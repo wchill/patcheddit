@@ -189,7 +189,7 @@ val undeleteRedditPatch = bytecodePatch(
 
         // region Fix the deletion reason detection
         stateSubmissionViewGetHeaderFingerprint.method.let {
-            stateSubmissionViewGetHeaderFingerprint.stringMatches!!.forEach { match ->
+            stateSubmissionViewGetHeaderFingerprint.stringMatches.forEach { match ->
                 if (match.string == "copyright_takedown") {
                     it.addInstructionsAtControlFlowLabel(
                         match.index,

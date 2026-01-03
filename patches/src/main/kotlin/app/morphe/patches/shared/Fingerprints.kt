@@ -2,19 +2,18 @@ package app.morphe.patches.shared
 
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.literal
-import app.morphe.patcher.string
 import com.android.tools.smali.dexlib2.AccessFlags
 
 internal object CastContextFetchFingerprint : Fingerprint(
-    filters = listOf(
-        string("Error fetching CastContext.")
+    strings = listOf(
+        "Error fetching CastContext."
     )
 )
 
 internal object PrimeMethodFingerprint : Fingerprint(
-    filters = listOf(
-        string("com.android.vending"),
-        string("com.google.android.GoogleCamera")
+    strings = listOf(
+        "com.android.vending",
+        "com.google.android.GoogleCamera"
     )
 )
 
