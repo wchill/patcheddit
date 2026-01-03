@@ -19,7 +19,7 @@ val addArchiveLinks = bytecodePatch(
     compatibleWith("com.rubenmayayo.reddit")
     execute {
         linkBuildContextMenuFingerprint.method.apply {
-            val index = linkBuildContextMenuFingerprint.instructionMatches.lastIndex
+            val index = linkBuildContextMenuFingerprint.instructionMatches.last().index
             addInstructions(
                 index,
                 """
@@ -29,7 +29,7 @@ val addArchiveLinks = bytecodePatch(
         }
 
         onClickContextMenuFingerprint.method.apply {
-            val index = onClickContextMenuFingerprint.instructionMatches.lastIndex
+            val index = onClickContextMenuFingerprint.instructionMatches.last().index
             val openLinkDialogName = "Lcom/rubenmayayo/reddit/ui/customviews/t;"
             val navigationName = "Lcom/rubenmayayo/reddit/ui/activities/i;"
             val openUriName = "d0"
