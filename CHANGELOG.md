@@ -1,3 +1,10 @@
+# [1.0.0-dev.3](https://github.com/wchill/patcheddit/compare/v1.0.0-dev.2...v1.0.0-dev.3) (2026-01-03)
+
+
+### Bug Fixes
+
+* Fix extension class namespaces in patch code ([d14a92e](https://github.com/wchill/patcheddit/commit/d14a92ea494af721ff8c17e844492b1a0835d690))
+
 # [1.0.0-dev.2](https://github.com/wchill/patcheddit/compare/v1.0.0-dev.1...v1.0.0-dev.2) (2026-01-03)
 
 
