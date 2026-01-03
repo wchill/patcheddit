@@ -17,6 +17,7 @@ Any application or derivative work that uses code from this repository must incl
 easily accessible, user-facing message with the exact wording:
 
     "This app uses code from Patcheddit. To learn more, visit https://github.com/wchill/patcheddit or https://reddit.com/r/patcheddit"
+    "This app uses code from Morphe. To learn more, visit http://morphe.software"
 
 The message must be presented in a way that allows the end user to easily visit the URL
 (e.g., clickable link, UI button to open the website, or equivalent).

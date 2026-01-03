@@ -1,4 +1,18 @@
 [versions]
 morphe-patcher = "1.0.0"
-#noinspection GradleDependency
+# Tracking https://github.com/google/smali/issues/100.
 smali = "b6365a84f4"
+# 8.3.0 causes java verifier error: https://github.com/ReVanced/revanced-patches/issues/2818.
+#noinspection GradleDependency
+agp = "8.2.2"
+annotation = "1.9.1"
+gson = "2.13.2"
+guava = "33.5.0-jre"
+
+[libraries]
+annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+guava = { module = "com.google.guava:guava", version.ref = "guava" }
+
+[plugins]
+android-library = { id = "com.android.library" }
