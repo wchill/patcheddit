@@ -1,28 +1,30 @@
 package app.morphe.patches.reddit.customclients.joeyforreddit.api
 
-import com.android.tools.smali.dexlib2.Opcode
+import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.OpcodeFilter
+import app.morphe.patcher.OpcodesFilter
 import com.android.tools.smali.dexlib2.AccessFlags
-import app.morphe.patcher.fingerprint
+import com.android.tools.smali.dexlib2.Opcode
 
-internal val authUtilityUserAgentFingerprint = fingerprint {
-    accessFlags(AccessFlags.PUBLIC, AccessFlags.STATIC)
-    returns("Ljava/lang/String;")
-    opcodes(Opcode.APUT_OBJECT)
-    custom { method, classDef ->
+internal val authUtilityUserAgentFingerprint = Fingerprint(
+    accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC),
+    returnType = "Ljava/lang/String;",
+    filters = listOf(OpcodeFilter(Opcode.APUT_OBJECT)),
+    custom = { method, classDef ->
         classDef.sourceFile == "AuthUtility.java"
     }
-}
+)
 
-internal val getClientIdFingerprint = fingerprint {
-    accessFlags(AccessFlags.PUBLIC, AccessFlags.STATIC)
-    returns("L")
-    opcodes(
+internal val getClientIdFingerprint = Fingerprint(
+    accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC),
+    returnType = "L",
+    filters = OpcodesFilter.opcodesToFilters(
         Opcode.CONST,               // R.string.valuable_cid
         Opcode.INVOKE_STATIC,       // StringMaster.decrypt
         Opcode.MOVE_RESULT_OBJECT,
         Opcode.RETURN_OBJECT
-    )
-    custom { _, classDef ->
+    ),
+    custom = { _, classDef ->
         classDef.sourceFile == "AuthUtility.java"
     }
-}
+)

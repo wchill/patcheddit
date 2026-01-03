@@ -1,7 +1,7 @@
 package app.morphe.patches.reddit.customclients.boostforreddit.http
 
-import app.morphe.patcher.fingerprint
+import app.morphe.patcher.Fingerprint
 
-internal val installOkHttpInterceptorFingerprint = fingerprint {
-    custom { method, _ -> method.name == "c" && method.definingClass == "Ltb/a;" }
-}
+internal val installOkHttpInterceptorFingerprint = Fingerprint(
+    custom = { method, _ -> method.name == "c" && method.definingClass == "Ltb/a;" }
+)

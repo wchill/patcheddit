@@ -139,7 +139,7 @@ public class SheetBottomDialog {
     }
 
     /**
-     * A custom {@link LinearLayout} that provides drag-to-dismiss functionality for a {@link SlideDialog}.
+     * A custom = {@link LinearLayout} that provides drag-to-dismiss functionality for a {@link SlideDialog}.
      * This layout intercepts touch events to allow dragging the dialog downward to dismiss it when the
      * content cannot scroll upward. It ensures compatibility with scrollable content (e.g., {@link ListView},
      * {@link ScrollView}) and clickable elements (e.g., buttons, {@link android.widget.SeekBar}) by prioritizing

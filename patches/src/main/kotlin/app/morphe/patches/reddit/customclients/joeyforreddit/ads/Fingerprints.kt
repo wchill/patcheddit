@@ -1,10 +1,11 @@
 package app.morphe.patches.reddit.customclients.joeyforreddit.ads
 
+import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.string
 import com.android.tools.smali.dexlib2.AccessFlags
-import app.morphe.patcher.fingerprint
 
-internal val isAdFreeUserFingerprint = fingerprint {
-    accessFlags(AccessFlags.PUBLIC)
-    returns("Z")
-    strings("AD_FREE_USER")
-}
+internal val isAdFreeUserFingerprint = Fingerprint(
+    accessFlags = listOf(AccessFlags.PUBLIC),
+    returnType = "Z",
+    filters = listOf(string("AD_FREE_USER"))
+)

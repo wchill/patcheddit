@@ -1,10 +1,11 @@
 package app.morphe.patches.reddit.customclients.sync.ads
 
+import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.string
 import com.android.tools.smali.dexlib2.AccessFlags
-import app.morphe.patcher.fingerprint
 
-internal val isAdsEnabledFingerprint = fingerprint {
-    accessFlags(AccessFlags.PUBLIC, AccessFlags.STATIC)
-    returns("Z")
-    strings("SyncIapHelper")
-}
+internal val isAdsEnabledFingerprint = Fingerprint(
+    accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC),
+    returnType = "Z",
+    filters = listOf(string("SyncIapHelper"))
+)

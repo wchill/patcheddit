@@ -1,19 +1,25 @@
 package app.morphe.patches.reddit.customclients.baconreader.api
 
-import app.morphe.patcher.fingerprint
+import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.string
 
-internal val getAuthorizationUrlFingerprint = fingerprint {
-    strings("client_id=zACVn0dSFGdWqQ")
-}
-internal val getClientIdFingerprint = fingerprint {
-    strings("client_id=zACVn0dSFGdWqQ")
-    custom { method, classDef ->
-        if (!classDef.endsWith("RedditOAuth;")) return@custom false
+internal val getAuthorizationUrlFingerprint = Fingerprint(
+    filters = listOf(string("client_id=zACVn0dSFGdWqQ"))
+)
 
+internal val getClientIdFingerprint = Fingerprint(
+    filters = listOf(string("client_id=zACVn0dSFGdWqQ")),
+    custom = {
+            method, classDef ->
+        if (!classDef.endsWith("RedditOAuth;")) return@Fingerprint false
         method.name == "getAuthorizeUrl"
     }
-}
+)
 
-internal val requestTokenFingerprint = fingerprint {
-    strings("zACVn0dSFGdWqQ", "kDm2tYpu9DqyWFFyPlNcXGEni4k") // App ID and secret.
-}
+internal val requestTokenFingerprint = Fingerprint(
+    filters = listOf(
+        // App ID and secret.
+        string("zACVn0dSFGdWqQ"),
+        string("kDm2tYpu9DqyWFFyPlNcXGEni4k")
+    )
+)

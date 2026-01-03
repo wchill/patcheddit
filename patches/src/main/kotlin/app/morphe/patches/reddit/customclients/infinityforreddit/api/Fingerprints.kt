@@ -1,7 +1,8 @@
 package app.morphe.patches.reddit.customclients.infinityforreddit.api
 
-import app.morphe.patcher.fingerprint
+import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.string
 
-internal val apiUtilsFingerprint = fingerprint {
-    strings("native-lib")
-}
+internal val apiUtilsFingerprint = Fingerprint(
+    filters = listOf(string("native-lib"))
+)

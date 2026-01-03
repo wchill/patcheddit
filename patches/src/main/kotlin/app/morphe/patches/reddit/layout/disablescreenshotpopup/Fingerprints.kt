@@ -1,15 +1,15 @@
 package app.morphe.patches.reddit.layout.disablescreenshotpopup
 
-import app.morphe.patcher.fingerprint
+import app.morphe.patcher.Fingerprint
 
-internal val disableScreenshotPopupFingerprint = fingerprint {
-    returns("V")
-    parameters("Landroidx/compose/runtime/", "I")
-    custom { method, classDef ->
+internal val disableScreenshotPopupFingerprint = Fingerprint(
+    returnType = "V",
+    parameters = listOf("Landroidx/compose/runtime/", "I"),
+    custom = { method, classDef ->
         if (!classDef.endsWith("\$ScreenshotTakenBannerKt\$lambda-1\$1;")) {
-            return@custom false
+            return@Fingerprint false
         }
 
         method.name == "invoke"
     }
-}
+)
