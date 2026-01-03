@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.android.library) 
+    alias(libs.plugins.android.library)
 }
 
 android {
@@ -7,16 +7,15 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 23
+        minSdk = 24
     }
 
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-}
-
-dependencies {
-    compileOnly(libs.annotation)
-    compileOnly(libs.okhttp)
+    dependencies {
+        coreLibraryDesugaring(libs.desugar.jdk.libs)
+    }
 }
