@@ -22,122 +22,200 @@ public final class app/morphe/patches/all/misc/transformation/TransformInstructi
 	public static final fun transformInstructionsPatch (Lkotlin/jvm/functions/Function4;Lkotlin/jvm/functions/Function2;)Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/music/ad/video/HideVideoAdsKt {
-	public static final fun getHideVideoAdsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+public final class app/morphe/patches/reddit/ad/banner/HideBannerPatchKt {
+	public static final fun getHideBannerPatch ()Lapp/morphe/patcher/patch/ResourcePatch;
 }
 
-public final class app/morphe/patches/music/audio/exclusiveaudio/EnableExclusiveAudioPlaybackKt {
-	public static final fun getEnableExclusiveAudioPlaybackPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+public final class app/morphe/patches/reddit/ad/comments/HideCommentAdsPatchKt {
+	public static final fun getHideCommentAdsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/music/interaction/permanentrepeat/PermanentRepeatPatchKt {
-	public static final fun getPermanentRepeatPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+public final class app/morphe/patches/reddit/ad/general/HideAdsPatchKt {
+	public static final fun getHideAdsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/music/layout/branding/CustomBrandingPatchKt {
-	public static final fun getCustomBrandingPatch ()Lapp/morphe/patcher/patch/ResourcePatch;
+public final class app/morphe/patches/reddit/customclients/FixRedgifsApiPatchKt {
+	public static final field CREATE_NEW_CLIENT_METHOD Ljava/lang/String;
+	public static final field INSTALL_NEW_CLIENT_METHOD Ljava/lang/String;
+	public static final fun fixRedgifsApiPatch (Lapp/morphe/patcher/patch/Patch;Lkotlin/jvm/functions/Function1;)Lapp/morphe/patcher/patch/BytecodePatch;
+	public static synthetic fun fixRedgifsApiPatch$default (Lapp/morphe/patcher/patch/Patch;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/music/layout/buttons/HideButtonsKt {
-	public static final fun getHideButtons ()Lapp/morphe/patcher/patch/BytecodePatch;
+public final class app/morphe/patches/reddit/customclients/FixSLinksPatchKt {
+	public static final field RESOLVE_S_LINK_METHOD Ljava/lang/String;
+	public static final field SET_ACCESS_TOKEN_METHOD Ljava/lang/String;
+	public static final fun fixSLinksPatch (Lapp/morphe/patcher/patch/Patch;Lkotlin/jvm/functions/Function1;)Lapp/morphe/patcher/patch/BytecodePatch;
+	public static synthetic fun fixSLinksPatch$default (Lapp/morphe/patcher/patch/Patch;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/music/layout/compactheader/HideCategoryBarKt {
-	public static final fun getHideCategoryBar ()Lapp/morphe/patcher/patch/BytecodePatch;
+public final class app/morphe/patches/reddit/customclients/SpoofClientPatchKt {
+	public static final fun spoofClientPatch (Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lapp/morphe/patcher/patch/BytecodePatch;
+	public static final fun spoofClientPatch (Lkotlin/jvm/functions/Function3;)Lapp/morphe/patcher/patch/BytecodePatch;
+	public static synthetic fun spoofClientPatch$default (Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lapp/morphe/patcher/patch/BytecodePatch;
+	public static final fun spoofUserAgentPatch (Lkotlin/jvm/functions/Function2;)Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/music/layout/miniplayercolor/ChangeMiniplayerColorKt {
-	public static final fun getChangeMiniplayerColor ()Lapp/morphe/patcher/patch/BytecodePatch;
+public final class app/morphe/patches/reddit/customclients/baconreader/api/SpoofClientPatchKt {
+	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/music/layout/navigationbar/NavigationBarPatchKt {
-	public static final fun getNavigationBarPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+public final class app/morphe/patches/reddit/customclients/baconreader/fix/redgifs/FixRedgifsApiPatchKt {
+	public static final fun getFixRedgifsApi ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/music/layout/premium/HideGetPremiumPatchKt {
-	public static final fun getHideGetPremiumPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/music/layout/theme/ThemePatchKt {
-	public static final fun getThemePatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/music/misc/androidauto/BypassCertificateChecksPatchKt {
-	public static final fun getBypassCertificateChecksPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/music/misc/backgroundplayback/BackgroundPlaybackPatchKt {
-	public static final fun getBackgroundPlaybackPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/music/misc/debugging/EnableDebuggingPatchKt {
-	public static final fun getEnableDebuggingPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/music/misc/dns/CheckWatchHistoryDomainNameResolutionPatchKt {
-	public static final fun getCheckWatchHistoryDomainNameResolutionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/music/misc/extension/SharedExtensionPatchKt {
+public final class app/morphe/patches/reddit/customclients/baconreader/misc/extension/SharedExtensionPatchKt {
 	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/music/misc/gms/Constants {
-	public static final field INSTANCE Lapp/morphe/patches/music/misc/gms/Constants;
+public final class app/morphe/patches/reddit/customclients/boostforreddit/ads/DisableAdsPatchKt {
+	public static final fun getDisableAdsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/music/misc/gms/GmsCoreSupportPatchKt {
-	public static final fun getGmsCoreSupportPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+public final class app/morphe/patches/reddit/customclients/boostforreddit/api/SpoofClientPatchKt {
+	public static final field JRAW_NEW_URL_EXTENSION_CLASS_DESCRIPTOR Ljava/lang/String;
+	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+	public static final fun getUserAgentPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/music/misc/privacy/SanitizeSharingLinksPatchKt {
-	public static final fun getSanitizeSharingLinksPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+public final class app/morphe/patches/reddit/customclients/boostforreddit/debug/HookExceptionHandlerKt {
+	public static final field EXTENSION_CLASS_DESCRIPTOR Ljava/lang/String;
+	public static final fun getHookExceptionHandler ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/music/misc/settings/PreferenceScreen : app/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen {
-	public static final field INSTANCE Lapp/morphe/patches/music/misc/settings/PreferenceScreen;
-	public fun commit (Lapp/morphe/patches/shared/misc/settings/preference/PreferenceScreenPreference;)V
-	public final fun getADS ()Lapp/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen$Screen;
-	public final fun getGENERAL ()Lapp/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen$Screen;
-	public final fun getMISC ()Lapp/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen$Screen;
-	public final fun getPLAYER ()Lapp/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen$Screen;
+public final class app/morphe/patches/reddit/customclients/boostforreddit/fix/downloads/FixAudioMissingInDownloadsPatchKt {
+	public static final fun getFixAudioMissingInDownloadsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/music/misc/settings/SettingsPatchKt {
-	public static final fun getSettingsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-	public static final fun newIntent (Ljava/lang/String;)Lapp/morphe/patches/shared/misc/settings/preference/IntentPreference$Intent;
+public final class app/morphe/patches/reddit/customclients/boostforreddit/fix/redgifs/FixRedgifsApiPatchKt {
+	public static final fun getFixRedgifsApi ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/music/misc/spoof/SpoofVideoStreamsPatchKt {
-	public static final fun getSpoofVideoStreamsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+public final class app/morphe/patches/reddit/customclients/boostforreddit/fix/slink/FixSLinksPatchKt {
+	public static final field EXTENSION_CLASS_DESCRIPTOR Ljava/lang/String;
+	public static final fun getFixSlinksPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/music/misc/spoof/UserAgentClientSpoofPatchKt {
-	public static final fun getUserAgentClientSpoofPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+public final class app/morphe/patches/reddit/customclients/boostforreddit/http/InterceptHttpRequestsKt {
+	public static final fun getInterceptHttpRequests ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/music/misc/tracks/ForceOriginalAudioPatchKt {
-	public static final fun getForceOriginalAudioPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+public final class app/morphe/patches/reddit/customclients/boostforreddit/http/archive/AddArchiveLinksPatchKt {
+	public static final fun getAddArchiveLinks ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/music/playservice/VersionCheckPatchKt {
-	public static final fun getVersionCheckPatch ()Lapp/morphe/patcher/patch/ResourcePatch;
-	public static final fun is_7_16_or_greater ()Z
-	public static final fun is_7_33_or_greater ()Z
-	public static final fun is_8_05_or_greater ()Z
-	public static final fun is_8_10_or_greater ()Z
-	public static final fun is_8_11_or_greater ()Z
-	public static final fun is_8_15_or_greater ()Z
-	public static final fun is_8_40_or_greater ()Z
+public final class app/morphe/patches/reddit/customclients/boostforreddit/http/imgur/UndeleteImgurPatchKt {
+	public static final fun getInterceptImgurRequests ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/shared/layout/theme/LithoColorHookPatchKt {
-	public static final fun getLithoColorHookPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-	public static final fun getLithoColorOverrideHook ()Lkotlin/jvm/functions/Function2;
+public final class app/morphe/patches/reddit/customclients/boostforreddit/http/reddit/UndeleteRedditPatchKt {
+	public static final fun getUndeleteRedditPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/shared/misc/checks/BaseCheckEnvironmentPatchKt {
-	public static final fun checkEnvironmentPatch (Lapp/morphe/patcher/Fingerprint;Lapp/morphe/patcher/patch/Patch;[Ljava/lang/String;)Lapp/morphe/patcher/patch/BytecodePatch;
+public final class app/morphe/patches/reddit/customclients/boostforreddit/misc/extension/SharedExtensionPatchKt {
+	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/infinityforreddit/api/SpoofClientPatchKt {
+	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/infinityforreddit/subscription/UnlockSubscriptionPatchKt {
+	public static final fun getUnlockSubscriptionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/joeyforreddit/ads/DisableAdsPatchKt {
+	public static final fun getDisableAdsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/joeyforreddit/api/SpoofClientPatchKt {
+	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/joeyforreddit/detection/piracy/DisablePiracyDetectionPatchKt {
+	public static final fun getDisablePiracyDetectionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/redditisfun/api/SpoofClientPatchKt {
+	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/relayforreddit/api/SpoofClientPatchKt {
+	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/slide/api/SpoofClientPatchKt {
+	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/sync/ads/DisableAdsPatchKt {
+	public static final fun disableAdsPatch (Lkotlin/jvm/functions/Function1;)Lapp/morphe/patcher/patch/BytecodePatch;
+	public static synthetic fun disableAdsPatch$default (Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/sync/detection/piracy/DisablePiracyDetectionPatchKt {
+	public static final fun getDisablePiracyDetectionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/sync/syncforlemmy/ads/DisableAdsPatchKt {
+	public static final fun getDisableAdsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/ads/DisableAdsPatchKt {
+	public static final fun getDisableAdsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/annoyances/startup/DisableSyncForLemmyBottomSheetPatchKt {
+	public static final fun getDisableSyncForLemmyBottomSheetPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/api/SpoofClientPatchKt {
+	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/extension/SharedExtensionPatchKt {
+	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/fix/redgifs/FixRedgifsApiPatchKt {
+	public static final fun getFixRedgifsApi ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/fix/slink/FixSLinksPatchKt {
+	public static final field EXTENSION_CLASS_DESCRIPTOR Ljava/lang/String;
+	public static final fun getFixSLinksPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/fix/thumbnail/FixPostThumbnailsPatchKt {
+	public static final fun getFixPostThumbnailsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/fix/user/UseUserEndpointPatchKt {
+	public static final fun getUseUserEndpointPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/fix/video/FixVideoDownloadsPatchKt {
+	public static final fun getFixVideoDownloadsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/syncforreddit/fix/video/FixVideoDownloadsPatchKt {
+	public static final fun getFixVideoDownloadsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/layout/disablescreenshotpopup/DisableScreenshotPopupPatchKt {
+	public static final fun getDisableScreenshotPopupPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/layout/premiumicon/UnlockPremiumIconPatchKt {
+	public static final fun getUnlockPremiumIconPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+	public static final fun getUnlockPremiumIconsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/misc/extension/ExtensionPatchKt {
+	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/misc/tracking/url/SanitizeUrlQueryPatchKt {
+	public static final fun getSanitizeUrlQueryPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
 public class app/morphe/patches/shared/misc/extension/ExtensionHook {
@@ -151,17 +229,6 @@ public final class app/morphe/patches/shared/misc/extension/SharedExtensionPatch
 	public static synthetic fun activityOnCreateExtensionHook$default (Ljava/lang/String;ZILjava/lang/Object;)Lapp/morphe/patches/shared/misc/extension/ExtensionHook;
 	public static final fun sharedExtensionPatch (Ljava/lang/String;[Lapp/morphe/patches/shared/misc/extension/ExtensionHook;)Lapp/morphe/patcher/patch/BytecodePatch;
 	public static final fun sharedExtensionPatch ([Lapp/morphe/patches/shared/misc/extension/ExtensionHook;)Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/shared/misc/fix/verticalscroll/VerticalScrollPatchKt {
-	public static final fun getVerticalScrollPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/shared/misc/gms/GmsCoreSupportPatchKt {
-	public static final fun gmsCoreSupportPatch (Ljava/lang/String;Ljava/lang/String;Lapp/morphe/patcher/Fingerprint;Ljava/util/Set;Lapp/morphe/patcher/Fingerprint;Lapp/morphe/patcher/patch/Patch;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lapp/morphe/patcher/patch/BytecodePatch;
-	public static synthetic fun gmsCoreSupportPatch$default (Ljava/lang/String;Ljava/lang/String;Lapp/morphe/patcher/Fingerprint;Ljava/util/Set;Lapp/morphe/patcher/Fingerprint;Lapp/morphe/patcher/patch/Patch;Lkotlin/jvm/functions/Function0;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lapp/morphe/patcher/patch/BytecodePatch;
-	public static final fun gmsCoreSupportResourcePatch (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lapp/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen$Screen;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;)Lapp/morphe/patcher/patch/ResourcePatch;
-	public static synthetic fun gmsCoreSupportResourcePatch$default (Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Lapp/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen$Screen;Lkotlin/jvm/functions/Function1;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lapp/morphe/patcher/patch/ResourcePatch;
 }
 
 public final class app/morphe/patches/shared/misc/hex/HexPatchBuilder : java/util/Set, kotlin/jvm/internal/markers/KMappedMarker {
@@ -425,431 +492,8 @@ public final class app/morphe/patches/shared/misc/settings/preference/TextPrefer
 	public fun serialize (Lorg/w3c/dom/Document;Lkotlin/jvm/functions/Function1;)Lorg/w3c/dom/Element;
 }
 
-public final class app/morphe/patches/shared/misc/spoof/UserAgentClientSpoofPatchKt {
-	public static final fun userAgentClientSpoofPatch (Ljava/lang/String;)Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
 public final class app/morphe/patches/shared/misc/string/ReplaceStringPatchKt {
 	public static final fun replaceStringPatch (Ljava/lang/String;Ljava/lang/String;)Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/ad/general/HideAdsPatchKt {
-	public static final fun getHideAdsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/ad/video/VideoAdsPatchKt {
-	public static final fun getVideoAdsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/interaction/copyvideourl/CopyVideoUrlPatchKt {
-	public static final fun getCopyVideoUrlPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/interaction/dialog/RemoveViewerDiscretionDialogPatchKt {
-	public static final fun getRemoveViewerDiscretionDialogPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/interaction/doubletap/DisableChapterSkipDoubleTapPatchKt {
-	public static final fun getDisableDoubleTapActionsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/interaction/downloads/DownloadsPatchKt {
-	public static final fun getDownloadsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/interaction/seekbar/DisablePreciseSeekingGesturePatchKt {
-	public static final fun getDisablePreciseSeekingGesturePatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/interaction/seekbar/EnableSeekbarTappingPatchKt {
-	public static final fun getEnableSeekbarTappingPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/interaction/seekbar/EnableSlideToSeekPatchKt {
-	public static final fun getEnableSlideToSeekPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/interaction/seekbar/HideSeekbarPatchKt {
-	public static final fun getHideSeekbarPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/interaction/seekbar/SeekbarPatchKt {
-	public static final fun getSeekbarPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/interaction/swipecontrols/SwipeControlsPatchKt {
-	public static final fun getSwipeControlsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/autocaptions/AutoCaptionsPatchKt {
-	public static final fun getAutoCaptionsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/branding/CustomBrandingPatchKt {
-	public static final fun getCustomBrandingPatch ()Lapp/morphe/patcher/patch/ResourcePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/branding/header/ChangeHeaderPatchKt {
-	public static final fun getChangeHeaderPatch ()Lapp/morphe/patcher/patch/ResourcePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/buttons/action/HideVideoActionButtonsPatchKt {
-	public static final fun getHideVideoActionButtonsPatch ()Lapp/morphe/patcher/patch/ResourcePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/buttons/navigation/NavigationButtonsPatchKt {
-	public static final fun getNavigationButtonsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/buttons/overlay/HidePlayerOverlayButtonsPatchKt {
-	public static final fun getHidePlayerOverlayButtonsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/formfactor/ChangeFormFactorPatchKt {
-	public static final fun getChangeFormFactorPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/hide/endscreencards/HideEndScreenCardsPatchKt {
-	public static final fun getHideEndScreenCardsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/hide/endscreensuggestion/HideEndScreenSuggestedVideoPatchKt {
-	public static final fun getHideEndScreenSuggestedVideoPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/hide/fullscreenambientmode/DisableFullscreenAmbientModePatchKt {
-	public static final fun getDisableFullscreenAmbientModePatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/hide/general/HideLayoutComponentsPatchKt {
-	public static final fun getHideLayoutComponentsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/hide/infocards/HideInfoCardsPatchKt {
-	public static final fun getHideInfoCardsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/hide/player/flyoutmenupanel/HidePlayerFlyoutMenuPatchKt {
-	public static final fun getHidePlayerFlyoutMenuPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/hide/relatedvideooverlay/HideRelatedVideoOverlayPatchKt {
-	public static final fun getHideRelatedVideoOverlayPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/hide/rollingnumber/DisableRollingNumberAnimationPatchKt {
-	public static final fun getDisableRollingNumberAnimationPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/hide/shorts/HideShortsComponentsPatchKt {
-	public static final fun getHideShortsComponentsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/hide/signintotvpopup/DisableSignInToTvPatchPopupKt {
-	public static final fun getDisableSignInToTvPopupPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/hide/time/HideTimestampPatchKt {
-	public static final fun getHideTimestampPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/miniplayer/MiniplayerPatchKt {
-	public static final fun getMiniplayerPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/panels/popup/PlayerPopupPanelsPatchKt {
-	public static final fun getPlayerPopupPanelsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/player/fullscreen/OpenVideosFullscreenPatchKt {
-	public static final fun getOpenVideosFullscreenPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/player/overlay/CustomPlayerOverlayOpacityPatchKt {
-	public static final fun getCustomPlayerOverlayOpacityPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/returnyoutubedislike/ReturnYouTubeDislikePatchKt {
-	public static final fun getReturnYouTubeDislikePatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/returnyoutubedislike/Vote : java/lang/Enum {
-	public static final field DISLIKE Lapp/morphe/patches/youtube/layout/returnyoutubedislike/Vote;
-	public static final field LIKE Lapp/morphe/patches/youtube/layout/returnyoutubedislike/Vote;
-	public static final field REMOVE_LIKE Lapp/morphe/patches/youtube/layout/returnyoutubedislike/Vote;
-	public static fun getEntries ()Lkotlin/enums/EnumEntries;
-	public final fun getValue ()I
-	public static fun valueOf (Ljava/lang/String;)Lapp/morphe/patches/youtube/layout/returnyoutubedislike/Vote;
-	public static fun values ()[Lapp/morphe/patches/youtube/layout/returnyoutubedislike/Vote;
-}
-
-public final class app/morphe/patches/youtube/layout/seekbar/SeekbarColorPatchKt {
-	public static final fun getSeekbarColorPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/shortsautoplay/ShortsAutoplayPatchKt {
-	public static final fun getShortsAutoplayPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/shortsplayer/OpenShortsInRegularPlayerPatchKt {
-	public static final fun getOpenShortsInRegularPlayerPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/sponsorblock/SponsorBlockPatchKt {
-	public static final fun getSponsorBlockPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/spoofappversion/SpoofAppVersionPatchKt {
-	public static final fun getSpoofAppVersionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/startpage/ChangeStartPagePatchKt {
-	public static final fun getChangeStartPagePatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/startupshortsreset/DisableResumingShortsOnStartupPatchKt {
-	public static final fun getDisableResumingShortsOnStartupPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/theme/ThemePatchKt {
-	public static final fun getThemePatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/thumbnails/AlternativeThumbnailsPatchKt {
-	public static final fun getAlternativeThumbnailsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/layout/thumbnails/BypassImageRegionRestrictionsPatchKt {
-	public static final fun getBypassImageRegionRestrictionsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/announcements/AnnouncementsPatchKt {
-	public static final fun getAnnouncementsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/backgroundplayback/BackgroundPlaybackPatchKt {
-	public static final fun getBackgroundPlaybackPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/debugging/EnableDebuggingPatchKt {
-	public static final fun getEnableDebuggingPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/dimensions/spoof/SpoofDeviceDimensionsPatchKt {
-	public static final fun getSpoofDeviceDimensionsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/dns/CheckWatchHistoryDomainNameResolutionPatchKt {
-	public static final fun getCheckWatchHistoryDomainNameResolutionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/extension/SharedExtensionPatchKt {
-	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/fix/playbackspeed/FIxPlaybackSpeedWhilePlayingPatchKt {
-	public static final fun getFixPlaybackSpeedWhilePlayingPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/gms/GmsCoreSupportPatchKt {
-	public static final fun getGmsCoreSupportPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/hapticfeedback/DisableHapticFeedbackPatchKt {
-	public static final fun getDisableHapticFeedbackPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/imageurlhook/CronetImageUrlHookKt {
-	public static final fun addImageUrlErrorCallbackHook (Ljava/lang/String;)V
-	public static final fun addImageUrlHook (Ljava/lang/String;Z)V
-	public static synthetic fun addImageUrlHook$default (Ljava/lang/String;ZILjava/lang/Object;)V
-	public static final fun addImageUrlSuccessCallbackHook (Ljava/lang/String;)V
-	public static final fun getCronetImageUrlHookPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/links/BypassURLRedirectsPatchKt {
-	public static final fun getBypassURLRedirectsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/links/OpenLinksExternallyPatchKt {
-	public static final fun getOpenLinksExternallyPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/litho/filter/LithoFilterPatchKt {
-	public static final fun getAddLithoFilter ()Lkotlin/jvm/functions/Function1;
-	public static final fun getLithoFilterPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/loopvideo/LoopVideoPatchKt {
-	public static final fun getLoopVideoPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/navigation/NavigationBarHookPatchKt {
-	public static field hookNavigationButtonCreated Lkotlin/jvm/functions/Function1;
-	public static final fun getHookNavigationButtonCreated ()Lkotlin/jvm/functions/Function1;
-	public static final fun getNavigationBarHookPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-	public static final fun setHookNavigationButtonCreated (Lkotlin/jvm/functions/Function1;)V
-}
-
-public final class app/morphe/patches/youtube/misc/playercontrols/PlayerControlsOverlayVisibilityPatchKt {
-	public static final fun getPlayerControlsOverlayVisibilityPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/playercontrols/PlayerControlsPatchKt {
-	public static final fun getAddBottomControl ()Lkotlin/jvm/functions/Function1;
-	public static final fun getPlayerControlsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-	public static final fun initializeBottomControl (Ljava/lang/String;)V
-	public static final fun injectVisibilityCheckCall (Ljava/lang/String;)V
-}
-
-public final class app/morphe/patches/youtube/misc/playertype/PlayerTypeHookPatchKt {
-	public static final fun getPlayerTypeHookPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/playservice/VersionCheckPatchKt {
-	public static final fun getVersionCheckPatch ()Lapp/morphe/patcher/patch/ResourcePatch;
-	public static final fun is_19_17_or_greater ()Z
-	public static final fun is_19_18_or_greater ()Z
-	public static final fun is_19_23_or_greater ()Z
-	public static final fun is_19_25_or_greater ()Z
-	public static final fun is_19_26_or_greater ()Z
-	public static final fun is_19_29_or_greater ()Z
-	public static final fun is_19_32_or_greater ()Z
-	public static final fun is_19_33_or_greater ()Z
-	public static final fun is_19_34_or_greater ()Z
-	public static final fun is_19_35_or_greater ()Z
-	public static final fun is_19_36_or_greater ()Z
-	public static final fun is_19_41_or_greater ()Z
-	public static final fun is_19_43_or_greater ()Z
-	public static final fun is_19_46_or_greater ()Z
-	public static final fun is_19_47_or_greater ()Z
-	public static final fun is_19_49_or_greater ()Z
-	public static final fun is_20_02_or_greater ()Z
-	public static final fun is_20_03_or_greater ()Z
-	public static final fun is_20_05_or_greater ()Z
-	public static final fun is_20_07_or_greater ()Z
-	public static final fun is_20_09_or_greater ()Z
-	public static final fun is_20_10_or_greater ()Z
-	public static final fun is_20_14_or_greater ()Z
-	public static final fun is_20_15_or_greater ()Z
-	public static final fun is_20_19_or_greater ()Z
-	public static final fun is_20_20_or_greater ()Z
-	public static final fun is_20_21_or_greater ()Z
-	public static final fun is_20_22_or_greater ()Z
-	public static final fun is_20_26_or_greater ()Z
-	public static final fun is_20_28_or_greater ()Z
-	public static final fun is_20_30_or_greater ()Z
-	public static final fun is_20_31_or_greater ()Z
-	public static final fun is_20_34_or_greater ()Z
-	public static final fun is_20_37_or_greater ()Z
-	public static final fun is_20_39_or_greater ()Z
-	public static final fun is_20_41_or_greater ()Z
-	public static final fun is_20_45_or_greater ()Z
-	public static final fun is_20_46_or_greater ()Z
-	public static final fun is_20_49_or_greater ()Z
-}
-
-public final class app/morphe/patches/youtube/misc/privacy/SanitizeSharingLinksPatchKt {
-	public static final fun getSanitizeSharingLinksPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/recyclerviewtree/hook/RecyclerViewTreeHookPatchKt {
-	public static final fun getAddRecyclerViewTreeHook ()Lkotlin/jvm/functions/Function1;
-	public static final fun getRecyclerViewTreeHookPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/settings/PreferenceScreen : app/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen {
-	public static final field INSTANCE Lapp/morphe/patches/youtube/misc/settings/PreferenceScreen;
-	public fun commit (Lapp/morphe/patches/shared/misc/settings/preference/PreferenceScreenPreference;)V
-	public final fun getADS ()Lapp/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen$Screen;
-	public final fun getALTERNATIVE_THUMBNAILS ()Lapp/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen$Screen;
-	public final fun getFEED ()Lapp/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen$Screen;
-	public final fun getGENERAL_LAYOUT ()Lapp/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen$Screen;
-	public final fun getMISC ()Lapp/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen$Screen;
-	public final fun getPLAYER ()Lapp/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen$Screen;
-	public final fun getRETURN_YOUTUBE_DISLIKE ()Lapp/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen$Screen;
-	public final fun getSEEKBAR ()Lapp/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen$Screen;
-	public final fun getSHORTS ()Lapp/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen$Screen;
-	public final fun getSPONSORBLOCK ()Lapp/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen$Screen;
-	public final fun getSWIPE_CONTROLS ()Lapp/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen$Screen;
-	public final fun getVIDEO ()Lapp/morphe/patches/shared/misc/settings/preference/BasePreferenceScreen$Screen;
-}
-
-public final class app/morphe/patches/youtube/misc/settings/SettingsPatchKt {
-	public static final fun getSettingsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-	public static final fun newIntent (Ljava/lang/String;)Lapp/morphe/patches/shared/misc/settings/preference/IntentPreference$Intent;
-}
-
-public final class app/morphe/patches/youtube/misc/spoof/SpoofVideoStreamsPatchKt {
-	public static final fun getSpoofVideoStreamsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/misc/spoof/UserAgentClientSpoofPatchKt {
-	public static final fun getUserAgentClientSpoofPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/video/audio/ForceOriginalAudioPatchKt {
-	public static final fun getForceOriginalAudioPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/video/codecs/DisableVideoCodecsPatchKt {
-	public static final fun getDisableVideoCodecsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/video/information/VideoInformationPatchKt {
-	public static final fun getVideoInformationPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-	public static final fun userSelectedPlaybackSpeedHook (Ljava/lang/String;Ljava/lang/String;)V
-	public static final fun videoSpeedChangedHook (Ljava/lang/String;Ljava/lang/String;)V
-	public static final fun videoTimeHook (Ljava/lang/String;Ljava/lang/String;)V
-}
-
-public abstract class app/morphe/patches/youtube/video/playerresponse/Hook {
-	public synthetic fun <init> (Ljava/lang/String;Lkotlin/jvm/internal/DefaultConstructorMarker;)V
-	public fun toString ()Ljava/lang/String;
-}
-
-public final class app/morphe/patches/youtube/video/playerresponse/Hook$ProtoBufferParameter : app/morphe/patches/youtube/video/playerresponse/Hook {
-	public fun <init> (Ljava/lang/String;)V
-}
-
-public final class app/morphe/patches/youtube/video/playerresponse/Hook$ProtoBufferParameterBeforeVideoId : app/morphe/patches/youtube/video/playerresponse/Hook {
-	public fun <init> (Ljava/lang/String;)V
-}
-
-public final class app/morphe/patches/youtube/video/playerresponse/Hook$VideoId : app/morphe/patches/youtube/video/playerresponse/Hook {
-	public fun <init> (Ljava/lang/String;)V
-}
-
-public final class app/morphe/patches/youtube/video/playerresponse/PlayerResponseMethodHookPatchKt {
-	public static final fun addPlayerResponseMethodHook (Lapp/morphe/patches/youtube/video/playerresponse/Hook;)V
-	public static final fun getPlayerResponseMethodHookPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/video/quality/RememberVideoQualityPatchKt {
-	public static final fun getRememberVideoQualityPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/video/quality/VideoQualityDialogButtonPatchKt {
-	public static final fun getVideoQualityDialogButtonPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/video/quality/VideoQualityPatchKt {
-	public static final fun getVideoQualityPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/video/speed/PlaybackSpeedPatchKt {
-	public static final fun getPlaybackSpeedPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/video/speed/button/PlaybackSpeedButtonPatchKt {
-	public static final fun getPlaybackSpeedButtonPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/youtube/video/videoid/VideoIdPatchKt {
-	public static final fun getVideoIdPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-	public static final fun hookBackgroundPlayVideoId (Ljava/lang/String;)V
-	public static final fun hookPlayerResponseVideoId (Ljava/lang/String;)V
-	public static final fun hookVideoId (Ljava/lang/String;)V
 }
 
 public final class app/morphe/util/BytecodeUtilsKt {
