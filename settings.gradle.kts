@@ -19,6 +19,14 @@ pluginManagement {
     }
 }
 
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+    }
+}
+
 plugins {
     id("app.morphe.patches") version "1.0.0"
 }
