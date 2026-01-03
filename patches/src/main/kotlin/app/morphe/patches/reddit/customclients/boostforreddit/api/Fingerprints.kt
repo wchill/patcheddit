@@ -1,10 +1,9 @@
 package app.morphe.patches.reddit.customclients.boostforreddit.api
 
 import app.morphe.patcher.Fingerprint
-import app.morphe.patcher.string
 
 internal val buildUserAgentFingerprint = Fingerprint(
-    filters = listOf(string("%s:%s:%s (by /u/%s)"))
+    strings = listOf("%s:%s:%s (by /u/%s)")
 )
 
 internal val getClientIdFingerprint = Fingerprint(
@@ -16,7 +15,7 @@ internal val getClientIdFingerprint = Fingerprint(
 )
 
 internal val loginActivityOnCreateFingerprint = Fingerprint(
-    filters = listOf(string("http://rubenmayayo.com")),
+    strings = listOf("http://rubenmayayo.com"),
     custom = { method, classDef ->
         if (!classDef.endsWith("LoginActivity;")) return@Fingerprint false
 
@@ -25,7 +24,7 @@ internal val loginActivityOnCreateFingerprint = Fingerprint(
 )
 
 internal val loginActivityAShouldOverrideUrlLoadingFingerprint = Fingerprint(
-    filters = listOf(string("http://rubenmayayo.com")),
+    strings = listOf("http://rubenmayayo.com"),
     custom = { method, classDef ->
         if (!classDef.endsWith("LoginActivity${'$'}a;")) return@Fingerprint false
 

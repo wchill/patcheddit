@@ -1,7 +1,6 @@
 package app.morphe.patches.reddit.customclients.boostforreddit.http.reddit
 
 import app.morphe.patcher.Fingerprint
-import app.morphe.patcher.string
 import com.android.tools.smali.dexlib2.AccessFlags
 
 internal val installJrawInterceptorFingerprint = Fingerprint(
@@ -13,7 +12,7 @@ internal val setCommentBabushkaTextFingerprint = Fingerprint(
     accessFlags = listOf(AccessFlags.PUBLIC),
     returnType = "V",
     parameters = listOf("Lcom/rubenmayayo/reddit/models/reddit/CommentModel"),
-    filters = listOf(string("\uD83D\uDD12"))
+    strings = listOf("\uD83D\uDD12")
 )
 
 // Lcom/rubenmayayo/reddit/ui/adapters/SubmissionViewHolder;->n0(Lcom/rubenmayayo/reddit/models/reddit/SubmissionModel;)V
@@ -21,7 +20,7 @@ internal val setSubmissionBabushkaTextFingerprint = Fingerprint(
     accessFlags = listOf(AccessFlags.PUBLIC),
     returnType = "V",
     parameters = listOf("Lcom/rubenmayayo/reddit/models/reddit/SubmissionModel"),
-    filters = listOf(string("\uD83D\uDD12"))
+    strings = listOf("\uD83D\uDD12")
 )
 
 internal val contributionModelConstructorFingerprint = Fingerprint(
@@ -50,18 +49,18 @@ internal val commentModelDeserializeFingerprint = Fingerprint(
 
 internal val stateSubmissionViewGetHeaderFingerprint = Fingerprint(
     accessFlags = listOf(AccessFlags.PRIVATE),
-    filters = listOf(string("copyright_takedown"), string("reddit")),
+    strings = listOf("copyright_takedown", "reddit"),
     custom = { method, _ -> method.name == "a" && method.definingClass == "Lcom/rubenmayayo/reddit/ui/customviews/StateSubmissionView;" }
 )
 
 internal val stateSubmissionViewGetSummaryFingerprint = Fingerprint(
     accessFlags = listOf(AccessFlags.PRIVATE),
-    filters = listOf(string("copyright_takedown"), string("reddit")),
+    strings = listOf("copyright_takedown", "reddit"),
     custom = { method, _ -> method.name == "b" && method.definingClass == "Lcom/rubenmayayo/reddit/ui/customviews/StateSubmissionView;" }
 )
 
 internal val stateSubmissionViewHasValidRemovalReasonFingerprint = Fingerprint(
     accessFlags = listOf(AccessFlags.PRIVATE),
-    filters = listOf(string("reddit")),
+    strings = listOf("reddit"),
     custom = { method, _ -> method.name == "d" && method.definingClass == "Lcom/rubenmayayo/reddit/ui/customviews/StateSubmissionView;" }
 )
