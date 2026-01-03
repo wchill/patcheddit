@@ -9,7 +9,7 @@ import app.morphe.patches.reddit.customclients.SET_ACCESS_TOKEN_METHOD
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.sharedExtensionPatch
 import app.morphe.patches.reddit.customclients.fixSLinksPatch
 
-const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/revanced/extension/boostforreddit/FixSLinksPatch;"
+const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boostforreddit/FixSLinksPatch;"
 
 @Suppress("unused")
 val fixSlinksPatch = fixSLinksPatch(
