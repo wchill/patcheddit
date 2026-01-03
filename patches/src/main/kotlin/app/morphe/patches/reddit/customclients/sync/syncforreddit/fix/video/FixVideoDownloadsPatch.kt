@@ -7,7 +7,7 @@ import app.morphe.patches.reddit.customclients.sync.syncforreddit.extension.shar
 import com.android.tools.smali.dexlib2.iface.instruction.formats.Instruction35c
 
 private const val EXTENSION_CLASS_DESCRIPTOR =
-    "Lapp/revanced/extension/syncforreddit/FixRedditVideoDownloadPatch;"
+    "Lapp/morphe/extension/syncforreddit/FixRedditVideoDownloadPatch;"
 private const val GET_LINKS_METHOD = "getLinks([B)[Ljava/lang/String;"
 
 @Suppress("unused")

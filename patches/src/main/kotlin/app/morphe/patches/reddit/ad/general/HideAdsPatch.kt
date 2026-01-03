@@ -29,7 +29,7 @@ val hideAdsPatch = bytecodePatch(
         // region Filter promoted ads (does not work in popular or latest feed)
 
         val filterMethodDescriptor =
-            "Lapp/revanced/extension/reddit/patches/FilterPromotedLinksPatch;" +
+            "Lapp/morphe/extension/reddit/patches/FilterPromotedLinksPatch;" +
                 "->filterChildren(Ljava/lang/Iterable;)Ljava/util/List;"
 
         adPostFingerprint.method.apply {
