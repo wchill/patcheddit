@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package app.revanced.extension.music.innertube.utils;
+package app.morphe.extension.music.innertube.utils;
 
 option optimize_for = LITE_RUNTIME;
-option java_package = "app.revanced.extension.music.innertube.utils";
+option java_package = "app.morphe.extension.music.innertube.utils";
 
 message GuideResponse {
     repeated Items1 items = 2;
