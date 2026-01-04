@@ -23,7 +23,7 @@ val audioTracksPatch = audioTracksPatch(
     executeBlock = {
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_disable_auto_audio_tracks",
+            "rvx_morphed_disable_auto_audio_tracks",
             "true"
         )
 

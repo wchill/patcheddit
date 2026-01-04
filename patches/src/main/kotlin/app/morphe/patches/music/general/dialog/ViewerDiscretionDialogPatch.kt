@@ -25,7 +25,7 @@ val viewerDiscretionDialogPatch = bytecodePatch(
     execute {
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_remove_viewer_discretion_dialog",
+            "rvx_morphed_remove_viewer_discretion_dialog",
             "false"
         )
 

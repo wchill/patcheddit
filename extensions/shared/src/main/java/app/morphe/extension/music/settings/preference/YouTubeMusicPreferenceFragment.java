@@ -10,7 +10,7 @@ import app.morphe.extension.shared.utils.Logger;
 import app.morphe.extension.shared.utils.Utils;
 
 /**
- * Preference fragment for ReVanced settings.
+ * Preference fragment for RVX Morphed settings.
  */
 @SuppressWarnings("deprecation")
 public class YouTubeMusicPreferenceFragment extends ToolbarPreferenceFragment {

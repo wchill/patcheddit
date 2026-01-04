@@ -633,7 +633,7 @@ public class GeneralPatch {
         Context context = view.getContext();
         Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.setPackage(context.getPackageName());
-        intent.setData(Uri.parse("revanced_settings_intent"));
+        intent.setData(Uri.parse("rvx_morphed_settings_intent"));
         intent.setClassName(context.getPackageName(), TargetActivityClass());
         context.startActivity(intent);
     }

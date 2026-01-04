@@ -9,7 +9,7 @@ import app.morphe.patches.music.utils.settings.settingsPatch
 import app.morphe.util.removeStringsElements
 import app.morphe.util.valueOrThrow
 
-private const val APP_NAME_NOTIFICATION = "ReVanced Extended Music"
+private const val APP_NAME_NOTIFICATION = "RVX Morphed Music"
 private const val APP_NAME_LAUNCHER = "RVX Music"
 
 @Suppress("unused")
@@ -25,7 +25,7 @@ val customBrandingNamePatch = resourcePatch(
         key = "appNameNotification",
         default = APP_NAME_LAUNCHER,
         values = mapOf(
-            "ReVanced Extended Music" to APP_NAME_NOTIFICATION,
+            "RVX Morphed Music" to APP_NAME_NOTIFICATION,
             "RVX Music" to APP_NAME_LAUNCHER,
             "YouTube Music" to "YouTube Music",
             "YT Music" to "YT Music",
@@ -39,7 +39,7 @@ val customBrandingNamePatch = resourcePatch(
         key = "appNameLauncher",
         default = APP_NAME_LAUNCHER,
         values = mapOf(
-            "ReVanced Extended Music" to APP_NAME_NOTIFICATION,
+            "RVX Morphed Music" to APP_NAME_NOTIFICATION,
             "RVX Music" to APP_NAME_LAUNCHER,
             "YouTube Music" to "YouTube Music",
             "YT Music" to "YT Music",

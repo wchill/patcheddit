@@ -82,7 +82,7 @@ private val settingsBytecodePatch = bytecodePatch(
 
             replaceInstruction(
                 stringIndex,
-                "const-string v$stringRegister, \"reddit_revanced\""
+                "const-string v$stringRegister, \"reddit_rvx_morphed\""
             )
         }
 
@@ -171,7 +171,7 @@ val settingsPatch = resourcePatch(
         key = "rvxSettingsLabel",
         default = DEFAULT_LABEL,
         values = mapOf(
-            "ReVanced Extended" to "ReVanced Extended",
+            "RVX Morphed" to "RVX Morphed",
             "RVX" to DEFAULT_LABEL,
         ),
         title = "RVX settings menu name",

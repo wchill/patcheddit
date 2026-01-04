@@ -77,7 +77,7 @@ public class VideoQualityPatch {
 
                 switch (networkType) {
                     case NONE -> {
-                        Utils.showToastShort(str("revanced_remember_video_quality_none"));
+                        Utils.showToastShort(str("rvx_morphed_remember_video_quality_none"));
                         return;
                     }
                     case MOBILE -> mobileQualitySetting.save(quality);
@@ -86,7 +86,7 @@ public class VideoQualityPatch {
 
                 if (Settings.REMEMBER_VIDEO_QUALITY_LAST_SELECTED_TOAST.get()) {
                     StringBuilder sb = new StringBuilder();
-                    sb.append("revanced_remember_video_quality_");
+                    sb.append("rvx_morphed_remember_video_quality_");
                     if (quality == AUTOMATIC_VIDEO_QUALITY_VALUE) {
                         sb.append("auto_");
                     }

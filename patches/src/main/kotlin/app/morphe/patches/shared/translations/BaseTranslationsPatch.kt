@@ -129,8 +129,8 @@ fun ResourcePatchContext.baseTranslationsPatch(
     // Remove unselected app languages from RVX Settings
     document("res/values/arrays.xml").use { document ->
         val targetAttributeNames = setOf(
-            "revanced_language_entries",
-            "revanced_language_entry_values",
+            "rvx_morphed_language_entries",
+            "rvx_morphed_language_entry_values",
         )
         val nodesToRemove = mutableListOf<Node>()
 

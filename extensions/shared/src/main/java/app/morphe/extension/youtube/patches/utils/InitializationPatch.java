@@ -23,7 +23,7 @@ public class InitializationPatch {
      */
     public static void onCreate(@NonNull Activity mActivity) {
         if (!SETTINGS_INITIALIZED.get()) {
-            runOnMainThreadDelayed(() -> showRestartDialog(mActivity, str("revanced_restart_first_run"), 3500), 500);
+            runOnMainThreadDelayed(() -> showRestartDialog(mActivity, str("rvx_morphed_restart_first_run"), 3500), 500);
             runOnMainThreadDelayed(() -> SETTINGS_INITIALIZED.save(true), 1000);
         }
     }

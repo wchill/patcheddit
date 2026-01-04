@@ -346,7 +346,7 @@ public class Utils {
             }
             Activity mActivity = activityRef.get();
             if (mActivity != null && mContext != null) {
-                AppLanguage language = BaseSettings.REVANCED_LANGUAGE.get();
+                AppLanguage language = BaseSettings.RVX_MORPHED_LANGUAGE.get();
 
                 // Locale of Application.
                 Locale applicationLocale = language == AppLanguage.DEFAULT
@@ -416,7 +416,7 @@ public class Utils {
 
     public static void setClipboard(@NonNull String text, @Nullable String toastMessage) {
         if (context != null && context.getSystemService(Context.CLIPBOARD_SERVICE) instanceof ClipboardManager clipboardManager) {
-            android.content.ClipData clip = android.content.ClipData.newPlainText("ReVanced", text);
+            android.content.ClipData clip = android.content.ClipData.newPlainText("RVXMorphed", text);
             clipboardManager.setPrimaryClip(clip);
 
             // Do not show a toast if using Android 13+ as it shows it's own toast.
@@ -470,7 +470,7 @@ public class Utils {
             // If a user imports bad data, the color picker preference resets the
             // bad color before this method can be called.
             Logger.printDebug(() -> "Could not parse color: $setting", ex);
-            Utils.showToastShort(str("revanced_settings_color_invalid"));
+            Utils.showToastShort(str("rvx_morphed_settings_color_invalid"));
             settings.resetToDefault();
             return validateColor(settings); // Recursively return.
         }
@@ -481,7 +481,7 @@ public class Utils {
 
         if (value < min || value > max) {
             showToastShort(str(message));
-            showToastShort(str("revanced_reset_to_default_toast"));
+            showToastShort(str("rvx_morphed_reset_to_default_toast"));
             settings.resetToDefault();
             value = settings.defaultValue;
         }
@@ -494,7 +494,7 @@ public class Utils {
 
         if (value < min || value > max) {
             showToastShort(str(message));
-            showToastShort(str("revanced_reset_to_default_toast"));
+            showToastShort(str("rvx_morphed_reset_to_default_toast"));
             settings.resetToDefault();
             value = settings.defaultValue;
         }
@@ -507,10 +507,10 @@ public class Utils {
 
     /**
      * @return If the device language uses right to left text layout (Hebrew, Arabic, etc).
-     * If this should match any ReVanced language override then instead use
-     * {@link #isRightToLeftLocale(Locale)} with {@link BaseSettings#REVANCED_LANGUAGE}.
+     * If this should match any RVX Morphed language override then instead use
+     * {@link #isRightToLeftLocale(Locale)} with {@link BaseSettings#RVX_MORPHED_LANGUAGE}.
      * This is the default locale of the device, which may differ if
-     * {@link BaseSettings#REVANCED_LANGUAGE} is set to a different language.
+     * {@link BaseSettings#RVX_MORPHED_LANGUAGE} is set to a different language.
      */
     public static boolean isRightToLeftLocale() {
         if (isRightToLeftTextLayout == null) {
@@ -529,9 +529,9 @@ public class Utils {
 
     /**
      * @return A UTF8 string containing a left-to-right or right-to-left
-     * character of the device locale. If this should match any ReVanced language
+     * character of the device locale. If this should match any RVX Morphed language
      * override then instead use {@link #getTextDirectionString(Locale)} with
-     * {@link BaseSettings#REVANCED_LANGUAGE}.
+     * {@link BaseSettings#RVX_MORPHED_LANGUAGE}.
      */
     public static String getTextDirectionString() {
         return getTextDirectionString(isRightToLeftLocale());
@@ -813,7 +813,7 @@ public class Utils {
      *                When used in a method containing an override, it must be called before 'super'.
      */
     public static AlertDialog setAlertDialogThemeAndShow(final AlertDialog.Builder builder) {
-        final int dialogStyle = ResourceUtils.getStyleIdentifier("revanced_dialog_rounded_corners");
+        final int dialogStyle = ResourceUtils.getStyleIdentifier("rvx_morphed_dialog_rounded_corners");
         if (dialogStyle != 0) {
             builder.getContext().setTheme(dialogStyle);
         }
@@ -1069,7 +1069,7 @@ public class Utils {
     public static String removePunctuationToLowercase(@Nullable CharSequence original) {
         if (original == null) return "";
         return PUNCTUATION_PATTERN.matcher(original).replaceAll("")
-                .toLowerCase(BaseSettings.REVANCED_LANGUAGE.get().getLocale());
+                .toLowerCase(BaseSettings.RVX_MORPHED_LANGUAGE.get().getLocale());
     }
 
     /**
@@ -1086,7 +1086,7 @@ public class Utils {
      * Returns a cached Collator for the current locale, or creates a new one if locale changed.
      */
     private static Collator getCollator() {
-        Locale currentLocale = BaseSettings.REVANCED_LANGUAGE.get().getLocale();
+        Locale currentLocale = BaseSettings.RVX_MORPHED_LANGUAGE.get().getLocale();
 
         if (cachedCollator == null || !currentLocale.equals(cachedCollatorLocale)) {
             cachedCollatorLocale = currentLocale;

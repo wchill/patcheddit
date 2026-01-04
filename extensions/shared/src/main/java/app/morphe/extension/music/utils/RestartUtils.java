@@ -24,7 +24,7 @@ public class RestartUtils {
     }
 
     public static void showRestartDialog(@NonNull Activity activity) {
-        showRestartDialog(activity, "revanced_restart_message", false);
+        showRestartDialog(activity, "rvx_morphed_restart_message", false);
     }
 
     public static void showRestartDialog(@NonNull Activity activity, @NonNull String message,

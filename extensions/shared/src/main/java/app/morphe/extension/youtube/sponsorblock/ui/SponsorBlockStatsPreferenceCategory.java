@@ -70,7 +70,7 @@ public class SponsorBlockStatsPreferenceCategory extends PreferenceCategory {
             addPreference(loadingPlaceholderPreference);
 
             if (enabled) {
-                loadingPlaceholderPreference.setTitle(str("revanced_sb_stats_loading"));
+                loadingPlaceholderPreference.setTitle(str("rvx_morphed_sb_stats_loading"));
                 Utils.runOnBackgroundThread(() -> {
                     UserStats stats = SBRequester.retrieveUserStats();
                     Utils.runOnMainThread(() -> { // get back on main thread to modify UI elements
@@ -79,7 +79,7 @@ public class SponsorBlockStatsPreferenceCategory extends PreferenceCategory {
                     });
                 });
             } else {
-                loadingPlaceholderPreference.setTitle(str("revanced_sb_stats_sb_disabled"));
+                loadingPlaceholderPreference.setTitle(str("rvx_morphed_sb_stats_sb_disabled"));
             }
         } catch (Exception ex) {
             Logger.printException(() -> "onAttachedToActivity failure", ex);
@@ -90,7 +90,7 @@ public class SponsorBlockStatsPreferenceCategory extends PreferenceCategory {
         Utils.verifyOnMainThread();
         try {
             if (stats == null) {
-                loadingPlaceholder.setTitle(str("revanced_sb_stats_connection_failure"));
+                loadingPlaceholder.setTitle(str("rvx_morphed_sb_stats_connection_failure"));
                 return;
             }
             removeAll();
@@ -100,8 +100,8 @@ public class SponsorBlockStatsPreferenceCategory extends PreferenceCategory {
                 // If user has not created any segments, there's no reason to set a username.
                 String userName = stats.userName;
                 ResettableEditTextPreference preference = new ResettableEditTextPreference(context);
-                preference.setTitle(fromHtml(str("revanced_sb_stats_username", userName), FROM_HTML_MODE_COMPACT));
-                preference.setSummary(str("revanced_sb_stats_username_change"));
+                preference.setTitle(fromHtml(str("rvx_morphed_sb_stats_username", userName), FROM_HTML_MODE_COMPACT));
+                preference.setSummary(str("rvx_morphed_sb_stats_username_change"));
                 preference.setText(userName);
                 preference.setOnPreferenceChangeListener((preference1, value) -> {
                     Utils.runOnBackgroundThread(() -> {
@@ -109,9 +109,9 @@ public class SponsorBlockStatsPreferenceCategory extends PreferenceCategory {
                         String errorMessage = SBRequester.setUsername(newUserName);
                         Utils.runOnMainThread(() -> {
                             if (errorMessage == null) {
-                                preference.setTitle(fromHtml(str("revanced_sb_stats_username", newUserName), FROM_HTML_MODE_COMPACT));
+                                preference.setTitle(fromHtml(str("rvx_morphed_sb_stats_username", newUserName), FROM_HTML_MODE_COMPACT));
                                 preference.setText(newUserName);
-                                Utils.showToastLong(str("revanced_sb_stats_username_changed"));
+                                Utils.showToastLong(str("rvx_morphed_sb_stats_username_changed"));
                             } else {
                                 preference.setText(userName); // revert to previous
                                 SponsorBlockUtils.showErrorDialog(errorMessage);
@@ -128,8 +128,8 @@ public class SponsorBlockStatsPreferenceCategory extends PreferenceCategory {
                 // Number of segment submissions (does not include ignored segments).
                 Preference preference = new Preference(context);
                 String formatted = SponsorBlockUtils.getNumberOfSkipsString(stats.segmentCount);
-                preference.setTitle(fromHtml(str("revanced_sb_stats_submissions", formatted), FROM_HTML_MODE_COMPACT));
-                preference.setSummary(str("revanced_sb_stats_submissions_sum"));
+                preference.setTitle(fromHtml(str("rvx_morphed_sb_stats_submissions", formatted), FROM_HTML_MODE_COMPACT));
+                preference.setSummary(str("rvx_morphed_sb_stats_submissions_sum"));
                 if (stats.totalSegmentCountIncludingIgnored == 0) {
                     preference.setSelectable(false);
                 } else {
@@ -148,7 +148,7 @@ public class SponsorBlockStatsPreferenceCategory extends PreferenceCategory {
                 // "user reputation".  Usually not useful since it appears most users have zero reputation.
                 // But if there is a reputation then show it here.
                 Preference preference = new Preference(context);
-                preference.setTitle(fromHtml(str("revanced_sb_stats_reputation", stats.reputation), FROM_HTML_MODE_COMPACT));
+                preference.setTitle(fromHtml(str("rvx_morphed_sb_stats_reputation", stats.reputation), FROM_HTML_MODE_COMPACT));
                 preference.setSelectable(false);
                 preference.setEnabled(Settings.SB_ENABLED.isAvailable());
                 if (stats.reputation != 0) {
@@ -163,12 +163,12 @@ public class SponsorBlockStatsPreferenceCategory extends PreferenceCategory {
                 String stats_saved;
                 String stats_saved_sum;
                 if (stats.totalSegmentCountIncludingIgnored == 0) {
-                    stats_saved = str("revanced_sb_stats_saved_zero");
-                    stats_saved_sum = str("revanced_sb_stats_saved_sum_zero");
+                    stats_saved = str("rvx_morphed_sb_stats_saved_zero");
+                    stats_saved_sum = str("rvx_morphed_sb_stats_saved_sum_zero");
                 } else {
-                    stats_saved = str("revanced_sb_stats_saved",
+                    stats_saved = str("rvx_morphed_sb_stats_saved",
                             SponsorBlockUtils.getNumberOfSkipsString(stats.viewCount));
-                    stats_saved_sum = str("revanced_sb_stats_saved_sum",
+                    stats_saved_sum = str("rvx_morphed_sb_stats_saved_sum",
                             SponsorBlockUtils.getTimeSavedString((long) (60 * stats.minutesSaved)));
                 }
                 preference.setTitle(fromHtml(stats_saved, FROM_HTML_MODE_COMPACT));
@@ -193,18 +193,18 @@ public class SponsorBlockStatsPreferenceCategory extends PreferenceCategory {
         Runnable updateStatsSelfSaved = () -> {
             String formatted = SponsorBlockUtils.getNumberOfSkipsString(
                     Settings.SB_LOCAL_TIME_SAVED_NUMBER_SEGMENTS.get());
-            preference.setTitle(fromHtml(str("revanced_sb_stats_self_saved", formatted), FROM_HTML_MODE_COMPACT));
+            preference.setTitle(fromHtml(str("rvx_morphed_sb_stats_self_saved", formatted), FROM_HTML_MODE_COMPACT));
 
             String formattedSaved = SponsorBlockUtils.getTimeSavedString(
                     Settings.SB_LOCAL_TIME_SAVED_MILLISECONDS.get() / 1000);
-            preference.setSummary(fromHtml(str("revanced_sb_stats_self_saved_sum", formattedSaved), FROM_HTML_MODE_COMPACT));
+            preference.setSummary(fromHtml(str("rvx_morphed_sb_stats_self_saved_sum", formattedSaved), FROM_HTML_MODE_COMPACT));
         };
         updateStatsSelfSaved.run();
 
         preference.setOnPreferenceClickListener(preference1 -> {
             Pair<Dialog, LinearLayout> dialogPair = CustomDialog.create(
                     preference.getContext(),
-                    str("revanced_sb_stats_self_saved_reset_title"), // Title.
+                    str("rvx_morphed_sb_stats_self_saved_reset_title"), // Title.
                     null, // No message.
                     null, // No EditText.
                     null, // OK button text.

@@ -26,11 +26,11 @@ private val webViewResourcePatch = resourcePatch(
         arrayOf(
             ResourceGroup(
                 "layout",
-                "revanced_webview.xml",
+                "rvx_morphed_webview.xml",
             ),
             ResourceGroup(
                 "menu",
-                "revanced_webview_menu.xml",
+                "rvx_morphed_webview_menu.xml",
             )
         ).forEach { resourceGroup ->
             copyResources("shared/webview", resourceGroup)

@@ -33,8 +33,6 @@ val visualPreferencesIconsPatch = resourcePatch(
             "Custom branding icon" to "custom_branding_icon",
             "Extension" to DEFAULT_ICON,
             "Gear" to "gear",
-            "ReVanced" to "revanced",
-            "ReVanced Colored" to "revanced_colored",
             "RVX Letters" to "rvx_letters",
             "RVX Letters Bold" to "rvx_letters_bold",
             "YT alt" to "yt_alt",
@@ -76,7 +74,7 @@ val visualPreferencesIconsPatch = resourcePatch(
         }
         val resourceGroup = ResourceGroup(
             "drawable",
-            "revanced_settings_icon.xml"
+            "rvx_morphed_settings_icon.xml"
         )
 
         try {
@@ -135,21 +133,21 @@ private val preferenceKey = setOf(
     "settings_header_about_youtube_music",
 
     // RVX settings.
-    "revanced_settings",
+    "rvx_morphed_settings",
 
-    "revanced_preference_screen_account",
-    "revanced_preference_screen_action_bar",
-    "revanced_preference_screen_ads",
-    "revanced_preference_screen_flyout",
-    "revanced_preference_screen_general",
-    "revanced_preference_screen_navigation",
-    "revanced_preference_screen_player",
-    "revanced_preference_screen_settings",
-    "revanced_preference_screen_video",
-    "revanced_preference_screen_ryd",
-    "revanced_preference_screen_return_youtube_username",
-    "revanced_preference_screen_sb",
-    "revanced_preference_screen_misc",
+    "rvx_morphed_preference_screen_account",
+    "rvx_morphed_preference_screen_action_bar",
+    "rvx_morphed_preference_screen_ads",
+    "rvx_morphed_preference_screen_flyout",
+    "rvx_morphed_preference_screen_general",
+    "rvx_morphed_preference_screen_navigation",
+    "rvx_morphed_preference_screen_player",
+    "rvx_morphed_preference_screen_settings",
+    "rvx_morphed_preference_screen_video",
+    "rvx_morphed_preference_screen_ryd",
+    "rvx_morphed_preference_screen_return_youtube_username",
+    "rvx_morphed_preference_screen_sb",
+    "rvx_morphed_preference_screen_misc",
 )
 
 // endregion.

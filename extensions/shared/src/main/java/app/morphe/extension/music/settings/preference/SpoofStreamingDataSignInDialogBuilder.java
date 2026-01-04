@@ -16,13 +16,13 @@ public class SpoofStreamingDataSignInDialogBuilder {
         AlertDialog.Builder builder = Utils.getDialogBuilder(mActivity);
 
         String dialogTitle =
-                str("revanced_spoof_streaming_data_sign_in_android_no_sdk_dialog_title");
+                str("rvx_morphed_spoof_streaming_data_sign_in_android_no_sdk_dialog_title");
         String dialogMessage =
-                str("revanced_spoof_streaming_data_sign_in_android_no_sdk_dialog_message");
+                str("rvx_morphed_spoof_streaming_data_sign_in_android_no_sdk_dialog_message");
         String resetButtonText =
-                str("revanced_spoof_streaming_data_sign_in_android_no_sdk_dialog_reset_text");
+                str("rvx_morphed_spoof_streaming_data_sign_in_android_no_sdk_dialog_reset_text");
         String okButtonText =
-                str("revanced_spoof_streaming_data_sign_in_android_no_sdk_dialog_get_authorization_token_text");
+                str("rvx_morphed_spoof_streaming_data_sign_in_android_no_sdk_dialog_get_authorization_token_text");
 
         builder.setTitle(dialogTitle);
         builder.setMessage(dialogMessage);
@@ -41,11 +41,11 @@ public class SpoofStreamingDataSignInDialogBuilder {
         AlertDialog.Builder builder = Utils.getDialogBuilder(mActivity);
 
         String dialogTitle =
-                str("revanced_spoof_streaming_data_sign_in_android_vr_dialog_title");
+                str("rvx_morphed_spoof_streaming_data_sign_in_android_vr_dialog_title");
         String dialogMessage =
-                str("revanced_spoof_streaming_data_sign_in_android_vr_dialog_message");
+                str("rvx_morphed_spoof_streaming_data_sign_in_android_vr_dialog_message");
         String resetButtonText =
-                str("revanced_spoof_streaming_data_sign_in_android_vr_dialog_reset_text");
+                str("rvx_morphed_spoof_streaming_data_sign_in_android_vr_dialog_reset_text");
 
         builder.setTitle(dialogTitle);
         builder.setMessage(dialogMessage);
@@ -53,14 +53,14 @@ public class SpoofStreamingDataSignInDialogBuilder {
 
         if (YouTubeVRAuthPatch.isDeviceCodeAvailable()) {
             String okButtonText =
-                    str("revanced_spoof_streaming_data_sign_in_android_vr_dialog_get_authorization_token_text");
+                    str("rvx_morphed_spoof_streaming_data_sign_in_android_vr_dialog_get_authorization_token_text");
             builder.setPositiveButton(okButtonText, (dialog, id) -> {
                 YouTubeVRAuthPatch.setRefreshToken();
                 YouTubeVRAuthPatch.setAccessToken(mActivity);
             });
         } else {
             String okButtonText =
-                    str("revanced_spoof_streaming_data_sign_in_android_vr_dialog_get_activation_code_text");
+                    str("rvx_morphed_spoof_streaming_data_sign_in_android_vr_dialog_get_activation_code_text");
             builder.setPositiveButton(okButtonText, (dialog, id) -> {
                 YouTubeVRAuthPatch.setActivationCode(mActivity);
             });

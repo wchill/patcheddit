@@ -16,7 +16,7 @@ import app.morphe.extension.youtube.settings.Settings;
 public class SpoofStreamingDataSideEffectsPreference extends Preference {
 
     private final SharedPreferences.OnSharedPreferenceChangeListener listener = (sharedPreferences, str) -> {
-        // Because this listener may run before the ReVanced settings fragment updates Settings,
+        // Because this listener may run before the RVX Morphed settings fragment updates Settings,
         // this could show the prior config and not the current.
         //
         // Push this call to the end of the main run queue,
@@ -63,7 +63,7 @@ public class SpoofStreamingDataSideEffectsPreference extends Preference {
 
     private void updateUI() {
         final String clientName = Settings.SPOOF_STREAMING_DATA_DEFAULT_CLIENT.get().name().toLowerCase();
-        final String summaryTextKey = "revanced_spoof_streaming_data_side_effects_" + clientName;
+        final String summaryTextKey = "rvx_morphed_spoof_streaming_data_side_effects_" + clientName;
 
         setSummary(str(summaryTextKey));
         setEnabled(Settings.SPOOF_STREAMING_DATA.get());

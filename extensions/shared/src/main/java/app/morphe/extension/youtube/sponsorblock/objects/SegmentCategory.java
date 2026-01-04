@@ -50,38 +50,38 @@ import app.morphe.extension.youtube.settings.Settings;
 
 @SuppressWarnings({"unused", "FieldCanBeLocal"})
 public enum SegmentCategory {
-    SPONSOR("sponsor", sf("revanced_sb_segments_sponsor"), sf("revanced_sb_segments_sponsor_sum"), sf("revanced_sb_skip_button_sponsor"), sf("revanced_sb_skipped_sponsor"),
+    SPONSOR("sponsor", sf("rvx_morphed_sb_segments_sponsor"), sf("rvx_morphed_sb_segments_sponsor_sum"), sf("rvx_morphed_sb_skip_button_sponsor"), sf("rvx_morphed_sb_skipped_sponsor"),
             SB_CATEGORY_SPONSOR, SB_CATEGORY_SPONSOR_COLOR),
-    SELF_PROMO("selfpromo", sf("revanced_sb_segments_selfpromo"), sf("revanced_sb_segments_selfpromo_sum"), sf("revanced_sb_skip_button_selfpromo"), sf("revanced_sb_skipped_selfpromo"),
+    SELF_PROMO("selfpromo", sf("rvx_morphed_sb_segments_selfpromo"), sf("rvx_morphed_sb_segments_selfpromo_sum"), sf("rvx_morphed_sb_skip_button_selfpromo"), sf("rvx_morphed_sb_skipped_selfpromo"),
             SB_CATEGORY_SELF_PROMO, SB_CATEGORY_SELF_PROMO_COLOR),
-    INTERACTION("interaction", sf("revanced_sb_segments_interaction"), sf("revanced_sb_segments_interaction_sum"), sf("revanced_sb_skip_button_interaction"), sf("revanced_sb_skipped_interaction"),
+    INTERACTION("interaction", sf("rvx_morphed_sb_segments_interaction"), sf("rvx_morphed_sb_segments_interaction_sum"), sf("rvx_morphed_sb_skip_button_interaction"), sf("rvx_morphed_sb_skipped_interaction"),
             SB_CATEGORY_INTERACTION, SB_CATEGORY_INTERACTION_COLOR),
     /**
      * Unique category that is treated differently than the rest.
      */
-    HIGHLIGHT("poi_highlight", sf("revanced_sb_segments_highlight"), sf("revanced_sb_segments_highlight_sum"), sf("revanced_sb_skip_button_highlight"), sf("revanced_sb_skipped_highlight"),
+    HIGHLIGHT("poi_highlight", sf("rvx_morphed_sb_segments_highlight"), sf("rvx_morphed_sb_segments_highlight_sum"), sf("rvx_morphed_sb_skip_button_highlight"), sf("rvx_morphed_sb_skipped_highlight"),
             SB_CATEGORY_HIGHLIGHT, SB_CATEGORY_HIGHLIGHT_COLOR),
-    INTRO("intro", sf("revanced_sb_segments_intro"), sf("revanced_sb_segments_intro_sum"),
-            sf("revanced_sb_skip_button_intro_beginning"), sf("revanced_sb_skip_button_intro_middle"), sf("revanced_sb_skip_button_intro_end"),
-            sf("revanced_sb_skipped_intro_beginning"), sf("revanced_sb_skipped_intro_middle"), sf("revanced_sb_skipped_intro_end"),
+    INTRO("intro", sf("rvx_morphed_sb_segments_intro"), sf("rvx_morphed_sb_segments_intro_sum"),
+            sf("rvx_morphed_sb_skip_button_intro_beginning"), sf("rvx_morphed_sb_skip_button_intro_middle"), sf("rvx_morphed_sb_skip_button_intro_end"),
+            sf("rvx_morphed_sb_skipped_intro_beginning"), sf("rvx_morphed_sb_skipped_intro_middle"), sf("rvx_morphed_sb_skipped_intro_end"),
             SB_CATEGORY_INTRO, SB_CATEGORY_INTRO_COLOR),
-    OUTRO("outro", sf("revanced_sb_segments_outro"), sf("revanced_sb_segments_outro_sum"), sf("revanced_sb_skip_button_outro"), sf("revanced_sb_skipped_outro"),
+    OUTRO("outro", sf("rvx_morphed_sb_segments_outro"), sf("rvx_morphed_sb_segments_outro_sum"), sf("rvx_morphed_sb_skip_button_outro"), sf("rvx_morphed_sb_skipped_outro"),
             SB_CATEGORY_OUTRO, SB_CATEGORY_OUTRO_COLOR),
-    PREVIEW("preview", sf("revanced_sb_segments_preview"), sf("revanced_sb_segments_preview_sum"),
-            sf("revanced_sb_skip_button_preview_beginning"), sf("revanced_sb_skip_button_preview_middle"), sf("revanced_sb_skip_button_preview_end"),
-            sf("revanced_sb_skipped_preview_beginning"), sf("revanced_sb_skipped_preview_middle"), sf("revanced_sb_skipped_preview_end"),
+    PREVIEW("preview", sf("rvx_morphed_sb_segments_preview"), sf("rvx_morphed_sb_segments_preview_sum"),
+            sf("rvx_morphed_sb_skip_button_preview_beginning"), sf("rvx_morphed_sb_skip_button_preview_middle"), sf("rvx_morphed_sb_skip_button_preview_end"),
+            sf("rvx_morphed_sb_skipped_preview_beginning"), sf("rvx_morphed_sb_skipped_preview_middle"), sf("rvx_morphed_sb_skipped_preview_end"),
             SB_CATEGORY_PREVIEW, SB_CATEGORY_PREVIEW_COLOR),
-    HOOK("hook", sf("revanced_sb_segments_hook"), sf("revanced_sb_segments_hook_sum"), sf("revanced_sb_skip_button_hook"), sf("revanced_sb_skipped_hook"),
+    HOOK("hook", sf("rvx_morphed_sb_segments_hook"), sf("rvx_morphed_sb_segments_hook_sum"), sf("rvx_morphed_sb_skip_button_hook"), sf("rvx_morphed_sb_skipped_hook"),
             SB_CATEGORY_HOOK, SB_CATEGORY_HOOK_COLOR),
-    FILLER("filler", sf("revanced_sb_segments_filler"), sf("revanced_sb_segments_filler_sum"), sf("revanced_sb_skip_button_filler"), sf("revanced_sb_skipped_filler"),
+    FILLER("filler", sf("rvx_morphed_sb_segments_filler"), sf("rvx_morphed_sb_segments_filler_sum"), sf("rvx_morphed_sb_skip_button_filler"), sf("rvx_morphed_sb_skipped_filler"),
             SB_CATEGORY_FILLER, SB_CATEGORY_FILLER_COLOR),
-    MUSIC_OFFTOPIC("music_offtopic", sf("revanced_sb_segments_nomusic"), sf("revanced_sb_segments_nomusic_sum"), sf("revanced_sb_skip_button_nomusic"), sf("revanced_sb_skipped_nomusic"),
+    MUSIC_OFFTOPIC("music_offtopic", sf("rvx_morphed_sb_segments_nomusic"), sf("rvx_morphed_sb_segments_nomusic_sum"), sf("rvx_morphed_sb_skip_button_nomusic"), sf("rvx_morphed_sb_skipped_nomusic"),
             SB_CATEGORY_MUSIC_OFFTOPIC, SB_CATEGORY_MUSIC_OFFTOPIC_COLOR),
-    UNSUBMITTED("unsubmitted", StringRef.empty, StringRef.empty, sf("revanced_sb_skip_button_unsubmitted"), sf("revanced_sb_skipped_unsubmitted"),
+    UNSUBMITTED("unsubmitted", StringRef.empty, StringRef.empty, sf("rvx_morphed_sb_skip_button_unsubmitted"), sf("rvx_morphed_sb_skipped_unsubmitted"),
             SB_CATEGORY_UNSUBMITTED, SB_CATEGORY_UNSUBMITTED_COLOR);
 
-    private final StringRef skipSponsorTextCompact = sf("revanced_sb_skip_button_compact");
-    private final StringRef skipSponsorTextCompactHighlight = sf("revanced_sb_skip_button_compact_highlight");
+    private final StringRef skipSponsorTextCompact = sf("rvx_morphed_sb_skip_button_compact");
+    private final StringRef skipSponsorTextCompactHighlight = sf("rvx_morphed_sb_skip_button_compact_highlight");
 
     private static final SegmentCategory[] categoriesWithoutHighlights = new SegmentCategory[]{
             SPONSOR,
@@ -260,7 +260,7 @@ public enum SegmentCategory {
      */
     private void loadFromSettings() {
         String behaviorString = behaviorSetting.get();
-        CategoryBehaviour savedBehavior = CategoryBehaviour.byReVancedKeyValue(behaviorString);
+        CategoryBehaviour savedBehavior = CategoryBehaviour.byRVXKeyValue(behaviorString);
         if (savedBehavior == null) {
             Logger.printException(() -> "Invalid behavior: " + behaviorString);
             behaviorSetting.resetToDefault();
@@ -284,7 +284,7 @@ public enum SegmentCategory {
      */
     public void setBehaviour(CategoryBehaviour behaviour) {
         this.behaviour = Objects.requireNonNull(behaviour);
-        this.behaviorSetting.save(behaviour.reVancedKeyValue);
+        this.behaviorSetting.save(behaviour.rvxKeyValue);
     }
 
     /**

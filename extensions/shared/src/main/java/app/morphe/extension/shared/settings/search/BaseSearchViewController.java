@@ -50,7 +50,7 @@ import app.morphe.extension.shared.utils.Logger;
 import app.morphe.extension.shared.utils.Utils;
 
 /**
- * Abstract controller for managing the overlay search view in ReVanced settings.
+ * Abstract controller for managing the overlay search view in RVX Morphed settings.
  * Subclasses must implement app-specific preference handling.
  */
 @SuppressWarnings("deprecation")
@@ -73,14 +73,14 @@ public abstract class BaseSearchViewController {
 
     protected static final int MAX_SEARCH_RESULTS = 50; // Maximum number of search results displayed.
 
-    protected static final int ID_REVANCED_SEARCH_VIEW = getIdIdentifier("revanced_search_view");
-    protected static final int ID_REVANCED_SEARCH_VIEW_CONTAINER = getIdIdentifier("revanced_search_view_container");
+    protected static final int ID_RVX_MORPHED_SEARCH_VIEW = getIdIdentifier("rvx_morphed_search_view");
+    protected static final int ID_RVX_MORPHED_SEARCH_VIEW_CONTAINER = getIdIdentifier("rvx_morphed_search_view_container");
     protected static final int ID_ACTION_SEARCH = getIdIdentifier("action_search");
-    protected static final int ID_REVANCED_SETTINGS_FRAGMENTS = getIdIdentifier("revanced_settings_fragments");
-    public static final int DRAWABLE_REVANCED_SETTINGS_SEARCH_ICON =
-            getDrawableIdentifier("revanced_settings_search_icon");
-    protected static final int MENU_REVANCED_SEARCH_MENU =
-            getMenuIdentifier("revanced_search_menu");
+    protected static final int ID_RVX_MORPHED_SETTINGS_FRAGMENTS = getIdIdentifier("rvx_morphed_settings_fragments");
+    public static final int DRAWABLE_RVX_MORPHED_SETTINGS_SEARCH_ICON =
+            getDrawableIdentifier("rvx_morphed_settings_search_icon");
+    protected static final int MENU_RVX_MORPHED_SEARCH_MENU =
+            getMenuIdentifier("rvx_morphed_search_menu");
 
     /**
      * Constructs a new BaseSearchViewController instance.
@@ -111,7 +111,7 @@ public abstract class BaseSearchViewController {
     private String getString(String str) {
         Activity mActivity = Utils.getActivity();
         if (mActivity != null) {
-            AppLanguage language = BaseSettings.REVANCED_LANGUAGE.get();
+            AppLanguage language = BaseSettings.RVX_MORPHED_LANGUAGE.get();
             Configuration configuration = mActivity.getResources().getConfiguration();
 
             // Locale of Application.
@@ -135,17 +135,17 @@ public abstract class BaseSearchViewController {
     @SuppressLint("DiscouragedApi")
     private void initializeSearchView() {
         // Retrieve SearchView and container from XML.
-        searchView = activity.findViewById(ID_REVANCED_SEARCH_VIEW);
+        searchView = activity.findViewById(ID_RVX_MORPHED_SEARCH_VIEW);
         EditText searchEditText = searchView.findViewById(
                 searchView.getContext().getResources().getIdentifier(
                         "android:id/search_src_text", null, null));
         // Disable fullscreen keyboard mode.
         searchEditText.setImeOptions(searchEditText.getImeOptions() | EditorInfo.IME_FLAG_NO_EXTRACT_UI);
 
-        searchContainer = activity.findViewById(ID_REVANCED_SEARCH_VIEW_CONTAINER);
+        searchContainer = activity.findViewById(ID_RVX_MORPHED_SEARCH_VIEW_CONTAINER);
 
-        String rvxSettingsLabel = getString("revanced_settings_title");
-        String searchLabel = getString("revanced_settings_search_title");
+        String rvxSettingsLabel = getString("rvx_morphed_settings_title");
+        String searchLabel = getString("rvx_morphed_settings_search_title");
         String searchHint = String.format(searchLabel, rvxSettingsLabel);
 
         // Set background and query hint.
@@ -153,7 +153,7 @@ public abstract class BaseSearchViewController {
         searchView.setQueryHint(searchHint);
 
         // Configure RTL support based on app language.
-        AppLanguage appLanguage = BaseSettings.REVANCED_LANGUAGE.get();
+        AppLanguage appLanguage = BaseSettings.RVX_MORPHED_LANGUAGE.get();
         if (Utils.isRightToLeftLocale(appLanguage.getLocale())) {
             searchView.setTextDirection(View.TEXT_DIRECTION_RTL);
             searchView.setTextAlignment(View.TEXT_ALIGNMENT_VIEW_END);
@@ -192,7 +192,7 @@ public abstract class BaseSearchViewController {
                 FrameLayout.LayoutParams.MATCH_PARENT));
 
         // Add overlay to the main content container.
-        FrameLayout mainContainer = activity.findViewById(ID_REVANCED_SETTINGS_FRAGMENTS);
+        FrameLayout mainContainer = activity.findViewById(ID_RVX_MORPHED_SETTINGS_FRAGMENTS);
         if (mainContainer != null) {
             FrameLayout.LayoutParams overlayParams = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.MATCH_PARENT,
@@ -248,7 +248,7 @@ public abstract class BaseSearchViewController {
      * Sets up the toolbar menu for the search action.
      */
     protected void setupToolbarMenu() {
-        toolbar.inflateMenu(MENU_REVANCED_SEARCH_MENU);
+        toolbar.inflateMenu(MENU_RVX_MORPHED_SEARCH_MENU);
         toolbar.setOnMenuItemClickListener(item -> {
             if (item.getItemId() == ID_ACTION_SEARCH && !isSearchActive) {
                 openSearch();
@@ -529,10 +529,10 @@ public abstract class BaseSearchViewController {
         if (filteredSearchItems.isEmpty()) {
             Preference noResultsPreference = new Preference(activity);
             noResultsPreference.setKey("no_results_placeholder");
-            noResultsPreference.setTitle(str("revanced_settings_search_no_results_title", query));
-            noResultsPreference.setSummary(str("revanced_settings_search_no_results_summary"));
+            noResultsPreference.setTitle(str("rvx_morphed_settings_search_no_results_title", query));
+            noResultsPreference.setSummary(str("rvx_morphed_settings_search_no_results_summary"));
             noResultsPreference.setSelectable(false);
-            noResultsPreference.setIcon(DRAWABLE_REVANCED_SETTINGS_SEARCH_ICON);
+            noResultsPreference.setIcon(DRAWABLE_RVX_MORPHED_SETTINGS_SEARCH_ICON);
             filteredSearchItems.add(new BaseSearchResultItem.PreferenceSearchItem(noResultsPreference, "", Collections.emptyList()));
         }
 

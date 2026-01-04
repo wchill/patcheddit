@@ -55,8 +55,8 @@ public class Whitelist {
 
     private static final WhitelistType whitelistTypePlaybackSpeed = WhitelistType.PLAYBACK_SPEED;
     private static final WhitelistType whitelistTypeSponsorBlock = WhitelistType.SPONSOR_BLOCK;
-    private static final String whitelistIncluded = str("revanced_whitelist_included");
-    private static final String whitelistExcluded = str("revanced_whitelist_excluded");
+    private static final String whitelistIncluded = str("rvx_morphed_whitelist_included");
+    private static final String whitelistExcluded = str("rvx_morphed_whitelist_excluded");
 
     public static boolean isChannelWhitelistedSponsorBlock(String channelId) {
         return isWhitelisted(whitelistTypeSponsorBlock, channelId);
@@ -71,7 +71,7 @@ public class Whitelist {
         final String channelName = VideoInformation.getChannelName();
 
         if (channelId.isEmpty() || channelName.isEmpty()) {
-            Utils.showToastShort(str("revanced_whitelist_failure_generic"));
+            Utils.showToastShort(str("rvx_morphed_whitelist_failure_generic"));
             return;
         }
 
@@ -404,9 +404,9 @@ public class Whitelist {
         whitelisted.add(channel);
         String friendlyName = whitelistType.getFriendlyName();
         if (updateWhitelist(whitelistType, whitelisted)) {
-            showDialogOrToast(context, str("revanced_whitelist_added", channelName, friendlyName));
+            showDialogOrToast(context, str("rvx_morphed_whitelist_added", channelName, friendlyName));
         } else {
-            showToastShort(str("revanced_whitelist_add_failed", channelName, friendlyName));
+            showToastShort(str("rvx_morphed_whitelist_add_failed", channelName, friendlyName));
         }
     }
 
@@ -428,9 +428,9 @@ public class Whitelist {
         }
         String friendlyName = whitelistType.getFriendlyName();
         if (updateWhitelist(whitelistType, whitelisted)) {
-            showDialogOrToast(context, str("revanced_whitelist_removed", channelName, friendlyName));
+            showDialogOrToast(context, str("rvx_morphed_whitelist_removed", channelName, friendlyName));
         } else {
-            showToastShort(str("revanced_whitelist_remove_failed", channelName, friendlyName));
+            showToastShort(str("rvx_morphed_whitelist_remove_failed", channelName, friendlyName));
         }
     }
 
@@ -439,12 +439,12 @@ public class Whitelist {
             showToastShort(message);
             return;
         } else {
-            message = message + "\n \n" + str("revanced_whitelist_reload_video");
+            message = message + "\n \n" + str("rvx_morphed_whitelist_reload_video");
         }
         // Create the custom dialog.
         Pair<Dialog, LinearLayout> dialogPair = CustomDialog.create(
                 context,
-                str("revanced_whitelist_settings_title"), // Title.
+                str("rvx_morphed_whitelist_settings_title"), // Title.
                 message,                    // Message.
                 null,                       // No EditText.
                 null,                       // OK button text.
@@ -532,7 +532,7 @@ public class Whitelist {
 
         WhitelistType() {
             String name = name().toLowerCase();
-            this.friendlyName = str("revanced_whitelist_" + name);
+            this.friendlyName = str("rvx_morphed_whitelist_" + name);
             this.preferencesName = "whitelist_" + name;
         }
 

@@ -34,7 +34,7 @@ import app.morphe.extension.youtube.settings.YouTubeHostActivity;
 import app.morphe.extension.youtube.utils.ExtendedUtils;
 
 /**
- * Preference fragment for ReVanced settings.
+ * Preference fragment for RVX Morphed settings.
  */
 @SuppressWarnings("deprecation")
 public class YouTubePreferenceFragment extends ToolbarPreferenceFragment {
@@ -155,7 +155,7 @@ public class YouTubePreferenceFragment extends ToolbarPreferenceFragment {
      * Add Preference to Import/Export settings submenu
      */
     private void setBackupRestorePreference() {
-        Preference importPreference = findPreference("revanced_settings_import");
+        Preference importPreference = findPreference("rvx_morphed_settings_import");
         if (importPreference == null) {
             return;
         }
@@ -163,7 +163,7 @@ public class YouTubePreferenceFragment extends ToolbarPreferenceFragment {
             importActivity();
             return false;
         });
-        Preference exportPreference = findPreference("revanced_settings_export");
+        Preference exportPreference = findPreference("rvx_morphed_settings_export");
         if (exportPreference == null) {
             return;
         }
@@ -178,7 +178,7 @@ public class YouTubePreferenceFragment extends ToolbarPreferenceFragment {
      * Set Preference to Debug settings submenu
      */
     private void setDebugLogPreference() {
-        Preference clearLog = findPreference("revanced_debug_logs_clear_buffer");
+        Preference clearLog = findPreference("rvx_morphed_debug_logs_clear_buffer");
         if (clearLog == null) {
             return;
         }
@@ -187,7 +187,7 @@ public class YouTubePreferenceFragment extends ToolbarPreferenceFragment {
             return false;
         });
 
-        Preference exportLogToClipboard = findPreference("revanced_debug_export_logs_to_clipboard");
+        Preference exportLogToClipboard = findPreference("rvx_morphed_debug_export_logs_to_clipboard");
         if (exportLogToClipboard == null) {
             return;
         }
@@ -196,7 +196,7 @@ public class YouTubePreferenceFragment extends ToolbarPreferenceFragment {
             return false;
         });
 
-        Preference exportLogToFile = findPreference("revanced_debug_export_logs_to_file");
+        Preference exportLogToFile = findPreference("rvx_morphed_debug_export_logs_to_file");
         if (exportLogToFile == null) {
             return;
         }
@@ -247,19 +247,19 @@ public class YouTubePreferenceFragment extends ToolbarPreferenceFragment {
      * Set patch information preference summary
      */
     private void setPatchInformationPreference() {
-        Preference appNamePreference = findPreference("revanced_app_name");
+        Preference appNamePreference = findPreference("rvx_morphed_app_name");
         if (appNamePreference != null) {
             appNamePreference.setSummary(ExtendedUtils.getAppLabel());
         }
-        Preference appVersionPreference = findPreference("revanced_app_version");
+        Preference appVersionPreference = findPreference("rvx_morphed_app_version");
         if (appVersionPreference != null) {
             appVersionPreference.setSummary(ExtendedUtils.getAppVersionName());
         }
-        Preference patchesVersion = findPreference("revanced_patches_version");
+        Preference patchesVersion = findPreference("rvx_morphed_patches_version");
         if (patchesVersion != null) {
             patchesVersion.setSummary(PatchVersion());
         }
-        Preference patchedDatePreference = findPreference("revanced_patched_date");
+        Preference patchedDatePreference = findPreference("rvx_morphed_patched_date");
         if (patchedDatePreference != null) {
             long patchedTime = PatchedTime();
             Date date = new Date(patchedTime);
@@ -294,8 +294,8 @@ public class YouTubePreferenceFragment extends ToolbarPreferenceFragment {
             return true;
         });
         String shortsSummary = ReturnYouTubeDislikePatch.IS_SPOOFING_TO_NON_LITHO_SHORTS_PLAYER
-                ? str("revanced_ryd_shorts_summary_on")
-                : str("revanced_ryd_shorts_summary_on_disclaimer");
+                ? str("rvx_morphed_ryd_shorts_summary_on")
+                : str("rvx_morphed_ryd_shorts_summary_on_disclaimer");
         shortsPreference.setSummaryOn(shortsSummary);
         percentagePreference.setOnPreferenceChangeListener(clearAllUICaches);
         compactLayoutPreference.setOnPreferenceChangeListener(clearAllUICaches);
@@ -320,11 +320,11 @@ public class YouTubePreferenceFragment extends ToolbarPreferenceFragment {
             boolean useJS = SPOOF_STREAMING_DATA_USE_JS.get() || switchPreference.isChecked();
 
             String entriesKey = useJS
-                    ? "revanced_spoof_streaming_data_default_client_with_js_entries"
-                    : "revanced_spoof_streaming_data_default_client_entries";
+                    ? "rvx_morphed_spoof_streaming_data_default_client_with_js_entries"
+                    : "rvx_morphed_spoof_streaming_data_default_client_entries";
             String entryValueKey = useJS
-                    ? "revanced_spoof_streaming_data_default_client_with_js_entry_values"
-                    : "revanced_spoof_streaming_data_default_client_entry_values";
+                    ? "rvx_morphed_spoof_streaming_data_default_client_with_js_entry_values"
+                    : "rvx_morphed_spoof_streaming_data_default_client_entry_values";
 
             listPreference.setEntries(ResourceUtils.getArrayIdentifier(entriesKey));
             listPreference.setEntryValues(ResourceUtils.getArrayIdentifier(entryValueKey));
@@ -333,7 +333,7 @@ public class YouTubePreferenceFragment extends ToolbarPreferenceFragment {
 
     private void setWhitelistPreference() {
         final boolean enabled = PatchStatus.VideoPlayback() || PatchStatus.SponsorBlock();
-        final String[] whitelistKey = {Settings.OVERLAY_BUTTON_WHITELIST.key, "revanced_whitelist_settings"};
+        final String[] whitelistKey = {Settings.OVERLAY_BUTTON_WHITELIST.key, "rvx_morphed_whitelist_settings"};
 
         for (String key : whitelistKey) {
             final Preference preference = findPreference(key);

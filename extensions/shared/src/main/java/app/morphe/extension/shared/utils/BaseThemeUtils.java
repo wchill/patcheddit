@@ -282,7 +282,7 @@ public class BaseThemeUtils {
     }
 
     public static Drawable getBackButtonDrawable(boolean isDarkModeEnabled) {
-        Drawable drawable = getDrawable("revanced_settings_toolbar_arrow_left");
+        Drawable drawable = getDrawable("rvx_morphed_settings_toolbar_arrow_left");
         customizeBackButtonDrawable(drawable, isDarkModeEnabled);
         return drawable;
     }

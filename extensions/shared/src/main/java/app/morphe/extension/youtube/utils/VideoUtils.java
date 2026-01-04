@@ -152,14 +152,14 @@ public class VideoUtils extends IntentUtils {
 
     public static void copyUrl(String videoUrl, boolean withTimestamp) {
         setClipboard(videoUrl, withTimestamp
-                ? str("revanced_share_copy_url_timestamp_success")
-                : str("revanced_share_copy_url_success")
+                ? str("rvx_morphed_share_copy_url_timestamp_success")
+                : str("rvx_morphed_share_copy_url_success")
         );
     }
 
     public static void copyTimeStamp() {
         final String timeStamp = getTimeStamp(VideoInformation.getVideoTime());
-        setClipboard(timeStamp, str("revanced_share_copy_timestamp_success", timeStamp));
+        setClipboard(timeStamp, str("rvx_morphed_share_copy_timestamp_success", timeStamp));
     }
 
     public static void launchVideoExternalDownloader() {
@@ -258,7 +258,7 @@ public class VideoUtils extends IntentUtils {
                 final String channelId = VideoInformation.getChannelId();
                 // Channel id always starts with `UC` prefix
                 if (!channelId.startsWith("UC")) {
-                    showToastShort(str("revanced_overlay_button_play_all_not_available_toast"));
+                    showToastShort(str("rvx_morphed_overlay_button_play_all_not_available_toast"));
                     return;
                 }
                 sb.append(channelId.substring(2));
@@ -428,7 +428,7 @@ public class VideoUtils extends IntentUtils {
      */
     public static void reloadVideo(@NonNull String videoId, @NonNull String playlistId) {
         if (videoId.isEmpty()) {
-            showToastShort(str("revanced_dismiss_player_not_available_toast"));
+            showToastShort(str("rvx_morphed_dismiss_player_not_available_toast"));
         } else {
             try {
                 dismissPlayer();
@@ -897,7 +897,7 @@ public class VideoUtils extends IntentUtils {
                 if (speed == 1.0f) {
                     TextView normalLabel = new TextView(context);
                     // Use same 'Normal' string as stock YouTube.
-                    normalLabel.setText(str("revanced_playback_speed_normal"));
+                    normalLabel.setText(str("rvx_morphed_playback_speed_normal"));
                     normalLabel.setTextColor(ThemeUtils.getAppForegroundColor());
                     normalLabel.setTextSize(10);
                     normalLabel.setGravity(Gravity.CENTER);

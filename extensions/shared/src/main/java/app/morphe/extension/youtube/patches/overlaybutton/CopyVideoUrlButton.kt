@@ -19,7 +19,7 @@ object CopyVideoUrlButton {
         try {
             instance = PlayerControlButton(
                 controlsViewGroup = controlsView,
-                imageViewButtonId = "revanced_copy_video_url_button",
+                imageViewButtonId = "rvx_morphed_copy_video_url_button",
                 buttonVisibility = { isButtonEnabled() },
                 onClickListener = { view: View -> onClick(view) },
                 onLongClickListener = { view: View ->

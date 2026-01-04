@@ -72,23 +72,23 @@ val spoofStreamingDataPatch = spoofStreamingDataPatch(
         )
         addSwitchPreference(
             CategoryType.MISC,
-            "revanced_spoof_streaming_data",
+            "rvx_morphed_spoof_streaming_data",
             "true"
         )
         addPreferenceWithIntent(
             CategoryType.MISC,
-            "revanced_spoof_streaming_data_default_client",
-            "revanced_spoof_streaming_data",
+            "rvx_morphed_spoof_streaming_data_default_client",
+            "rvx_morphed_spoof_streaming_data",
         )
         addPreferenceWithIntent(
             CategoryType.MISC,
-            "revanced_spoof_streaming_data_sign_in_android_no_sdk_about",
-            "revanced_spoof_streaming_data"
+            "rvx_morphed_spoof_streaming_data_sign_in_android_no_sdk_about",
+            "rvx_morphed_spoof_streaming_data"
         )
         addPreferenceWithIntent(
             CategoryType.MISC,
-            "revanced_spoof_streaming_data_sign_in_android_vr_about",
-            "revanced_spoof_streaming_data"
+            "rvx_morphed_spoof_streaming_data_sign_in_android_vr_about",
+            "rvx_morphed_spoof_streaming_data"
         )
     },
 )

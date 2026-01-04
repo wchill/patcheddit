@@ -37,7 +37,7 @@ public class InitializationPatch {
             if (dataSyncId != null && dataSyncId.contains("||")) {
                 SETTINGS_INITIALIZED.save(true);
                 Utils.runOnMainThreadDelayed(() ->
-                                showRestartDialog(activityRef.get(), "revanced_restart_first_run", true),
+                                showRestartDialog(activityRef.get(), "rvx_morphed_restart_first_run", true),
                         2000
                 );
             }

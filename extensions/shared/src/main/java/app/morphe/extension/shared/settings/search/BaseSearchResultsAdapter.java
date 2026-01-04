@@ -1,6 +1,6 @@
 package app.morphe.extension.shared.settings.search;
 
-import static app.morphe.extension.shared.settings.search.BaseSearchViewController.DRAWABLE_REVANCED_SETTINGS_SEARCH_ICON;
+import static app.morphe.extension.shared.settings.search.BaseSearchViewController.DRAWABLE_RVX_MORPHED_SETTINGS_SEARCH_ICON;
 import static app.morphe.extension.shared.utils.ResourceUtils.getIdIdentifier;
 
 import android.animation.AnimatorSet;
@@ -278,7 +278,7 @@ public abstract class BaseSearchResultsAdapter extends ArrayAdapter<BaseSearchRe
         holder.titleView.setText(item.highlightedTitle);
         holder.summaryView.setText(item.highlightedSummary);
         holder.summaryView.setVisibility(TextUtils.isEmpty(item.highlightedSummary) ? View.GONE : View.VISIBLE);
-        holder.iconView.setImageResource(DRAWABLE_REVANCED_SETTINGS_SEARCH_ICON);
+        holder.iconView.setImageResource(DRAWABLE_RVX_MORPHED_SETTINGS_SEARCH_ICON);
     }
 
     /**

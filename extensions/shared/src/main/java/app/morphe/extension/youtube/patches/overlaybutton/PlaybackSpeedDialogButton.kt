@@ -22,7 +22,7 @@ object PlaybackSpeedDialogButton {
         try {
             instance = PlayerControlButton(
                 controlsViewGroup = controlsView,
-                imageViewButtonId = "revanced_playback_speed_dialog_button",
+                imageViewButtonId = "rvx_morphed_playback_speed_dialog_button",
                 buttonVisibility = { isButtonEnabled() },
                 onClickListener = { view: View -> onClick(view) },
                 onLongClickListener = { view: View ->
@@ -75,7 +75,7 @@ object PlaybackSpeedDialogButton {
             VideoInformation.overridePlaybackSpeed(1.0f)
             Utils.showToastShort(
                 StringRef.str(
-                    "revanced_overlay_button_speed_dialog_reset",
+                    "rvx_morphed_overlay_button_speed_dialog_reset",
                     "1.0"
                 )
             )
@@ -84,7 +84,7 @@ object PlaybackSpeedDialogButton {
             VideoInformation.overridePlaybackSpeed(defaultSpeed)
             Utils.showToastShort(
                 StringRef.str(
-                    "revanced_overlay_button_speed_dialog_reset",
+                    "rvx_morphed_overlay_button_speed_dialog_reset",
                     defaultSpeed
                 )
             )

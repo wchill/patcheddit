@@ -166,28 +166,28 @@ val accountComponentsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.ACCOUNT,
-            "revanced_hide_account_menu",
+            "rvx_morphed_hide_account_menu",
             "false"
         )
         addPreferenceWithIntent(
             CategoryType.ACCOUNT,
-            "revanced_hide_account_menu_filter_strings",
-            "revanced_hide_account_menu"
+            "rvx_morphed_hide_account_menu_filter_strings",
+            "rvx_morphed_hide_account_menu"
         )
         addSwitchPreference(
             CategoryType.ACCOUNT,
-            "revanced_hide_account_menu_empty_component",
+            "rvx_morphed_hide_account_menu_empty_component",
             "false",
-            "revanced_hide_account_menu"
+            "rvx_morphed_hide_account_menu"
         )
         addSwitchPreference(
             CategoryType.ACCOUNT,
-            "revanced_hide_handle",
+            "rvx_morphed_hide_handle",
             "true"
         )
         addSwitchPreference(
             CategoryType.ACCOUNT,
-            "revanced_hide_terms_container",
+            "rvx_morphed_hide_terms_container",
             "false"
         )
 

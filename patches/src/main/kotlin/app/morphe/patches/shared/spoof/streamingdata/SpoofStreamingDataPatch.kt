@@ -507,7 +507,7 @@ fun spoofStreamingDataPatch(
             arrayOf(
                 ResourceGroup(
                     "drawable",
-                    "revanced_reload_video.xml",
+                    "rvx_morphed_reload_video.xml",
                 )
             ).forEach { resourceGroup ->
                 context.copyResources("youtube/spoof/$directory", resourceGroup)

@@ -403,12 +403,12 @@ val playerComponentsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.PLAYER,
-            "revanced_add_miniplayer_next_button",
+            "rvx_morphed_add_miniplayer_next_button",
             "true"
         )
         addSwitchPreference(
             CategoryType.PLAYER,
-            "revanced_add_miniplayer_previous_button",
+            "rvx_morphed_add_miniplayer_previous_button",
             "true"
         )
 
@@ -488,23 +488,23 @@ val playerComponentsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.PLAYER,
-            "revanced_change_miniplayer_color",
+            "rvx_morphed_change_miniplayer_color",
             "true"
         )
         addSwitchPreference(
             CategoryType.PLAYER,
-            "revanced_change_player_background_color",
+            "rvx_morphed_change_player_background_color",
             "false"
         )
         addPreferenceWithIntent(
             CategoryType.PLAYER,
-            "revanced_custom_player_background_color_primary",
-            "revanced_change_player_background_color"
+            "rvx_morphed_custom_player_background_color_primary",
+            "rvx_morphed_change_player_background_color"
         )
         addPreferenceWithIntent(
             CategoryType.PLAYER,
-            "revanced_custom_player_background_color_secondary",
-            "revanced_change_player_background_color"
+            "rvx_morphed_custom_player_background_color_secondary",
+            "rvx_morphed_change_player_background_color"
         )
 
         // endregion
@@ -546,7 +546,7 @@ val playerComponentsPatch = bytecodePatch(
 
             addSwitchPreference(
                 CategoryType.PLAYER,
-                "revanced_change_seekbar_position",
+                "rvx_morphed_change_seekbar_position",
                 "false"
             )
 
@@ -593,12 +593,12 @@ val playerComponentsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.PLAYER,
-            "revanced_disable_miniplayer_gesture",
+            "rvx_morphed_disable_miniplayer_gesture",
             "false"
         )
         addSwitchPreference(
             CategoryType.PLAYER,
-            "revanced_disable_player_gesture",
+            "rvx_morphed_disable_player_gesture",
             "false"
         )
 
@@ -622,7 +622,7 @@ val playerComponentsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.PLAYER,
-            "revanced_enable_forced_miniplayer",
+            "rvx_morphed_enable_forced_miniplayer",
             "true"
         )
 
@@ -671,7 +671,7 @@ val playerComponentsPatch = bytecodePatch(
 
             addSwitchPreference(
                 CategoryType.PLAYER,
-                "revanced_enable_smooth_transition_animation",
+                "rvx_morphed_enable_smooth_transition_animation",
                 "true"
             )
         }
@@ -839,7 +839,7 @@ val playerComponentsPatch = bytecodePatch(
 
             addSwitchPreference(
                 CategoryType.PLAYER,
-                "revanced_enable_swipe_to_dismiss_miniplayer",
+                "rvx_morphed_enable_swipe_to_dismiss_miniplayer",
                 "true"
             )
         }
@@ -850,7 +850,7 @@ val playerComponentsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.PLAYER,
-            "revanced_enable_comments_scroll_top",
+            "rvx_morphed_enable_comments_scroll_top",
             "false"
         )
 
@@ -859,7 +859,7 @@ val playerComponentsPatch = bytecodePatch(
         if (thickSeekBar) {
             addSwitchPreference(
                 CategoryType.PLAYER,
-                "revanced_enable_thick_seekbar",
+                "rvx_morphed_enable_thick_seekbar",
                 "true"
             )
         }
@@ -886,14 +886,14 @@ val playerComponentsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.PLAYER,
-            "revanced_enable_zen_mode",
+            "rvx_morphed_enable_zen_mode",
             "false"
         )
         addSwitchPreference(
             CategoryType.PLAYER,
-            "revanced_enable_zen_mode_podcast",
+            "rvx_morphed_enable_zen_mode_podcast",
             "false",
-            "revanced_enable_zen_mode"
+            "rvx_morphed_enable_zen_mode"
         )
 
         // endregion
@@ -904,7 +904,7 @@ val playerComponentsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.PLAYER,
-            "revanced_hide_comment_channel_guidelines",
+            "rvx_morphed_hide_comment_channel_guidelines",
             "true"
         )
 
@@ -926,7 +926,7 @@ val playerComponentsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.PLAYER,
-            "revanced_hide_double_tap_overlay_filter",
+            "rvx_morphed_hide_double_tap_overlay_filter",
             "false"
         )
 
@@ -934,7 +934,7 @@ val playerComponentsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.PLAYER,
-            "revanced_hide_comment_timestamp_and_emoji_buttons",
+            "rvx_morphed_hide_comment_timestamp_and_emoji_buttons",
             "false"
         )
 
@@ -942,7 +942,7 @@ val playerComponentsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.PLAYER,
-            "revanced_hide_comments_information_button",
+            "rvx_morphed_hide_comments_information_button",
             "false"
         )
 
@@ -953,7 +953,7 @@ val playerComponentsPatch = bytecodePatch(
         if (is_8_05_or_greater) {
             addSwitchPreference(
                 CategoryType.PLAYER,
-                "revanced_hide_lyrics_share_button",
+                "rvx_morphed_hide_lyrics_share_button",
                 "false"
             )
         }
@@ -978,7 +978,7 @@ val playerComponentsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.PLAYER,
-            "revanced_hide_fullscreen_share_button",
+            "rvx_morphed_hide_fullscreen_share_button",
             "false"
         )
 
@@ -1017,7 +1017,7 @@ val playerComponentsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.PLAYER,
-            "revanced_hide_song_video_toggle",
+            "rvx_morphed_hide_song_video_toggle",
             "false"
         )
 
@@ -1042,7 +1042,7 @@ val playerComponentsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.PLAYER,
-            "revanced_remember_repeat_state",
+            "rvx_morphed_remember_repeat_state",
             "true"
         )
 
@@ -1181,7 +1181,7 @@ val playerComponentsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.PLAYER,
-            "revanced_remember_shuffle_state",
+            "rvx_morphed_remember_shuffle_state",
             "true"
         )
 
@@ -1266,7 +1266,7 @@ val playerComponentsPatch = bytecodePatch(
         if (restoreOldCommentsPopupPanel) {
             addSwitchPreference(
                 CategoryType.PLAYER,
-                "revanced_restore_old_comments_popup_panels",
+                "rvx_morphed_restore_old_comments_popup_panels",
                 "false"
             )
         }
@@ -1282,7 +1282,7 @@ val playerComponentsPatch = bytecodePatch(
             )
             addSwitchPreference(
                 CategoryType.PLAYER,
-                "revanced_restore_old_player_background",
+                "rvx_morphed_restore_old_player_background",
                 "false"
             )
         }
@@ -1298,7 +1298,7 @@ val playerComponentsPatch = bytecodePatch(
             )
             addSwitchPreference(
                 CategoryType.PLAYER,
-                "revanced_restore_old_player_layout",
+                "rvx_morphed_restore_old_player_layout",
                 "false"
             )
         }

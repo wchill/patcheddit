@@ -538,13 +538,13 @@ class StreamingDataRequest private constructor(
             }
 
             handleConnectionError(
-                str("revanced_spoof_streaming_data_failed_forbidden"),
+                str("rvx_morphed_spoof_streaming_data_failed_forbidden"),
                 null,
                 true
             )
             if (!SPOOF_STREAMING_DATA_DEFAULT_CLIENT.name.startsWith("TV")) {
                 handleConnectionError(
-                    str("revanced_spoof_streaming_data_failed_forbidden_suggestion"),
+                    str("rvx_morphed_spoof_streaming_data_failed_forbidden_suggestion"),
                     null,
                     true
                 )

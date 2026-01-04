@@ -180,12 +180,12 @@ val sponsorBlockPatch = resourcePatch(
                 List(tags.length) { tags.item(it) as Element }
                     .filter {
                         it.getAttribute("android:key")
-                            .contains("revanced_preference_screen_$category")
+                            .contains("rvx_morphed_preference_screen_$category")
                     }
                     .forEach {
                         it.adoptChild(SWITCH_PREFERENCE_TAG_NAME) {
-                            setAttribute("android:title", "@string/revanced_$key")
-                            setAttribute("android:summary", "@string/revanced_$key" + "_sum")
+                            setAttribute("android:title", "@string/rvx_morphed_$key")
+                            setAttribute("android:summary", "@string/rvx_morphed_$key" + "_sum")
                             setAttribute("android:key", key)
                             setAttribute("android:defaultValue", defaultValue)
                             if (dependencyKey != "") {
@@ -212,12 +212,12 @@ val sponsorBlockPatch = resourcePatch(
                 List(tags.length) { tags.item(it) as Element }
                     .filter {
                         it.getAttribute("android:key")
-                            .contains("revanced_preference_screen_$category")
+                            .contains("rvx_morphed_preference_screen_$category")
                     }
                     .forEach {
                         it.adoptChild("Preference") {
-                            setAttribute("android:title", "@string/revanced_$key")
-                            setAttribute("android:summary", "@string/revanced_$key" + "_sum")
+                            setAttribute("android:title", "@string/rvx_morphed_$key")
+                            setAttribute("android:summary", "@string/rvx_morphed_$key" + "_sum")
                             setAttribute("android:key", key)
                             setAttribute("android:dependency", dependencyKey)
                             this.adoptChild("intent") {
@@ -243,7 +243,7 @@ val sponsorBlockPatch = resourcePatch(
                     .filter { it.getAttribute("android:key").contains(preferenceScreenKey) }
                     .forEach {
                         it.adoptChild(PREFERENCE_CATEGORY_TAG_NAME) {
-                            setAttribute("android:title", "@string/revanced_$category")
+                            setAttribute("android:title", "@string/rvx_morphed_$category")
                             setAttribute("android:key", category)
                         }
                     }
@@ -260,8 +260,8 @@ val sponsorBlockPatch = resourcePatch(
                     .filter { it.getAttribute("android:key") == SEGMENTS_CATEGORY_KEY }
                     .forEach {
                         it.adoptChild("Preference") {
-                            setAttribute("android:title", "@string/revanced_$key")
-                            setAttribute("android:summary", "@string/revanced_$key" + "_sum")
+                            setAttribute("android:title", "@string/rvx_morphed_$key")
+                            setAttribute("android:summary", "@string/rvx_morphed_$key" + "_sum")
                             setAttribute("android:key", key)
                             setAttribute("android:dependency", dependencyKey)
                             this.adoptChild("intent") {
@@ -287,8 +287,8 @@ val sponsorBlockPatch = resourcePatch(
                     .filter { it.getAttribute("android:key") == ABOUT_CATEGORY_KEY }
                     .forEach {
                         it.adoptChild("Preference") {
-                            setAttribute("android:title", "@string/revanced_$key")
-                            setAttribute("android:summary", "@string/revanced_$key" + "_sum")
+                            setAttribute("android:title", "@string/rvx_morphed_$key")
+                            setAttribute("android:summary", "@string/rvx_morphed_$key" + "_sum")
                             setAttribute("android:key", key)
                             this.adoptChild("intent") {
                                 setAttribute("android:action", "android.intent.action.VIEW")

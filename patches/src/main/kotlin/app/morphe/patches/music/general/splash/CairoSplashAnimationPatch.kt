@@ -124,7 +124,7 @@ val cairoSplashAnimationPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_disable_cairo_splash_animation",
+            "rvx_morphed_disable_cairo_splash_animation",
             "false"
         )
 

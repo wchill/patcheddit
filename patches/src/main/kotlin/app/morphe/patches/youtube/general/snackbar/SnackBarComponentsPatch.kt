@@ -280,9 +280,9 @@ val snackBarComponentsPatch = resourcePatch(
 
         val snackBarColorAttr = "snackBarColor"
         val snackBarColorAttrReference = "?attr/$snackBarColorAttr"
-        val snackBarColorDark = "revanced_snack_bar_color_dark"
+        val snackBarColorDark = "rvx_morphed_snack_bar_color_dark"
         val snackBarColorDarkReference = "@color/$snackBarColorDark"
-        val snackBarColorLight = "revanced_snack_bar_color_light"
+        val snackBarColorLight = "rvx_morphed_snack_bar_color_light"
         val snackBarColorLightReference = "@color/$snackBarColorLight"
 
         document("res/values/colors.xml").use { document ->

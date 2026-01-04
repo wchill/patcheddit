@@ -207,7 +207,7 @@ object InnerTubeRequestBody {
         try {
             innerTubeBody.put("params", "CAQ%3D")
             // TODO: Implement an AlertDialog that allows changing the title of the playlist.
-            innerTubeBody.put("title", str("revanced_queue_manager_queue"))
+            innerTubeBody.put("title", str("rvx_morphed_queue_manager_queue"))
 
             val videoIds = JSONArray()
             videoIds.put(0, videoId)

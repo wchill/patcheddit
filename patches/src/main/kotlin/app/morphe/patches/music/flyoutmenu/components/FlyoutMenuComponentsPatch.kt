@@ -246,224 +246,224 @@ val flyoutMenuComponentsPatch = bytecodePatch(
         if (trimSilenceIncluded) {
             addSwitchPreference(
                 CategoryType.FLYOUT,
-                "revanced_disable_trim_silence",
+                "rvx_morphed_disable_trim_silence",
                 "true"
             )
         }
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_enable_compact_dialog",
+            "rvx_morphed_enable_compact_dialog",
             "true"
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_like_dislike",
+            "rvx_morphed_hide_flyout_menu_like_dislike",
             "false",
             false
         )
         if (is_6_36_or_greater) {
             addSwitchPreference(
                 CategoryType.FLYOUT,
-                "revanced_hide_flyout_menu_3_column_component",
+                "rvx_morphed_hide_flyout_menu_3_column_component",
                 "false",
                 false
             )
         }
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_add_to_queue",
+            "rvx_morphed_hide_flyout_menu_add_to_queue",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_captions",
+            "rvx_morphed_hide_flyout_menu_captions",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_delete_playlist",
+            "rvx_morphed_hide_flyout_menu_delete_playlist",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_dismiss_queue",
+            "rvx_morphed_hide_flyout_menu_dismiss_queue",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_download",
+            "rvx_morphed_hide_flyout_menu_download",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_edit_playlist",
+            "rvx_morphed_hide_flyout_menu_edit_playlist",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_go_to_album",
+            "rvx_morphed_hide_flyout_menu_go_to_album",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_go_to_artist",
+            "rvx_morphed_hide_flyout_menu_go_to_artist",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_go_to_episode",
+            "rvx_morphed_hide_flyout_menu_go_to_episode",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_go_to_podcast",
+            "rvx_morphed_hide_flyout_menu_go_to_podcast",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_help",
+            "rvx_morphed_hide_flyout_menu_help",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_not_interested",
+            "rvx_morphed_hide_flyout_menu_not_interested",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_pin_to_speed_dial",
+            "rvx_morphed_hide_flyout_menu_pin_to_speed_dial",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_play_next",
+            "rvx_morphed_hide_flyout_menu_play_next",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_quality",
+            "rvx_morphed_hide_flyout_menu_quality",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_remove_from_library",
+            "rvx_morphed_hide_flyout_menu_remove_from_library",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_remove_from_playlist",
+            "rvx_morphed_hide_flyout_menu_remove_from_playlist",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_report",
+            "rvx_morphed_hide_flyout_menu_report",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_save_episode_for_later_save_to_library",
+            "rvx_morphed_hide_flyout_menu_save_episode_for_later_save_to_library",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_save_to_playlist",
+            "rvx_morphed_hide_flyout_menu_save_to_playlist",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_share",
+            "rvx_morphed_hide_flyout_menu_share",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_shuffle_play",
+            "rvx_morphed_hide_flyout_menu_shuffle_play",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_sleep_timer",
+            "rvx_morphed_hide_flyout_menu_sleep_timer",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_start_radio",
+            "rvx_morphed_hide_flyout_menu_start_radio",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_stats_for_nerds",
+            "rvx_morphed_hide_flyout_menu_stats_for_nerds",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_subscribe",
+            "rvx_morphed_hide_flyout_menu_subscribe",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_taste_match",
+            "rvx_morphed_hide_flyout_menu_taste_match",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_unpin_from_speed_dial",
+            "rvx_morphed_hide_flyout_menu_unpin_from_speed_dial",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_hide_flyout_menu_view_song_credit",
+            "rvx_morphed_hide_flyout_menu_view_song_credit",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_replace_flyout_menu_dismiss_queue",
+            "rvx_morphed_replace_flyout_menu_dismiss_queue",
             "false"
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_replace_flyout_menu_dismiss_queue_continue_watch",
+            "rvx_morphed_replace_flyout_menu_dismiss_queue_continue_watch",
             "true",
-            "revanced_replace_flyout_menu_dismiss_queue"
+            "rvx_morphed_replace_flyout_menu_dismiss_queue"
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_replace_flyout_menu_report",
+            "rvx_morphed_replace_flyout_menu_report",
             "true"
         )
         addSwitchPreference(
             CategoryType.FLYOUT,
-            "revanced_replace_flyout_menu_report_only_player",
+            "rvx_morphed_replace_flyout_menu_report_only_player",
             "true",
-            "revanced_replace_flyout_menu_report"
+            "rvx_morphed_replace_flyout_menu_report"
         )
 
         updatePatchStatus(FLYOUT_MENU_COMPONENTS)

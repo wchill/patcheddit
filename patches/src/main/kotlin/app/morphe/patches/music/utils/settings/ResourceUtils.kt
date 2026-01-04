@@ -17,7 +17,7 @@ internal object ResourceUtils {
         this.context = context
     }
 
-    private const val RVX_SETTINGS_KEY = "revanced_settings"
+    private const val RVX_SETTINGS_KEY = "rvx_morphed_settings"
 
     const val SETTINGS_HEADER_PATH = "res/xml/settings_headers.xml"
 
@@ -93,9 +93,9 @@ internal object ResourceUtils {
                         it.adoptChild(PREFERENCE_SCREEN_TAG_NAME) {
                             setAttribute(
                                 "android:title",
-                                "@string/revanced_preference_screen_$category" + "_title"
+                                "@string/rvx_morphed_preference_screen_$category" + "_title"
                             )
-                            setAttribute("android:key", "revanced_preference_screen_$category")
+                            setAttribute("android:key", "rvx_morphed_preference_screen_$category")
                         }
                         setPreferenceCategory(category)
                     }
@@ -128,7 +128,7 @@ internal object ResourceUtils {
                 if (it !is Element) return@node
 
                 it.getAttributeNode("android:key")?.let { attribute ->
-                    if (attribute.textContent == "revanced_preference_screen_$category") {
+                    if (attribute.textContent == "rvx_morphed_preference_screen_$category") {
                         it.cloneNodes(it.parentNode)
                     }
                 }
@@ -147,7 +147,7 @@ internal object ResourceUtils {
             val tags = document.getElementsByTagName(PREFERENCE_SCREEN_TAG_NAME)
             List(tags.length) { tags.item(it) as Element }
                 .filter {
-                    it.getAttribute("android:key").contains("revanced_preference_screen_$category")
+                    it.getAttribute("android:key").contains("rvx_morphed_preference_screen_$category")
                 }
                 .forEach {
                     it.adoptChild("Preference") {
@@ -252,7 +252,7 @@ internal object ResourceUtils {
             val tags = document.getElementsByTagName(PREFERENCE_SCREEN_TAG_NAME)
             List(tags.length) { tags.item(it) as Element }
                 .filter {
-                    it.getAttribute("android:key").contains("revanced_preference_screen_$category")
+                    it.getAttribute("android:key").contains("rvx_morphed_preference_screen_$category")
                 }
                 .forEach {
                     it.adoptChild(SWITCH_PREFERENCE_TAG_NAME) {
@@ -279,7 +279,7 @@ internal object ResourceUtils {
             val tags = document.getElementsByTagName(PREFERENCE_SCREEN_TAG_NAME)
             List(tags.length) { tags.item(it) as Element }
                 .filter {
-                    it.getAttribute("android:key").contains("revanced_preference_screen_$category")
+                    it.getAttribute("android:key").contains("rvx_morphed_preference_screen_$category")
                 }
                 .forEach {
                     it.adoptChild("Preference") {
@@ -315,9 +315,9 @@ internal object ResourceUtils {
                         it.insertNode(PREFERENCE_SCREEN_TAG_NAME, it) {
                             setAttribute(
                                 "android:title",
-                                "@string/revanced_settings_title"
+                                "@string/rvx_morphed_settings_title"
                             )
-                            setAttribute("android:key", "revanced_settings")
+                            setAttribute("android:key", "rvx_morphed_settings")
                             setAttribute("app:allowDividerAbove", "false")
                         }
                         it.getAttributeNode("app:allowDividerBelow").textContent = "true"

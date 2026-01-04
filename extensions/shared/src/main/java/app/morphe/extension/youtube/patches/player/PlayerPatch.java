@@ -57,7 +57,7 @@ public class PlayerPatch {
                 Settings.CUSTOM_PLAYER_OVERLAY_OPACITY,
                 0,
                 100,
-                "revanced_custom_player_overlay_opacity_invalid_toast"
+                "rvx_morphed_custom_player_overlay_opacity_invalid_toast"
         );
         PLAYER_OVERLAY_OPACITY_LEVEL = (opacity * 255) / 100;
 
@@ -65,14 +65,14 @@ public class PlayerPatch {
                 Settings.SPEED_OVERLAY_VALUE,
                 0.0f,
                 8.0f,
-                "revanced_speed_overlay_value_invalid_toast"
+                "rvx_morphed_speed_overlay_value_invalid_toast"
         );
 
         final int topMargin = validateValue(
                 Settings.QUICK_ACTIONS_TOP_MARGIN,
                 0,
                 32,
-                "revanced_quick_actions_top_margin_invalid_toast"
+                "rvx_morphed_quick_actions_top_margin_invalid_toast"
         );
 
         QUICK_ACTIONS_MARGIN_TOP = Utils.dipToPixels(topMargin);

@@ -174,37 +174,37 @@ val adsPatch = adsPatch(
 
         addSwitchPreference(
             CategoryType.ADS,
-            "revanced_hide_fullscreen_ads",
+            "rvx_morphed_hide_fullscreen_ads",
             "false"
         )
         addSwitchPreference(
             CategoryType.ADS,
-            "revanced_hide_general_ads",
+            "rvx_morphed_hide_general_ads",
             "true"
         )
         addSwitchPreference(
             CategoryType.ADS,
-            "revanced_hide_music_ads",
+            "rvx_morphed_hide_music_ads",
             "true"
         )
         addSwitchPreference(
             CategoryType.ADS,
-            "revanced_hide_paid_promotion_label",
+            "rvx_morphed_hide_paid_promotion_label",
             "true"
         )
         addSwitchPreference(
             CategoryType.ADS,
-            "revanced_hide_premium_promotion",
+            "rvx_morphed_hide_premium_promotion",
             "true"
         )
         addSwitchPreference(
             CategoryType.ADS,
-            "revanced_hide_premium_renewal",
+            "rvx_morphed_hide_premium_renewal",
             "true"
         )
         addSwitchPreference(
             CategoryType.ADS,
-            "revanced_hide_promotion_alert_banner",
+            "rvx_morphed_hide_promotion_alert_banner",
             "true"
         )
 

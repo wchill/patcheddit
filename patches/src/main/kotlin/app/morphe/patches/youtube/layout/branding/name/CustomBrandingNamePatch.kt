@@ -23,7 +23,7 @@ val customBrandingNamePatch = resourcePatch(
         key = "appName",
         default = APP_NAME,
         values = mapOf(
-            "ReVanced Extended" to "ReVanced Extended",
+            "RVX Morphed" to "RVX Morphed",
             "RVX" to APP_NAME,
             "YouTube RVX" to "YouTube RVX",
             "YouTube" to "YouTube",

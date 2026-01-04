@@ -49,7 +49,7 @@ val sanitizeUrlQueryPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.MISC,
-            "revanced_sanitize_sharing_links",
+            "rvx_morphed_sanitize_sharing_links",
             "true"
         )
 

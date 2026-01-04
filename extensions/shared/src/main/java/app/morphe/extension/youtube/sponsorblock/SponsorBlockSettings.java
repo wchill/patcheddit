@@ -126,10 +126,10 @@ public class SponsorBlockSettings {
                 Settings.SB_LOCAL_TIME_SAVED_MILLISECONDS.save((long) (minutesSaved * 60 * 1000));
             }
 
-            Utils.showToastShort(str("revanced_sb_settings_import_successful"));
+            Utils.showToastShort(str("rvx_morphed_sb_settings_import_successful"));
         } catch (Exception ex) {
             Logger.printInfo(() -> "failed to import settings", ex); // Use info level, as we are showing our own toast.
-            Utils.showToastShort(str("revanced_sb_settings_import_failed", ex.getMessage()));
+            Utils.showToastShort(str("rvx_morphed_sb_settings_import_failed", ex.getMessage()));
         }
     }
 
@@ -177,7 +177,7 @@ public class SponsorBlockSettings {
             return json.toString(2);
         } catch (Exception ex) {
             Logger.printInfo(() -> "failed to export settings", ex); // Use info level, as we are showing our own toast.
-            Utils.showToastShort(str("revanced_sb_settings_export_failed", ex));
+            Utils.showToastShort(str("rvx_morphed_sb_settings_export_failed", ex));
             return "";
         }
     }
@@ -196,13 +196,13 @@ public class SponsorBlockSettings {
             Pair<Dialog, LinearLayout> dialogPair = CustomDialog.create(
                     dialogContext,
                     null, // No title.
-                    str("revanced_sb_settings_revanced_export_user_id_warning"), // Message.
+                    str("rvx_morphed_sb_settings_rvx_morphed_user_id_warning"), // Message.
                     null, // No EditText.
                     null, // OK button text.
                     () -> {
                     }, // OK button action (dismiss only).
                     null, // No cancel button action.
-                    str("revanced_sb_settings_revanced_export_user_id_warning_dismiss"), // Neutral button text.
+                    str("rvx_morphed_sb_settings_rvx_morphed_user_id_warning_dismiss"), // Neutral button text.
                     () -> Settings.SB_HIDE_EXPORT_WARNING.save(true), // Neutral button action.
                     true // Dismiss dialog when onNeutralClick.
             );

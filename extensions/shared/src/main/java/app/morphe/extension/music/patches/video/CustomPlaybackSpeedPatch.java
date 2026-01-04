@@ -49,7 +49,7 @@ public class CustomPlaybackSpeedPatch {
 
     private static void resetCustomSpeeds(@NonNull String toastMessage) {
         Utils.showToastLong(toastMessage);
-        Utils.showToastShort(str("revanced_reset_to_default_toast"));
+        Utils.showToastShort(str("rvx_morphed_reset_to_default_toast"));
         Settings.CUSTOM_PLAYBACK_SPEEDS.resetToDefault();
     }
 
@@ -67,7 +67,7 @@ public class CustomPlaybackSpeedPatch {
                     throw new IllegalArgumentException();
                 }
                 if (speed > MAXIMUM_PLAYBACK_SPEED) {
-                    resetCustomSpeeds(str("revanced_custom_playback_speeds_invalid", MAXIMUM_PLAYBACK_SPEED + ""));
+                    resetCustomSpeeds(str("rvx_morphed_custom_playback_speeds_invalid", MAXIMUM_PLAYBACK_SPEED + ""));
                     loadCustomSpeeds();
                     return;
                 }
@@ -75,7 +75,7 @@ public class CustomPlaybackSpeedPatch {
             }
         } catch (Exception ex) {
             Logger.printInfo(() -> "parse error", ex);
-            resetCustomSpeeds(str("revanced_custom_playback_speeds_parse_exception"));
+            resetCustomSpeeds(str("rvx_morphed_custom_playback_speeds_parse_exception"));
             loadCustomSpeeds();
         }
     }

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="revanced_change_start_page_entries">
-        <item>@string/revanced_change_start_page_entry_default</item>
-        <item>@string/revanced_change_start_page_entry_charts</item>
-        <item>@string/revanced_change_start_page_entry_episodes_for_later</item>
-        <item>@string/revanced_change_start_page_entry_explore</item>
-        <item>@string/revanced_change_start_page_entry_history</item>
-        <item>@string/revanced_change_start_page_entry_library</item>
-        <item>@string/revanced_change_start_page_entry_liked_music</item>
-        <item>@string/revanced_change_start_page_entry_podcasts</item>
-        <item>@string/revanced_change_start_page_entry_samples</item>
+    <string-array name="rvx_morphed_change_start_page_entries">
+        <item>@string/rvx_morphed_change_start_page_entry_default</item>
+        <item>@string/rvx_morphed_change_start_page_entry_charts</item>
+        <item>@string/rvx_morphed_change_start_page_entry_episodes_for_later</item>
+        <item>@string/rvx_morphed_change_start_page_entry_explore</item>
+        <item>@string/rvx_morphed_change_start_page_entry_history</item>
+        <item>@string/rvx_morphed_change_start_page_entry_library</item>
+        <item>@string/rvx_morphed_change_start_page_entry_liked_music</item>
+        <item>@string/rvx_morphed_change_start_page_entry_podcasts</item>
+        <item>@string/rvx_morphed_change_start_page_entry_samples</item>
     </string-array>
-    <string-array name="revanced_change_start_page_entry_values">
+    <string-array name="rvx_morphed_change_start_page_entry_values">
         <item>ORIGINAL</item>
         <item>CHARTS</item>
         <item>EPISODES_FOR_LATER</item>
@@ -22,67 +22,67 @@
         <item>PODCASTS</item>
         <item>SAMPLES</item>
     </string-array>
-    <string-array name="revanced_disable_music_video_in_album_redirect_type_entries">
-        <item>@string/revanced_disable_music_video_in_album_redirect_type_entry_redirect</item>
-        <item>@string/revanced_disable_music_video_in_album_redirect_type_entry_on_click</item>
-        <item>@string/revanced_disable_music_video_in_album_redirect_type_entry_on_long_click</item>
+    <string-array name="rvx_morphed_disable_music_video_in_album_redirect_type_entries">
+        <item>@string/rvx_morphed_disable_music_video_in_album_redirect_type_entry_redirect</item>
+        <item>@string/rvx_morphed_disable_music_video_in_album_redirect_type_entry_on_click</item>
+        <item>@string/rvx_morphed_disable_music_video_in_album_redirect_type_entry_on_long_click</item>
     </string-array>
-    <string-array name="revanced_disable_music_video_in_album_redirect_type_entry_values">
+    <string-array name="rvx_morphed_disable_music_video_in_album_redirect_type_entry_values">
         <item>REDIRECT</item>
         <item>ON_CLICK</item>
         <item>ON_LONG_CLICK</item>
     </string-array>
-    <string-array name="revanced_settings_import_export_entries">
-        <item>@string/revanced_settings_export_as_file</item>
-        <item>@string/revanced_settings_import_as_file</item>
-        <item>@string/revanced_settings_import_export_as_text</item>
+    <string-array name="rvx_morphed_settings_import_export_entries">
+        <item>@string/rvx_morphed_settings_export_as_file</item>
+        <item>@string/rvx_morphed_settings_import_as_file</item>
+        <item>@string/rvx_morphed_settings_import_export_as_text</item>
     </string-array>
-    <string-array name="revanced_external_downloader_label">
+    <string-array name="rvx_morphed_external_downloader_label">
         <item>NewPipe</item>
         <item>Seal</item>
         <item>Tubular</item>
         <item>YTDLnis</item>
     </string-array>
-    <string-array name="revanced_external_downloader_package_name">
+    <string-array name="rvx_morphed_external_downloader_package_name">
         <item>org.schabi.newpipe</item>
         <item>com.junkfood.seal</item>
         <item>org.polymorphicshade.tubular</item>
         <item>com.deniscerri.ytdl</item>
     </string-array>
-    <string-array name="revanced_external_downloader_website">
+    <string-array name="rvx_morphed_external_downloader_website">
         <item>https://github.com/TeamNewPipe/NewPipe/releases/latest</item>
         <item>https://github.com/JunkFood02/Seal/releases/latest</item>
         <item>https://github.com/polymorphicshade/Tubular/releases/latest</item>
         <item>https://github.com/deniscerri/ytdlnis/releases/latest</item>
     </string-array>
-    <string-array name="revanced_return_youtube_username_display_format_entries">
-        <item>@string/revanced_return_youtube_username_display_format_username_only</item>
-        <item>@string/revanced_return_youtube_username_display_format_username_handle</item>
-        <item>@string/revanced_return_youtube_username_display_format_handle_username</item>
+    <string-array name="rvx_morphed_return_youtube_username_display_format_entries">
+        <item>@string/rvx_morphed_return_youtube_username_display_format_username_only</item>
+        <item>@string/rvx_morphed_return_youtube_username_display_format_username_handle</item>
+        <item>@string/rvx_morphed_return_youtube_username_display_format_handle_username</item>
     </string-array>
-    <string-array name="revanced_return_youtube_username_display_format_entry_values">
+    <string-array name="rvx_morphed_return_youtube_username_display_format_entry_values">
         <item>USERNAME_ONLY</item>
         <item>USERNAME_HANDLE</item>
         <item>HANDLE_USERNAME</item>
     </string-array>
-    <string-array name="revanced_spoof_app_version_target_entries">
+    <string-array name="rvx_morphed_spoof_app_version_target_entries">
     </string-array>
-    <string-array name="revanced_spoof_app_version_target_entry_values">
+    <string-array name="rvx_morphed_spoof_app_version_target_entry_values">
     </string-array>
-    <string-array name="revanced_spoof_app_version_for_lyrics_target_entries">
+    <string-array name="rvx_morphed_spoof_app_version_for_lyrics_target_entries">
     </string-array>
-    <string-array name="revanced_spoof_app_version_for_lyrics_target_entry_values">
+    <string-array name="rvx_morphed_spoof_app_version_for_lyrics_target_entry_values">
     </string-array>
-    <string-array name="revanced_spoof_streaming_data_default_client_entries">
-        <item>@string/revanced_spoof_streaming_data_client_entry_android_music_no_sdk</item>
-        <item>@string/revanced_spoof_streaming_data_client_entry_android_no_sdk</item>
-        <item>@string/revanced_spoof_streaming_data_client_entry_android_vr</item>
-        <item>@string/revanced_spoof_streaming_data_client_entry_tv</item>
-        <item>@string/revanced_spoof_streaming_data_client_entry_tv_legacy</item>
-        <item>@string/revanced_spoof_streaming_data_client_entry_tv_simply</item>
-        <item>@string/revanced_spoof_streaming_data_client_entry_visionos</item>
+    <string-array name="rvx_morphed_spoof_streaming_data_default_client_entries">
+        <item>@string/rvx_morphed_spoof_streaming_data_client_entry_android_music_no_sdk</item>
+        <item>@string/rvx_morphed_spoof_streaming_data_client_entry_android_no_sdk</item>
+        <item>@string/rvx_morphed_spoof_streaming_data_client_entry_android_vr</item>
+        <item>@string/rvx_morphed_spoof_streaming_data_client_entry_tv</item>
+        <item>@string/rvx_morphed_spoof_streaming_data_client_entry_tv_legacy</item>
+        <item>@string/rvx_morphed_spoof_streaming_data_client_entry_tv_simply</item>
+        <item>@string/rvx_morphed_spoof_streaming_data_client_entry_visionos</item>
     </string-array>
-    <string-array name="revanced_spoof_streaming_data_default_client_entry_values">
+    <string-array name="rvx_morphed_spoof_streaming_data_default_client_entry_values">
         <item>ANDROID_MUSIC_NO_SDK</item>
         <item>ANDROID_NO_SDK</item>
         <item>ANDROID_VR</item>
@@ -91,12 +91,12 @@
         <item>TV_SIMPLY</item>
         <item>VISIONOS</item>
     </string-array>
-    <string-array name="revanced_watch_history_type_entries">
-        <item>@string/revanced_watch_history_type_entry_1</item>
-        <item>@string/revanced_watch_history_type_entry_2</item>
-        <item>@string/revanced_watch_history_type_entry_3</item>
+    <string-array name="rvx_morphed_watch_history_type_entries">
+        <item>@string/rvx_morphed_watch_history_type_entry_1</item>
+        <item>@string/rvx_morphed_watch_history_type_entry_2</item>
+        <item>@string/rvx_morphed_watch_history_type_entry_3</item>
     </string-array>
-    <string-array name="revanced_watch_history_type_entry_values">
+    <string-array name="rvx_morphed_watch_history_type_entry_values">
         <item>ORIGINAL</item>
         <item>REPLACE</item>
         <item>BLOCK</item>

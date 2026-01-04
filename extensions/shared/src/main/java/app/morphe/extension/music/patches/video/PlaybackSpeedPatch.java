@@ -27,6 +27,6 @@ public class PlaybackSpeedPatch {
         if (!Settings.REMEMBER_PLAYBACK_SPEED_LAST_SELECTED_TOAST.get())
             return;
 
-        showToastShort(str("revanced_remember_playback_speed_toast", playbackSpeed + "x"));
+        showToastShort(str("rvx_morphed_remember_playback_speed_toast", playbackSpeed + "x"));
     }
 }

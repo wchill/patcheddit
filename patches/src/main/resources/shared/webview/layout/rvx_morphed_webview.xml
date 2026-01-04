@@ -9,7 +9,7 @@
 
     <!-- Parent container for Toolbar -->
     <FrameLayout
-            android:id="@+id/revanced_toolbar_parent"
+            android:id="@+id/rvx_morphed_toolbar_parent"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
             android:background="@android:color/white"
@@ -17,18 +17,18 @@
 
         <!-- Toolbar -->
         <android.support.v7.widget.Toolbar
-                android:id="@+id/revanced_toolbar"
+                android:id="@+id/rvx_morphed_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
                 android:background="@android:color/white"
-                app:navigationIcon="@drawable/revanced_settings_toolbar_arrow_left"
-                app:title="@string/revanced_settings_title" />
+                app:navigationIcon="@drawable/rvx_morphed_settings_toolbar_arrow_left"
+                app:title="@string/rvx_morphed_settings_title" />
 
     </FrameLayout>
 
     <!-- Container for WebView -->
     <WebView
-            android:id="@+id/revanced_webview"
+            android:id="@+id/rvx_morphed_webview"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

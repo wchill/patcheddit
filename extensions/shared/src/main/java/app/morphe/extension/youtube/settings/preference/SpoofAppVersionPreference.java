@@ -51,7 +51,7 @@ public class SpoofAppVersionPreference extends CustomDialogListPreference {
         YT_19_28_42(),
         YT_19_26_42(),
         YT_19_01_34(),
-        OTHER(sf("revanced_spoof_app_version_other_item").toString());
+        OTHER(sf("rvx_morphed_spoof_app_version_other_item").toString());
 
         @NonNull
         public static AppVersion findAppVersion(String versionName) {
@@ -68,7 +68,7 @@ public class SpoofAppVersionPreference extends CustomDialogListPreference {
 
         AppVersion() {
             String tmpVersionName = name().replaceAll("YT_", "");
-            this.entryName = sf("revanced_spoof_app_version_target_entry_" + tmpVersionName).toString();
+            this.entryName = sf("rvx_morphed_spoof_app_version_target_entry_" + tmpVersionName).toString();
             this.versionName = tmpVersionName.replaceAll("_", ".");
         }
 
@@ -142,7 +142,7 @@ public class SpoofAppVersionPreference extends CustomDialogListPreference {
         final boolean isOther = AppVersion.findAppVersion(appVersionName) == AppVersion.OTHER;
         adapter = new CustomDialogListPreference.ListPreferenceArrayAdapter(
                 context,
-                LAYOUT_REVANCED_CUSTOM_LIST_ITEM_CHECKED,
+                LAYOUT_RVX_MORPHED_CUSTOM_LIST_ITEM_CHECKED,
                 getEntries(),
                 getEntryValues(),
                 isOther
@@ -202,7 +202,7 @@ public class SpoofAppVersionPreference extends CustomDialogListPreference {
         editText = new EditText(context);
         editText.setText(appVersionName);
         editText.setSelection(appVersionName.length());
-        editText.setHint(str("revanced_spoof_app_version_other_item_hint"));
+        editText.setHint(str("rvx_morphed_spoof_app_version_other_item_hint"));
         editText.setSingleLine(true); // Restrict EditText to a single line.
         editText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         editText.setEnabled(isOther);
@@ -252,7 +252,7 @@ public class SpoofAppVersionPreference extends CustomDialogListPreference {
                 },
                 () -> {
                 }, // Cancel button action (dismiss only).
-                str("revanced_settings_reset"),
+                str("rvx_morphed_settings_reset"),
                 () -> { // Reset action.
                     String defaultValue = Settings.SPOOF_APP_VERSION_TARGET.defaultValue;
                     editText.setText(defaultValue);
@@ -315,8 +315,8 @@ public class SpoofAppVersionPreference extends CustomDialogListPreference {
      */
     private boolean showToastIfAppVersionIsInvalid(String appVersion) {
         if (appVersion.compareTo(Settings.SPOOF_APP_VERSION_TARGET.defaultValue) < 0) {
-            Utils.showToastShort(str("revanced_spoof_app_version_target_invalid_toast", appVersion));
-            Utils.showToastShort(str("revanced_reset_to_default_toast"));
+            Utils.showToastShort(str("rvx_morphed_spoof_app_version_target_invalid_toast", appVersion));
+            Utils.showToastShort(str("rvx_morphed_reset_to_default_toast"));
             Settings.SPOOF_APP_VERSION_TARGET.resetToDefault();
 
             String defaultValue = Settings.SPOOF_APP_VERSION_TARGET.defaultValue;

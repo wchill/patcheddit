@@ -27,7 +27,7 @@ val bypassImageRegionRestrictionsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.MISC,
-            "revanced_bypass_image_region_restrictions",
+            "rvx_morphed_bypass_image_region_restrictions",
             "false"
         )
 

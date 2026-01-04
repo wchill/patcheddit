@@ -222,7 +222,7 @@ public class PlaybackSpeedPatch {
                         playbackSpeedSetting.save(finalPlaybackSpeed);
 
                         if (showToastSetting.get()) {
-                            Utils.showToastShort(str(isShorts ? "revanced_remember_playback_speed_toast_shorts" : "revanced_remember_playback_speed_toast", (finalPlaybackSpeed + "x")));
+                            Utils.showToastShort(str(isShorts ? "rvx_morphed_remember_playback_speed_toast_shorts" : "rvx_morphed_remember_playback_speed_toast", (finalPlaybackSpeed + "x")));
                         }
                     }, TOAST_DELAY_MILLISECONDS);
                 }

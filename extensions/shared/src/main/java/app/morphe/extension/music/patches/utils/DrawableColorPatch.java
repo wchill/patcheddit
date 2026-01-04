@@ -23,7 +23,7 @@ public class DrawableColorPatch {
 
     // background colors
     private static final Drawable headerGradient =
-            ResourceUtils.getDrawable("revanced_header_gradient");
+            ResourceUtils.getDrawable("rvx_morphed_header_gradient");
     private static final Drawable transparentDrawable =
             new ColorDrawable(Color.TRANSPARENT);
     private static final int blackColor =

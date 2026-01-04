@@ -92,7 +92,7 @@ public class WhitelistedChannelsPreference extends Preference implements Prefere
         // Create the custom dialog.
         Pair<Dialog, LinearLayout> dialogPair = CustomDialog.create(
                 context,
-                str("revanced_whitelist_settings_title"), // Title.
+                str("rvx_morphed_whitelist_settings_title"), // Title.
                 null, // No message (replaced by contentLayout).
                 null, // No EditText.
                 null, // OK button text.
@@ -147,7 +147,7 @@ public class WhitelistedChannelsPreference extends Preference implements Prefere
 
         if (mEntries.isEmpty()) {
             TextView textView = new TextView(context);
-            textView.setText(str("revanced_whitelist_empty"));
+            textView.setText(str("rvx_morphed_whitelist_empty"));
             textView.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
             textView.setTextSize(16);
             textView.setPadding(60, 40, 60, 0);
@@ -160,7 +160,7 @@ public class WhitelistedChannelsPreference extends Preference implements Prefere
                     Pair<Dialog, LinearLayout> dialogPair = CustomDialog.create(
                             context,
                             null, // No title.
-                            str("revanced_whitelist_remove_dialog_message", author, whitelistType.getFriendlyName()), // Message.
+                            str("rvx_morphed_whitelist_remove_dialog_message", author, whitelistType.getFriendlyName()), // Message.
                             null, // No EditText.
                             null, // OK button text.
                             () -> {

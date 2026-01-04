@@ -19,7 +19,7 @@ object VotingButton {
         try {
             instance = PlayerControlButton(
                 controlsViewGroup = controlsView,
-                imageViewButtonId = "revanced_sb_voting_button",
+                imageViewButtonId = "rvx_morphed_sb_voting_button",
                 hasPlaceholder = false,
                 buttonVisibility = { isButtonEnabled() },
                 onClickListener = { view: View -> onClick(view) }

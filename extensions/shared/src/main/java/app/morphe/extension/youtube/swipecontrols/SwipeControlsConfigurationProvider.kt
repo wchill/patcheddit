@@ -90,7 +90,7 @@ class SwipeControlsConfigurationProvider {
             Settings.SWIPE_BRIGHTNESS_DISTANCE_DIP,
             0.1f,
             10f,
-            "revanced_swipe_brightness_distance_dip_invalid_toast"
+            "rvx_morphed_swipe_brightness_distance_dip_invalid_toast"
         )
     }
 
@@ -103,7 +103,7 @@ class SwipeControlsConfigurationProvider {
             Settings.SWIPE_VOLUMES_SENSITIVITY,
             1,
             1000,
-            "revanced_swipe_volume_sensitivity_invalid_toast"
+            "rvx_morphed_swipe_volume_sensitivity_invalid_toast"
         )
     }
 
@@ -131,7 +131,7 @@ class SwipeControlsConfigurationProvider {
             Settings.SWIPE_OVERLAY_OPACITY,
             0,
             100,
-            "revanced_swipe_overlay_background_opacity_invalid_toast"
+            "rvx_morphed_swipe_overlay_background_opacity_invalid_toast"
         )
 
         opacity = opacity * 255 / 100
@@ -174,7 +174,7 @@ class SwipeControlsConfigurationProvider {
             Settings.SWIPE_OVERLAY_TEXT_SIZE,
             1,
             30,
-            "revanced_swipe_text_overlay_size_invalid_toast"
+            "rvx_morphed_swipe_text_overlay_size_invalid_toast"
         )
     }
 
@@ -186,7 +186,7 @@ class SwipeControlsConfigurationProvider {
             Settings.SWIPE_OVERLAY_RECT_SIZE,
             0,
             50,
-            "revanced_swipe_overlay_rect_size_invalid_toast"
+            "rvx_morphed_swipe_overlay_rect_size_invalid_toast"
         )
     }
 

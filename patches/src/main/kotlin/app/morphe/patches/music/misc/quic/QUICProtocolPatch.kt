@@ -25,7 +25,7 @@ val quicProtocolPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.MISC,
-            "revanced_disable_quic_protocol",
+            "rvx_morphed_disable_quic_protocol",
             "false"
         )
         updatePatchStatus(DISABLE_QUIC_PROTOCOL)

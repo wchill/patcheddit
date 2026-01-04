@@ -75,7 +75,7 @@ public class SponsorBlockViewController {
             Context context = Utils.getContext();
             RelativeLayout layout = new RelativeLayout(context);
             layout.setLayoutParams(new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
-            LayoutInflater.from(context).inflate(getLayoutIdentifier("revanced_sb_inline_sponsor_overlay"), layout);
+            LayoutInflater.from(context).inflate(getLayoutIdentifier("rvx_morphed_sb_inline_sponsor_overlay"), layout);
             inlineSponsorOverlayRef = new WeakReference<>(layout);
 
             viewGroup.addView(layout);
@@ -96,11 +96,11 @@ public class SponsorBlockViewController {
             youtubeOverlaysLayoutRef = new WeakReference<>(viewGroup);
 
             skipHighlightButtonRef = new WeakReference<>(
-                    Objects.requireNonNull(getChildViewByResourceName(layout, "revanced_sb_skip_highlight_button")));
+                    Objects.requireNonNull(getChildViewByResourceName(layout, "rvx_morphed_sb_skip_highlight_button")));
             skipSponsorButtonRef = new WeakReference<>(
-                    Objects.requireNonNull(getChildViewByResourceName(layout, "revanced_sb_skip_sponsor_button")));
+                    Objects.requireNonNull(getChildViewByResourceName(layout, "rvx_morphed_sb_skip_sponsor_button")));
             NewSegmentLayout newSegmentLayout = Objects.requireNonNull(
-                    getChildViewByResourceName(layout, "revanced_sb_new_segment_view"));
+                    getChildViewByResourceName(layout, "rvx_morphed_sb_new_segment_view"));
             newSegmentLayoutRef = new WeakReference<>(newSegmentLayout);
             newSegmentLayout.updateLayout();
 

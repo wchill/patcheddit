@@ -427,19 +427,19 @@ public class ExtendedUtils extends PackageUtils {
 
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(
-                        ResourceUtils.getLayoutIdentifier("revanced_custom_list_item_checked"),
+                        ResourceUtils.getLayoutIdentifier("rvx_morphed_custom_list_item_checked"),
                         parent,
                         false
                 );
                 viewHolder = new ViewHolder();
                 viewHolder.checkIcon = convertView.findViewById(
-                        ResourceUtils.getIdIdentifier("revanced_check_icon")
+                        ResourceUtils.getIdIdentifier("rvx_morphed_check_icon")
                 );
                 viewHolder.placeholder = convertView.findViewById(
-                        ResourceUtils.getIdIdentifier("revanced_check_icon_placeholder")
+                        ResourceUtils.getIdIdentifier("rvx_morphed_check_icon_placeholder")
                 );
                 viewHolder.textView = convertView.findViewById(
-                        ResourceUtils.getIdIdentifier("revanced_item_text")
+                        ResourceUtils.getIdIdentifier("rvx_morphed_item_text")
                 );
                 convertView.setTag(viewHolder);
             } else {

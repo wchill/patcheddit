@@ -20,7 +20,7 @@ object WhitelistButton {
         try {
             instance = PlayerControlButton(
                 controlsViewGroup = controlsView,
-                imageViewButtonId = "revanced_whitelist_button",
+                imageViewButtonId = "rvx_morphed_whitelist_button",
                 buttonVisibility = { isButtonEnabled() },
                 onClickListener = { view: View -> onClick(view) },
                 onLongClickListener = { view: View ->

@@ -48,7 +48,7 @@ public final class PlayerComponentsFilter extends Filter {
         // But it was decided it's simpler to always hide this button because:
         // - it doesn't work with copy video url feature
         // - the button is rare
-        // - always hiding makes the ReVanced settings simpler and easier to understand
+        // - always hiding makes the RVX Morphed settings simpler and easier to understand
         // - nobody is going to notice the redundant button is always hidden
         final StringFilterGroup audioTrackButton = new StringFilterGroup(
                 null,

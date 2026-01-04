@@ -35,10 +35,10 @@ public class AppInfoDialogBuilder {
                             "<style> body { background-color: %s; color: %s; line-height: 20px; } a { color: %s; } </style>",
                             backgroundColorHex, foregroundColorHex, foregroundColorHex) +
                     "<h2>" +
-                    str("revanced_app_info_dialog_title") +
+                    str("rvx_morphed_app_info_dialog_title") +
                     "</h2>" +
                     String.format(
-                            str("revanced_app_info_dialog_message"),
+                            str("rvx_morphed_app_info_dialog_message"),
                             ExtendedUtils.getAppLabel(),
                             ExtendedUtils.getAppVersionName(),
                             PatchVersion(),

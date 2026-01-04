@@ -320,144 +320,144 @@ val layoutComponentsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_custom_filter",
+            "rvx_morphed_custom_filter",
             "false"
         )
         addPreferenceWithIntent(
             CategoryType.GENERAL,
-            "revanced_custom_filter_strings",
-            "revanced_custom_filter"
+            "rvx_morphed_custom_filter_strings",
+            "rvx_morphed_custom_filter"
         )
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_hide_button_shelf",
+            "rvx_morphed_hide_button_shelf",
             "false"
         )
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_hide_carousel_shelf",
+            "rvx_morphed_hide_carousel_shelf",
             "false"
         )
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_hide_cast_button",
+            "rvx_morphed_hide_cast_button",
             "true"
         )
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_hide_category_bar",
+            "rvx_morphed_hide_category_bar",
             "false"
         )
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_hide_floating_button",
+            "rvx_morphed_hide_floating_button",
             "false"
         )
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_hide_history_button",
+            "rvx_morphed_hide_history_button",
             "false"
         )
         if (is_6_42_or_greater) {
             addSwitchPreference(
                 CategoryType.GENERAL,
-                "revanced_hide_notification_button",
+                "rvx_morphed_hide_notification_button",
                 "false"
             )
         }
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_hide_playlist_card_shelf",
+            "rvx_morphed_hide_playlist_card_shelf",
             "false"
         )
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_hide_samples_shelf",
+            "rvx_morphed_hide_samples_shelf",
             "false"
         )
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_hide_search_button",
+            "rvx_morphed_hide_search_button",
             "false"
         )
         if (is_6_48_or_greater) {
             addSwitchPreference(
                 CategoryType.GENERAL,
-                "revanced_hide_sound_search_button",
+                "rvx_morphed_hide_sound_search_button",
                 "false"
             )
         }
         if (!is_8_15_or_greater) {
             addSwitchPreference(
                 CategoryType.GENERAL,
-                "revanced_hide_tap_to_update_button",
+                "rvx_morphed_hide_tap_to_update_button",
                 "false"
             )
         }
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_hide_voice_search_button",
+            "rvx_morphed_hide_voice_search_button",
             "false"
         )
         if (is_6_39_or_greater) {
             addSwitchPreference(
                 CategoryType.SETTINGS,
-                "revanced_hide_settings_menu_parent_tools",
+                "rvx_morphed_hide_settings_menu_parent_tools",
                 "false",
                 false
             )
         }
         addSwitchPreference(
             CategoryType.SETTINGS,
-            "revanced_hide_settings_menu_general",
+            "rvx_morphed_hide_settings_menu_general",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.SETTINGS,
-            "revanced_hide_settings_menu_playback",
+            "rvx_morphed_hide_settings_menu_playback",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.SETTINGS,
-            "revanced_hide_settings_menu_data_saving",
+            "rvx_morphed_hide_settings_menu_data_saving",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.SETTINGS,
-            "revanced_hide_settings_menu_downloads_and_storage",
+            "rvx_morphed_hide_settings_menu_downloads_and_storage",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.SETTINGS,
-            "revanced_hide_settings_menu_notification",
+            "rvx_morphed_hide_settings_menu_notification",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.SETTINGS,
-            "revanced_hide_settings_menu_privacy_and_location",
+            "rvx_morphed_hide_settings_menu_privacy_and_location",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.SETTINGS,
-            "revanced_hide_settings_menu_recommendations",
+            "rvx_morphed_hide_settings_menu_recommendations",
             "false",
             false
         )
         addSwitchPreference(
             CategoryType.SETTINGS,
-            "revanced_hide_settings_menu_paid_memberships",
+            "rvx_morphed_hide_settings_menu_paid_memberships",
             "true",
             false
         )
         addSwitchPreference(
             CategoryType.SETTINGS,
-            "revanced_hide_settings_menu_about",
+            "rvx_morphed_hide_settings_menu_about",
             "false",
             false
         )

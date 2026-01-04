@@ -54,9 +54,9 @@ public class SkipSponsorButton extends FrameLayout {
     public SkipSponsorButton(Context context, AttributeSet attributeSet, int defStyleAttr, int defStyleRes) {
         super(context, attributeSet, defStyleAttr, defStyleRes);
 
-        LayoutInflater.from(context).inflate(getLayoutIdentifier("revanced_sb_skip_sponsor_button"), this, true);  // layout:revanced_sb_skip_sponsor_button
+        LayoutInflater.from(context).inflate(getLayoutIdentifier("rvx_morphed_sb_skip_sponsor_button"), this, true);  // layout:rvx_morphed_sb_skip_sponsor_button
         setMinimumHeight(getDimension("ad_skip_ad_button_min_height"));  // dimen:ad_skip_ad_button_min_height
-        skipSponsorBtnContainer = (LinearLayout) Objects.requireNonNull((View) findViewById(getIdIdentifier("revanced_sb_skip_sponsor_button_container")));  // id:revanced_sb_skip_sponsor_button_container
+        skipSponsorBtnContainer = (LinearLayout) Objects.requireNonNull((View) findViewById(getIdIdentifier("rvx_morphed_sb_skip_sponsor_button_container")));  // id:rvx_morphed_sb_skip_sponsor_button_container
 
         background = new Paint();
         background.setColor(getColor("skip_ad_button_background_color"));  // color:skip_ad_button_background_color);
@@ -67,7 +67,7 @@ public class SkipSponsorButton extends FrameLayout {
         border.setStrokeWidth(getDimension("ad_skip_ad_button_border_width"));  // dimen:ad_skip_ad_button_border_width);
         border.setStyle(Paint.Style.STROKE);
 
-        skipSponsorTextView = (TextView) Objects.requireNonNull((View) findViewById(getIdIdentifier("revanced_sb_skip_sponsor_button_text")));  // id:revanced_sb_skip_sponsor_button_text;
+        skipSponsorTextView = (TextView) Objects.requireNonNull((View) findViewById(getIdIdentifier("rvx_morphed_sb_skip_sponsor_button_text")));  // id:rvx_morphed_sb_skip_sponsor_button_text;
 
         updateLayout();
 

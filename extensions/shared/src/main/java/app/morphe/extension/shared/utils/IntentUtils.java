@@ -52,7 +52,7 @@ public class IntentUtils extends Utils {
         try {
             Intent intent = new Intent();
             intent.setPackage(mContext.getPackageName());
-            intent.setData(Uri.parse("revanced_webview"));
+            intent.setData(Uri.parse("rvx_morphed_webview"));
             intent.putExtra("clearCookiesOnStartUp", clearCookiesOnStartUp);
             intent.putExtra("clearCookiesOnShutDown", clearCookiesOnShutDown);
             intent.putExtra("useDesktopUserAgent", useDesktopUserAgent);

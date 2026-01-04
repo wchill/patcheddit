@@ -19,7 +19,7 @@ object PlayAllButton {
         try {
             instance = PlayerControlButton(
                 controlsViewGroup = controlsView,
-                imageViewButtonId = "revanced_play_all_button",
+                imageViewButtonId = "rvx_morphed_play_all_button",
                 buttonVisibility = { isButtonEnabled() },
                 onClickListener = { view: View -> onClick(view) },
                 onLongClickListener = { view: View ->

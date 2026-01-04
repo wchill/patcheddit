@@ -28,7 +28,7 @@ import app.morphe.extension.shared.utils.Utils;
 public class NavigationPatch {
     private static final int colorGrey12 = PatchStatus.DarkTheme()
             ? ResourceUtils.getColor("ytm_color_grey_12")
-            : ResourceUtils.getColor("revanced_color_grey_12");
+            : ResourceUtils.getColor("rvx_morphed_color_grey_12");
 
     @NonNull
     private static String lastYTNavigationEnumName = "";
@@ -45,8 +45,8 @@ public class NavigationPatch {
                 return Color.parseColor(Settings.ENABLE_CUSTOM_NAVIGATION_BAR_COLOR_VALUE.get());
             }
         } catch (Exception ex) {
-            Utils.showToastShort(str("revanced_custom_navigation_bar_color_value_invalid_invalid_toast"));
-            Utils.showToastShort(str("revanced_reset_to_default_toast"));
+            Utils.showToastShort(str("rvx_morphed_custom_navigation_bar_color_value_invalid_invalid_toast"));
+            Utils.showToastShort(str("rvx_morphed_reset_to_default_toast"));
             Settings.ENABLE_CUSTOM_NAVIGATION_BAR_COLOR_VALUE.resetToDefault();
         }
 

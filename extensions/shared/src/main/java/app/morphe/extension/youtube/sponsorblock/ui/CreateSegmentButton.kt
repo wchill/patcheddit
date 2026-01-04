@@ -17,7 +17,7 @@ object CreateSegmentButton {
         try {
             instance = PlayerControlButton(
                 controlsViewGroup = controlsView,
-                imageViewButtonId = "revanced_sb_create_segment_button",
+                imageViewButtonId = "rvx_morphed_sb_create_segment_button",
                 hasPlaceholder = false,
                 buttonVisibility = { isButtonEnabled() },
                 onClickListener = { view: View -> onClick() }

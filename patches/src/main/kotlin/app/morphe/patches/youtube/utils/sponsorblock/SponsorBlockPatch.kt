@@ -207,8 +207,8 @@ val sponsorBlockPatch = resourcePatch(
         arrayOf(
             ResourceGroup(
                 "layout",
-                "revanced_sb_inline_sponsor_overlay.xml",
-                "revanced_sb_skip_sponsor_button.xml"
+                "rvx_morphed_sb_inline_sponsor_overlay.xml",
+                "rvx_morphed_sb_skip_sponsor_button.xml"
             )
         ).forEach { resourceGroup ->
             copyResources("youtube/sponsorblock/shared", resourceGroup)
@@ -223,18 +223,18 @@ val sponsorBlockPatch = resourcePatch(
             arrayOf(
                 ResourceGroup(
                     "layout",
-                    "revanced_sb_new_segment.xml"
+                    "rvx_morphed_sb_new_segment.xml"
                 ),
                 ResourceGroup(
                     "drawable",
-                    "revanced_sb_adjust.xml",
-                    "revanced_sb_backward.xml",
-                    "revanced_sb_compare.xml",
-                    "revanced_sb_edit.xml",
-                    "revanced_sb_forward.xml",
-                    "revanced_sb_logo.xml",
-                    "revanced_sb_publish.xml",
-                    "revanced_sb_voting.xml"
+                    "rvx_morphed_sb_adjust.xml",
+                    "rvx_morphed_sb_backward.xml",
+                    "rvx_morphed_sb_compare.xml",
+                    "rvx_morphed_sb_edit.xml",
+                    "rvx_morphed_sb_forward.xml",
+                    "rvx_morphed_sb_logo.xml",
+                    "rvx_morphed_sb_publish.xml",
+                    "rvx_morphed_sb_voting.xml"
                 )
             ).forEach { resourceGroup ->
                 copyResources("youtube/sponsorblock/outline", resourceGroup)
@@ -243,16 +243,16 @@ val sponsorBlockPatch = resourcePatch(
             arrayOf(
                 ResourceGroup(
                     "layout",
-                    "revanced_sb_new_segment.xml"
+                    "rvx_morphed_sb_new_segment.xml"
                 ),
                 ResourceGroup(
                     "drawable",
-                    "revanced_sb_adjust.xml",
-                    "revanced_sb_compare.xml",
-                    "revanced_sb_edit.xml",
-                    "revanced_sb_logo.xml",
-                    "revanced_sb_publish.xml",
-                    "revanced_sb_voting.xml"
+                    "rvx_morphed_sb_adjust.xml",
+                    "rvx_morphed_sb_compare.xml",
+                    "rvx_morphed_sb_edit.xml",
+                    "rvx_morphed_sb_logo.xml",
+                    "rvx_morphed_sb_publish.xml",
+                    "rvx_morphed_sb_voting.xml"
                 )
             ).forEach { resourceGroup ->
                 copyResources("youtube/sponsorblock/default", resourceGroup)
@@ -264,8 +264,8 @@ val sponsorBlockPatch = resourcePatch(
          */
         addTopControl(
             "youtube/sponsorblock/shared",
-            "@+id/revanced_sb_voting_button",
-            "@+id/revanced_sb_create_segment_button"
+            "@+id/rvx_morphed_sb_voting_button",
+            "@+id/rvx_morphed_sb_create_segment_button"
         )
 
         /**

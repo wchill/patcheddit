@@ -37,7 +37,7 @@ public class YouTubeAuthPatch {
         accessTokenExpiration = 1770 * 1000L;
         authorization = "";
 
-        Utils.showToastShort(str("revanced_spoof_streaming_data_sign_in_android_no_sdk_toast_reset"));
+        Utils.showToastShort(str("rvx_morphed_spoof_streaming_data_sign_in_android_no_sdk_toast_reset"));
     }
 
     public static void setAccessToken() {
@@ -70,9 +70,9 @@ public class YouTubeAuthPatch {
                 AlertDialog.Builder builder = Utils.getDialogBuilder(mActivity);
 
                 String dialogTitle =
-                        str("revanced_spoof_streaming_data_sign_in_android_no_sdk_success_dialog_title");
+                        str("rvx_morphed_spoof_streaming_data_sign_in_android_no_sdk_success_dialog_title");
                 String dialogMessage =
-                        str("revanced_spoof_streaming_data_sign_in_android_no_sdk_success_dialog_message");
+                        str("rvx_morphed_spoof_streaming_data_sign_in_android_no_sdk_success_dialog_message");
 
                 builder.setTitle(dialogTitle);
                 builder.setMessage(dialogMessage);

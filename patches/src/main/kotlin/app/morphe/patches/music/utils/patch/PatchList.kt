@@ -139,7 +139,7 @@ internal enum class PatchList(
     ),
     SETTINGS_FOR_YOUTUBE_MUSIC(
         "Settings for YouTube Music",
-        "Applies mandatory patches to implement ReVanced Extended settings into the application."
+        "Applies mandatory patches to implement RVX Morphed settings into the application."
     ),
     SPONSORBLOCK(
         "SponsorBlock",

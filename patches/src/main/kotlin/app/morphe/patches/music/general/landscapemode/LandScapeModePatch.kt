@@ -43,7 +43,7 @@ val landScapeModePatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_enable_landscape_mode",
+            "rvx_morphed_enable_landscape_mode",
             "false"
         )
 

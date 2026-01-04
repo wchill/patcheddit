@@ -127,9 +127,9 @@ public final class MiniplayerPatch {
             int dipWidth = Settings.MINIPLAYER_WIDTH_DIP.get();
 
             if (dipWidth < WIDTH_DIP_MIN || dipWidth > WIDTH_DIP_MAX) {
-                Utils.showToastShort(str("revanced_miniplayer_width_dip_invalid_toast",
+                Utils.showToastShort(str("rvx_morphed_miniplayer_width_dip_invalid_toast",
                         WIDTH_DIP_MIN, WIDTH_DIP_MAX));
-                Utils.showToastShort(str("revanced_reset_to_default_toast"));
+                Utils.showToastShort(str("rvx_morphed_reset_to_default_toast"));
 
                 // Instead of resetting, clamp the size at the bounds.
                 dipWidth = Math.max(WIDTH_DIP_MIN, Math.min(dipWidth, WIDTH_DIP_MAX));
@@ -199,7 +199,7 @@ public final class MiniplayerPatch {
                 Settings.MINIPLAYER_OPACITY,
                 0,
                 100,
-                "revanced_miniplayer_opacity_invalid_toast"
+                "rvx_morphed_miniplayer_opacity_invalid_toast"
         );
 
         OPACITY_LEVEL = (opacity * 255) / 100;

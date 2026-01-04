@@ -45,7 +45,7 @@ import org.w3c.dom.Element
 private const val EXTENSION_ACTIVITY_CLASS_DESCRIPTOR =
     "$EXTENSION_PATH/settings/ActivityHook;"
 private const val EXTENSION_FRAGMENT_CLASS_DESCRIPTOR =
-    "$EXTENSION_PATH/settings/preference/ReVancedPreferenceFragment;"
+    "$EXTENSION_PATH/settings/preference/RVXMorphedPreferenceFragment;"
 private const val EXTENSION_INITIALIZATION_CLASS_DESCRIPTOR =
     "$UTILS_PATH/InitializationPatch;"
 
@@ -195,7 +195,7 @@ val settingsPatch = resourcePatch(
         key = "rvxSettingsLabel",
         default = DEFAULT_LABEL,
         values = mapOf(
-            "ReVanced Extended" to "ReVanced Extended",
+            "RVX Morphed" to "RVX Morphed",
             "RVX" to DEFAULT_LABEL,
         ),
         title = "RVX settings label",
@@ -234,7 +234,7 @@ val settingsPatch = resourcePatch(
         arrayOf(
             ResourceGroup(
                 "drawable",
-                "revanced_settings_toolbar_arrow_left.xml",
+                "rvx_morphed_settings_toolbar_arrow_left.xml",
             ),
         ).forEach { resourceGroup ->
             copyResources("music/settings", resourceGroup)
@@ -285,7 +285,7 @@ val settingsPatch = resourcePatch(
          */
         addPreferenceWithIntent(
             CategoryType.MISC,
-            "revanced_settings_import_export"
+            "rvx_morphed_settings_import_export"
         )
     }
 
@@ -296,11 +296,11 @@ val settingsPatch = resourcePatch(
          */
         if (settingsLabel != DEFAULT_LABEL) {
             removeStringsElements(
-                arrayOf("revanced_settings_title")
+                arrayOf("rvx_morphed_settings_title")
             )
             document("res/values/strings.xml").use { document ->
                 mapOf(
-                    "revanced_settings_title" to settingsLabel
+                    "rvx_morphed_settings_title" to settingsLabel
                 ).forEach { (k, v) ->
                     val stringElement = document.createElement("string")
 
@@ -318,7 +318,7 @@ val settingsPatch = resourcePatch(
          */
         addPreferenceWithIntent(
             CategoryType.MISC,
-            "revanced_default_app_settings"
+            "rvx_morphed_default_app_settings"
         )
 
         if (GMSCORE_SUPPORT.included == true) {
@@ -337,7 +337,7 @@ val settingsPatch = resourcePatch(
         if (is_6_42_or_greater) {
             addPreferenceWithIntent(
                 CategoryType.MISC,
-                "revanced_app_info"
+                "rvx_morphed_app_info"
             )
         }
 

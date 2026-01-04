@@ -160,13 +160,13 @@ class VideoDetailsRequest private constructor(
                 if (!author.isNullOrEmpty() && !title.isNullOrEmpty()) {
                     return if (description.isNullOrEmpty()) {
                         str(
-                            "revanced_queue_manager_video_information_no_description_user_dialog_message",
+                            "rvx_morphed_queue_manager_video_information_no_description_user_dialog_message",
                             author,
                             title
                         )
                     } else {
                         str(
-                            "revanced_queue_manager_video_information_user_dialog_message",
+                            "rvx_morphed_queue_manager_video_information_user_dialog_message",
                             author,
                             title,
                             description

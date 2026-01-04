@@ -73,7 +73,7 @@ public class SponsorBlockUtils {
                 SegmentCategory category = SegmentCategory.categoriesWithoutHighlights()[which];
                 final boolean enableButton;
                 if (category.behaviour == CategoryBehaviour.IGNORE) {
-                    Utils.showToastLong(str("revanced_sb_new_segment_disabled_category"));
+                    Utils.showToastLong(str("rvx_morphed_sb_new_segment_disabled_category"));
                     enableButton = false;
                 } else {
                     newUserCreatedSegmentCategory = category;
@@ -104,7 +104,7 @@ public class SponsorBlockUtils {
 
                 newUserCreatedSegmentCategory = null;
                 AlertDialog.Builder builder = new AlertDialog.Builder(context)
-                        .setTitle(str("revanced_sb_new_segment_choose_category"))
+                        .setTitle(str("rvx_morphed_sb_new_segment_choose_category"))
                         .setSingleChoiceItems(titles, -1, segmentTypeListener)
                         .setNegativeButton(android.R.string.cancel, null)
                         .setPositiveButton(android.R.string.ok, segmentCategorySelectedDialogListener);
@@ -148,10 +148,10 @@ public class SponsorBlockUtils {
             editByHandSaveDialogListener.settingStart = isStart;
             editByHandSaveDialogListener.editTextRef = new WeakReference<>(textView);
             AlertDialog.Builder builder = new AlertDialog.Builder(context)
-                    .setTitle(str(isStart ? "revanced_sb_new_segment_time_start" : "revanced_sb_new_segment_time_end"))
+                    .setTitle(str(isStart ? "rvx_morphed_sb_new_segment_time_start" : "rvx_morphed_sb_new_segment_time_end"))
                     .setView(container)
                     .setNegativeButton(android.R.string.cancel, null)
-                    .setNeutralButton(str("revanced_sb_new_segment_now"), editByHandSaveDialogListener)
+                    .setNeutralButton(str("rvx_morphed_sb_new_segment_now"), editByHandSaveDialogListener)
                     .setPositiveButton(android.R.string.ok, editByHandSaveDialogListener);
             setAlertDialogThemeAndShow(builder);
 
@@ -253,12 +253,12 @@ public class SponsorBlockUtils {
             newSponsorSegmentDialogShownMillis = VideoInformation.getVideoTime();
 
             AlertDialog.Builder builder = new AlertDialog.Builder(SponsorBlockViewController.getOverLaysViewGroupContext())
-                    .setTitle(str("revanced_sb_new_segment_title"))
-                    .setMessage(str("revanced_sb_new_segment_mark_current_time_as_question",
+                    .setTitle(str("rvx_morphed_sb_new_segment_title"))
+                    .setMessage(str("rvx_morphed_sb_new_segment_mark_current_time_as_question",
                             formatSegmentTime(newSponsorSegmentDialogShownMillis)))
                     .setNeutralButton(android.R.string.cancel, null)
-                    .setNegativeButton(str("revanced_sb_new_segment_mark_start"), newSponsorSegmentDialogListener)
-                    .setPositiveButton(str("revanced_sb_new_segment_mark_end"), newSponsorSegmentDialogListener);
+                    .setNegativeButton(str("rvx_morphed_sb_new_segment_mark_start"), newSponsorSegmentDialogListener)
+                    .setPositiveButton(str("rvx_morphed_sb_new_segment_mark_end"), newSponsorSegmentDialogListener);
             setAlertDialogThemeAndShow(builder);
         } catch (Exception ex) {
             Logger.printException(() -> "onMarkLocationClicked failure", ex);
@@ -269,16 +269,16 @@ public class SponsorBlockUtils {
         try {
             Utils.verifyOnMainThread();
             if (newSponsorSegmentStartMillis < 0 || newSponsorSegmentEndMillis < 0) {
-                Utils.showToastShort(str("revanced_sb_new_segment_mark_locations_first"));
+                Utils.showToastShort(str("rvx_morphed_sb_new_segment_mark_locations_first"));
             } else if (newSponsorSegmentStartMillis >= newSponsorSegmentEndMillis) {
-                Utils.showToastShort(str("revanced_sb_new_segment_start_is_before_end"));
+                Utils.showToastShort(str("rvx_morphed_sb_new_segment_start_is_before_end"));
             } else if (!newSponsorSegmentPreviewed && newSponsorSegmentStartMillis != 0) {
-                Utils.showToastLong(str("revanced_sb_new_segment_preview_segment_first"));
+                Utils.showToastLong(str("rvx_morphed_sb_new_segment_preview_segment_first"));
             } else {
                 final long segmentLength = (newSponsorSegmentEndMillis - newSponsorSegmentStartMillis) / 1000;
                 AlertDialog.Builder builder = new AlertDialog.Builder(SponsorBlockViewController.getOverLaysViewGroupContext())
-                        .setTitle(str("revanced_sb_new_segment_confirm_title"))
-                        .setMessage(str("revanced_sb_new_segment_confirm_contents",
+                        .setTitle(str("rvx_morphed_sb_new_segment_confirm_title"))
+                        .setMessage(str("rvx_morphed_sb_new_segment_confirm_contents",
                                 formatSegmentTime(newSponsorSegmentStartMillis),
                                 formatSegmentTime(newSponsorSegmentEndMillis),
                                 getTimeSavedString(segmentLength)))
@@ -299,7 +299,7 @@ public class SponsorBlockUtils {
                 // Button is hidden if no segments exist.
                 // But if prior video had segments, and current video does not,
                 // then the button persists until the overlay fades out (this is intentional, as abruptly hiding the button is jarring).
-                Utils.showToastShort(str("revanced_sb_vote_no_segments"));
+                Utils.showToastShort(str("rvx_morphed_sb_vote_no_segments"));
                 return;
             }
 
@@ -320,7 +320,7 @@ public class SponsorBlockUtils {
                 if (segment.category == SegmentCategory.HIGHLIGHT) {
                     spannableBuilder.append(startTime);
                 } else {
-                    String toFromString = str("revanced_sb_vote_segment_time_to_from",
+                    String toFromString = str("rvx_morphed_sb_vote_segment_time_to_from",
                             startTime, formatSegmentTime(segment.end));
                     spannableBuilder.append(toFromString);
                 }
@@ -353,7 +353,7 @@ public class SponsorBlockUtils {
             }
 
             AlertDialog.Builder builder = new AlertDialog.Builder(context)
-                    .setTitle(str("revanced_sb_new_segment_choose_category"))
+                    .setTitle(str("rvx_morphed_sb_new_segment_choose_category"))
                     .setItems(titles, (dialog, which) -> SBRequester.voteToChangeCategoryOnBackgroundThread(segment, values[which]));
             setAlertDialogThemeAndShow(builder);
         } catch (Exception ex) {
@@ -365,9 +365,9 @@ public class SponsorBlockUtils {
         try {
             Utils.verifyOnMainThread();
             if (newSponsorSegmentStartMillis < 0 || newSponsorSegmentEndMillis < 0) {
-                Utils.showToastShort(str("revanced_sb_new_segment_mark_locations_first"));
+                Utils.showToastShort(str("rvx_morphed_sb_new_segment_mark_locations_first"));
             } else if (newSponsorSegmentStartMillis >= newSponsorSegmentEndMillis) {
-                Utils.showToastShort(str("revanced_sb_new_segment_start_is_before_end"));
+                Utils.showToastShort(str("rvx_morphed_sb_new_segment_start_is_before_end"));
             } else {
                 SegmentPlaybackController.removeUnsubmittedSegments(); // If user hits preview more than once before playing.
                 SegmentPlaybackController.addUnsubmittedSegment(
@@ -408,11 +408,11 @@ public class SponsorBlockUtils {
         try {
             Utils.verifyOnMainThread();
             AlertDialog.Builder builder = new AlertDialog.Builder(SponsorBlockViewController.getOverLaysViewGroupContext())
-                    .setTitle(str("revanced_sb_new_segment_edit_by_hand_title"))
-                    .setMessage(str("revanced_sb_new_segment_edit_by_hand_content"))
+                    .setTitle(str("rvx_morphed_sb_new_segment_edit_by_hand_title"))
+                    .setMessage(str("rvx_morphed_sb_new_segment_edit_by_hand_content"))
                     .setNeutralButton(android.R.string.cancel, null)
-                    .setNegativeButton(str("revanced_sb_new_segment_mark_start"), editByHandDialogListener)
-                    .setPositiveButton(str("revanced_sb_new_segment_mark_end"), editByHandDialogListener);
+                    .setNegativeButton(str("rvx_morphed_sb_new_segment_mark_start"), editByHandDialogListener)
+                    .setPositiveButton(str("rvx_morphed_sb_new_segment_mark_end"), editByHandDialogListener);
             setAlertDialogThemeAndShow(builder);
         } catch (Exception ex) {
             Logger.printException(() -> "onEditByHandClicked failure", ex);
@@ -505,13 +505,13 @@ public class SponsorBlockUtils {
         String minutesFormatted = statsNumberFormatter.format(minutes);
         if (hours > 0) {
             String hoursFormatted = statsNumberFormatter.format(hours);
-            return str("revanced_sb_stats_saved_hour_format", hoursFormatted, minutesFormatted);
+            return str("rvx_morphed_sb_stats_saved_hour_format", hoursFormatted, minutesFormatted);
         }
         String secondsFormatted = statsNumberFormatter.format(seconds);
         if (minutes > 0) {
-            return str("revanced_sb_stats_saved_minute_format", minutesFormatted, secondsFormatted);
+            return str("rvx_morphed_sb_stats_saved_minute_format", minutesFormatted, secondsFormatted);
         }
-        return str("revanced_sb_stats_saved_second_format", secondsFormatted);
+        return str("rvx_morphed_sb_stats_saved_second_format", secondsFormatted);
     }
 
     private static class EditByHandSaveDialogListener implements DialogInterface.OnClickListener {
@@ -530,7 +530,7 @@ public class SponsorBlockUtils {
                 } else {
                     time = parseSegmentTime(editText.getText().toString());
                     if (time < 0) {
-                        Utils.showToastLong(str("revanced_sb_new_segment_edit_by_hand_parse_error"));
+                        Utils.showToastLong(str("rvx_morphed_sb_new_segment_edit_by_hand_parse_error"));
                         return;
                     }
                 }

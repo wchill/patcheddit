@@ -29,14 +29,14 @@ import app.morphe.extension.shared.utils.ResourceUtils;
 @SuppressWarnings({"unused", "deprecation"})
 public class CustomDialogListPreference extends ListPreference {
 
-    public static final int ID_REVANCED_CHECK_ICON =
-            ResourceUtils.getIdIdentifier("revanced_check_icon");
-    public static final int ID_REVANCED_CHECK_ICON_PLACEHOLDER =
-            ResourceUtils.getIdIdentifier("revanced_check_icon_placeholder");
-    public static final int ID_REVANCED_ITEM_TEXT =
-            ResourceUtils.getIdIdentifier("revanced_item_text");
-    public static final int LAYOUT_REVANCED_CUSTOM_LIST_ITEM_CHECKED =
-            ResourceUtils.getLayoutIdentifier("revanced_custom_list_item_checked");
+    public static final int ID_RVX_MORPHED_CHECK_ICON =
+            ResourceUtils.getIdIdentifier("rvx_morphed_check_icon");
+    public static final int ID_RVX_MORPHED_CHECK_ICON_PLACEHOLDER =
+            ResourceUtils.getIdIdentifier("rvx_morphed_check_icon_placeholder");
+    public static final int ID_RVX_MORPHED_ITEM_TEXT =
+            ResourceUtils.getIdIdentifier("rvx_morphed_item_text");
+    public static final int LAYOUT_RVX_MORPHED_CUSTOM_LIST_ITEM_CHECKED =
+            ResourceUtils.getLayoutIdentifier("rvx_morphed_custom_list_item_checked");
 
     private String staticSummary = null;
     private CharSequence[] highlightedEntriesForDialog = null;
@@ -124,9 +124,9 @@ public class CustomDialogListPreference extends ListPreference {
                 LayoutInflater inflater = LayoutInflater.from(getContext());
                 view = inflater.inflate(layoutResourceId, parent, false);
                 holder = new SubViewDataContainer();
-                holder.checkIcon = view.findViewById(ID_REVANCED_CHECK_ICON);
-                holder.placeholder = view.findViewById(ID_REVANCED_CHECK_ICON_PLACEHOLDER);
-                holder.itemText = view.findViewById(ID_REVANCED_ITEM_TEXT);
+                holder.checkIcon = view.findViewById(ID_RVX_MORPHED_CHECK_ICON);
+                holder.placeholder = view.findViewById(ID_RVX_MORPHED_CHECK_ICON_PLACEHOLDER);
+                holder.itemText = view.findViewById(ID_RVX_MORPHED_ITEM_TEXT);
                 view.setTag(holder);
             } else {
                 holder = (SubViewDataContainer) view.getTag();
@@ -182,7 +182,7 @@ public class CustomDialogListPreference extends ListPreference {
         // Create custom adapter for the ListView.
         ListPreferenceArrayAdapter adapter = new ListPreferenceArrayAdapter(
                 context,
-                LAYOUT_REVANCED_CUSTOM_LIST_ITEM_CHECKED,
+                LAYOUT_RVX_MORPHED_CUSTOM_LIST_ITEM_CHECKED,
                 entriesToShow,
                 entryValues,
                 getValue()

@@ -272,7 +272,7 @@ val settingsPatch = resourcePatch(
         key = "rvxSettingsLabel",
         default = DEFAULT_LABEL,
         values = mapOf(
-            "ReVanced Extended" to "ReVanced Extended",
+            "RVX Morphed" to "RVX Morphed",
             "RVX" to DEFAULT_LABEL,
         ),
         title = "RVX settings label",
@@ -334,54 +334,54 @@ val settingsPatch = resourcePatch(
         arrayOf(
             ResourceGroup(
                 "drawable",
-                "revanced_settings_arrow_time.xml",
-                "revanced_settings_cursor.xml",
-                "revanced_settings_custom_checkmark.xml",
-                "revanced_settings_icon.xml",
-                "revanced_settings_rounded_corners_background.xml",
-                "revanced_settings_search_icon.xml",
-                "revanced_settings_search_remove.xml",
-                "revanced_settings_toolbar_arrow_left.xml",
+                "rvx_morphed_settings_arrow_time.xml",
+                "rvx_morphed_settings_cursor.xml",
+                "rvx_morphed_settings_custom_checkmark.xml",
+                "rvx_morphed_settings_icon.xml",
+                "rvx_morphed_settings_rounded_corners_background.xml",
+                "rvx_morphed_settings_search_icon.xml",
+                "rvx_morphed_settings_search_remove.xml",
+                "rvx_morphed_settings_toolbar_arrow_left.xml",
             ),
             ResourceGroup(
                 "layout",
-                "revanced_color_dot_widget.xml",
-                "revanced_color_picker.xml",
-                "revanced_custom_list_item_checked.xml",
-                "revanced_preference_search_history_item.xml",
-                "revanced_preference_search_history_screen.xml",
-                "revanced_preference_search_no_result.xml",
-                "revanced_preference_search_result_color.xml",
-                "revanced_preference_search_result_group_header.xml",
-                "revanced_preference_search_result_list.xml",
-                "revanced_preference_search_result_regular.xml",
-                "revanced_preference_search_result_switch.xml",
-                "revanced_settings_preferences_category.xml",
-                "revanced_settings_with_toolbar.xml",
+                "rvx_morphed_color_dot_widget.xml",
+                "rvx_morphed_color_picker.xml",
+                "rvx_morphed_custom_list_item_checked.xml",
+                "rvx_morphed_preference_search_history_item.xml",
+                "rvx_morphed_preference_search_history_screen.xml",
+                "rvx_morphed_preference_search_no_result.xml",
+                "rvx_morphed_preference_search_result_color.xml",
+                "rvx_morphed_preference_search_result_group_header.xml",
+                "rvx_morphed_preference_search_result_list.xml",
+                "rvx_morphed_preference_search_result_regular.xml",
+                "rvx_morphed_preference_search_result_switch.xml",
+                "rvx_morphed_settings_preferences_category.xml",
+                "rvx_morphed_settings_with_toolbar.xml",
             ),
             ResourceGroup(
                 "menu",
-                "revanced_search_menu.xml",
+                "rvx_morphed_search_menu.xml",
             ),
             ResourceGroup(
                 "xml",
-                "revanced_prefs.xml",
+                "rvx_morphed_prefs.xml",
             )
         ).forEach { resourceGroup ->
             copyResources("youtube/settings", resourceGroup)
         }
 
         /**
-         * initialize ReVanced Extended Settings
+         * initialize RVX Morphed Settings
          */
         ResourceUtils.addPreferenceFragment(
-            "revanced_settings",
+            "rvx_morphed_settings",
             insertKey,
             targetActivityClassName,
         )
 
         /**
-         * remove ReVanced Extended Settings divider
+         * remove RVX Morphed Settings divider
          */
         document("res/values/styles.xml").use { document ->
             val themeNames = arrayOf("Theme.YouTube.Settings", "Theme.YouTube.Settings.Dark")
@@ -411,11 +411,11 @@ val settingsPatch = resourcePatch(
          */
         if (settingsLabel != DEFAULT_LABEL) {
             removeStringsElements(
-                arrayOf("revanced_settings_title")
+                arrayOf("rvx_morphed_settings_title")
             )
             document("res/values/strings.xml").use { document ->
                 mapOf(
-                    "revanced_settings_title" to settingsLabel
+                    "rvx_morphed_settings_title" to settingsLabel
                 ).forEach { (k, v) ->
                     val stringElement = document.createElement("string")
 

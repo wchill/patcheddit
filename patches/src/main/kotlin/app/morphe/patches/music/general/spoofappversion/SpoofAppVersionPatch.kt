@@ -100,13 +100,13 @@ val spoofAppVersionPatch = resourcePatch(
 
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_spoof_app_version",
+            "rvx_morphed_spoof_app_version",
             "false"
         )
         addPreferenceWithIntent(
             CategoryType.GENERAL,
-            "revanced_spoof_app_version_target",
-            "revanced_spoof_app_version"
+            "rvx_morphed_spoof_app_version_target",
+            "rvx_morphed_spoof_app_version"
         )
 
         updatePatchStatus(SPOOF_APP_VERSION)

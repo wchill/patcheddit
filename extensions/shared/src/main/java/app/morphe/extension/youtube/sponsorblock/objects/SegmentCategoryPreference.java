@@ -45,7 +45,7 @@ public class SegmentCategoryPreference extends ColorPickerPreference {
         // Enable opacity slider for this preference.
         setOpacitySliderEnabled(true);
 
-        setWidgetLayoutResource(LAYOUT_REVANCED_COLOR_DOT_WIDGET);
+        setWidgetLayoutResource(LAYOUT_RVX_MORPHED_COLOR_DOT_WIDGET);
 
         // Sync initial color from category.
         setText(category.getColorStringWithOpacity());
@@ -70,7 +70,7 @@ public class SegmentCategoryPreference extends ColorPickerPreference {
                 colorChangeListener.onColorChanged(getKey(), category.getColorWithOpacity());
             }
         } catch (IllegalArgumentException ex) {
-            Utils.showToastShort(str("revanced_settings_color_invalid"));
+            Utils.showToastShort(str("rvx_morphed_settings_color_invalid"));
             setText(category.colorSetting.defaultValue);
         } catch (Exception ex) {
             String colorStringFinal = colorString;
@@ -118,7 +118,7 @@ public class SegmentCategoryPreference extends ColorPickerPreference {
     protected void onDialogOkClicked() {
         if (selectedDialogEntryIndex >= 0 && entryValues != null) {
             String value = entryValues[selectedDialogEntryIndex].toString();
-            category.setBehaviour(Objects.requireNonNull(CategoryBehaviour.byReVancedKeyValue(value)));
+            category.setBehaviour(Objects.requireNonNull(CategoryBehaviour.byRVXKeyValue(value)));
             SegmentCategory.updateEnabledCategories();
         }
     }

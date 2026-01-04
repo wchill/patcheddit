@@ -228,16 +228,16 @@ val swipeControlsPatch = bytecodePatch(
                 "ic_sc_volume_mute.xml",
                 "ic_sc_volume_normal.xml",
                 // Modern
-                "revanced_ic_sc_brightness_auto.xml",
-                "revanced_ic_sc_brightness_full.xml",
-                "revanced_ic_sc_brightness_high.xml",
-                "revanced_ic_sc_brightness_low.xml",
-                "revanced_ic_sc_brightness_manual.xml",
-                "revanced_ic_sc_brightness_medium.xml",
-                "revanced_ic_sc_volume_high.xml",
-                "revanced_ic_sc_volume_low.xml",
-                "revanced_ic_sc_volume_mute.xml",
-                "revanced_ic_sc_volume_normal.xml",
+                "rvx_morphed_ic_sc_brightness_auto.xml",
+                "rvx_morphed_ic_sc_brightness_full.xml",
+                "rvx_morphed_ic_sc_brightness_high.xml",
+                "rvx_morphed_ic_sc_brightness_low.xml",
+                "rvx_morphed_ic_sc_brightness_manual.xml",
+                "rvx_morphed_ic_sc_brightness_medium.xml",
+                "rvx_morphed_ic_sc_volume_high.xml",
+                "rvx_morphed_ic_sc_volume_low.xml",
+                "rvx_morphed_ic_sc_volume_mute.xml",
+                "rvx_morphed_ic_sc_volume_normal.xml",
             )
         )
 

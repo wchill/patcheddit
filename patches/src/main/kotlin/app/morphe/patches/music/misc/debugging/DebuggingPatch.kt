@@ -23,20 +23,20 @@ val debuggingPatch = resourcePatch(
     execute {
         addSwitchPreference(
             CategoryType.MISC,
-            "revanced_debug",
+            "rvx_morphed_debug",
             "false"
         )
         addSwitchPreference(
             CategoryType.MISC,
-            "revanced_debug_protobuffer",
+            "rvx_morphed_debug_protobuffer",
             "false",
-            "revanced_debug"
+            "rvx_morphed_debug"
         )
         addSwitchPreference(
             CategoryType.MISC,
-            "revanced_debug_spannable",
+            "rvx_morphed_debug_spannable",
             "false",
-            "revanced_debug"
+            "rvx_morphed_debug"
         )
 
         updatePatchStatus(ENABLE_DEBUG_LOGGING)

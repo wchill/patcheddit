@@ -95,7 +95,7 @@ val spoofAppVersionForLyricsPatch = resourcePatch(
         fun appendLyricsAppVersion(appVersion: String) =
             appendAppVersion(
                 appVersion,
-                "revanced_spoof_app_version_for_lyrics_target"
+                "rvx_morphed_spoof_app_version_for_lyrics_target"
             )
 
         if (is_8_30_or_greater && !is_8_33_or_greater) {
@@ -120,13 +120,13 @@ val spoofAppVersionForLyricsPatch = resourcePatch(
 
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_spoof_app_version_for_lyrics",
+            "rvx_morphed_spoof_app_version_for_lyrics",
             "false"
         )
         addPreferenceWithIntent(
             CategoryType.GENERAL,
-            "revanced_spoof_app_version_for_lyrics_target",
-            "revanced_spoof_app_version_for_lyrics"
+            "rvx_morphed_spoof_app_version_for_lyrics_target",
+            "rvx_morphed_spoof_app_version_for_lyrics"
         )
 
         updatePatchStatus(SPOOF_APP_VERSION_FOR_LYRICS)

@@ -140,10 +140,10 @@ public class VideoQualityPatch {
         String networkTypeMessage;
         IntegerSetting qualitySetting;
         if (Utils.getNetworkType() == Utils.NetworkType.MOBILE) {
-            networkTypeMessage = str("revanced_remember_video_quality_mobile");
+            networkTypeMessage = str("rvx_morphed_remember_video_quality_mobile");
             qualitySetting = shortPlayerOpen ? shortsQualityMobile : videoQualityMobile;
         } else {
-            networkTypeMessage = str("revanced_remember_video_quality_wifi");
+            networkTypeMessage = str("rvx_morphed_remember_video_quality_wifi");
             qualitySetting = shortPlayerOpen ? shortsQualityWifi : videoQualityWifi;
         }
 
@@ -158,8 +158,8 @@ public class VideoQualityPatch {
             String qualityLabel = qualityResolution + "p";
             Utils.showToastShort(str(
                     shortPlayerOpen
-                            ? "revanced_remember_video_quality_toast_shorts"
-                            : "revanced_remember_video_quality_toast",
+                            ? "rvx_morphed_remember_video_quality_toast_shorts"
+                            : "rvx_morphed_remember_video_quality_toast",
                     networkTypeMessage,
                     qualityLabel)
             );

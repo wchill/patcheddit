@@ -11,7 +11,7 @@
 
         <!-- Parent container for Toolbar and SearchView -->
         <FrameLayout
-                android:id="@+id/revanced_toolbar_parent"
+                android:id="@+id/rvx_morphed_toolbar_parent"
                 android:layout_width="match_parent"
                 android:layout_height="?android:attr/actionBarSize"
                 android:background="@android:color/white"
@@ -19,23 +19,23 @@
 
             <!-- Toolbar -->
             <android.support.v7.widget.Toolbar
-                    android:id="@+id/revanced_toolbar"
+                    android:id="@+id/rvx_morphed_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?android:attr/actionBarSize"
                     android:background="@android:color/white"
-                    app:navigationIcon="@drawable/revanced_settings_toolbar_arrow_left"
-                    app:title="@string/revanced_settings_title" />
+                    app:navigationIcon="@drawable/rvx_morphed_settings_toolbar_arrow_left"
+                    app:title="@string/rvx_morphed_settings_title" />
 
             <!-- Container for SearchView -->
             <FrameLayout
-                    android:id="@+id/revanced_search_view_container"
+                    android:id="@+id/rvx_morphed_search_view_container"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:visibility="gone">
 
                 <android.widget.SearchView
-                        android:id="@+id/revanced_search_view"
+                        android:id="@+id/rvx_morphed_search_view"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="56dp"
@@ -46,7 +46,7 @@
                         android:iconifiedByDefault="false"
                         android:searchIcon="@null"
                         android:queryBackground="@null"
-                        android:theme="@style/revanced_searchbar_cursor"
+                        android:theme="@style/rvx_morphed_searchbar_cursor"
                         android:padding="2dp" />
 
             </FrameLayout>
@@ -55,7 +55,7 @@
 
         <!-- Container for fragments -->
         <FrameLayout
-                android:id="@+id/revanced_settings_fragments"
+                android:id="@+id/rvx_morphed_settings_fragments"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 

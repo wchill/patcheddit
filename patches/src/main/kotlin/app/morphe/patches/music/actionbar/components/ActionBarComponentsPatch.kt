@@ -96,7 +96,7 @@ val actionBarComponentsPatch = bytecodePatch(
 
                 addSwitchPreference(
                     CategoryType.ACTION_BAR,
-                    "revanced_change_action_bar_position",
+                    "rvx_morphed_change_action_bar_position",
                     "false"
                 )
             }
@@ -249,74 +249,74 @@ val actionBarComponentsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.ACTION_BAR,
-            "revanced_hide_action_button_like_dislike",
+            "rvx_morphed_hide_action_button_like_dislike",
             "false"
         )
         addSwitchPreference(
             CategoryType.ACTION_BAR,
-            "revanced_hide_action_button_comment",
+            "rvx_morphed_hide_action_button_comment",
             "false"
         )
         addSwitchPreference(
             CategoryType.ACTION_BAR,
-            "revanced_hide_action_button_add_to_playlist",
+            "rvx_morphed_hide_action_button_add_to_playlist",
             "false"
         )
         addSwitchPreference(
             CategoryType.ACTION_BAR,
-            "revanced_hide_action_button_download",
+            "rvx_morphed_hide_action_button_download",
             "false"
         )
         addSwitchPreference(
             CategoryType.ACTION_BAR,
-            "revanced_hide_action_button_radio",
+            "rvx_morphed_hide_action_button_radio",
             "false"
         )
         addSwitchPreference(
             CategoryType.ACTION_BAR,
-            "revanced_hide_action_button_share",
+            "rvx_morphed_hide_action_button_share",
             "false"
         )
         if (is_7_33_or_greater) {
             addSwitchPreference(
                 CategoryType.ACTION_BAR,
-                "revanced_hide_action_button_song_video",
+                "rvx_morphed_hide_action_button_song_video",
                 "false"
             )
         }
         if (is_7_25_or_greater) {
             addSwitchPreference(
                 CategoryType.ACTION_BAR,
-                "revanced_hide_action_button_disabled",
+                "rvx_morphed_hide_action_button_disabled",
                 "false"
             )
         } else {
             addSwitchPreference(
                 CategoryType.ACTION_BAR,
-                "revanced_hide_action_button_label",
+                "rvx_morphed_hide_action_button_label",
                 "false"
             )
         }
         addSwitchPreference(
             CategoryType.ACTION_BAR,
-            "revanced_external_downloader_action",
+            "rvx_morphed_external_downloader_action",
             "false"
         )
         addPreferenceWithIntent(
             CategoryType.ACTION_BAR,
-            "revanced_external_downloader_package_name",
-            "revanced_external_downloader_action"
+            "rvx_morphed_external_downloader_package_name",
+            "rvx_morphed_external_downloader_action"
         )
         addSwitchPreference(
             CategoryType.ACTION_BAR,
-            "revanced_replace_action_button_like",
+            "rvx_morphed_replace_action_button_like",
             "false"
         )
         addSwitchPreference(
             CategoryType.ACTION_BAR,
-            "revanced_replace_action_button_like_type",
+            "rvx_morphed_replace_action_button_like_type",
             "false",
-            "revanced_replace_action_button_like"
+            "rvx_morphed_replace_action_button_like"
         )
 
         updatePatchStatus(HIDE_ACTION_BAR_COMPONENTS)

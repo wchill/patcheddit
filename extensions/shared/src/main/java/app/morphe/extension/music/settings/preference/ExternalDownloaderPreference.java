@@ -27,9 +27,9 @@ import app.morphe.extension.shared.utils.Utils;
 public class ExternalDownloaderPreference {
 
     private static final StringSetting settings = Settings.EXTERNAL_DOWNLOADER_PACKAGE_NAME;
-    private static final String[] mEntries = ResourceUtils.getStringArray("revanced_external_downloader_label");
-    private static final String[] mEntryValues = ResourceUtils.getStringArray("revanced_external_downloader_package_name");
-    private static final String[] mWebsiteEntries = ResourceUtils.getStringArray("revanced_external_downloader_website");
+    private static final String[] mEntries = ResourceUtils.getStringArray("rvx_morphed_external_downloader_label");
+    private static final String[] mEntryValues = ResourceUtils.getStringArray("rvx_morphed_external_downloader_package_name");
+    private static final String[] mWebsiteEntries = ResourceUtils.getStringArray("rvx_morphed_external_downloader_website");
     private static String packageName;
     private static int mClickedDialogEntryIndex;
 
@@ -68,7 +68,7 @@ public class ExternalDownloaderPreference {
         table.addView(row);
         builder.setView(table);
 
-        builder.setTitle(str("revanced_external_downloader_dialog_title"));
+        builder.setTitle(str("rvx_morphed_external_downloader_dialog_title"));
         builder.setSingleChoiceItems(mEntries, mClickedDialogEntryIndex, (dialog, which) -> {
             mClickedDialogEntryIndex = which;
             mEditText.setText(mEntryValues[which].toString());
@@ -79,7 +79,7 @@ public class ExternalDownloaderPreference {
             checkPackageIsValid(mActivity, packageName);
             dialog.dismiss();
         });
-        builder.setNeutralButton(str("revanced_settings_reset"), (dialog, which) -> settings.resetToDefault());
+        builder.setNeutralButton(str("rvx_morphed_settings_reset"), (dialog, which) -> settings.resetToDefault());
         builder.setNegativeButton(android.R.string.cancel, null);
 
         builder.show();
@@ -100,13 +100,13 @@ public class ExternalDownloaderPreference {
             return true;
 
         if (website.isEmpty()) {
-            Utils.showToastShort(str("revanced_external_downloader_not_installed_warning", packageName));
+            Utils.showToastShort(str("rvx_morphed_external_downloader_not_installed_warning", packageName));
             return false;
         }
 
         getDialogBuilder(mActivity)
-                .setTitle(str("revanced_external_downloader_not_installed_dialog_title"))
-                .setMessage(str("revanced_external_downloader_not_installed_dialog_message", appName, appName))
+                .setTitle(str("rvx_morphed_external_downloader_not_installed_dialog_title"))
+                .setMessage(str("rvx_morphed_external_downloader_not_installed_dialog_message", appName, appName))
                 .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                     Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(website));
                     mActivity.startActivity(i);

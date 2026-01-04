@@ -26,7 +26,7 @@ import app.morphe.extension.youtube.settings.Settings;
 public final class CustomFilter extends Filter {
 
     private static void showInvalidSyntaxToast(@NonNull String expression) {
-        Utils.showToastLong(str("revanced_custom_filter_toast_invalid_syntax", expression));
+        Utils.showToastLong(str("rvx_morphed_custom_filter_toast_invalid_syntax", expression));
     }
 
     private static class CustomFilterGroup extends StringFilterGroup {

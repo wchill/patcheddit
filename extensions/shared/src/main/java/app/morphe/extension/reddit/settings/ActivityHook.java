@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
-import app.morphe.extension.reddit.settings.preference.ReVancedPreferenceFragment;
+import app.morphe.extension.reddit.settings.preference.RVXMorphedPreferenceFragment;
 
 @SuppressWarnings("all")
 public class ActivityHook {
@@ -28,7 +28,7 @@ public class ActivityHook {
 
         activity.getFragmentManager()
                 .beginTransaction()
-                .replace(fragmentId, new ReVancedPreferenceFragment())
+                .replace(fragmentId, new RVXMorphedPreferenceFragment())
                 .commit();
     }
 }

@@ -35,20 +35,20 @@ public class SponsorBlockApiUrlPreference {
             container.addView(textInputLayout);
 
             getDialogBuilder(mActivity)
-                    .setTitle(str("revanced_sb_api_url"))
+                    .setTitle(str("rvx_morphed_sb_api_url"))
                     .setView(container)
                     .setNegativeButton(android.R.string.cancel, null)
-                    .setNeutralButton(str("revanced_settings_reset"), (dialog, which) -> {
+                    .setNeutralButton(str("rvx_morphed_settings_reset"), (dialog, which) -> {
                         apiUrl.resetToDefault();
-                        Utils.showToastShort(str("revanced_sb_api_url_reset"));
+                        Utils.showToastShort(str("rvx_morphed_sb_api_url_reset"));
                     })
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                         String serverAddress = textView.getText().toString().trim();
                         if (!isValidSBServerAddress(serverAddress)) {
-                            Utils.showToastShort(str("revanced_sb_api_url_invalid"));
+                            Utils.showToastShort(str("rvx_morphed_sb_api_url_invalid"));
                         } else if (!serverAddress.equals(Settings.SB_API_URL.get())) {
                             apiUrl.save(serverAddress);
-                            Utils.showToastShort(str("revanced_sb_api_url_changed"));
+                            Utils.showToastShort(str("rvx_morphed_sb_api_url_changed"));
                         }
                     })
                     .show();

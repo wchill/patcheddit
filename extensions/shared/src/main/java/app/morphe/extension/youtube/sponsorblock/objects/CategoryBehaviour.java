@@ -11,19 +11,19 @@ import app.morphe.extension.shared.utils.StringRef;
 import app.morphe.extension.shared.utils.Utils;
 
 public enum CategoryBehaviour {
-    SKIP_AUTOMATICALLY("skip", 2, true, sf("revanced_sb_skip_automatically")),
+    SKIP_AUTOMATICALLY("skip", 2, true, sf("rvx_morphed_sb_skip_automatically")),
     // desktop does not have skip-once behavior. Key is unique to ReVanced
-    SKIP_AUTOMATICALLY_ONCE("skip-once", 3, true, sf("revanced_sb_skip_automatically_once")),
-    MANUAL_SKIP("manual-skip", 1, false, sf("revanced_sb_skip_showbutton")),
-    SHOW_IN_SEEKBAR("seekbar-only", 0, false, sf("revanced_sb_skip_seekbaronly")),
+    SKIP_AUTOMATICALLY_ONCE("skip-once", 3, true, sf("rvx_morphed_sb_skip_automatically_once")),
+    MANUAL_SKIP("manual-skip", 1, false, sf("rvx_morphed_sb_skip_showbutton")),
+    SHOW_IN_SEEKBAR("seekbar-only", 0, false, sf("rvx_morphed_sb_skip_seekbaronly")),
     // ignored categories are not exported to json, and ignore is the default behavior when importing
-    IGNORE("ignore", -1, false, sf("revanced_sb_skip_ignore"));
+    IGNORE("ignore", -1, false, sf("rvx_morphed_sb_skip_ignore"));
 
     /**
-     * ReVanced specific value.
+     * RVX specific value.
      */
     @NonNull
-    public final String reVancedKeyValue;
+    public final String rvxKeyValue;
     /**
      * Desktop specific value.
      */
@@ -35,17 +35,17 @@ public enum CategoryBehaviour {
     @NonNull
     public final StringRef description;
 
-    CategoryBehaviour(String reVancedKeyValue, int desktopKeyValue, boolean skipAutomatically, StringRef description) {
-        this.reVancedKeyValue = Objects.requireNonNull(reVancedKeyValue);
+    CategoryBehaviour(String rvxKeyValue, int desktopKeyValue, boolean skipAutomatically, StringRef description) {
+        this.rvxKeyValue = Objects.requireNonNull(rvxKeyValue);
         this.desktopKeyValue = desktopKeyValue;
         this.skipAutomatically = skipAutomatically;
         this.description = Objects.requireNonNull(description);
     }
 
     @Nullable
-    public static CategoryBehaviour byReVancedKeyValue(@NonNull String keyValue) {
+    public static CategoryBehaviour byRVXKeyValue(@NonNull String keyValue) {
         for (CategoryBehaviour behaviour : values()) {
-            if (behaviour.reVancedKeyValue.equals(keyValue)) {
+            if (behaviour.rvxKeyValue.equals(keyValue)) {
                 return behaviour;
             }
         }
@@ -81,7 +81,7 @@ public enum CategoryBehaviour {
         int behaviorIndex = 0, behaviorHighlightIndex = 0;
         while (behaviorIndex < behaviorLength) {
             CategoryBehaviour behaviour = behaviours[behaviorIndex];
-            String value = behaviour.reVancedKeyValue;
+            String value = behaviour.rvxKeyValue;
             String description = behaviour.description.toString();
             behaviorKeyValues[behaviorIndex] = value;
             behaviorDescriptions[behaviorIndex] = description;

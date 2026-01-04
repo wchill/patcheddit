@@ -45,17 +45,17 @@ class SwipeControlsOverlayLayout(
     constructor(context: Context) : this(context, SwipeControlsConfigurationProvider())
 
     // Drawable icons for brightness and volume.
-    private var autoBrightnessIcon: Drawable = getDrawable("revanced_ic_sc_brightness_auto")
-    private val lowBrightnessIcon: Drawable = getDrawable("revanced_ic_sc_brightness_low")
-    private val mediumBrightnessIcon: Drawable = getDrawable("revanced_ic_sc_brightness_medium")
-    private val highBrightnessIcon: Drawable = getDrawable("revanced_ic_sc_brightness_high")
-    private val fullBrightnessIcon: Drawable = getDrawable("revanced_ic_sc_brightness_full")
-    private var manualBrightnessIcon: Drawable = getDrawable("revanced_ic_sc_brightness_manual")
-    private var mutedVolumeIcon: Drawable = getDrawable("revanced_ic_sc_volume_mute")
-    private val lowVolumeIcon: Drawable = getDrawable("revanced_ic_sc_volume_low")
-    private var normalVolumeIcon: Drawable = getDrawable("revanced_ic_sc_volume_normal")
+    private var autoBrightnessIcon: Drawable = getDrawable("rvx_morphed_ic_sc_brightness_auto")
+    private val lowBrightnessIcon: Drawable = getDrawable("rvx_morphed_ic_sc_brightness_low")
+    private val mediumBrightnessIcon: Drawable = getDrawable("rvx_morphed_ic_sc_brightness_medium")
+    private val highBrightnessIcon: Drawable = getDrawable("rvx_morphed_ic_sc_brightness_high")
+    private val fullBrightnessIcon: Drawable = getDrawable("rvx_morphed_ic_sc_brightness_full")
+    private var manualBrightnessIcon: Drawable = getDrawable("rvx_morphed_ic_sc_brightness_manual")
+    private var mutedVolumeIcon: Drawable = getDrawable("rvx_morphed_ic_sc_volume_mute")
+    private val lowVolumeIcon: Drawable = getDrawable("rvx_morphed_ic_sc_volume_low")
+    private var normalVolumeIcon: Drawable = getDrawable("rvx_morphed_ic_sc_volume_normal")
     private val feedbackTextView: TextView
-    private val fullVolumeIcon: Drawable = getDrawable("revanced_ic_sc_volume_high")
+    private val fullVolumeIcon: Drawable = getDrawable("rvx_morphed_ic_sc_volume_high")
 
     // Function to retrieve drawable resources by name.
     private fun getDrawable(name: String, width: Int? = null, height: Int? = null): Drawable {
@@ -308,7 +308,7 @@ class SwipeControlsOverlayLayout(
     override fun onBrightnessChanged(brightness: Double) {
         if (config.shouldLowestValueEnableAutoBrightness && brightness <= 0) {
             val displayText = if (config.overlayStyle.isVertical) "A"
-            else str("revanced_swipe_lowest_value_enable_auto_brightness_overlay_text")
+            else str("rvx_morphed_swipe_lowest_value_enable_auto_brightness_overlay_text")
 
             if (isLegacyStyles) {
                 showFeedbackView(

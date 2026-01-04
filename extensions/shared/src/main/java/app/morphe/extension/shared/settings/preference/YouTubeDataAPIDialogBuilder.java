@@ -29,10 +29,10 @@ public class YouTubeDataAPIDialogBuilder {
                             "<style> body { background-color: %s; color: %s; line-height: 20px; } a { color: %s; } </style>",
                             backgroundColorHex, foregroundColorHex, foregroundColorHex) +
                     "<h2>" +
-                    str("revanced_return_youtube_username_youtube_data_api_v3_dialog_title") +
+                    str("rvx_morphed_return_youtube_username_youtube_data_api_v3_dialog_title") +
                     "</h2>" +
                     String.format(
-                            str("revanced_return_youtube_username_youtube_data_api_v3_dialog_message"),
+                            str("rvx_morphed_return_youtube_username_youtube_data_api_v3_dialog_message"),
                             URL_CREATE_PROJECT,
                             URL_MARKET_PLACE
                     ) +

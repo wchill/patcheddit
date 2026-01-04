@@ -33,13 +33,13 @@ public class ResettableEditTextPreference {
                     .setTitle(str(setting.key + "_title"))
                     .setView(container)
                     .setNegativeButton(android.R.string.cancel, null)
-                    .setNeutralButton(str("revanced_settings_reset"), (dialog, which) -> {
+                    .setNeutralButton(str("rvx_morphed_settings_reset"), (dialog, which) -> {
                         setting.resetToDefault();
-                        ReVancedPreferenceFragment.showRebootDialog();
+                        RVXMorphedPreferenceFragment.showRebootDialog();
                     })
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                         setting.save(textView.getText().toString().trim());
-                        ReVancedPreferenceFragment.showRebootDialog();
+                        RVXMorphedPreferenceFragment.showRebootDialog();
                     })
                     .show();
         } catch (Exception ex) {

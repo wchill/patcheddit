@@ -89,8 +89,8 @@ val spoofStreamingDataPatch = spoofStreamingDataPatch(
     finalizeBlock = {
         addTopControl(
             "youtube/spoof/shared",
-            "@+id/revanced_reload_video_button",
-            "@+id/revanced_reload_video_button"
+            "@+id/rvx_morphed_reload_video_button",
+            "@+id/rvx_morphed_reload_video_button"
         )
     }
 )

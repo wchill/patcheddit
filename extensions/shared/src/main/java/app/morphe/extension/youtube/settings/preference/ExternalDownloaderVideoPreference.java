@@ -75,7 +75,7 @@ public class ExternalDownloaderVideoPreference extends CustomDialogListPreferenc
         TUBULAR("Tubular",
                 "org.polymorphicshade.tubular",
                 "https://github.com/polymorphicshade/Tubular/releases/latest"),
-        OTHER(sf("revanced_external_downloader_other_item").toString(),
+        OTHER(sf("rvx_morphed_external_downloader_other_item").toString(),
                 null,
                 null,
                 true);
@@ -186,7 +186,7 @@ public class ExternalDownloaderVideoPreference extends CustomDialogListPreferenc
         // Ignore calls to set the summary.
         // Summary is always the description of the category.
         //
-        // This is required otherwise the ReVanced preference fragment
+        // This is required otherwise the RVX Morphed preference fragment
         // sets all ListPreference summaries to show the current selection.
     }
 
@@ -215,7 +215,7 @@ public class ExternalDownloaderVideoPreference extends CustomDialogListPreferenc
         final boolean usingCustomDownloader = Downloader.findByPackageName(packageName) == null;
         adapter = new CustomDialogListPreference.ListPreferenceArrayAdapter(
                 context,
-                LAYOUT_REVANCED_CUSTOM_LIST_ITEM_CHECKED,
+                LAYOUT_RVX_MORPHED_CUSTOM_LIST_ITEM_CHECKED,
                 getEntries(),
                 getEntryValues(),
                 usingCustomDownloader
@@ -278,7 +278,7 @@ public class ExternalDownloaderVideoPreference extends CustomDialogListPreferenc
         editText = new EditText(context);
         editText.setText(packageName);
         editText.setSelection(packageName.length());
-        editText.setHint(str("revanced_external_downloader_other_item_hint"));
+        editText.setHint(str("rvx_morphed_external_downloader_other_item_hint"));
         editText.setSingleLine(true); // Restrict EditText to a single line.
         editText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         // Set initial EditText state based on selected downloader.
@@ -321,8 +321,8 @@ public class ExternalDownloaderVideoPreference extends CustomDialogListPreferenc
                         // Show dialog if EditText is empty.
                         CustomDialog.create(
                                 context,
-                                str("revanced_external_downloader_dialog_title"),
-                                str("revanced_external_downloader_empty_warning"),
+                                str("rvx_morphed_external_downloader_dialog_title"),
+                                str("rvx_morphed_external_downloader_empty_warning"),
                                 null,
                                 null,
                                 () -> {
@@ -346,7 +346,7 @@ public class ExternalDownloaderVideoPreference extends CustomDialogListPreferenc
                 },
                 () -> {
                 }, // Cancel button action (dismiss only).
-                str("revanced_settings_reset"),
+                str("rvx_morphed_settings_reset"),
                 () -> { // Reset action.
                     String defaultValue = settings.defaultValue;
                     editText.setText(defaultValue);
@@ -421,12 +421,12 @@ public class ExternalDownloaderVideoPreference extends CustomDialogListPreferenc
                 : null; // Ok.
         // Show a dialog if the recommended app is not installed or if the custom package cannot be found.
         String message = downloader != null
-                ? str("revanced_external_downloader_not_installed_warning", downloader.name)
-                : str("revanced_external_downloader_package_not_found_warning", packageName);
+                ? str("rvx_morphed_external_downloader_not_installed_warning", downloader.name)
+                : str("rvx_morphed_external_downloader_package_not_found_warning", packageName);
 
         CustomDialog.create(
                 context,
-                str("revanced_external_downloader_not_found_title"),
+                str("rvx_morphed_external_downloader_not_found_title"),
                 message,
                 null,
                 okButtonText,

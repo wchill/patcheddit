@@ -29,23 +29,23 @@ val returnYouTubeUsernamePatch = resourcePatch(
     execute {
         addSwitchPreference(
             CategoryType.RETURN_YOUTUBE_USERNAME,
-            "revanced_return_youtube_username_enabled",
+            "rvx_morphed_return_youtube_username_enabled",
             "false"
         )
         addPreferenceWithIntent(
             CategoryType.RETURN_YOUTUBE_USERNAME,
-            "revanced_return_youtube_username_display_format",
-            "revanced_return_youtube_username_enabled"
+            "rvx_morphed_return_youtube_username_display_format",
+            "rvx_morphed_return_youtube_username_enabled"
         )
         addPreferenceWithIntent(
             CategoryType.RETURN_YOUTUBE_USERNAME,
-            "revanced_return_youtube_username_youtube_data_api_v3_developer_key",
-            "revanced_return_youtube_username_enabled"
+            "rvx_morphed_return_youtube_username_youtube_data_api_v3_developer_key",
+            "rvx_morphed_return_youtube_username_enabled"
         )
         if (is_6_42_or_greater) {
             addPreferenceWithIntent(
                 CategoryType.RETURN_YOUTUBE_USERNAME,
-                "revanced_return_youtube_username_youtube_data_api_v3_about"
+                "rvx_morphed_return_youtube_username_youtube_data_api_v3_about"
             )
         }
 

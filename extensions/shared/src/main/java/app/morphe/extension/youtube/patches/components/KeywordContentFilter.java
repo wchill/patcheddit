@@ -527,7 +527,7 @@ public final class KeywordContentFilter extends Filter {
                     // language that does not use spaces between words.
 
                     // Do not reset the setting. Keep the invalid keywords so the user can fix the mistake.
-                    Utils.showToastLong(str("revanced_hide_keyword_toast_invalid_length", phrase, MINIMUM_KEYWORD_LENGTH));
+                    Utils.showToastLong(str("rvx_morphed_hide_keyword_toast_invalid_length", phrase, MINIMUM_KEYWORD_LENGTH));
                     continue;
                 } else {
                     wholeWordMatching = false;
@@ -554,9 +554,9 @@ public final class KeywordContentFilter extends Filter {
                     String toastMessage;
                     // If whole word matching is off, but would pass with on, then show a different toast.
                     if (!wholeWordMatching && !phrasesWillHideAllVideos(phraseVariations, true)) {
-                        toastMessage = "revanced_hide_keyword_toast_invalid_common_whole_word_required";
+                        toastMessage = "rvx_morphed_hide_keyword_toast_invalid_common_whole_word_required";
                     } else {
-                        toastMessage = "revanced_hide_keyword_toast_invalid_common";
+                        toastMessage = "rvx_morphed_hide_keyword_toast_invalid_common";
                     }
 
                     Utils.showToastLong(str(toastMessage, phrase));
@@ -569,7 +569,7 @@ public final class KeywordContentFilter extends Filter {
                     if (existing == null) {
                         keywords.put(variation, wholeWordMatching);
                     } else if (existing != wholeWordMatching) {
-                        Utils.showToastLong(str("revanced_hide_keyword_toast_invalid_conflicting", phrase));
+                        Utils.showToastLong(str("rvx_morphed_hide_keyword_toast_invalid_conflicting", phrase));
                         break;
                     }
                 }
@@ -676,7 +676,7 @@ public final class KeywordContentFilter extends Filter {
         timeToResumeFiltering = System.currentTimeMillis() + ALL_VIDEOS_FILTERED_BACKOFF_MILLISECONDS;
 
         Logger.printDebug(() -> "Temporarily turning off filtering due to excessively broad filter: " + keyword);
-        Utils.showToastLong(str("revanced_hide_keyword_toast_invalid_broad", keyword));
+        Utils.showToastLong(str("rvx_morphed_hide_keyword_toast_invalid_broad", keyword));
     }
 
     @Override

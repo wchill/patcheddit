@@ -47,9 +47,9 @@ public class SpoofStreamingDataSignInPreference extends Preference implements Pr
     public boolean onPreferenceClick(Preference preference) {
         Context context = getContext();
         Pair<Dialog, LinearLayout> dialogPair;
-        String dialogTitle = str("revanced_spoof_streaming_data_sign_in_android_vr_dialog_title");
-        String dialogMessage = str("revanced_spoof_streaming_data_sign_in_android_vr_dialog_message");
-        String resetButtonText = str("revanced_spoof_streaming_data_sign_in_android_vr_dialog_reset_text");
+        String dialogTitle = str("rvx_morphed_spoof_streaming_data_sign_in_android_vr_dialog_title");
+        String dialogMessage = str("rvx_morphed_spoof_streaming_data_sign_in_android_vr_dialog_message");
+        String resetButtonText = str("rvx_morphed_spoof_streaming_data_sign_in_android_vr_dialog_reset_text");
         if (YouTubeVRAuthPatch.isDeviceCodeAvailable()) {
             dialogPair = CustomDialog.create(
                     context,
@@ -60,7 +60,7 @@ public class SpoofStreamingDataSignInPreference extends Preference implements Pr
                     // No EditText.
                     null,
                     // OK button text.
-                    str("revanced_spoof_streaming_data_sign_in_android_vr_dialog_get_authorization_token_text"),
+                    str("rvx_morphed_spoof_streaming_data_sign_in_android_vr_dialog_get_authorization_token_text"),
                     // OK button action.
                     () -> {
                         YouTubeVRAuthPatch.setRefreshToken();
@@ -85,7 +85,7 @@ public class SpoofStreamingDataSignInPreference extends Preference implements Pr
                     // No EditText.
                     null,
                     // OK button text.
-                    str("revanced_spoof_streaming_data_sign_in_android_vr_dialog_get_activation_code_text"),
+                    str("rvx_morphed_spoof_streaming_data_sign_in_android_vr_dialog_get_activation_code_text"),
                     // OK button action.
                     () -> YouTubeVRAuthPatch.setActivationCode(context),
                     // Cancel button action.

@@ -100,8 +100,8 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
 
             // If the user has a private user id, then include a subtext that mentions not to share it.
             String importExportSummary = SponsorBlockSettings.userHasSBPrivateId()
-                    ? str("revanced_sb_settings_ie_sum_warning")
-                    : str("revanced_sb_settings_ie_sum");
+                    ? str("rvx_morphed_sb_settings_ie_sum_warning")
+                    : str("rvx_morphed_sb_settings_ie_sum");
             importExport.setSummary(importExportSummary);
 
             for (SegmentCategoryPreference category : segmentCategories) {
@@ -175,7 +175,7 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
 
             SwitchPreference sbEnabled = new SwitchPreference(context);
             initializePreference(sbEnabled, Settings.SB_ENABLED,
-                    "revanced_sb_enable_sb", false);
+                    "rvx_morphed_sb_enable_sb", false);
             addPreference(sbEnabled);
             sbEnabled.setOnPreferenceChangeListener((preference1, newValue) -> {
                 Settings.SB_ENABLED.save((Boolean) newValue);
@@ -184,12 +184,12 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
             });
 
             PreferenceCategory appearanceCategory = new PreferenceCategory(context);
-            appearanceCategory.setTitle(str("revanced_sb_appearance_category"));
+            appearanceCategory.setTitle(str("rvx_morphed_sb_appearance_category"));
             addPreference(appearanceCategory);
 
             SwitchPreference votingEnabled = new SwitchPreference(context);
             initializePreference(votingEnabled, Settings.SB_VOTING_BUTTON,
-                    "revanced_sb_enable_voting");
+                    "rvx_morphed_sb_enable_voting");
             votingEnabled.setOnPreferenceChangeListener((preference1, newValue) -> {
                 Settings.SB_VOTING_BUTTON.save((Boolean) newValue);
                 updateUIDelayed();
@@ -199,7 +199,7 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
 
             SwitchPreference compactSkipButton = new SwitchPreference(context);
             initializePreference(compactSkipButton, Settings.SB_COMPACT_SKIP_BUTTON,
-                    "revanced_sb_enable_compact_skip_button");
+                    "rvx_morphed_sb_enable_compact_skip_button");
             compactSkipButton.setOnPreferenceChangeListener((preference1, newValue) -> {
                 Settings.SB_COMPACT_SKIP_BUTTON.save((Boolean) newValue);
                 updateUIDelayed();
@@ -209,7 +209,7 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
 
             SwitchPreference autoHideSkipSegmentButton = new SwitchPreference(context);
             initializePreference(autoHideSkipSegmentButton, Settings.SB_AUTO_HIDE_SKIP_BUTTON,
-                    "revanced_sb_enable_auto_hide_skip_segment_button");
+                    "rvx_morphed_sb_enable_auto_hide_skip_segment_button");
             autoHideSkipSegmentButton.setOnPreferenceChangeListener((preference1, newValue) -> {
                 Settings.SB_AUTO_HIDE_SKIP_BUTTON.save((Boolean) newValue);
                 updateUIDelayed();
@@ -219,7 +219,7 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
 
             CustomDialogListPreference autoHideSkipSegmentButtonDuration = new CustomDialogListPreference(context);
             initializePreference(autoHideSkipSegmentButtonDuration, Settings.SB_AUTO_HIDE_SKIP_BUTTON_DURATION,
-                    "revanced_sb_auto_hide_skip_button_duration");
+                    "rvx_morphed_sb_auto_hide_skip_button_duration");
             autoHideSkipSegmentButtonDuration.setOnPreferenceChangeListener((preference1, newValue) -> {
                 SponsorBlockDuration newDuration = SponsorBlockDuration.valueOf((String) newValue);
                 Settings.SB_AUTO_HIDE_SKIP_BUTTON_DURATION.save(newDuration);
@@ -231,7 +231,7 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
 
             SwitchPreference showSkipToast = new SwitchPreference(context);
             initializePreference(showSkipToast, Settings.SB_TOAST_ON_SKIP,
-                    "revanced_sb_general_skiptoast");
+                    "rvx_morphed_sb_general_skiptoast");
             showSkipToast.setOnPreferenceChangeListener((preference1, newValue) -> {
                 Settings.SB_TOAST_ON_SKIP.save((Boolean) newValue);
                 updateUIDelayed();
@@ -241,9 +241,9 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
 
             CustomDialogListPreference showSkipToastDuration = new CustomDialogListPreference(context);
             initializePreference(showSkipToastDuration, Settings.SB_TOAST_ON_SKIP_DURATION,
-                    "revanced_sb_toast_on_skip_duration");
+                    "rvx_morphed_sb_toast_on_skip_duration");
             // Sets a static summary without overwriting it.
-            showSkipToastDuration.setStaticSummary(str("revanced_sb_toast_on_skip_duration_sum"));
+            showSkipToastDuration.setStaticSummary(str("rvx_morphed_sb_toast_on_skip_duration_sum"));
             showSkipToastDuration.setOnPreferenceChangeListener((preference1, newValue) -> {
                 SponsorBlockDuration newDuration = SponsorBlockDuration.valueOf((String) newValue);
                 Settings.SB_TOAST_ON_SKIP_DURATION.save(newDuration);
@@ -255,7 +255,7 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
 
             SwitchPreference showTimeWithoutSegments = new SwitchPreference(context);
             initializePreference(showTimeWithoutSegments, Settings.SB_VIDEO_LENGTH_WITHOUT_SEGMENTS,
-                    "revanced_sb_general_time_without");
+                    "rvx_morphed_sb_general_time_without");
             showTimeWithoutSegments.setOnPreferenceChangeListener((preference1, newValue) -> {
                 Settings.SB_VIDEO_LENGTH_WITHOUT_SEGMENTS.save((Boolean) newValue);
                 updateUIDelayed();
@@ -265,7 +265,7 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
 
             SwitchPreference squareLayout = new SwitchPreference(context);
             initializePreference(squareLayout, Settings.SB_SQUARE_LAYOUT,
-                    "revanced_sb_square_layout");
+                    "rvx_morphed_sb_square_layout");
             squareLayout.setOnPreferenceChangeListener((preference1, newValue) -> {
                 Settings.SB_SQUARE_LAYOUT.save((Boolean) newValue);
                 updateUIDelayed();
@@ -274,7 +274,7 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
             appearanceCategory.addPreference(squareLayout);
 
             PreferenceCategory segmentCategory = new PreferenceCategory(context);
-            segmentCategory.setTitle(str("revanced_sb_diff_segments"));
+            segmentCategory.setTitle(str("rvx_morphed_sb_diff_segments"));
             addPreference(segmentCategory);
 
             for (SegmentCategory category : SegmentCategory.categoriesWithoutUnsubmitted()) {
@@ -284,24 +284,24 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
             }
 
             PreferenceCategory createSegmentCategory = new PreferenceCategory(context);
-            createSegmentCategory.setTitle(str("revanced_sb_create_segment_category"));
+            createSegmentCategory.setTitle(str("rvx_morphed_sb_create_segment_category"));
             addPreference(createSegmentCategory);
 
             SwitchPreference addNewSegment = new SwitchPreference(context);
             initializePreference(addNewSegment, Settings.SB_CREATE_NEW_SEGMENT,
-                    "revanced_sb_enable_create_segment");
+                    "rvx_morphed_sb_enable_create_segment");
             addNewSegment.setOnPreferenceChangeListener((preference1, o) -> {
                 Boolean newValue = (Boolean) o;
                 if (newValue && !Settings.SB_SEEN_GUIDELINES.get()) {
                     Pair<Dialog, LinearLayout> dialogPair = CustomDialog.create(
                             preference1.getContext(),
-                            str("revanced_sb_guidelines_popup_title"),      // Title.
-                            str("revanced_sb_guidelines_popup_content"),    // Message.
+                            str("rvx_morphed_sb_guidelines_popup_title"),      // Title.
+                            str("rvx_morphed_sb_guidelines_popup_content"),    // Message.
                             null,                                               // No EditText.
-                            str("revanced_sb_guidelines_popup_open"),       // OK button text.
+                            str("rvx_morphed_sb_guidelines_popup_open"),       // OK button text.
                             this::openGuidelines,                               // OK button action.
                             null,                                               // Cancel button action.
-                            str("revanced_sb_guidelines_popup_already_read"), // Neutral button text.
+                            str("rvx_morphed_sb_guidelines_popup_already_read"), // Neutral button text.
                             () -> {
                             },                                           // Neutral button action (dismiss only).
                             true                                                // Dismiss dialog when onNeutralClick.
@@ -323,7 +323,7 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
 
             ResettableEditTextPreference newSegmentStep = new ResettableEditTextPreference(context);
             initializePreference(newSegmentStep, Settings.SB_CREATE_NEW_SEGMENT_STEP,
-                    "revanced_sb_general_adjusting");
+                    "rvx_morphed_sb_general_adjusting");
             newSegmentStep.getEditText().setInputType(InputType.TYPE_CLASS_NUMBER);
             newSegmentStep.setOnPreferenceChangeListener((preference1, newValue) -> {
                 try {
@@ -337,15 +337,15 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
                     Logger.printInfo(() -> "Invalid new segment step", ex);
                 }
 
-                Utils.showToastLong(str("revanced_sb_general_adjusting_invalid"));
+                Utils.showToastLong(str("rvx_morphed_sb_general_adjusting_invalid"));
                 updateUIDelayed();
                 return false;
             });
             createSegmentCategory.addPreference(newSegmentStep);
 
             Preference guidelinePreferences = new Preference(context);
-            guidelinePreferences.setTitle(str("revanced_sb_guidelines_preference_title"));
-            guidelinePreferences.setSummary(str("revanced_sb_guidelines_preference_sum"));
+            guidelinePreferences.setTitle(str("rvx_morphed_sb_guidelines_preference_title"));
+            guidelinePreferences.setSummary(str("rvx_morphed_sb_guidelines_preference_sum"));
             guidelinePreferences.setOnPreferenceClickListener(preference1 -> {
                 openGuidelines();
                 return true;
@@ -353,12 +353,12 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
             createSegmentCategory.addPreference(guidelinePreferences);
 
             PreferenceCategory generalCategory = new PreferenceCategory(context);
-            generalCategory.setTitle(str("revanced_sb_general"));
+            generalCategory.setTitle(str("rvx_morphed_sb_general"));
             addPreference(generalCategory);
 
             SwitchPreference toastOnConnectionError = new SwitchPreference(context);
             initializePreference(toastOnConnectionError, Settings.SB_TOAST_ON_CONNECTION_ERROR,
-                    "revanced_sb_toast_on_connection_error");
+                    "rvx_morphed_sb_toast_on_connection_error");
             toastOnConnectionError.setOnPreferenceChangeListener((preference1, newValue) -> {
                 Settings.SB_TOAST_ON_CONNECTION_ERROR.save((Boolean) newValue);
                 updateUIDelayed();
@@ -368,7 +368,7 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
 
             SwitchPreference trackSkips = new SwitchPreference(context);
             initializePreference(trackSkips, Settings.SB_TRACK_SKIP_COUNT,
-                    "revanced_sb_general_skipcount");
+                    "rvx_morphed_sb_general_skipcount");
             trackSkips.setOnPreferenceChangeListener((preference1, newValue) -> {
                 Settings.SB_TRACK_SKIP_COUNT.save((Boolean) newValue);
                 updateUIDelayed();
@@ -378,7 +378,7 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
 
             ResettableEditTextPreference minSegmentDuration = new ResettableEditTextPreference(context);
             initializePreference(minSegmentDuration, Settings.SB_SEGMENT_MIN_DURATION,
-                    "revanced_sb_general_min_duration");
+                    "rvx_morphed_sb_general_min_duration");
             minSegmentDuration.getEditText().setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             minSegmentDuration.setOnPreferenceChangeListener((preference1, newValue) -> {
                 try {
@@ -390,7 +390,7 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
                     Logger.printInfo(() -> "Invalid minimum segment duration", ex);
                 }
 
-                Utils.showToastLong(str("revanced_sb_general_min_duration_invalid"));
+                Utils.showToastLong(str("rvx_morphed_sb_general_min_duration_invalid"));
                 updateUIDelayed();
                 return false;
             });
@@ -424,7 +424,7 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
                                 },
                                 () -> {
                                 }, // Cancel button action (dismiss only).
-                                str("revanced_sb_settings_copy"), // Neutral button text (Copy).
+                                str("rvx_morphed_sb_settings_copy"), // Neutral button text (Copy).
                                 () -> {
                                     // Neutral button action (Copy).
                                     try {
@@ -447,11 +447,11 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
                 }
             };
             initializePreference(privateUserId, Settings.SB_PRIVATE_USER_ID,
-                    "revanced_sb_general_uuid");
+                    "rvx_morphed_sb_general_uuid");
             privateUserId.setOnPreferenceChangeListener((preference1, newValue) -> {
                 String newUUID = newValue.toString();
                 if (!SponsorBlockSettings.isValidSBUserId(newUUID)) {
-                    Utils.showToastLong(str("revanced_sb_general_uuid_invalid"));
+                    Utils.showToastLong(str("rvx_morphed_sb_general_uuid_invalid"));
                     updateUIDelayed();
                     return false;
                 }
@@ -464,7 +464,7 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
 
             Preference apiUrl = new Preference(context);
             initializePreference(apiUrl, Settings.SB_API_URL,
-                    "revanced_sb_general_api_url");
+                    "rvx_morphed_sb_general_api_url");
             apiUrl.setOnPreferenceClickListener(preference1 -> {
                 EditText editText = new EditText(context);
                 editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_URI);
@@ -473,7 +473,7 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
                 // Create a custom dialog.
                 Pair<Dialog, LinearLayout> dialogPair = CustomDialog.create(
                         context,
-                        str("revanced_sb_general_api_url"), // Title.
+                        str("rvx_morphed_sb_general_api_url"), // Title.
                         null,     // No message, EditText replaces it.
                         editText, // Pass the EditText.
                         null,     // OK button text.
@@ -481,19 +481,19 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
                             // OK button action.
                             String serverAddress = editText.getText().toString();
                             if (!SponsorBlockSettings.isValidSBServerAddress(serverAddress)) {
-                                Utils.showToastLong(str("revanced_sb_api_url_invalid"));
+                                Utils.showToastLong(str("rvx_morphed_sb_api_url_invalid"));
                             } else if (!serverAddress.equals(Settings.SB_API_URL.get())) {
                                 Settings.SB_API_URL.save(serverAddress);
-                                Utils.showToastLong(str("revanced_sb_api_url_changed"));
+                                Utils.showToastLong(str("rvx_morphed_sb_api_url_changed"));
                             }
                         },
                         () -> {
                         }, // Cancel button action (dismiss dialog).
-                        str("revanced_settings_reset"), // Neutral (Reset) button text.
+                        str("rvx_morphed_settings_reset"), // Neutral (Reset) button text.
                         () -> {
                             // Neutral button action.
                             Settings.SB_API_URL.resetToDefault();
-                            Utils.showToastLong(str("revanced_sb_api_url_reset"));
+                            Utils.showToastLong(str("rvx_morphed_sb_api_url_reset"));
                         },
                         true // Dismiss dialog when onNeutralClick.
                 );
@@ -517,10 +517,10 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
                         // Create a custom dialog.
                         Pair<Dialog, LinearLayout> dialogPair = CustomDialog.create(
                                 context,
-                                str("revanced_sb_settings_ie"), // Title.
+                                str("rvx_morphed_sb_settings_ie"), // Title.
                                 null,     // No message, EditText replaces it.
                                 editText, // Pass the EditText.
-                                str("revanced_settings_import"), // OK button text.
+                                str("rvx_morphed_settings_import"), // OK button text.
                                 () -> {
                                     // OK button action. Trigger OnPreferenceChangeListener.
                                     String newValue = editText.getText().toString();
@@ -530,7 +530,7 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
                                 },
                                 () -> {
                                 }, // Cancel button action (dismiss only).
-                                str("revanced_sb_settings_copy"), // Neutral button text (Copy).
+                                str("rvx_morphed_sb_settings_copy"), // Neutral button text (Copy).
                                 () -> {
                                     // Neutral button action (Copy).
                                     try {
@@ -549,7 +549,7 @@ public class SponsorBlockPreferenceGroup extends PreferenceGroup {
                     }
                 }
             };
-            importExport.setTitle(str("revanced_sb_settings_ie"));
+            importExport.setTitle(str("rvx_morphed_sb_settings_ie"));
             // Summary is set in updateUI().
             EditText editText = importExport.getEditText();
             editText.setInputType(InputType.TYPE_CLASS_TEXT

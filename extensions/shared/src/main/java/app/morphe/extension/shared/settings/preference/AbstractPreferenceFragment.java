@@ -118,7 +118,7 @@ public abstract class AbstractPreferenceFragment extends PreferenceFragment {
      * so all app specific {@link Setting} instances are loaded before this method returns.
      */
     protected void initialize() {
-        final int identifier = getXmlIdentifier("revanced_prefs");
+        final int identifier = getXmlIdentifier("rvx_morphed_prefs");
         if (identifier == 0) return;
         addPreferencesFromResource(identifier);
 
@@ -132,7 +132,7 @@ public abstract class AbstractPreferenceFragment extends PreferenceFragment {
 
         final var context = getActivity();
         if (confirmDialogTitle == null) {
-            confirmDialogTitle = str("revanced_confirm_user_dialog_title");
+            confirmDialogTitle = str("rvx_morphed_confirm_user_dialog_title");
         }
 
         showingUserDialogMessage = true;
@@ -326,13 +326,13 @@ public abstract class AbstractPreferenceFragment extends PreferenceFragment {
             return;
         }
         if (restartDialogTitle == null) {
-            restartDialogTitle = str("revanced_restart_title");
+            restartDialogTitle = str("rvx_morphed_restart_title");
         }
         if (restartDialogMessage == null) {
-            restartDialogMessage = str("revanced_restart_dialog_message");
+            restartDialogMessage = str("rvx_morphed_restart_dialog_message");
         }
         if (restartDialogButtonText == null) {
-            restartDialogButtonText = str("revanced_restart");
+            restartDialogButtonText = str("rvx_morphed_restart");
         }
 
         showingRestartDialog = true;

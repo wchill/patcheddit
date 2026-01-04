@@ -82,20 +82,20 @@ public class ImportExportPreference extends EditTextPreference implements Prefer
             Pair<Dialog, LinearLayout> dialogPair = CustomDialog.create(
                     context,
                     // Title.
-                    str("revanced_preference_screen_import_export_title"),
+                    str("rvx_morphed_preference_screen_import_export_title"),
                     // Message.
                     null,
                     // EditText.
                     editText,
                     // OK button text.
-                    str("revanced_settings_import"),
+                    str("rvx_morphed_settings_import"),
                     // OK button action.
                     () -> importSettings(context, editText.getText().toString()),
                     // Cancel button action.
                     () -> {
                     },
                     // Neutral button text.
-                    str("revanced_settings_import_copy"),
+                    str("rvx_morphed_settings_import_copy"),
                     // Neutral button action.
                     () -> Utils.setClipboard(editText.getText().toString()),
                     // Dismiss dialog when onNeutralClick.

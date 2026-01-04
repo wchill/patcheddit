@@ -19,7 +19,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginEnd="16dp"
-            android:src="@drawable/revanced_settings_arrow_time"
+            android:src="@drawable/rvx_morphed_settings_arrow_time"
             android:tint="?android:attr/textColorSecondary" />
 
     <!-- Search history text -->
@@ -39,7 +39,7 @@
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="16dp"
-            android:src="@drawable/revanced_settings_search_remove"
+            android:src="@drawable/rvx_morphed_settings_search_remove"
             android:background="?android:attr/selectableItemBackgroundBorderless"
             android:padding="4dp"
             android:scaleType="centerInside"

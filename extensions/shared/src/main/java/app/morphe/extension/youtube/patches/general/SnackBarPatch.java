@@ -104,12 +104,12 @@ public final class SnackBarPatch {
     }
 
     private static int getBlackColor() {
-        if (blackColor == 0) blackColor = ResourceUtils.getColor("revanced_snack_bar_color_dark");
+        if (blackColor == 0) blackColor = ResourceUtils.getColor("rvx_morphed_snack_bar_color_dark");
         return blackColor;
     }
 
     private static int getWhiteColor() {
-        if (whiteColor == 0) whiteColor = ResourceUtils.getColor("revanced_snack_bar_color_light");
+        if (whiteColor == 0) whiteColor = ResourceUtils.getColor("rvx_morphed_snack_bar_color_light");
         return whiteColor;
     }
 }

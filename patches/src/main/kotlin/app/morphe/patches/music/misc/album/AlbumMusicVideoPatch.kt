@@ -119,13 +119,13 @@ val albumMusicVideoPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.MISC,
-            "revanced_disable_music_video_in_album",
+            "rvx_morphed_disable_music_video_in_album",
             "false"
         )
         addPreferenceWithIntent(
             CategoryType.MISC,
-            "revanced_disable_music_video_in_album_redirect_type",
-            "revanced_disable_music_video_in_album"
+            "rvx_morphed_disable_music_video_in_album_redirect_type",
+            "rvx_morphed_disable_music_video_in_album"
         )
 
         updatePatchStatus(DISABLE_MUSIC_VIDEO_IN_ALBUM)

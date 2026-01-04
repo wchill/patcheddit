@@ -93,13 +93,13 @@ public class SBRequester {
                 // no segments are found.  a normal response
                 Logger.printDebug(() -> "No segments found for video: " + videoId);
             } else {
-                handleConnectionError(str("revanced_sb_sponsorblock_connection_failure_status", responseCode), null);
+                handleConnectionError(str("rvx_morphed_sb_sponsorblock_connection_failure_status", responseCode), null);
                 connection.disconnect(); // something went wrong, might as well disconnect
             }
         } catch (SocketTimeoutException ex) {
-            handleConnectionError(str("revanced_sb_sponsorblock_connection_failure_timeout"), ex);
+            handleConnectionError(str("rvx_morphed_sb_sponsorblock_connection_failure_timeout"), ex);
         } catch (IOException ex) {
-            handleConnectionError(str("revanced_sb_sponsorblock_connection_failure_generic"), ex);
+            handleConnectionError(str("rvx_morphed_sb_sponsorblock_connection_failure_generic"), ex);
         } catch (Exception ex) {
             // Should never happen
             Logger.printException(() -> "getSegments failure", ex);

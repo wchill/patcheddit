@@ -167,8 +167,8 @@ val overlayButtonsPatch = resourcePatch(
                 "drawable",
                 "playlist_repeat_button.xml",
                 "playlist_shuffle_button.xml",
-                "revanced_repeat_button.xml",
-                "revanced_mute_volume_button.xml",
+                "rvx_morphed_repeat_button.xml",
+                "rvx_morphed_mute_volume_button.xml",
             )
         )
 
@@ -189,14 +189,14 @@ val overlayButtonsPatch = resourcePatch(
                     "quantum_ic_fullscreen_exit_white_24.png",
                     "quantum_ic_fullscreen_grey600_24.png",
                     "quantum_ic_fullscreen_white_24.png",
-                    "revanced_copy_button.png",
-                    "revanced_copy_timestamp_button.png",
-                    "revanced_external_download_button.png",
-                    "revanced_play_all_button.png",
-                    "revanced_playback_speed_dialog_button.png",
-                    "revanced_volume_muted_button.png",
-                    "revanced_volume_unmuted_button.png",
-                    "revanced_whitelist_button.png",
+                    "rvx_morphed_copy_button.png",
+                    "rvx_morphed_copy_timestamp_button.png",
+                    "rvx_morphed_external_download_button.png",
+                    "rvx_morphed_play_all_button.png",
+                    "rvx_morphed_playback_speed_dialog_button.png",
+                    "rvx_morphed_volume_muted_button.png",
+                    "rvx_morphed_volume_unmuted_button.png",
+                    "rvx_morphed_whitelist_button.png",
                     "yt_fill_arrow_repeat_white_24.png",
                     "yt_outline_arrow_repeat_1_white_24.png",
                     "yt_outline_arrow_shuffle_1_white_24.png",
@@ -230,7 +230,7 @@ val overlayButtonsPatch = resourcePatch(
                 node.getAttributeNode("yt:layout_constraintRight_toLeftOf")
                     ?.let { attribute ->
                         if (attribute.textContent == "@id/fullscreen_button") {
-                            attribute.textContent = "@+id/revanced_playback_speed_dialog_button"
+                            attribute.textContent = "@+id/rvx_morphed_playback_speed_dialog_button"
                         }
                     }
             }
@@ -252,7 +252,7 @@ val overlayButtonsPatch = resourcePatch(
                             ?.let { attribute ->
                                 if (attribute.textContent == "@id/fullscreen_button") {
                                     attribute.textContent =
-                                        "@+id/revanced_playback_speed_dialog_button"
+                                        "@+id/rvx_morphed_playback_speed_dialog_button"
                                 }
                             }
 
@@ -260,7 +260,7 @@ val overlayButtonsPatch = resourcePatch(
                             ?.let { attribute ->
                                 if (attribute.textContent == "@id/quick_actions_container") {
                                     attribute.textContent =
-                                        "@+id/revanced_overlay_buttons_bottom_margin"
+                                        "@+id/rvx_morphed_overlay_buttons_bottom_margin"
                                 }
                             }
 
@@ -306,7 +306,7 @@ val overlayButtonsPatch = resourcePatch(
                             node.setAttribute("android:layout_width", "56.0dip")
                         }
 
-                        if (id.equals("@+id/revanced_overlay_buttons_bottom_margin")) {
+                        if (id.equals("@+id/rvx_morphed_overlay_buttons_bottom_margin")) {
                             node.setAttribute("android:layout_height", marginBottom)
                         } else if (id.equals("@id/time_bar_reference_view")) {
                             node.setAttribute(

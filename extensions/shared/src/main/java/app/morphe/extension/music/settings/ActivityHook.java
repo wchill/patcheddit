@@ -8,7 +8,7 @@ import androidx.annotation.NonNull;
 
 import java.lang.ref.WeakReference;
 
-import app.morphe.extension.music.settings.preference.ReVancedPreferenceFragment;
+import app.morphe.extension.music.settings.preference.RVXMorphedPreferenceFragment;
 import app.morphe.extension.shared.utils.Logger;
 
 /**
@@ -67,7 +67,7 @@ public class ActivityHook {
             // Starts a new PreferenceFragment to handle activities freely.
             mActivity.getFragmentManager()
                     .beginTransaction()
-                    .add(new ReVancedPreferenceFragment(), "")
+                    .add(new RVXMorphedPreferenceFragment(), "")
                     .commit();
 
             return true;

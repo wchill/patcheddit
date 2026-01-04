@@ -12,10 +12,10 @@ import app.morphe.extension.shared.patches.spoof.SpoofStreamingDataPatch;
 public class ForceOriginalAudioSwitchPreference extends SwitchPreference {
     {
         String summaryOn = SpoofStreamingDataPatch.multiAudioTrackAvailable()
-                ? "revanced_disable_auto_audio_tracks_summary_on"
-                : "revanced_disable_auto_audio_tracks_summary_on_disclaimer";
+                ? "rvx_morphed_disable_auto_audio_tracks_summary_on"
+                : "rvx_morphed_disable_auto_audio_tracks_summary_on_disclaimer";
         setSummaryOn(str(summaryOn));
-        setSummaryOff(str("revanced_disable_auto_audio_tracks_summary_off"));
+        setSummaryOff(str("rvx_morphed_disable_auto_audio_tracks_summary_off"));
     }
 
     public ForceOriginalAudioSwitchPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {

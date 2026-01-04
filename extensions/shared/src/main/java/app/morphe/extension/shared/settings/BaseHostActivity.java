@@ -27,14 +27,14 @@ import app.morphe.extension.shared.utils.Utils;
  */
 @SuppressWarnings({"BooleanMethodIsAlwaysInverted", "deprecation"})
 public abstract class BaseHostActivity extends Activity {
-    private static final int ID_REVANCED_SETTINGS_FRAGMENTS =
-            getIdIdentifier("revanced_settings_fragments");
-    private static final int ID_REVANCED_TOOLBAR_PARENT =
-            getIdIdentifier("revanced_toolbar_parent");
-    public static final int LAYOUT_REVANCED_SETTINGS_WITH_TOOLBAR =
-            getLayoutIdentifier("revanced_settings_with_toolbar");
-    private static final int STRING_REVANCED_SETTINGS_TITLE =
-            getStringIdentifier("revanced_settings_title");
+    private static final int ID_RVX_MORPHED_SETTINGS_FRAGMENTS =
+            getIdIdentifier("rvx_morphed_settings_fragments");
+    private static final int ID_RVX_MORPHED_TOOLBAR_PARENT =
+            getIdIdentifier("rvx_morphed_toolbar_parent");
+    public static final int LAYOUT_RVX_MORPHED_SETTINGS_WITH_TOOLBAR =
+            getLayoutIdentifier("rvx_morphed_settings_with_toolbar");
+    private static final int STRING_RVX_MORPHED_SETTINGS_TITLE =
+            getStringIdentifier("rvx_morphed_settings_title");
 
 
     /**
@@ -65,7 +65,7 @@ public abstract class BaseHostActivity extends Activity {
         try {
             // Check sanity first
             String dataString = getIntent().getDataString();
-            if (!"revanced_settings_intent".equals(dataString)) {
+            if (!"rvx_morphed_settings_intent".equals(dataString)) {
                 // User did not open RVX Settings
                 // (For example, the user opened the Open source licenses menu)
                 Logger.printDebug(() -> "onCreate ignored");
@@ -80,7 +80,7 @@ public abstract class BaseHostActivity extends Activity {
 
             getFragmentManager()
                     .beginTransaction()
-                    .replace(ID_REVANCED_SETTINGS_FRAGMENTS, fragment)
+                    .replace(ID_RVX_MORPHED_SETTINGS_FRAGMENTS, fragment)
                     .commit();
 
             isInitialized = true;
@@ -96,8 +96,8 @@ public abstract class BaseHostActivity extends Activity {
     protected void createToolbar(PreferenceFragment fragment) {
         // Replace dummy placeholder toolbar.
         // This is required to fix submenu title alignment issue with Android ASOP 15+
-        ViewGroup toolBarParent = findViewById(ID_REVANCED_TOOLBAR_PARENT);
-        ViewGroup dummyToolbar = Utils.getChildViewByResourceName(toolBarParent, "revanced_toolbar");
+        ViewGroup toolBarParent = findViewById(ID_RVX_MORPHED_TOOLBAR_PARENT);
+        ViewGroup dummyToolbar = Utils.getChildViewByResourceName(toolBarParent, "rvx_morphed_toolbar");
         toolbarLayoutParams = dummyToolbar.getLayoutParams();
         toolBarParent.removeView(dummyToolbar);
 
@@ -108,7 +108,7 @@ public abstract class BaseHostActivity extends Activity {
         toolbar.setBackgroundColor(getToolbarBackgroundColor());
         toolbar.setNavigationIcon(getNavigationIcon());
         toolbar.setNavigationOnClickListener(getNavigationClickListener(this));
-        toolbar.setTitle(STRING_REVANCED_SETTINGS_TITLE);
+        toolbar.setTitle(STRING_RVX_MORPHED_SETTINGS_TITLE);
 
         if (isSDKAbove(24)) {
             final int margin = Utils.dipToPixels(16);

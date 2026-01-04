@@ -102,7 +102,7 @@ public class FlyoutPatch {
         if (REPLACE_FLYOUT_MENU_DISMISS_QUEUE.get() &&
                 textView.getParent() instanceof ViewGroup clickAbleArea) {
             runOnMainThreadDelayed(() -> {
-                        textView.setText(str("revanced_replace_flyout_menu_dismiss_queue_watch_on_youtube_label"));
+                        textView.setText(str("rvx_morphed_replace_flyout_menu_dismiss_queue_watch_on_youtube_label"));
                         imageView.setImageResource(getIdentifier("yt_outline_youtube_logo_icon_vd_theme_24", ResourceType.DRAWABLE, clickAbleArea.getContext()));
                         clickAbleArea.setOnClickListener(view -> {
                             clickView(touchOutSideViewRef.get());

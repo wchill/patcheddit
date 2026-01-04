@@ -51,9 +51,9 @@ public class AboutFakeBufferingPreference extends Preference implements Preferen
         Pair<Dialog, LinearLayout> dialogPair = CustomDialog.create(
                 context,
                 // Title.
-                str("revanced_spoof_streaming_data_use_js_bypass_fake_buffering_dialog_title"),
+                str("rvx_morphed_spoof_streaming_data_use_js_bypass_fake_buffering_dialog_title"),
                 // Message.
-                str("revanced_spoof_streaming_data_use_js_bypass_fake_buffering_dialog_message"),
+                str("rvx_morphed_spoof_streaming_data_use_js_bypass_fake_buffering_dialog_message"),
                 // No EditText.
                 null,
                 // OK button text.
@@ -64,7 +64,7 @@ public class AboutFakeBufferingPreference extends Preference implements Preferen
                 // No Cancel button action.
                 null,
                 // Neutral button text.
-                str("revanced_spoof_streaming_data_use_js_bypass_fake_buffering_dialog_open_text"),
+                str("rvx_morphed_spoof_streaming_data_use_js_bypass_fake_buffering_dialog_open_text"),
                 // Neutral button action.
                 () -> {
                     Intent i = new Intent(Intent.ACTION_VIEW);

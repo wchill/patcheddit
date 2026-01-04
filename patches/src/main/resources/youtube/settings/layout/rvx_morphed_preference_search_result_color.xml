@@ -39,7 +39,7 @@
 
     <!-- Include color dot layout -->
     <include
-            layout="@layout/revanced_color_dot_widget"
+            layout="@layout/rvx_morphed_color_dot_widget"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="16dp" />

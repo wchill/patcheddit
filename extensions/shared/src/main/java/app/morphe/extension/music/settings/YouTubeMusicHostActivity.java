@@ -15,7 +15,7 @@ import app.morphe.extension.shared.utils.BaseThemeUtils;
 import app.morphe.extension.shared.utils.ResourceUtils;
 
 public class YouTubeMusicHostActivity extends BaseHostActivity {
-    private final int REVANCED_SETTINGS_BACKGROUND_COLOR =
+    private final int RVX_MORPHED_SETTINGS_BACKGROUND_COLOR =
             ResourceUtils.getColor("yt_black_pure");
 
     @SuppressLint("StaticFieldLeak")
@@ -40,8 +40,8 @@ public class YouTubeMusicHostActivity extends BaseHostActivity {
     protected void customizeActivityTheme(Activity activity) {
         // Override the default YouTube Music theme to increase start padding of list items.
         // Custom style located in resources/music/values/style.xml
-        activity.setTheme(ResourceUtils.getStyleIdentifier("Theme.ReVanced.YouTubeMusic.Settings"));
-        activity.getWindow().getDecorView().setBackgroundColor(REVANCED_SETTINGS_BACKGROUND_COLOR);
+        activity.setTheme(ResourceUtils.getStyleIdentifier("Theme.RVXMorphed.YouTubeMusic.Settings"));
+        activity.getWindow().getDecorView().setBackgroundColor(RVX_MORPHED_SETTINGS_BACKGROUND_COLOR);
     }
 
     /**
@@ -49,7 +49,7 @@ public class YouTubeMusicHostActivity extends BaseHostActivity {
      */
     @Override
     protected int getContentViewResourceId() {
-        return LAYOUT_REVANCED_SETTINGS_WITH_TOOLBAR;
+        return LAYOUT_RVX_MORPHED_SETTINGS_WITH_TOOLBAR;
     }
 
     /**
@@ -57,7 +57,7 @@ public class YouTubeMusicHostActivity extends BaseHostActivity {
      */
     @Override
     protected int getToolbarBackgroundColor() {
-        return REVANCED_SETTINGS_BACKGROUND_COLOR;
+        return RVX_MORPHED_SETTINGS_BACKGROUND_COLOR;
     }
 
     /**

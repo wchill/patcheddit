@@ -180,8 +180,8 @@ public final class AlternativeThumbnailsPatch {
         // Cannot use unsecured 'http', otherwise the connections fail to start and no callbacks hooks are made.
         String scheme = apiUri.getScheme();
         if (scheme == null || scheme.equals("http") || apiUri.getHost() == null) {
-            Utils.showToastLong(str("revanced_alt_thumbnail_dearrow_api_url_invalid_toast"));
-            Utils.showToastShort(str("revanced_reset_to_default_toast"));
+            Utils.showToastLong(str("rvx_morphed_alt_thumbnail_dearrow_api_url_invalid_toast"));
+            Utils.showToastShort(str("rvx_morphed_reset_to_default_toast"));
             Settings.ALT_THUMBNAIL_DEARROW_API_URL.resetToDefault();
             return validateSettings();
         }
@@ -282,8 +282,8 @@ public final class AlternativeThumbnailsPatch {
             timeToResumeDeArrowAPICalls = now + DEARROW_FAILURE_API_BACKOFF_MILLISECONDS;
             if (Settings.ALT_THUMBNAIL_DEARROW_CONNECTION_TOAST.get()) {
                 String toastMessage = (statusCode != 0)
-                        ? str("revanced_alt_thumbnail_dearrow_error", statusCode)
-                        : str("revanced_alt_thumbnail_dearrow_error_generic");
+                        ? str("rvx_morphed_alt_thumbnail_dearrow_error", statusCode)
+                        : str("rvx_morphed_alt_thumbnail_dearrow_error_generic");
                 Utils.showToastLong(toastMessage);
             }
         }

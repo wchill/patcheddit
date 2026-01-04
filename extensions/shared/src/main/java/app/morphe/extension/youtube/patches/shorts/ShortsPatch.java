@@ -44,7 +44,7 @@ public class ShortsPatch {
                 Settings.SHORTS_NAVIGATION_BAR_HEIGHT_PERCENTAGE,
                 0,
                 100,
-                "revanced_shorts_navigation_bar_height_percentage_invalid_toast"
+                "rvx_morphed_shorts_navigation_bar_height_percentage_invalid_toast"
         );
 
         NAVIGATION_BAR_HEIGHT_PERCENTAGE = heightPercentage / 100d;
@@ -104,7 +104,7 @@ public class ShortsPatch {
     }
 
     private static final int zeroPaddingDimenId =
-            ResourceUtils.getDimenIdentifier("revanced_zero_padding");
+            ResourceUtils.getDimenIdentifier("rvx_morphed_zero_padding");
 
     public static int getShortsSoundButtonDimenId(int dimenId) {
         return Settings.HIDE_SHORTS_SOUND_BUTTON.get()

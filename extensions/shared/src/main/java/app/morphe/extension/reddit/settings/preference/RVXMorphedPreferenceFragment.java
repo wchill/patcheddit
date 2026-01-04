@@ -15,10 +15,10 @@ import app.morphe.extension.shared.settings.Setting;
 import app.morphe.extension.shared.settings.preference.AbstractPreferenceFragment;
 
 /**
- * Preference fragment for ReVanced settings
+ * Preference fragment for RVX Morphed settings
  */
 @SuppressWarnings("deprecation")
-public class ReVancedPreferenceFragment extends AbstractPreferenceFragment {
+public class RVXMorphedPreferenceFragment extends AbstractPreferenceFragment {
 
     @Override
     protected void syncSettingWithPreference(@NonNull @NotNull Preference pref,

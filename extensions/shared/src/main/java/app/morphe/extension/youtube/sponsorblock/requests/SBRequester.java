@@ -102,13 +102,13 @@ public class SBRequester {
                 // no segments are found.  a normal response
                 Logger.printDebug(() -> "No segments found for video: " + videoId);
             } else {
-                handleConnectionError(str("revanced_sb_sponsorblock_connection_failure_status", responseCode), null);
+                handleConnectionError(str("rvx_morphed_sb_sponsorblock_connection_failure_status", responseCode), null);
                 connection.disconnect(); // something went wrong, might as well disconnect
             }
         } catch (SocketTimeoutException ex) {
-            handleConnectionError(str("revanced_sb_sponsorblock_connection_failure_timeout"), ex);
+            handleConnectionError(str("rvx_morphed_sb_sponsorblock_connection_failure_timeout"), ex);
         } catch (IOException ex) {
-            handleConnectionError(str("revanced_sb_sponsorblock_connection_failure_generic"), ex);
+            handleConnectionError(str("rvx_morphed_sb_sponsorblock_connection_failure_generic"), ex);
         } catch (Exception ex) {
             // Should never happen
             Logger.printException(() -> "getSegments failure", ex);
@@ -179,18 +179,18 @@ public class SBRequester {
             final int responseCode = connection.getResponseCode();
 
             if (responseCode == HTTP_STATUS_CODE_SUCCESS) {
-                Utils.showToastLong(str("revanced_sb_submit_succeeded"));
+                Utils.showToastLong(str("rvx_morphed_sb_submit_succeeded"));
                 return;
             }
 
             String userErrorMessage = switch (responseCode) {
-                case 409 -> str("revanced_sb_submit_failed_duplicate");
-                case 403 -> str("revanced_sb_submit_failed_forbidden",
+                case 409 -> str("rvx_morphed_sb_submit_failed_duplicate");
+                case 403 -> str("rvx_morphed_sb_submit_failed_forbidden",
                         Requester.parseErrorStringAndDisconnect(connection));
-                case 429 -> str("revanced_sb_submit_failed_rate_limit");
-                case 400 -> str("revanced_sb_submit_failed_invalid",
+                case 429 -> str("rvx_morphed_sb_submit_failed_rate_limit");
+                case 400 -> str("rvx_morphed_sb_submit_failed_invalid",
                         Requester.parseErrorStringAndDisconnect(connection));
-                default -> str("revanced_sb_submit_failed_unknown_error",
+                default -> str("rvx_morphed_sb_submit_failed_unknown_error",
                         responseCode, connection.getResponseMessage());
             };
 
@@ -199,10 +199,10 @@ public class SBRequester {
             SponsorBlockUtils.showErrorDialog(userErrorMessage);
         } catch (SocketTimeoutException ex) {
             Logger.printDebug(() -> "Timeout", ex);
-            Utils.showToastLong(str("revanced_sb_submit_failed_timeout"));
+            Utils.showToastLong(str("rvx_morphed_sb_submit_failed_timeout"));
         } catch (IOException ex) {
             Logger.printDebug(() -> "IOException", ex);
-            Utils.showToastLong(str("revanced_sb_submit_failed_unknown_error", 0, ex.getMessage()));
+            Utils.showToastLong(str("rvx_morphed_sb_submit_failed_unknown_error", 0, ex.getMessage()));
         } catch (Exception ex) {
             Logger.printException(() -> "failed to submit segments", ex); // Should never happen.
         } finally {
@@ -253,20 +253,20 @@ public class SBRequester {
                         Logger.printDebug(() -> "Vote success for segment: " + segment);
                         return;
                     case 403:
-                        userMessage = str("revanced_sb_vote_failed_forbidden",
+                        userMessage = str("rvx_morphed_sb_vote_failed_forbidden",
                                 Requester.parseErrorStringAndDisconnect(connection));
                         break;
                     default:
-                        userMessage = str("revanced_sb_vote_failed_unknown_error",
+                        userMessage = str("rvx_morphed_sb_vote_failed_unknown_error",
                                 responseCode, connection.getResponseMessage());
                         break;
                 }
 
                 SponsorBlockUtils.showErrorDialog(userMessage);
             } catch (SocketTimeoutException ex) {
-                Utils.showToastShort(str("revanced_sb_vote_failed_timeout"));
+                Utils.showToastShort(str("rvx_morphed_sb_vote_failed_timeout"));
             } catch (IOException ex) {
-                Utils.showToastShort(str("revanced_sb_vote_failed_unknown_error", 0, ex.getMessage()));
+                Utils.showToastShort(str("rvx_morphed_sb_vote_failed_unknown_error", 0, ex.getMessage()));
             } catch (Exception ex) {
                 Logger.printException(() -> "failed to vote for segment", ex); // should never happen
             }
@@ -312,10 +312,10 @@ public class SBRequester {
             if (responseCode == HTTP_STATUS_CODE_SUCCESS) {
                 return null;
             }
-            return str("revanced_sb_stats_username_change_unknown_error", responseCode, responseMessage);
+            return str("rvx_morphed_sb_stats_username_change_unknown_error", responseCode, responseMessage);
         } catch (Exception ex) { // should never happen
             Logger.printInfo(() -> "failed to set username", ex); // do not toast
-            return str("revanced_sb_stats_username_change_unknown_error", 0, ex.getMessage());
+            return str("rvx_morphed_sb_stats_username_change_unknown_error", 0, ex.getMessage());
         }
     }
 

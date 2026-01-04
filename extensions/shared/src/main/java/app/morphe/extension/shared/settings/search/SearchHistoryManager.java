@@ -50,11 +50,11 @@ public class SearchHistoryManager {
     private static final int ID_SEARCH_HISTORY_HEADER = getIdIdentifier(
             "search_history_header");
     private static final int ID_SEARCH_TIPS_SUMMARY = getIdIdentifier(
-            "revanced_settings_search_tips_summary");
-    private static final int LAYOUT_REVANCED_PREFERENCE_SEARCH_HISTORY_SCREEN = getLayoutIdentifier(
-            "revanced_preference_search_history_screen");
-    private static final int LAYOUT_REVANCED_PREFERENCE_SEARCH_HISTORY_ITEM = getLayoutIdentifier(
-            "revanced_preference_search_history_item");
+            "rvx_morphed_settings_search_tips_summary");
+    private static final int LAYOUT_RVX_MORPHED_PREFERENCE_SEARCH_HISTORY_SCREEN = getLayoutIdentifier(
+            "rvx_morphed_preference_search_history_screen");
+    private static final int LAYOUT_RVX_MORPHED_PREFERENCE_SEARCH_HISTORY_ITEM = getLayoutIdentifier(
+            "rvx_morphed_preference_search_history_item");
     private static final int ID_SEARCH_HISTORY_LIST = getIdIdentifier(
             "search_history_list");
 
@@ -98,7 +98,7 @@ public class SearchHistoryManager {
 
         // Inflate search history layout.
         LayoutInflater inflater = LayoutInflater.from(activity);
-        View historyView = inflater.inflate(LAYOUT_REVANCED_PREFERENCE_SEARCH_HISTORY_SCREEN, searchHistoryContainer, false);
+        View historyView = inflater.inflate(LAYOUT_RVX_MORPHED_PREFERENCE_SEARCH_HISTORY_SCREEN, searchHistoryContainer, false);
         searchHistoryContainer.addView(historyView, new FrameLayout.LayoutParams(
                 FrameLayout.LayoutParams.MATCH_PARENT,
                 FrameLayout.LayoutParams.MATCH_PARENT));
@@ -123,14 +123,14 @@ public class SearchHistoryManager {
         // Set up clear history button.
         TextView clearHistoryButton = searchHistoryContainer.findViewById(ID_CLEAR_HISTORY_BUTTON);
         clearHistoryButton.setOnClickListener(v -> createAndShowDialog(
-                str("revanced_settings_search_clear_history"),
-                str("revanced_settings_search_clear_history_message"),
+                str("rvx_morphed_settings_search_clear_history"),
+                str("rvx_morphed_settings_search_clear_history_message"),
                 this::clearAllSearchHistory
         ));
 
         // Set up search tips summary.
         CharSequence text = BulletPointPreference.formatIntoBulletPoints(
-                str("revanced_settings_search_tips_summary"));
+                str("rvx_morphed_settings_search_tips_summary"));
         TextView tipsSummary = historyView.findViewById(ID_SEARCH_TIPS_SUMMARY);
         tipsSummary.setText(text);
     }
@@ -240,9 +240,9 @@ public class SearchHistoryManager {
      */
     protected void showEmptyHistoryViews(TextView emptyTitle, TextView emptySummary) {
         emptyTitle.setVisibility(View.VISIBLE);
-        emptyTitle.setText(str("revanced_settings_search_empty_history_title"));
+        emptyTitle.setText(str("rvx_morphed_settings_search_empty_history_title"));
         emptySummary.setVisibility(View.VISIBLE);
-        emptySummary.setText(str("revanced_settings_search_empty_history_summary"));
+        emptySummary.setText(str("rvx_morphed_settings_search_empty_history_summary"));
     }
 
     /**
@@ -322,7 +322,7 @@ public class SearchHistoryManager {
         public void notifyDataSetChanged() {
             container.removeAllViews();
             for (String query : history) {
-                View view = inflater.inflate(LAYOUT_REVANCED_PREFERENCE_SEARCH_HISTORY_ITEM, container, false);
+                View view = inflater.inflate(LAYOUT_RVX_MORPHED_PREFERENCE_SEARCH_HISTORY_ITEM, container, false);
 
                 TextView historyText = view.findViewById(ID_HISTORY_TEXT);
                 ImageView deleteIcon = view.findViewById(ID_DELETE_ICON);
@@ -335,7 +335,7 @@ public class SearchHistoryManager {
                 // Set click listener for delete icon.
                 deleteIcon.setOnClickListener(v -> createAndShowDialog(
                         query,
-                        str("revanced_settings_search_remove_message"),
+                        str("rvx_morphed_settings_search_remove_message"),
                         () -> {
                             removeSearchQuery(query);
                             remove(query);

@@ -103,16 +103,16 @@ public class WebViewHostActivity extends Activity {
             isInitialized = false;
             Intent intent = getIntent();
             String dataString = intent.getDataString();
-            if (!StringUtils.equals("revanced_webview", dataString)) {
+            if (!StringUtils.equals("rvx_morphed_webview", dataString)) {
                 Logger.printDebug(() -> "onCreate ignored");
                 return;
             }
             if (!Utils.isNetworkConnected()) {
-                Utils.showToastShort(str("revanced_webview_toast_no_network"));
+                Utils.showToastShort(str("rvx_morphed_webview_toast_no_network"));
                 return;
             }
             if (!Utils.isWebViewSupported()) {
-                Utils.showToastShort(str("revanced_webview_toast_unavailable"));
+                Utils.showToastShort(str("rvx_morphed_webview_toast_unavailable"));
                 return;
             }
             clearCookiesOnStartUp =
@@ -132,7 +132,7 @@ public class WebViewHostActivity extends Activity {
                 url = intentUrl;
             }
             isEmbeddedSetup = url.startsWith(EMBEDDED_SETUP_URL);
-            setContentView(getLayoutIdentifier("revanced_webview"));
+            setContentView(getLayoutIdentifier("rvx_morphed_webview"));
             Window window = getWindow();
             if (window != null) {
                 View decorView = window.getDecorView();
@@ -162,7 +162,7 @@ public class WebViewHostActivity extends Activity {
                         this::finish
                 );
             }
-            webView = findViewById(getIdIdentifier("revanced_webview"));
+            webView = findViewById(getIdIdentifier("rvx_morphed_webview"));
 
             if (clearCookiesOnStartUp) {
                 clearCookies();
@@ -216,10 +216,10 @@ public class WebViewHostActivity extends Activity {
     }
 
     protected void setToolbar() {
-        ViewGroup toolBarParent = findViewById(getIdIdentifier("revanced_toolbar_parent"));
+        ViewGroup toolBarParent = findViewById(getIdIdentifier("rvx_morphed_toolbar_parent"));
 
         // Remove dummy toolbar.
-        ViewGroup dummyToolbar = toolBarParent.findViewById(getIdIdentifier("revanced_toolbar"));
+        ViewGroup dummyToolbar = toolBarParent.findViewById(getIdIdentifier("rvx_morphed_toolbar"));
         ViewGroup.LayoutParams lp = dummyToolbar.getLayoutParams();
         toolBarParent.removeView(dummyToolbar);
 
@@ -238,7 +238,7 @@ public class WebViewHostActivity extends Activity {
             textView.setTextColor(Color.BLACK);
         }
         if (BaseThemeUtils.isSupportModernDialog) {
-            toolbar.inflateMenu(getMenuIdentifier("revanced_webview_menu"));
+            toolbar.inflateMenu(getMenuIdentifier("rvx_morphed_webview_menu"));
             LinearLayout menuParent = Utils.getChildView(toolbar, view -> view instanceof LinearLayout);
             if (menuParent != null) {
                 ImageButton menuButton = Utils.getChildView(menuParent, view -> view instanceof ImageButton);
@@ -246,23 +246,23 @@ public class WebViewHostActivity extends Activity {
                     menuButton.setImageDrawable(BaseThemeUtils.getMenuButtonDrawable(false));
                 }
             }
-            int getCookies = getIdIdentifier("revanced_webview_get_cookies");
-            int getDataSyncId = getIdIdentifier("revanced_webview_get_data_sync_id");
-            int getVisitorData = getIdIdentifier("revanced_webview_get_visitor_data");
-            int refresh = getIdIdentifier("revanced_webview_refresh");
+            int getCookies = getIdIdentifier("rvx_morphed_webview_get_cookies");
+            int getDataSyncId = getIdIdentifier("rvx_morphed_webview_get_data_sync_id");
+            int getVisitorData = getIdIdentifier("rvx_morphed_webview_get_visitor_data");
+            int refresh = getIdIdentifier("rvx_morphed_webview_refresh");
 
             // Set menu item click listener.
             toolbar.setOnMenuItemClickListener(item -> {
                 try {
                     int itemId = item.getItemId();
                     if (itemId == getCookies) {
-                        showDialog(cookies, str("revanced_webview_cookies"));
+                        showDialog(cookies, str("rvx_morphed_webview_cookies"));
                         return true;
                     } else if (itemId == getDataSyncId) {
-                        showDialog(dataSyncId, str("revanced_webview_data_sync_id"));
+                        showDialog(dataSyncId, str("rvx_morphed_webview_data_sync_id"));
                         return true;
                     } else if (itemId == getVisitorData) {
-                        showDialog(visitorData, str("revanced_webview_visitor_data"));
+                        showDialog(visitorData, str("rvx_morphed_webview_visitor_data"));
                         return true;
                     } else if (itemId == refresh) {
                         if (webView != null) {
@@ -283,7 +283,7 @@ public class WebViewHostActivity extends Activity {
 
     private void showDialog(String content, String title) {
         if (StringUtils.isEmpty(content)) {
-            Utils.showToastShort(str("revanced_webview_toast_empty", title));
+            Utils.showToastShort(str("rvx_morphed_webview_toast_empty", title));
             return;
         }
         Context context = webView.getContext();
@@ -299,11 +299,11 @@ public class WebViewHostActivity extends Activity {
                 // No EditText.
                 null,
                 // OK button text.
-                str("revanced_webview_copy"),
+                str("rvx_morphed_webview_copy"),
                 // OK button action.
                 () -> {
                     Utils.setClipboard(content);
-                    Utils.showToastShort(str("revanced_webview_toast_copy_success", title));
+                    Utils.showToastShort(str("rvx_morphed_webview_toast_copy_success", title));
                 },
                 // Cancel button action (dismiss only).
                 () -> {

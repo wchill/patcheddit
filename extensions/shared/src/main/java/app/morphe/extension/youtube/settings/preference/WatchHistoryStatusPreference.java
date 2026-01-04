@@ -17,7 +17,7 @@ import app.morphe.extension.youtube.settings.Settings;
 public class WatchHistoryStatusPreference extends Preference {
 
     private final SharedPreferences.OnSharedPreferenceChangeListener listener = (sharedPreferences, str) -> {
-        // Because this listener may run before the ReVanced settings fragment updates Settings,
+        // Because this listener may run before the RVX Morphed settings fragment updates Settings,
         // this could show the prior config and not the current.
         //
         // Push this call to the end of the main run queue,
@@ -69,11 +69,11 @@ public class WatchHistoryStatusPreference extends Preference {
 
         final String summaryTextKey;
         if (blockWatchHistory) {
-            summaryTextKey = "revanced_watch_history_about_status_blocked";
+            summaryTextKey = "rvx_morphed_watch_history_about_status_blocked";
         } else if (replaceWatchHistory) {
-            summaryTextKey = "revanced_watch_history_about_status_replaced";
+            summaryTextKey = "rvx_morphed_watch_history_about_status_replaced";
         } else {
-            summaryTextKey = "revanced_watch_history_about_status_original";
+            summaryTextKey = "rvx_morphed_watch_history_about_status_original";
         }
 
         setSummary(str(summaryTextKey));

@@ -24,7 +24,7 @@ import app.morphe.extension.shared.utils.Logger;
 import app.morphe.extension.shared.utils.Utils;
 
 public class SponsorBlockCategoryPreference {
-    private static final String[] CategoryBehaviourEntries = {str("revanced_sb_skip_automatically"), str("revanced_sb_skip_ignore")};
+    private static final String[] CategoryBehaviourEntries = {str("rvx_morphed_sb_skip_automatically"), str("rvx_morphed_sb_skip_ignore")};
     private static final CategoryBehaviour[] CategoryBehaviourEntryValues = {CategoryBehaviour.SKIP_AUTOMATICALLY, CategoryBehaviour.IGNORE};
     private static int mClickedDialogEntryIndex;
 
@@ -40,7 +40,7 @@ public class SponsorBlockCategoryPreference {
             TableRow row = new TableRow(baseActivity);
 
             TextView colorTextLabel = new TextView(baseActivity);
-            colorTextLabel.setText(str("revanced_sb_color_dot_label"));
+            colorTextLabel.setText(str("rvx_morphed_sb_color_dot_label"));
             row.addView(colorTextLabel);
 
             TextView colorDotView = new TextView(baseActivity);
@@ -95,16 +95,16 @@ public class SponsorBlockCategoryPreference {
                 try {
                     if (!colorString.equals(category.colorString())) {
                         category.setColor(colorString);
-                        Utils.showToastShort(str("revanced_sb_color_changed"));
+                        Utils.showToastShort(str("rvx_morphed_sb_color_changed"));
                     }
                 } catch (IllegalArgumentException ex) {
-                    Utils.showToastShort(str("revanced_sb_color_invalid"));
+                    Utils.showToastShort(str("rvx_morphed_sb_color_invalid"));
                 }
             });
-            builder.setNeutralButton(str("revanced_sb_reset_color"), (dialog, which) -> {
+            builder.setNeutralButton(str("rvx_morphed_sb_reset_color"), (dialog, which) -> {
                 try {
                     category.resetColor();
-                    Utils.showToastShort(str("revanced_sb_color_reset"));
+                    Utils.showToastShort(str("rvx_morphed_sb_color_reset"));
                 } catch (Exception ex) {
                     Logger.printException(() -> "setNeutralButton failure", ex);
                 }

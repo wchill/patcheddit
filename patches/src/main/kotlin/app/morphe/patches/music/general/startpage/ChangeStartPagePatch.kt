@@ -37,11 +37,11 @@ private val changeStartPageResourcePatch = resourcePatch(
     execute {
         fun appendStartPage(startPage: String) {
             addEntryValues(
-                "revanced_change_start_page_entries",
-                "@string/revanced_change_start_page_entry_$startPage",
+                "rvx_morphed_change_start_page_entries",
+                "@string/rvx_morphed_change_start_page_entry_$startPage",
             )
             addEntryValues(
-                "revanced_change_start_page_entry_values",
+                "rvx_morphed_change_start_page_entry_values",
                 startPage.uppercase(),
             )
         }
@@ -90,7 +90,7 @@ val changeStartPagePatch = bytecodePatch(
 
         addPreferenceWithIntent(
             CategoryType.GENERAL,
-            "revanced_change_start_page"
+            "rvx_morphed_change_start_page"
         )
 
         updatePatchStatus(CHANGE_START_PAGE)

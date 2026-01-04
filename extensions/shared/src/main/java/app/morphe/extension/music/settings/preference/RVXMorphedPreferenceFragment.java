@@ -74,16 +74,16 @@ import app.morphe.extension.shared.utils.Logger;
 import app.morphe.extension.shared.utils.Utils;
 
 @SuppressWarnings("all")
-public class ReVancedPreferenceFragment extends PreferenceFragment {
+public class RVXMorphedPreferenceFragment extends PreferenceFragment {
 
-    private static final String IMPORT_EXPORT_SETTINGS_ENTRY_KEY = "revanced_settings_import_export_entries";
+    private static final String IMPORT_EXPORT_SETTINGS_ENTRY_KEY = "rvx_morphed_settings_import_export_entries";
     private static final int READ_REQUEST_CODE = 42;
     private static final int WRITE_REQUEST_CODE = 43;
 
     private static String existingSettings;
 
 
-    public ReVancedPreferenceFragment() {
+    public RVXMorphedPreferenceFragment() {
     }
 
     /**
@@ -222,7 +222,7 @@ public class ReVancedPreferenceFragment extends PreferenceFragment {
             final String[] mEntries = getStringArray(IMPORT_EXPORT_SETTINGS_ENTRY_KEY);
 
             getDialogBuilder(activity)
-                    .setTitle(str("revanced_settings_import_export_title"))
+                    .setTitle(str("rvx_morphed_settings_import_export_title"))
                     .setItems(mEntries, (dialog, index) -> {
                         switch (index) {
                             case 0 -> exportActivity();
@@ -257,11 +257,11 @@ public class ReVancedPreferenceFragment extends PreferenceFragment {
             container.addView(textInputLayout);
 
             getDialogBuilder(activity)
-                    .setTitle(str("revanced_settings_import_export_title"))
+                    .setTitle(str("rvx_morphed_settings_import_export_title"))
                     .setView(container)
                     .setNegativeButton(android.R.string.cancel, null)
-                    .setNeutralButton(str("revanced_settings_import_copy"), (dialog, which) -> Utils.setClipboard(textView.getText().toString(), str("revanced_share_copy_settings_success")))
-                    .setPositiveButton(str("revanced_settings_import"), (dialog, which) -> importSettings(activity, textView.getText().toString()))
+                    .setNeutralButton(str("rvx_morphed_settings_import_copy"), (dialog, which) -> Utils.setClipboard(textView.getText().toString(), str("rvx_morphed_share_copy_settings_success")))
+                    .setPositiveButton(str("rvx_morphed_settings_import"), (dialog, which) -> importSettings(activity, textView.getText().toString()))
                     .show();
         } catch (Exception ex) {
             Logger.printException(() -> "importExportEditTextDialogBuilder failure", ex);
@@ -334,9 +334,9 @@ public class ReVancedPreferenceFragment extends PreferenceFragment {
             printWriter.close();
             jsonFileWriter.close();
 
-            showToastShort(str("revanced_settings_export_success"));
+            showToastShort(str("rvx_morphed_settings_export_success"));
         } catch (IOException e) {
-            showToastShort(str("revanced_settings_export_failed"));
+            showToastShort(str("rvx_morphed_settings_export_failed"));
         }
     }
 
@@ -363,10 +363,10 @@ public class ReVancedPreferenceFragment extends PreferenceFragment {
 
             final boolean restartNeeded = Setting.importFromJSON(context, sb.toString());
             if (restartNeeded) {
-                ReVancedPreferenceFragment.showRebootDialog();
+                RVXMorphedPreferenceFragment.showRebootDialog();
             }
         } catch (IOException e) {
-            showToastShort(str("revanced_settings_import_failed"));
+            showToastShort(str("rvx_morphed_settings_import_failed"));
             throw new RuntimeException(e);
         }
     }
@@ -379,7 +379,7 @@ public class ReVancedPreferenceFragment extends PreferenceFragment {
             }
             final boolean restartNeeded = Setting.importFromJSON(mActivity, replacementSettings);
             if (restartNeeded) {
-                ReVancedPreferenceFragment.showRebootDialog();
+                RVXMorphedPreferenceFragment.showRebootDialog();
             }
         } catch (Exception ex) {
             Logger.printException(() -> "importSettings failure", ex);

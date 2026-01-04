@@ -70,8 +70,8 @@ public final class LogBufferManager {
 
             // Most (but not all) Android 13+ devices always show a "copied to clipboard" toast
             // and there is no way to programmatically detect if a toast will show or not.
-            // Show a toast even if using Android 13+, but show ReVanced toast first (before copying to clipboard).
-            Utils.showToastShort(str("revanced_debug_logs_copied_to_clipboard"));
+            // Show a toast even if using Android 13+, but show RVX Morphed toast first (before copying to clipboard).
+            Utils.showToastShort(str("rvx_morphed_debug_logs_copied_to_clipboard"));
         } catch (Exception ignored) {
             // Intent cannot contain more than 512KB (or 1024KB) of data at a time.
             // If the message size exceeds 512KB (or 1024KB), an 'android.os.TransactionTooLargeException' will be thrown:
@@ -79,19 +79,19 @@ public final class LogBufferManager {
             // https://stackoverflow.com/a/67954710
             //
             // RVX supports 'Export debug logs as file', so this shouldn't be a major issue.
-            Utils.showToastShort(str("revanced_debug_logs_failed_to_copy_to_clipboard"));
+            Utils.showToastShort(str("rvx_morphed_debug_logs_failed_to_copy_to_clipboard"));
         }
     }
 
     public static String exportToString() {
         try {
             if (!BaseSettings.DEBUG.get()) {
-                Utils.showToastShort(str("revanced_debug_logs_disabled"));
+                Utils.showToastShort(str("rvx_morphed_debug_logs_disabled"));
                 return null;
             }
 
             if (logBuffer.isEmpty()) {
-                Utils.showToastShort(str("revanced_debug_logs_none_found"));
+                Utils.showToastShort(str("rvx_morphed_debug_logs_none_found"));
                 clearLogBufferData(); // Clear toast log entry that was just created.
                 return null;
             }
@@ -99,7 +99,7 @@ public final class LogBufferManager {
             return String.join("\n", logBuffer);
         } catch (Exception ex) {
             // Handle security exception if clipboard access is denied.
-            String errorMessage = String.format(str("revanced_debug_logs_failed_to_export"), ex.getMessage());
+            String errorMessage = String.format(str("rvx_morphed_debug_logs_failed_to_export"), ex.getMessage());
             Utils.showToastLong(errorMessage);
             Logger.printDebug(() -> errorMessage, ex);
         }
@@ -123,12 +123,12 @@ public final class LogBufferManager {
      */
     public static void clearLogBuffer() {
         if (!BaseSettings.DEBUG.get()) {
-            Utils.showToastShort(str("revanced_debug_logs_disabled"));
+            Utils.showToastShort(str("rvx_morphed_debug_logs_disabled"));
             return;
         }
 
         // Show toast before clearing, otherwise toast log will still remain.
-        Utils.showToastShort(str("revanced_debug_logs_clear_toast"));
+        Utils.showToastShort(str("rvx_morphed_debug_logs_clear_toast"));
         clearLogBufferData();
     }
 }

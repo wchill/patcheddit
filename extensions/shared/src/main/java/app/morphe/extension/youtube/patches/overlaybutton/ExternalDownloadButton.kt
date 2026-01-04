@@ -21,7 +21,7 @@ object ExternalDownloadButton {
         try {
             instance = PlayerControlButton(
                 controlsViewGroup = controlsView,
-                imageViewButtonId = "revanced_external_download_button",
+                imageViewButtonId = "rvx_morphed_external_download_button",
                 buttonVisibility = { isButtonEnabled() },
                 onClickListener = { view: View -> onClick(view) },
                 onLongClickListener = { view: View ->

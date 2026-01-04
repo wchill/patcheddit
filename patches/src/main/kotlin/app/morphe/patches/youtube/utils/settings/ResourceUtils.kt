@@ -10,7 +10,7 @@ import org.w3c.dom.Element
 import java.io.File
 
 internal object ResourceUtils {
-    internal const val RVX_PREFERENCE_PATH = "res/xml/revanced_prefs.xml"
+    internal const val RVX_PREFERENCE_PATH = "res/xml/rvx_morphed_prefs.xml"
     internal const val YOUTUBE_SETTINGS_PATH = "res/xml/settings_fragment.xml"
 
     private lateinit var context: ResourcePatchContext
@@ -74,12 +74,12 @@ internal object ResourceUtils {
     }
 
     fun updatePatchStatus(patchTitle: String) {
-        updatePatchStatusSettings(patchTitle, "@string/revanced_patches_included")
+        updatePatchStatusSettings(patchTitle, "@string/rvx_morphed_patches_included")
     }
 
     fun updatePatchStatusIcon(iconName: String) {
         iconType = iconName
-        updatePatchStatusSettings("Icon", "@string/revanced_icon_$iconName")
+        updatePatchStatusSettings("Icon", "@string/rvx_morphed_icon_$iconName")
     }
 
     fun updatePatchStatusTheme(themeName: String) =

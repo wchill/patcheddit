@@ -134,7 +134,7 @@ fun ResourcePatchContext.copyAdaptiveIcon(
 
 fun ResourcePatchContext.appendAppVersion(
     appVersion: String,
-    key: String = "revanced_spoof_app_version_target"
+    key: String = "rvx_morphed_spoof_app_version_target"
 ) {
     addEntryValues(
         "${key}_entries",

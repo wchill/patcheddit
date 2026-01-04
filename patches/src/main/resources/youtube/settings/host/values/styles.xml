@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="revanced_dialog_rounded_corners" parent="@android:style/ThemeOverlay.Material.Dialog">
+    <style name="rvx_morphed_dialog_rounded_corners" parent="@android:style/ThemeOverlay.Material.Dialog">
         <item name="android:windowBackground">?ytRaisedBackground</item>
         <item name="android:windowIsTranslucent">true</item>
-        <item name="android:background">@drawable/revanced_settings_rounded_corners_background</item>
+        <item name="android:background">@drawable/rvx_morphed_settings_rounded_corners_background</item>
     </style>
-    <style name="revanced_searchbar_cursor">
-        <item name="android:textCursorDrawable">@drawable/revanced_settings_cursor</item>
+    <style name="rvx_morphed_searchbar_cursor">
+        <item name="android:textCursorDrawable">@drawable/rvx_morphed_settings_cursor</item>
         <item name="android:textSize">16sp</item>
     </style>
 </resources>

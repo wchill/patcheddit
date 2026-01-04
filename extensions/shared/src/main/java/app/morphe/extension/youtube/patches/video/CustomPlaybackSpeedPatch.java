@@ -65,7 +65,7 @@ public class CustomPlaybackSpeedPatch {
     private static long lastTimeOldPlaybackMenuInvoked;
 
     static {
-        defaultSpeedEntries = new String[]{getString("quality_auto"), "0.25x", "0.5x", "0.75x", getString("revanced_playback_speed_normal"), "1.25x", "1.5x", "1.75x", "2.0x"};
+        defaultSpeedEntries = new String[]{getString("quality_auto"), "0.25x", "0.5x", "0.75x", getString("rvx_morphed_playback_speed_normal"), "1.25x", "1.5x", "1.75x", "2.0x"};
         defaultSpeedEntryValues = new String[]{"-2.0", "0.25", "0.5", "0.75", "1.0", "1.25", "1.5", "1.75", "2.0"};
         loadCustomSpeeds();
     }
@@ -149,7 +149,7 @@ public class CustomPlaybackSpeedPatch {
 
     private static void resetCustomSpeeds(@NonNull String toastMessage) {
         Utils.showToastLong(toastMessage);
-        Utils.showToastShort(str("revanced_reset_to_default_toast"));
+        Utils.showToastShort(str("rvx_morphed_reset_to_default_toast"));
         Settings.CUSTOM_PLAYBACK_SPEEDS.resetToDefault();
     }
 
@@ -173,7 +173,7 @@ public class CustomPlaybackSpeedPatch {
                 }
 
                 if (speedFloat > PLAYBACK_SPEED_MAXIMUM) {
-                    resetCustomSpeeds(str("revanced_custom_playback_speeds_invalid", PLAYBACK_SPEED_MAXIMUM));
+                    resetCustomSpeeds(str("rvx_morphed_custom_playback_speeds_invalid", PLAYBACK_SPEED_MAXIMUM));
                     loadCustomSpeeds();
                     return;
                 }
@@ -194,13 +194,13 @@ public class CustomPlaybackSpeedPatch {
                 String speedString = String.valueOf(speed);
                 customSpeedEntries[i] = speed != 1.0f
                         ? speedString + "x"
-                        : getString("revanced_playback_speed_normal");
+                        : getString("rvx_morphed_playback_speed_normal");
                 customSpeedEntryValues[i] = speedString;
                 i++;
             }
         } catch (Exception ex) {
             Logger.printInfo(() -> "Parse error", ex);
-            resetCustomSpeeds(str("revanced_custom_playback_speeds_parse_exception"));
+            resetCustomSpeeds(str("rvx_morphed_custom_playback_speeds_parse_exception"));
             loadCustomSpeeds();
         }
     }

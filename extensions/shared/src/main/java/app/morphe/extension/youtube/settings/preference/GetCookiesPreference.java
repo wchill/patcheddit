@@ -53,13 +53,13 @@ public class GetCookiesPreference extends Preference implements Preference.OnPre
         Pair<Dialog, LinearLayout> dialogPair = CustomDialog.create(
                 context,
                 // Title.
-                str("revanced_transcript_cookies_dialog_title"),
+                str("rvx_morphed_transcript_cookies_dialog_title"),
                 // Message.
-                str("revanced_transcript_cookies_dialog_message"),
+                str("rvx_morphed_transcript_cookies_dialog_message"),
                 // No EditText.
                 null,
                 // OK button text.
-                str("revanced_transcript_cookies_dialog_auth_text"),
+                str("rvx_morphed_transcript_cookies_dialog_auth_text"),
                 // OK button action.
                 () -> launchWebViewActivity(
                         context,
@@ -71,7 +71,7 @@ public class GetCookiesPreference extends Preference implements Preference.OnPre
                 // Cancel button action (dismiss only).
                 null,
                 // Neutral button text.
-                str("revanced_transcript_cookies_dialog_no_auth_text"),
+                str("rvx_morphed_transcript_cookies_dialog_no_auth_text"),
                 // Neutral button action.
                 () -> launchWebViewActivity(
                         context,

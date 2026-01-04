@@ -49,7 +49,7 @@ public class VideoUtils extends IntentUtils {
     public static void openInYouTube() {
         final String videoId = VideoInformation.getVideoId();
         if (videoId.isEmpty()) {
-            showToastShort(str("revanced_replace_flyout_menu_dismiss_queue_watch_on_youtube_warning"));
+            showToastShort(str("rvx_morphed_replace_flyout_menu_dismiss_queue_watch_on_youtube_warning"));
             return;
         }
 

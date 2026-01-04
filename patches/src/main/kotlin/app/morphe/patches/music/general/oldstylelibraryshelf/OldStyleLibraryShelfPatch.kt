@@ -43,7 +43,7 @@ val oldStyleLibraryShelfPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_restore_old_style_library_shelf",
+            "rvx_morphed_restore_old_style_library_shelf",
             "false"
         )
 

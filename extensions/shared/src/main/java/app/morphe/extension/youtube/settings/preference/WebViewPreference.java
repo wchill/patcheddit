@@ -25,9 +25,9 @@ import app.morphe.extension.shared.ui.CustomDialog;
 public class WebViewPreference extends Preference implements Preference.OnPreferenceClickListener {
     private final String YOUTUBE_SIGN_IN_URL = "https://www.youtube.com/signin";
     private final String[] labels = {
-            "revanced_webview_intent_clear_cookies_on_startup",
-            "revanced_webview_intent_clear_cookies_on_shutdown",
-            "revanced_webview_intent_use_desktop_user_agent"
+            "rvx_morphed_webview_intent_clear_cookies_on_startup",
+            "rvx_morphed_webview_intent_clear_cookies_on_shutdown",
+            "rvx_morphed_webview_intent_use_desktop_user_agent"
     };
     private final boolean[] items = {
             false,
@@ -115,7 +115,7 @@ public class WebViewPreference extends Preference implements Preference.OnPrefer
                 // Context.
                 context,
                 // Title.
-                str("revanced_webview_title"),
+                str("rvx_morphed_webview_title"),
                 // Message.
                 null,
                 // EditText.
@@ -134,7 +134,7 @@ public class WebViewPreference extends Preference implements Preference.OnPrefer
                 () -> {
                 },
                 // Neutral button text.
-                str("revanced_settings_reset"),
+                str("rvx_morphed_settings_reset"),
                 // Neutral button action.
                 () -> {
                     for (int i = 0; i < labels.length; i++) {

@@ -224,39 +224,39 @@ val videoPlaybackPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.VIDEO,
-            "revanced_disable_drc_audio",
+            "rvx_morphed_disable_drc_audio",
             "false"
         )
         addPreferenceWithIntent(
             CategoryType.VIDEO,
-            "revanced_custom_playback_speeds"
+            "rvx_morphed_custom_playback_speeds"
         )
         addSwitchPreference(
             CategoryType.VIDEO,
-            "revanced_enable_opus_codec",
+            "rvx_morphed_enable_opus_codec",
             "true"
         )
         addSwitchPreference(
             CategoryType.VIDEO,
-            "revanced_remember_playback_speed_last_selected",
+            "rvx_morphed_remember_playback_speed_last_selected",
             "true"
         )
         addSwitchPreference(
             CategoryType.VIDEO,
-            "revanced_remember_playback_speed_last_selected_toast",
+            "rvx_morphed_remember_playback_speed_last_selected_toast",
             "true",
-            "revanced_remember_playback_speed_last_selected"
+            "rvx_morphed_remember_playback_speed_last_selected"
         )
         addSwitchPreference(
             CategoryType.VIDEO,
-            "revanced_remember_video_quality_last_selected",
+            "rvx_morphed_remember_video_quality_last_selected",
             "true"
         )
         addSwitchPreference(
             CategoryType.VIDEO,
-            "revanced_remember_video_quality_last_selected_toast",
+            "rvx_morphed_remember_video_quality_last_selected_toast",
             "true",
-            "revanced_remember_video_quality_last_selected"
+            "rvx_morphed_remember_video_quality_last_selected"
         )
 
         updatePatchStatus(VIDEO_PLAYBACK)

@@ -179,7 +179,7 @@ public class ReturnYouTubeDislike {
                 oldLikes = formatDislikeCount(voteData.getLikeCount());
             } else {
                 // Change the "Likes" string to show that likes and dislikes are hidden.
-                String hiddenMessageString = str("revanced_ryd_video_likes_hidden_by_video_owner");
+                String hiddenMessageString = str("rvx_morphed_ryd_video_likes_hidden_by_video_owner");
                 return newSpanUsingStylingOfAnotherSpan(oldSpannable, hiddenMessageString);
             }
         }
@@ -448,7 +448,7 @@ public class ReturnYouTubeDislike {
                 // Method automatically prevents showing multiple toasts if the connection failed.
                 // This call is needed here in case the api call did succeed but took too long.
                 ReturnYouTubeDislikeApi.handleConnectionError(
-                        str("revanced_ryd_failure_connection_timeout"),
+                        str("rvx_morphed_ryd_failure_connection_timeout"),
                         null, null, Toast.LENGTH_SHORT);
                 Logger.printDebug(() -> "Cannot add dislike to UI (RYD data not available)");
                 return original;

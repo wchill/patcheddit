@@ -56,7 +56,7 @@ val shareSheetPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.MISC,
-            "revanced_change_share_sheet",
+            "rvx_morphed_change_share_sheet",
             "false"
         )
 

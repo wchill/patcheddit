@@ -26,7 +26,7 @@ val watchHistoryPatch = bytecodePatch(
 
         addPreferenceWithIntent(
             CategoryType.MISC,
-            "revanced_watch_history_type"
+            "rvx_morphed_watch_history_type"
         )
     }
 

@@ -21,7 +21,7 @@ object ReloadVideoButton {
         try {
             instance = PlayerControlButton(
                 controlsViewGroup = controlsView,
-                imageViewButtonId = "revanced_reload_video_button",
+                imageViewButtonId = "rvx_morphed_reload_video_button",
                 hasPlaceholder = false,
                 buttonVisibility = { isButtonEnabled() },
                 onClickListener = { view: View -> onClick(view) }

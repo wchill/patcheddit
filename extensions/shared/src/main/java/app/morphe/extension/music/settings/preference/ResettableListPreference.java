@@ -39,9 +39,9 @@ public class ResettableListPreference {
                     .setSingleChoiceItems(mEntries, mClickedDialogEntryIndex,
                             (dialog, id) -> mClickedDialogEntryIndex = id)
                     .setNegativeButton(android.R.string.cancel, null)
-                    .setNeutralButton(str("revanced_settings_reset"), (dialog, which) -> {
+                    .setNeutralButton(str("rvx_morphed_settings_reset"), (dialog, which) -> {
                         setting.resetToDefault();
-                        ReVancedPreferenceFragment.showRebootDialog();
+                        RVXMorphedPreferenceFragment.showRebootDialog();
                     })
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                         String value = mEntryValues[mClickedDialogEntryIndex];
@@ -52,7 +52,7 @@ public class ResettableListPreference {
                         } else if (setting instanceof LongSetting longSetting) {
                             longSetting.save(Long.parseLong(value));
                         }
-                        ReVancedPreferenceFragment.showRebootDialog();
+                        RVXMorphedPreferenceFragment.showRebootDialog();
                     })
                     .show();
         } catch (Exception ex) {
@@ -77,13 +77,13 @@ public class ResettableListPreference {
                     .setSingleChoiceItems(mEntries, mClickedDialogEntryIndex,
                             (dialog, id) -> mClickedDialogEntryIndex = id)
                     .setNegativeButton(android.R.string.cancel, null)
-                    .setNeutralButton(str("revanced_settings_reset"), (dialog, which) -> {
+                    .setNeutralButton(str("rvx_morphed_settings_reset"), (dialog, which) -> {
                         setting.resetToDefault();
-                        ReVancedPreferenceFragment.showRebootDialog();
+                        RVXMorphedPreferenceFragment.showRebootDialog();
                     })
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> {
                         setting.saveValueFromString(mEntryValues[mClickedDialogEntryIndex]);
-                        ReVancedPreferenceFragment.showRebootDialog();
+                        RVXMorphedPreferenceFragment.showRebootDialog();
                     })
                     .show();
         } catch (Exception ex) {

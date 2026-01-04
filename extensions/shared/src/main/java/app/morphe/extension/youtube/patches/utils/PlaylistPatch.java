@@ -73,25 +73,25 @@ public class PlaylistPatch {
     static {
         Context mContext = Utils.getContext();
         if (mContext != null && mContext.getResources() != null) {
-            checkFailedAuth = str("revanced_queue_manager_check_failed_auth");
-            checkFailedPlaylistId = str("revanced_queue_manager_check_failed_playlist_id");
-            checkFailedQueue = str("revanced_queue_manager_check_failed_queue");
-            checkFailedVideoId = str("revanced_queue_manager_check_failed_video_id");
-            checkFailedGeneric = str("revanced_queue_manager_check_failed_generic");
+            checkFailedAuth = str("rvx_morphed_queue_manager_check_failed_auth");
+            checkFailedPlaylistId = str("rvx_morphed_queue_manager_check_failed_playlist_id");
+            checkFailedQueue = str("rvx_morphed_queue_manager_check_failed_queue");
+            checkFailedVideoId = str("rvx_morphed_queue_manager_check_failed_video_id");
+            checkFailedGeneric = str("rvx_morphed_queue_manager_check_failed_generic");
 
-            fetchFailedAdd = str("revanced_queue_manager_fetch_failed_add");
-            fetchFailedCreate = str("revanced_queue_manager_fetch_failed_create");
-            fetchFailedDelete = str("revanced_queue_manager_fetch_failed_delete");
-            fetchFailedRemove = str("revanced_queue_manager_fetch_failed_remove");
-            fetchFailedSave = str("revanced_queue_manager_fetch_failed_save");
+            fetchFailedAdd = str("rvx_morphed_queue_manager_fetch_failed_add");
+            fetchFailedCreate = str("rvx_morphed_queue_manager_fetch_failed_create");
+            fetchFailedDelete = str("rvx_morphed_queue_manager_fetch_failed_delete");
+            fetchFailedRemove = str("rvx_morphed_queue_manager_fetch_failed_remove");
+            fetchFailedSave = str("rvx_morphed_queue_manager_fetch_failed_save");
             fetchFailedVideoIndormation =
-                    str("revanced_queue_manager_fetch_failed_video_information");
+                    str("rvx_morphed_queue_manager_fetch_failed_video_information");
 
-            fetchSucceededAdd = str("revanced_queue_manager_fetch_succeeded_add");
-            fetchSucceededCreate = str("revanced_queue_manager_fetch_succeeded_create");
-            fetchSucceededDelete = str("revanced_queue_manager_fetch_succeeded_delete");
-            fetchSucceededRemove = str("revanced_queue_manager_fetch_succeeded_remove");
-            fetchSucceededSave = str("revanced_queue_manager_fetch_succeeded_save");
+            fetchSucceededAdd = str("rvx_morphed_queue_manager_fetch_succeeded_add");
+            fetchSucceededCreate = str("rvx_morphed_queue_manager_fetch_succeeded_create");
+            fetchSucceededDelete = str("rvx_morphed_queue_manager_fetch_succeeded_delete");
+            fetchSucceededRemove = str("rvx_morphed_queue_manager_fetch_succeeded_remove");
+            fetchSucceededSave = str("rvx_morphed_queue_manager_fetch_succeeded_save");
         }
     }
 
@@ -266,7 +266,7 @@ public class PlaylistPatch {
                                 // context
                                 mContext,
                                 // title
-                                str("revanced_queue_manager_video_information"),
+                                str("rvx_morphed_queue_manager_video_information"),
                                 // message
                                 message,
                                 // editText
@@ -279,11 +279,11 @@ public class PlaylistPatch {
                                 // onCancelClick
                                 null,
                                 // neutralButtonText
-                                str("revanced_queue_manager_video_information_copy"),
+                                str("rvx_morphed_queue_manager_video_information_copy"),
                                 // onNeutralClick
                                 () -> Utils.setClipboard(
                                         message,
-                                        str("revanced_share_copy_video_information_success")
+                                        str("rvx_morphed_share_copy_video_information_success")
                                 ),
                                 // dismissDialogOnNeutralClick
                                 true
@@ -438,63 +438,63 @@ public class PlaylistPatch {
 
     private enum QueueManager {
         ADD_TO_QUEUE(
-                "revanced_queue_manager_add_to_queue",
+                "rvx_morphed_queue_manager_add_to_queue",
                 "yt_outline_list_add_black_24",
                 () -> fetchQueue(false, false, false, false)
         ),
         ADD_TO_QUEUE_AND_OPEN_QUEUE(
-                "revanced_queue_manager_add_to_queue_and_open_queue",
+                "rvx_morphed_queue_manager_add_to_queue_and_open_queue",
                 "yt_outline_list_add_black_24",
                 () -> fetchQueue(false, true, false, false)
         ),
         ADD_TO_QUEUE_AND_PLAY_VIDEO(
-                "revanced_queue_manager_add_to_queue_and_play_video",
+                "rvx_morphed_queue_manager_add_to_queue_and_play_video",
                 "yt_outline_list_play_arrow_black_24",
                 () -> fetchQueue(false, true, true, false)
         ),
         ADD_TO_QUEUE_AND_RELOAD_VIDEO(
-                "revanced_queue_manager_add_to_queue_and_reload_video",
+                "rvx_morphed_queue_manager_add_to_queue_and_reload_video",
                 "yt_outline_arrow_circle_black_24",
                 () -> fetchQueue(false, true, true, true)
         ),
         REMOVE_FROM_QUEUE(
-                "revanced_queue_manager_remove_from_queue",
+                "rvx_morphed_queue_manager_remove_from_queue",
                 "yt_outline_trash_can_black_24",
                 () -> fetchQueue(true, false, false, false)
         ),
         REMOVE_FROM_QUEUE_AND_OPEN_QUEUE(
-                "revanced_queue_manager_remove_from_queue_and_open_queue",
+                "rvx_morphed_queue_manager_remove_from_queue_and_open_queue",
                 "yt_outline_trash_can_black_24",
                 () -> fetchQueue(true, true, false, false)
         ),
         REMOVE_FROM_QUEUE_AND_RELOAD_VIDEO(
-                "revanced_queue_manager_remove_from_queue_and_reload_video",
+                "rvx_morphed_queue_manager_remove_from_queue_and_reload_video",
                 "yt_outline_arrow_circle_black_24",
                 () -> fetchQueue(true, true, true, true)
         ),
         OPEN_QUEUE(
-                "revanced_queue_manager_open_queue",
+                "rvx_morphed_queue_manager_open_queue",
                 "yt_outline_list_view_black_24",
                 PlaylistPatch::openQueue
         ),
         // For some reason, the 'playlist/delete' endpoint is unavailable.
         REMOVE_QUEUE(
-                "revanced_queue_manager_remove_queue",
+                "rvx_morphed_queue_manager_remove_queue",
                 "yt_outline_slash_circle_left_black_24",
                 PlaylistPatch::removeQueue
         ),
         SAVE_QUEUE(
-                "revanced_queue_manager_save_queue",
+                "rvx_morphed_queue_manager_save_queue",
                 "yt_outline_bookmark_black_24",
                 PlaylistPatch::saveToPlaylist
         ),
         SHOW_ORIGINAL_VIDEO_INFORMATION(
-                "revanced_queue_manager_show_original_video_information",
+                "rvx_morphed_queue_manager_show_original_video_information",
                 "quantum_gm_ic_g_translate_black_24",
                 PlaylistPatch::fetchVideoDetails
         ),
         EXTERNAL_DOWNLOADER(
-                "revanced_queue_manager_external_downloader",
+                "rvx_morphed_queue_manager_external_downloader",
                 "yt_outline_download_black_24",
                 PlaylistPatch::downloadVideo
         );

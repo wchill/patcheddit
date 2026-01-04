@@ -225,8 +225,8 @@ public class GmsCoreSupport {
     private static String getGmsCoreDownload() {
         final String vendorGroupId = getGmsCoreVendorGroupId();
         return switch (vendorGroupId) {
-            case "app.morphe" -> "https://github.com/revanced/gmscore/releases/latest";
-            case "com.mgoogle" -> "https://github.com/inotia00/VancedMicroG/releases/latest";
+            case "app.morphe" -> "https://github.com/MorpheApp/MicroG-RE/releases/latest";
+            case "com.google" -> "https://github.com/inotia00/VancedMicroG/releases/latest";
             default -> vendorGroupId + ".android.gms";
         };
     }

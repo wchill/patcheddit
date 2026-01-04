@@ -68,7 +68,7 @@ val dislikeRedirectionPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_disable_dislike_redirection",
+            "rvx_morphed_disable_dislike_redirection",
             "false"
         )
 

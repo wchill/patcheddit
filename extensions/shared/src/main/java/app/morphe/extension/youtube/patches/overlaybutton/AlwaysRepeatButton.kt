@@ -29,7 +29,7 @@ object AlwaysRepeatButton {
         try {
             instance = PlayerControlButton(
                 controlsViewGroup = controlsView,
-                imageViewButtonId = "revanced_always_repeat_button",
+                imageViewButtonId = "rvx_morphed_always_repeat_button",
                 buttonVisibility = { isButtonEnabled() },
                 onClickListener = { view: View -> onClick(view) },
                 onLongClickListener = { view: View ->
@@ -98,7 +98,7 @@ object AlwaysRepeatButton {
         if (imageView == null) return
 
         if (imageView.colorFilter === cf) {
-            showToastShort(str("revanced_overlay_button_not_allowed_warning"))
+            showToastShort(str("rvx_morphed_overlay_button_not_allowed_warning"))
             return
         }
 

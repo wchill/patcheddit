@@ -22,7 +22,7 @@ object MuteVolumeButton {
         try {
             instance = PlayerControlButton(
                 controlsViewGroup = controlsView,
-                imageViewButtonId = "revanced_mute_volume_button",
+                imageViewButtonId = "rvx_morphed_mute_volume_button",
                 buttonVisibility = { isButtonEnabled() },
                 onClickListener = { view: View -> onClick(view) },
             )

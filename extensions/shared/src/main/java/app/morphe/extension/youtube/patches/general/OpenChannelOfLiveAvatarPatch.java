@@ -24,7 +24,7 @@ public final class OpenChannelOfLiveAvatarPatch {
      * If you change the language in the app settings, a string from another language may be used.
      * In this case, restarting the app will solve it.
      */
-    private static final String liveRingDescription = str("revanced_live_ring_description");
+    private static final String liveRingDescription = str("rvx_morphed_live_ring_description");
 
     private static volatile String videoId = "";
 

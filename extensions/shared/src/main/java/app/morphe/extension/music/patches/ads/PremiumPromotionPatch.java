@@ -87,7 +87,7 @@ public class PremiumPromotionPatch {
                 promotionDialogShown = true;
                 dialog.setOnShowListener(DialogInterface::dismiss);
                 if (BaseSettings.DEBUG.get()) {
-                    Utils.showToastShort(str("revanced_hide_premium_promotion_closed_toast"));
+                    Utils.showToastShort(str("rvx_morphed_hide_premium_promotion_closed_toast"));
                 }
                 return;
             }

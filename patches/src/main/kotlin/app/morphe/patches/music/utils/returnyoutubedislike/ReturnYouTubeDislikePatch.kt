@@ -103,8 +103,8 @@ enum class Vote(val value: Int) {
     REMOVE_LIKE(0),
 }
 
-private const val ABOUT_CATEGORY_KEY = "revanced_ryd_about"
-private const val RYD_ATTRIBUTION_KEY = "revanced_ryd_attribution"
+private const val ABOUT_CATEGORY_KEY = "rvx_morphed_ryd_about"
+private const val RYD_ATTRIBUTION_KEY = "rvx_morphed_ryd_attribution"
 
 @Suppress("unused")
 val returnYouTubeDislikePatch = resourcePatch(
@@ -121,32 +121,32 @@ val returnYouTubeDislikePatch = resourcePatch(
     execute {
         addSwitchPreference(
             CategoryType.RETURN_YOUTUBE_DISLIKE,
-            "revanced_ryd_enabled",
+            "rvx_morphed_ryd_enabled",
             "true"
         )
         addSwitchPreference(
             CategoryType.RETURN_YOUTUBE_DISLIKE,
-            "revanced_ryd_dislike_percentage",
+            "rvx_morphed_ryd_dislike_percentage",
             "false",
-            "revanced_ryd_enabled"
+            "rvx_morphed_ryd_enabled"
         )
         addSwitchPreference(
             CategoryType.RETURN_YOUTUBE_DISLIKE,
-            "revanced_ryd_compact_layout",
+            "rvx_morphed_ryd_compact_layout",
             "false",
-            "revanced_ryd_enabled"
+            "rvx_morphed_ryd_enabled"
         )
         addSwitchPreference(
             CategoryType.RETURN_YOUTUBE_DISLIKE,
-            "revanced_ryd_estimated_like",
+            "rvx_morphed_ryd_estimated_like",
             "false",
-            "revanced_ryd_enabled"
+            "rvx_morphed_ryd_enabled"
         )
         addSwitchPreference(
             CategoryType.RETURN_YOUTUBE_DISLIKE,
-            "revanced_ryd_toast_on_connection_error",
+            "rvx_morphed_ryd_toast_on_connection_error",
             "true",
-            "revanced_ryd_enabled"
+            "rvx_morphed_ryd_enabled"
         )
 
         addPreferenceCategoryUnderPreferenceScreen(

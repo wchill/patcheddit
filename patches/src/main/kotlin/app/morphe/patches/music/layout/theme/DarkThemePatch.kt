@@ -128,7 +128,7 @@ val darkThemePatch = resourcePatch(
         arrayOf(
             ResourceGroup(
                 "drawable",
-                "revanced_header_gradient.xml",
+                "rvx_morphed_header_gradient.xml",
             )
         ).forEach { resourceGroup ->
             copyResources("music/theme", resourceGroup)

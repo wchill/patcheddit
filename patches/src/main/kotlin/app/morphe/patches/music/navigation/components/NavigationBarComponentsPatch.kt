@@ -189,53 +189,53 @@ val navigationBarComponentsPatch = bytecodePatch(
 
         addSwitchPreference(
             CategoryType.NAVIGATION,
-            "revanced_enable_custom_navigation_bar_color",
+            "rvx_morphed_enable_custom_navigation_bar_color",
             "false"
         )
         addPreferenceWithIntent(
             CategoryType.NAVIGATION,
-            "revanced_custom_navigation_bar_color_value",
-            "revanced_enable_custom_navigation_bar_color"
+            "rvx_morphed_custom_navigation_bar_color_value",
+            "rvx_morphed_enable_custom_navigation_bar_color"
         )
         addSwitchPreference(
             CategoryType.NAVIGATION,
-            "revanced_hide_navigation_home_button",
+            "rvx_morphed_hide_navigation_home_button",
             "false"
         )
         addSwitchPreference(
             CategoryType.NAVIGATION,
-            "revanced_hide_navigation_samples_button",
+            "rvx_morphed_hide_navigation_samples_button",
             "false"
         )
         addSwitchPreference(
             CategoryType.NAVIGATION,
-            "revanced_hide_navigation_explore_button",
+            "rvx_morphed_hide_navigation_explore_button",
             "false"
         )
         addSwitchPreference(
             CategoryType.NAVIGATION,
-            "revanced_hide_navigation_library_button",
+            "rvx_morphed_hide_navigation_library_button",
             "false"
         )
         addSwitchPreference(
             CategoryType.NAVIGATION,
-            "revanced_hide_navigation_upgrade_button",
+            "rvx_morphed_hide_navigation_upgrade_button",
             "true"
         )
         addSwitchPreference(
             CategoryType.NAVIGATION,
-            "revanced_hide_navigation_bar",
+            "rvx_morphed_hide_navigation_bar",
             "false"
         )
         addSwitchPreference(
             CategoryType.NAVIGATION,
-            "revanced_hide_navigation_label",
+            "rvx_morphed_hide_navigation_label",
             "false"
         )
         if (is_6_27_or_greater && !is_8_29_or_greater) {
             addSwitchPreference(
                 CategoryType.NAVIGATION,
-                "revanced_replace_navigation_samples_button",
+                "rvx_morphed_replace_navigation_samples_button",
                 "false"
             )
         } else {
@@ -243,12 +243,12 @@ val navigationBarComponentsPatch = bytecodePatch(
         }
         addSwitchPreference(
             CategoryType.NAVIGATION,
-            "revanced_replace_navigation_upgrade_button",
+            "rvx_morphed_replace_navigation_upgrade_button",
             "false"
         )
         addPreferenceWithIntent(
             CategoryType.NAVIGATION,
-            "revanced_replace_navigation_button_about"
+            "rvx_morphed_replace_navigation_button_about"
         )
 
         updatePatchStatus(NAVIGATION_BAR_COMPONENTS)

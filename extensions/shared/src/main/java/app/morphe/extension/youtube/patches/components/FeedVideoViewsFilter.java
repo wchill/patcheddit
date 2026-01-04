@@ -73,7 +73,7 @@ public final class FeedVideoViewsFilter extends Filter {
     private static final StringSetting HIDE_VIDEO_VIEW_COUNTS_MULTIPLIER =
             Settings.HIDE_VIDEO_VIEW_COUNTS_MULTIPLIER;
     private static final String HIDE_VIDEO_VIEW_COUNTS_MULTIPLIER_DEFAULT_VALUE =
-            "revanced_hide_video_view_counts_multiplier_default_value";
+            "rvx_morphed_hide_video_view_counts_multiplier_default_value";
     private static final String[] parts;
     private Pattern[] viewCountPatterns = null;
 

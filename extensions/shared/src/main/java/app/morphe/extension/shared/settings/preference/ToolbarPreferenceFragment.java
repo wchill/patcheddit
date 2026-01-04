@@ -126,7 +126,7 @@ public class ToolbarPreferenceFragment extends AbstractPreferenceFragment {
     @SuppressLint("SimpleDateFormat")
     protected void exportActivity() {
         if (!settingExportInProgress && !BaseSettings.DEBUG.get()) {
-            Utils.showToastShort(str("revanced_debug_logs_disabled"));
+            Utils.showToastShort(str("rvx_morphed_debug_logs_disabled"));
             return;
         }
 
@@ -207,15 +207,15 @@ public class ToolbarPreferenceFragment extends AbstractPreferenceFragment {
             jsonFileWriter.close();
 
             if (settingExportInProgress) {
-                showToastShort(str("revanced_settings_export_success"));
+                showToastShort(str("rvx_morphed_settings_export_success"));
             } else {
-                showToastShort(str("revanced_debug_logs_export_success"));
+                showToastShort(str("rvx_morphed_debug_logs_export_success"));
             }
         } catch (IOException e) {
             if (settingExportInProgress) {
-                showToastShort(str("revanced_settings_export_failed"));
+                showToastShort(str("rvx_morphed_settings_export_failed"));
             } else {
-                showToastShort(String.format(str("revanced_debug_logs_failed_to_export"), e.getMessage()));
+                showToastShort(String.format(str("rvx_morphed_debug_logs_failed_to_export"), e.getMessage()));
             }
         } finally {
             settingExportInProgress = false;
@@ -248,7 +248,7 @@ public class ToolbarPreferenceFragment extends AbstractPreferenceFragment {
                 showRestartDialog(getActivity());
             }
         } catch (IOException e) {
-            showToastShort(str("revanced_settings_import_failed"));
+            showToastShort(str("rvx_morphed_settings_import_failed"));
             throw new RuntimeException(e);
         } finally {
             settingImportInProgress = false;

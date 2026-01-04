@@ -24,7 +24,7 @@ val autoCaptionsPatch = bytecodePatch(
     execute {
         addSwitchPreference(
             CategoryType.GENERAL,
-            "revanced_disable_auto_captions",
+            "rvx_morphed_disable_auto_captions",
             "false"
         )
 
