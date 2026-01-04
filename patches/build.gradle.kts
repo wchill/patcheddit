@@ -1,13 +1,13 @@
-group = "app.revanced"
+group = "app.morphe"
 
 patches {
     about {
-        name = "ReVanced Patches"
-        description = "Patches for ReVanced"
-        source = "git@github.com:revanced/revanced-patches.git"
-        author = "ReVanced"
-        contact = "contact@revanced.app"
-        website = "https://revanced.app"
+        name = "RVX Ported"
+        description = "RVX Patches for Morphe"
+        source = "git@github.com:wchill/patcheddit.git"
+        author = "wchill & inotia00"
+        contact = "https://github.com/wchill"
+        website = "https://github.com/wchill/patcheddit"
         license = "GNU General Public License v3.0"
     }
 }
@@ -19,7 +19,7 @@ dependencies {
 
 tasks {
     jar {
-        exclude("app/revanced/generator")
+        exclude("app/morphe/generator")
     }
     register<JavaExec>("generatePatchesFiles") {
         description = "Generate patches files"
@@ -27,7 +27,7 @@ tasks {
         dependsOn(build)
 
         classpath = sourceSets["main"].runtimeClasspath
-        mainClass.set("app.revanced.generator.MainKt")
+        mainClass.set("app.morphe.generator.MainKt")
     }
     // Used by gradle-semantic-release-plugin.
     publish {
@@ -45,7 +45,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/inotia00/revanced-patches")
+            url = uri("https://maven.pkg.github.com/wchill/patcheddit")
             credentials {
                 username = System.getenv("GITHUB_ACTOR")
                 password = System.getenv("GITHUB_TOKEN")

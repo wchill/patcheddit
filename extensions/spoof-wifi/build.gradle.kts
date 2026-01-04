@@ -1,11 +1,11 @@
 import java.lang.Boolean.TRUE
 
 extension {
-    name = "extensions/all/connectivity/wifi/spoof/spoof-wifi.rve"
+    name = "extensions/all/connectivity/wifi/spoof/spoof-wifi.mpe"
 }
 
 android {
-    namespace = "app.revanced.extension"
+    namespace = "app.morphe.extension"
     compileSdk = 35
 
     defaultConfig {

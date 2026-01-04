@@ -5,11 +5,11 @@ plugins {
 }
 
 extension {
-    name = "extensions/shared.rve"
+    name = "extensions/shared.mpe"
 }
 
 android {
-    namespace = "app.revanced.extension"
+    namespace = "app.morphe.extension"
     compileSdk = 35
 
     defaultConfig {
