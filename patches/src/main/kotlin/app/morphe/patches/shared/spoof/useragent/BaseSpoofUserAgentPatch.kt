@@ -26,7 +26,7 @@ fun baseSpoofUserAgentPatch(
 ) = transformInstructionsPatch(
     filterMap = { classDef, _, instruction, instructionIndex ->
         filterMapInstruction35c<MethodCall>(
-            "Lapp/revanced/extension",
+            "Lapp/morphe/extension",
             classDef,
             instruction,
             instructionIndex,

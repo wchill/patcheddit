@@ -2,7 +2,7 @@ package app.morphe.patches.youtube.utils.extension
 
 @Suppress("MemberVisibilityCanBePrivate")
 internal object Constants {
-    const val EXTENSION_PATH = "Lapp/revanced/extension/youtube"
+    const val EXTENSION_PATH = "Lapp/morphe/extension/youtube"
     const val SHARED_PATH = "$EXTENSION_PATH/shared"
     const val PATCHES_PATH = "$EXTENSION_PATH/patches"
 

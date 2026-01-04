@@ -6,7 +6,7 @@ import app.morphe.patches.all.misc.transformation.filterMapInstruction35c
 import app.morphe.patches.all.misc.transformation.transformInstructionsPatch
 
 internal const val EXTENSION_CLASS_DESCRIPTOR_PREFIX =
-    "Lapp/revanced/extension/all/connectivity/wifi/spoof/SpoofWifiPatch"
+    "Lapp/morphe/extension/all/connectivity/wifi/spoof/SpoofWifiPatch"
 
 internal const val EXTENSION_CLASS_DESCRIPTOR = "$EXTENSION_CLASS_DESCRIPTOR_PREFIX;"
 

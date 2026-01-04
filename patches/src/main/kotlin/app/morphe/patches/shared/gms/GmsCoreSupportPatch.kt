@@ -383,7 +383,7 @@ fun gmsCoreSupportPatch(
                     val reference =
                         getReference<MethodReference>() ?: return@indexOfFirstInstruction false
 
-                    reference.toString() == "Lapp/revanced/extension/shared/Utils;->setContext(Landroid/content/Context;)V"
+                    reference.toString() == "Lapp/morphe/extension/shared/Utils;->setContext(Landroid/content/Context;)V"
                 }
 
                 // Add after setContext call, because this patch needs the context.

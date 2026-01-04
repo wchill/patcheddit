@@ -1184,8 +1184,8 @@ public class Utils {
             return;
         }
 
-        String revancedLocale = Utils.getContext().getResources().getConfiguration().locale.getLanguage();
-        if (revancedLocale.equals(Locale.ENGLISH.getLanguage())) {
+        String morpheLocale = Utils.getContext().getResources().getConfiguration().locale.getLanguage();
+        if (morpheLocale.equals(Locale.ENGLISH.getLanguage())) {
             return;
         }
 

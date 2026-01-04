@@ -9,7 +9,7 @@ import com.android.tools.smali.dexlib2.iface.Method
 import com.android.tools.smali.dexlib2.iface.instruction.Instruction
 
 private const val EXTENSION_NAME_SPACE_PATH =
-    "Lapp/revanced/extension/"
+    "Lapp/morphe/extension/"
 
 fun <T> transformInstructionsPatch(
     filterMap: (ClassDef, Method, Instruction, Int) -> T?,
