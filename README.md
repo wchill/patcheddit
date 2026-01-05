@@ -25,22 +25,22 @@ Template repository for Morphe Patches.
 This is a template to create a new Morphe Patches repository.  
 The repository can have multiple patches, and patches from other repositories can be used together.
 
-For an example repository, see [Morphe Patches](https://github.com/morphe/morphe-patches).
+For an example repository, see [Morphe Patches](https://github.com/MorpheApp/morphe-patches).
 
 ## 🚀 Get started
 
 To start using this template, follow these steps:
 
-1. [Create a new repository using this template](https://github.com/new?template_name=morphe-patches-template&template_owner=Morphe)
+1. [Create a new repository using this template](https://github.com/new?template_name=morphe-patches-template&template_owner=MorpheApp)
 2. Set up the [build.gradle.kts](patches/build.gradle.kts) file (Specifically, the [group of the project](patches/build.gradle.kts#L1),
 and the [About](patches/build.gradle.kts#L5-L11))
 3. Update dependencies in the [libs.versions.toml](gradle/libs.versions.toml) file
 4. [Create a pass-phrased GPG master key and subkey](https://mikeross.xyz/create-gpg-key-pair-with-subkeys/)
 5. Add the following GitHub secrets:
-   1. [GPG_PRIVATE_KEY](.github/workflows/release.yml#L52): The ASCII-armored GPG key
-   2. [GPG_PASSPHRASE](.github/workflows/release.yml#L53): The passphrase for the GPG key
+   1. [GPG_PRIVATE_KEY](.github/workflows/release.yml#L49): The ASCII-armored GPG key
+   2. [GPG_PASSPHRASE](.github/workflows/release.yml#L50): The passphrase for the GPG key
 6. Add the following GitHub variables:
-   1. [GPG_FINGERPRINT](.github/workflows/release.yml#L54): The fingerprint of the GPG key
+   1. [GPG_FINGERPRINT](.github/workflows/release.yml#L51): The fingerprint of the GPG key
 7. Set up the [README.md](README.md) file[^1] (e.g, title, description, license, summary of the patches
 that are included in the repository), the [issue templates](.github/ISSUE_TEMPLATE)[^2]  and the [contribution guidelines](CONTRIBUTING.md)[^3]
 
