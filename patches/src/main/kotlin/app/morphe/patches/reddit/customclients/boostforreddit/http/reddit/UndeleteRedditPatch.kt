@@ -26,7 +26,7 @@ import com.android.tools.smali.dexlib2.immutable.ImmutableField
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethod
 
 
-internal const val OKHTTP_EXTENSION_CLASS_DESCRIPTOR = "Lapp/revanced/extension/boostforreddit/http/OkHttpRequestHook;"
+internal const val OKHTTP_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boostforreddit/http/OkHttpRequestHook;"
 internal const val EXTRA_EMOJI_CONTEXT_KEY = "extraEmoji"
 internal const val EXTRA_EMOJI_GETTER = "getExtraEmoji"
 
@@ -189,7 +189,7 @@ val undeleteRedditPatch = bytecodePatch(
 
         // region Fix the deletion reason detection
         stateSubmissionViewGetHeaderFingerprint.method.let {
-            stateSubmissionViewGetHeaderFingerprint.stringMatches!!.forEach { match ->
+            stateSubmissionViewGetHeaderFingerprint.stringMatches.forEach { match ->
                 if (match.string == "copyright_takedown") {
                     it.addInstructionsAtControlFlowLabel(
                         match.index,

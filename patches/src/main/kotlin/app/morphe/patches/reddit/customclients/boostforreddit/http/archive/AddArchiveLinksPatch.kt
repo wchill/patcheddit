@@ -8,7 +8,7 @@ import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.sharedExtensionPatch
 
 
-internal val SETTINGS_UTILS_EXTENSION_CLASS_DESCRIPTOR = "Lapp/revanced/extension/boostforreddit/utils/SettingsUtils;"
+internal val SETTINGS_UTILS_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boostforreddit/utils/SettingsUtils;"
 
 
 @Suppress("unused")

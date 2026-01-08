@@ -14,7 +14,7 @@ import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.TypeReference
 
-private const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/revanced/extension/boostforreddit/http/reddit/RedditFixAudioInDownloadsInterceptor;"
+private const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boostforreddit/http/reddit/RedditFixAudioInDownloadsInterceptor;"
 
 @Suppress("unused")
 val fixAudioMissingInDownloadsPatch = bytecodePatch(

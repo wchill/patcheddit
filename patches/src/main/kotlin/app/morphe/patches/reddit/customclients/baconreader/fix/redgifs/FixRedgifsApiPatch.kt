@@ -14,7 +14,7 @@ import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import com.android.tools.smali.dexlib2.iface.reference.TypeReference
 
-internal const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/revanced/extension/baconreader/FixRedgifsApiPatch;"
+internal const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/baconreader/FixRedgifsApiPatch;"
 
 @Suppress("unused")
 val fixRedgifsApi = fixRedgifsApiPatch(

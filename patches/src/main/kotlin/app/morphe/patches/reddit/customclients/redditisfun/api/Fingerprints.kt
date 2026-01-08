@@ -2,12 +2,11 @@ package app.morphe.patches.reddit.customclients.redditisfun.api
 
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.OpcodesFilter
-import app.morphe.patcher.string
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 
 internal fun baseClientIdFingerprint(str: String) = Fingerprint(
-    filters = listOf(string("yyOCBp.RHJhDKd"), string(str))
+    strings = listOf("yyOCBp.RHJhDKd", str)
 )
 
 

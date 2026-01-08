@@ -1,12 +1,11 @@
 package app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.user
 
 import app.morphe.patcher.Fingerprint
-import app.morphe.patcher.string
 import com.android.tools.smali.dexlib2.AccessFlags
 
 internal fun userEndpointFingerprint(source: String, accessFlags: Set<AccessFlags>? = null) =
     Fingerprint(
-        filters = listOf(string("u/")),
+        strings = listOf("u/"),
         custom = { _, classDef -> classDef.sourceFile == source },
         accessFlags = accessFlags?.toList()
 )
