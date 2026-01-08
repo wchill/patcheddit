@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-01-03T08:00:53",
-  "description": "# [1.0.0-dev.3](https://github.com/wchill/patcheddit/compare/v1.0.0-dev.2...v1.0.0-dev.3) (2026-01-03)\n\n\n### Bug Fixes\n\n* Fix extension class namespaces in patch code ([d14a92e](https://github.com/wchill/patcheddit/commit/d14a92ea494af721ff8c17e844492b1a0835d690))",
-  "download_url": "https://github.com/wchill/patcheddit/releases/download/v1.0.0-dev.3/patches-1.0.0-dev.3.mpp",
-  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v1.0.0-dev.3/patches-1.0.0-dev.3.mpp.asc",
-  "version": "1.0.0-dev.3"
+  "created_at": "2026-01-08T01:45:46",
+  "description": "# 1.0.0 (2026-01-08)\n\n\n### Bug Fixes\n\n* Copy all patches from previous repo and make them compile ([d6f98de](https://github.com/wchill/patcheddit/commit/d6f98de407fff1a8a58c4e89e5c11970a45e35dc))\n* Fix extension class namespaces in patch code ([d14a92e](https://github.com/wchill/patcheddit/commit/d14a92ea494af721ff8c17e844492b1a0835d690))\n* Refresh patches.api ([ac4a2ee](https://github.com/wchill/patcheddit/commit/ac4a2ee6a0ac39dcb51786403564e6dccd746bec))\n* Update extension code to new namespace and fix build ([2c484a6](https://github.com/wchill/patcheddit/commit/2c484a614123a19880a3080250563d6657aea10a))\n* use strings parameter instead of string filters ([951e1bd](https://github.com/wchill/patcheddit/commit/951e1bdee6a7b8307c226e43dbed5ef4216a54ae))\n\n\n### Features\n\n* Migrate all fingerprints to declarative API ([56374b8](https://github.com/wchill/patcheddit/commit/56374b80e1ad6ea3fe67da9ae9d871b1d94161a3))",
+  "download_url": "https://github.com/wchill/patcheddit/releases/download/v1.0.0/patches-1.0.0.mpp",
+  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v1.0.0/patches-1.0.0.mpp.asc",
+  "version": "1.0.0"
 }
