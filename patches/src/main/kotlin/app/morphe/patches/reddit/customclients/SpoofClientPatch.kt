@@ -80,10 +80,6 @@ fun spoofClientPatch(
         false
     )
 
-    if (clientIdOption.value == null && redirectUriOption.value == null && userAgentOption.value == null) {
-        throw PatchException("When spoofing client, at least one of clientId, redirectUri or userAgent should be set.")
-    }
-
     block(
         clientIdOption, redirectUriOption, userAgentOption
     )

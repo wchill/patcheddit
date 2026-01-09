@@ -3,6 +3,7 @@ package app.morphe.patches.reddit.customclients.boostforreddit.api
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
+import app.morphe.patcher.patch.PatchException
 import app.morphe.patches.reddit.customclients.spoofClientPatch
 import app.morphe.util.getReference
 import app.morphe.util.indexOfFirstInstructionOrThrow
@@ -21,6 +22,10 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
     val userAgent by userAgentOption
 
     execute {
+        if (clientIdOption.value == null && redirectUriOption.value == null && userAgentOption.value == null) {
+            throw PatchException("When spoofing client, at least one of clientId, redirectUri or userAgent should be set.")
+        }
+
         // region Patch client id.
 
         if (clientId != null) {
