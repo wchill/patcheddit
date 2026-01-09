@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0-dev.3",
+  "version": "1.1.0-dev.4",
   "patches": [
     {
       "name": "Add archive links to context menu",
@@ -448,8 +448,26 @@
         {
           "key": "client-id",
           "title": "OAuth client ID",
-          "description": "The Reddit OAuth client ID. You can get your client ID from https://www.reddit.com/prefs/apps. The application type has to be \"Installed app\" and the redirect URI has to be set to \"https://127.0.0.1:65023/authorize_callback\".",
-          "required": true,
+          "description": "The Reddit OAuth client ID. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing client ID.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "redirect-uri",
+          "title": "Redirect URI",
+          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing redirect URI.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "user-agent",
+          "title": "User agent",
+          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing user agent.",
+          "required": false,
           "type": "kotlin.String",
           "default": null,
           "values": null
@@ -576,8 +594,26 @@
         {
           "key": "client-id",
           "title": "OAuth client ID",
-          "description": "The Reddit OAuth client ID. You can get your client ID from https://www.reddit.com/prefs/apps. The application type has to be \"Installed app\" and the redirect URI has to be set to \"http://redditsync/auth\".",
-          "required": true,
+          "description": "The Reddit OAuth client ID. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing client ID.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "redirect-uri",
+          "title": "Redirect URI",
+          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing redirect URI.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "user-agent",
+          "title": "User agent",
+          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing user agent.",
+          "required": false,
           "type": "kotlin.String",
           "default": null,
           "values": null

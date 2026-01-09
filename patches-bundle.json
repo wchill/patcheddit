@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-01-09T11:02:40",
-  "description": "# [1.1.0-dev.3](https://github.com/wchill/patcheddit/compare/v1.1.0-dev.2...v1.1.0-dev.3) (2026-01-09)\n\n\n### Features\n\n* Add support for patching BaconReader with custom redirect URI ([a99d598](https://github.com/wchill/patcheddit/commit/a99d5980b22a25843f97d88045874c73435940dd))",
-  "download_url": "https://github.com/wchill/patcheddit/releases/download/v1.1.0-dev.3/patches-1.1.0-dev.3.mpp",
-  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v1.1.0-dev.3/patches-1.1.0-dev.3.mpp.asc",
-  "version": "1.1.0-dev.3"
+  "created_at": "2026-01-09T12:40:53",
+  "description": "# [1.1.0-dev.4](https://github.com/wchill/patcheddit/compare/v1.1.0-dev.3...v1.1.0-dev.4) (2026-01-09)\n\n\n### Features\n\n* Add support for patching Joey with custom redirect URI ([bc7bc1a](https://github.com/wchill/patcheddit/commit/bc7bc1a7acf05eacf7fff8f62a217cfdeb027049))\n* Add support for patching Sync with custom redirect URI ([8822a60](https://github.com/wchill/patcheddit/commit/8822a605d4c41cd3ba49fe60f85b50531daff4d5))",
+  "download_url": "https://github.com/wchill/patcheddit/releases/download/v1.1.0-dev.4/patches-1.1.0-dev.4.mpp",
+  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v1.1.0-dev.4/patches-1.1.0-dev.4.mpp.asc",
+  "version": "1.1.0-dev.4"
 }

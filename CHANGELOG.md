@@ -1,3 +1,11 @@
+# [1.1.0-dev.4](https://github.com/wchill/patcheddit/compare/v1.1.0-dev.3...v1.1.0-dev.4) (2026-01-09)
+
+
+### Features
+
+* Add support for patching Joey with custom redirect URI ([bc7bc1a](https://github.com/wchill/patcheddit/commit/bc7bc1a7acf05eacf7fff8f62a217cfdeb027049))
+* Add support for patching Sync with custom redirect URI ([8822a60](https://github.com/wchill/patcheddit/commit/8822a605d4c41cd3ba49fe60f85b50531daff4d5))
+
 # [1.1.0-dev.3](https://github.com/wchill/patcheddit/compare/v1.1.0-dev.2...v1.1.0-dev.3) (2026-01-09)
 
 
