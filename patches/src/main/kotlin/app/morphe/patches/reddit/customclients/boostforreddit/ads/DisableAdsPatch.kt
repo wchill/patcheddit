@@ -7,7 +7,7 @@ import app.morphe.patcher.patch.bytecodePatch
 val disableAdsPatch = bytecodePatch(
     name = "Disable ads",
 ) {
-    compatibleWith("com.rubenmayayo.reddit")
+    compatibleWith("com.rubenmayayo.reddit"("1.12.12"))
 
     execute {
         arrayOf(maxMediationFingerprint, admobMediationFingerprint).forEach { fingerprint ->

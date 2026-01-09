@@ -22,3 +22,33 @@ internal val requestTokenFingerprint = Fingerprint(
         "kDm2tYpu9DqyWFFyPlNcXGEni4k"
     )
 )
+
+internal val getRestClientUserAgentFingerprint = Fingerprint(
+    custom = { method, classDef ->
+        classDef.type == "Lcom/onelouder/baconreader/connectivity/RestClient;" && method.name == "getUserAgent"
+    }
+)
+
+internal val getRedditUserAgentFingerprint = Fingerprint(
+    custom = { method, classDef ->
+        classDef.endsWith("RedditRetrofitClientModule;") && method.name == "getUserAgent"
+    }
+)
+
+internal val getAuthorizeUrlFingerprint = Fingerprint(
+    strings = listOf("redirect_uri=http://baconreader.com/auth")
+)
+
+internal val isRedirectUrlFingerprint = Fingerprint(
+    strings = listOf("http://baconreader.com/auth"),
+    custom = { method, _ ->
+        method.name == "isRedirectUrl"
+    }
+)
+
+internal val runTaskFingerprint = Fingerprint(
+    strings = listOf("http://baconreader.com/auth"),
+    custom = { method, _ ->
+        method.name == "runTask"
+    }
+)

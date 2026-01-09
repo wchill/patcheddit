@@ -1,5 +1,5 @@
 {
-  "version": "1.0.0",
+  "version": "1.1.0-dev.4",
   "patches": [
     {
       "name": "Add archive links to context menu",
@@ -9,7 +9,9 @@
         "BytecodePatch"
       ],
       "compatiblePackages": {
-        "com.rubenmayayo.reddit": null
+        "com.rubenmayayo.reddit": [
+          "1.12.12"
+        ]
       },
       "options": []
     },
@@ -22,7 +24,9 @@
         "BytecodePatch"
       ],
       "compatiblePackages": {
-        "com.rubenmayayo.reddit": null
+        "com.rubenmayayo.reddit": [
+          "1.12.12"
+        ]
       },
       "options": []
     },
@@ -35,7 +39,9 @@
         "BytecodePatch"
       ],
       "compatiblePackages": {
-        "com.rubenmayayo.reddit": null
+        "com.rubenmayayo.reddit": [
+          "1.12.12"
+        ]
       },
       "options": []
     },
@@ -97,7 +103,9 @@
       "use": true,
       "dependencies": [],
       "compatiblePackages": {
-        "com.rubenmayayo.reddit": null
+        "com.rubenmayayo.reddit": [
+          "1.12.12"
+        ]
       },
       "options": []
     },
@@ -146,6 +154,18 @@
       "options": []
     },
     {
+      "name": "Fake reddit premium",
+      "description": "Allows using pro features without ads.",
+      "use": true,
+      "dependencies": [],
+      "compatiblePackages": {
+        "com.andrewshu.android.reddit": [
+          "5.6.22"
+        ]
+      },
+      "options": []
+    },
+    {
       "name": "Fix /s/ links",
       "description": null,
       "use": true,
@@ -153,7 +173,9 @@
         "BytecodePatch"
       ],
       "compatiblePackages": {
-        "com.rubenmayayo.reddit": null
+        "com.rubenmayayo.reddit": [
+          "1.12.12"
+        ]
       },
       "options": []
     },
@@ -192,7 +214,9 @@
         "BytecodePatch"
       ],
       "compatiblePackages": {
-        "com.rubenmayayo.reddit": null
+        "com.rubenmayayo.reddit": [
+          "1.12.12"
+        ]
       },
       "options": []
     },
@@ -219,7 +243,9 @@
         "BytecodePatch"
       ],
       "compatiblePackages": {
-        "com.rubenmayayo.reddit": null
+        "com.rubenmayayo.reddit": [
+          "1.12.12"
+        ]
       },
       "options": []
     },
@@ -273,7 +299,9 @@
         "BytecodePatch"
       ],
       "compatiblePackages": {
-        "com.rubenmayayo.reddit": null
+        "com.rubenmayayo.reddit": [
+          "1.12.12"
+        ]
       },
       "options": []
     },
@@ -285,7 +313,9 @@
         "BytecodePatch"
       ],
       "compatiblePackages": {
-        "com.rubenmayayo.reddit": null
+        "com.rubenmayayo.reddit": [
+          "1.12.12"
+        ]
       },
       "options": []
     },
@@ -314,8 +344,26 @@
         {
           "key": "client-id",
           "title": "OAuth client ID",
-          "description": "The Reddit OAuth client ID. You can get your client ID from https://www.reddit.com/prefs/apps. The application type has to be \"Installed app\" and the redirect URI has to be set to \"http://baconreader.com/auth\".",
-          "required": true,
+          "description": "The Reddit OAuth client ID. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing client ID.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "redirect-uri",
+          "title": "Redirect URI",
+          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing redirect URI.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "user-agent",
+          "title": "User agent",
+          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing user agent.",
+          "required": false,
           "type": "kotlin.String",
           "default": null,
           "values": null
@@ -328,14 +376,16 @@
       "use": true,
       "dependencies": [],
       "compatiblePackages": {
-        "com.rubenmayayo.reddit": null
+        "com.rubenmayayo.reddit": [
+          "1.12.12"
+        ]
       },
       "options": [
         {
           "key": "client-id",
           "title": "OAuth client ID",
-          "description": "The Reddit OAuth client ID. You can get your client ID from https://www.reddit.com/prefs/apps. The application type has to be \"Installed app\" and the redirect URI has to match the value provided for the \"Redirect URI\" option.",
-          "required": true,
+          "description": "The Reddit OAuth client ID. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing client ID.",
+          "required": false,
           "type": "kotlin.String",
           "default": null,
           "values": null
@@ -343,10 +393,19 @@
         {
           "key": "redirect-uri",
           "title": "Redirect URI",
-          "description": "The Reddit OAuth redirect URI. Should be a valid URI.",
-          "required": true,
+          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing redirect URI.",
+          "required": false,
           "type": "kotlin.String",
-          "default": "http://127.0.0.1:8080",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "user-agent",
+          "title": "User agent",
+          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing user agent.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
           "values": null
         }
       ]
@@ -389,8 +448,26 @@
         {
           "key": "client-id",
           "title": "OAuth client ID",
-          "description": "The Reddit OAuth client ID. You can get your client ID from https://www.reddit.com/prefs/apps. The application type has to be \"Installed app\" and the redirect URI has to be set to \"https://127.0.0.1:65023/authorize_callback\".",
-          "required": true,
+          "description": "The Reddit OAuth client ID. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing client ID.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "redirect-uri",
+          "title": "Redirect URI",
+          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing redirect URI.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "user-agent",
+          "title": "User agent",
+          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing user agent.",
+          "required": false,
           "type": "kotlin.String",
           "default": null,
           "values": null
@@ -403,15 +480,34 @@
       "use": true,
       "dependencies": [],
       "compatiblePackages": {
-        "com.andrewshu.android.reddit": null,
-        "com.andrewshu.android.redditdonation": null
+        "com.andrewshu.android.reddit": [
+          "5.6.22"
+        ]
       },
       "options": [
         {
           "key": "client-id",
           "title": "OAuth client ID",
-          "description": "The Reddit OAuth client ID. You can get your client ID from https://www.reddit.com/prefs/apps. The application type has to be \"Installed app\" and the redirect URI has to be set to \"redditisfun://auth\".",
-          "required": true,
+          "description": "The Reddit OAuth client ID. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing client ID.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "redirect-uri",
+          "title": "Redirect URI",
+          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing redirect URI.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "user-agent",
+          "title": "User agent",
+          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing user agent.",
+          "required": false,
           "type": "kotlin.String",
           "default": null,
           "values": null
@@ -424,15 +520,37 @@
       "use": true,
       "dependencies": [],
       "compatiblePackages": {
-        "free.reddit.news": null,
-        "reddit.news": null
+        "free.reddit.news": [
+          "10.2.40"
+        ],
+        "reddit.news": [
+          "10.2.40"
+        ]
       },
       "options": [
         {
           "key": "client-id",
           "title": "OAuth client ID",
-          "description": "The Reddit OAuth client ID. You can get your client ID from https://www.reddit.com/prefs/apps. The application type has to be \"Installed app\" and the redirect URI has to be set to \"dbrady://relay\".",
-          "required": true,
+          "description": "The Reddit OAuth client ID. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing client ID.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "redirect-uri",
+          "title": "Redirect URI",
+          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing redirect URI.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "user-agent",
+          "title": "User agent",
+          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing user agent.",
+          "required": false,
           "type": "kotlin.String",
           "default": null,
           "values": null
@@ -476,28 +594,26 @@
         {
           "key": "client-id",
           "title": "OAuth client ID",
-          "description": "The Reddit OAuth client ID. You can get your client ID from https://www.reddit.com/prefs/apps. The application type has to be \"Installed app\" and the redirect URI has to be set to \"http://redditsync/auth\".",
-          "required": true,
+          "description": "The Reddit OAuth client ID. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing client ID.",
+          "required": false,
           "type": "kotlin.String",
           "default": null,
           "values": null
-        }
-      ]
-    },
-    {
-      "name": "Spoof user agent",
-      "description": "Restores functionality of the app by using custom user agent.",
-      "use": true,
-      "dependencies": [],
-      "compatiblePackages": {
-        "com.rubenmayayo.reddit": null
-      },
-      "options": [
+        },
+        {
+          "key": "redirect-uri",
+          "title": "Redirect URI",
+          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing redirect URI.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
         {
           "key": "user-agent",
           "title": "User agent",
-          "description": "The app's user agent. User agent should be in the format \"<platform>:<app id>:<version> (by /u/<username>)\".",
-          "required": true,
+          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing user agent.",
+          "required": false,
           "type": "kotlin.String",
           "default": null,
           "values": null
@@ -537,6 +653,20 @@
         "com.laurencedawson.reddit_sync": null,
         "com.laurencedawson.reddit_sync.pro": null,
         "com.laurencedawson.reddit_sync.dev": null
+      },
+      "options": []
+    },
+    {
+      "name": "Use public imgur API",
+      "description": "Fix imgur albums not loading.",
+      "use": true,
+      "dependencies": [
+        "BytecodePatch"
+      ],
+      "compatiblePackages": {
+        "com.andrewshu.android.reddit": [
+          "5.6.22"
+        ]
       },
       "options": []
     }

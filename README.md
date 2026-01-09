@@ -15,10 +15,13 @@ In the meantime, see https://github.com/wchill/revanced-patches for a list of th
 2. In Morphe Manager, in the Patch Bundles tab, select `Enter URL` and copy-paste **ONE** of the following URLs:
    * Stable branch: `https://raw.githubusercontent.com/wchill/patcheddit/refs/heads/main/patches-bundle.json`
    * Dev branch: `https://raw.githubusercontent.com/wchill/patcheddit/refs/heads/dev/patches-bundle.json`
-3. Download a copy of your preferred, supported 3rd party reddit app (currently only Boost for Reddit) from https://apkmirror.com
+3. Get the APK for your preferred, supported 3rd party reddit app. If you don't have it, you can download it from https://apkmirror.com. APKM bundles (aka split APKs) will also work.
+   * The supported apps are Boost, RIF, Sync, Relay, BaconReader, and Joey.
+   * Infinity and Slide are open source and have actively maintained forks; see https://github.com/cygnusx-1-org/continuum and https://github.com/cygnusx-1-org/Slide instead of using these patches.
+   * You should get the last available version for your reddit app, unless you are patching Relay. Relay v10.2.40 should be used instead of the latest.
 4. In Morphe Manager, in the Apps tab, tap the + (plus) icon > Select from storage > the APK file you downloaded in step 3.
 5. Select appropriate patches and hit Save, then Patch.
-   * Make sure you have `Spoof client` and `Spoof user agent` selected, at a minimum. Make sure to fill in all the relevant fields to appropriate values.
+   * Make sure you have `Spoof client` selected, at a minimum. Make sure to fill in all the relevant fields to appropriate values.
    * You will need to have an OAuth client ID from https://www.reddit.com/prefs/apps/, however reddit is no longer issuing new ones without an approval process that usually results in denial. In order to work around this, see the subsection `What if I don't have a client ID?` below.
 7. Once patching is complete, install the app and set it up as usual.
 
@@ -31,13 +34,12 @@ You can use the client ID from other working 3rd party reddit apps (sadly not th
 1. Install RedReader from the Play Store and login with it.
 2. After you login, you should get an email with the title `You’ve authorized a new app in your Reddit account`. Look for `App ID`: in that email; note the random looking string as it will be used in the next step.
    * You can uninstall RedReader after this if you want.
-3. In Morphe Manager, make sure you set these values for `Spoof client` and `Spoof user agent` patches:
-   * `Spoof client`
-       * `OAuth client ID` - set this to the random looking string from the email.
-       * `Redirect URI` - set this to `redreader://rr_oauth_redir` (or the appropriate value if you got the client ID from a different app).
-   * `Spoof user agent`
-       * `User agent` - set this to `RedReader/1.25.1`. Ignore the description that says what the user agent format should be.
-4. Select your other desired patches and patch as normal.
+3. In Morphe Manager, make sure you set these values for the `Spoof client` patch. Make sure there are no extra spaces or slashes at the end.
+   * `OAuth client ID` - set this to the random looking string from the email.
+   * `Redirect URI` - set this to `redreader://rr_oauth_redir` (or the appropriate value if you got the client ID from a different app).
+   * `User agent` - set this to `RedReader/1.25.1`. Ignore the description that says what the user agent format should be.
+   * Depending on your app, you may not need to set all of these values for it to work, but it is highly recommended that you do so.
+5. Select your other desired patches and patch as normal.
 
 ## 🧑‍💻 Development
 

@@ -14,7 +14,7 @@ val interceptHttpRequests = bytecodePatch(
     name="Intercept HTTP requests"
 ) {
     dependsOn(sharedExtensionPatch)
-    compatibleWith("com.rubenmayayo.reddit")
+    compatibleWith("com.rubenmayayo.reddit"("1.12.12"))
 
     execute {
         installOkHttpInterceptorFingerprint.method.apply {

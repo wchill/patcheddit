@@ -16,7 +16,7 @@ val interceptImgurRequests = bytecodePatch(
     name="Automatically undelete Imgur images"
 ) {
     dependsOn(sharedExtensionPatch, interceptHttpRequests)
-    compatibleWith("com.rubenmayayo.reddit")
+    compatibleWith("com.rubenmayayo.reddit"("1.12.12"))
 
     execute {
         arrayOf(installImgurFreeOkHttpInterceptorFingerprint, installImgurPaidOkHttpInterceptorFingerprint)

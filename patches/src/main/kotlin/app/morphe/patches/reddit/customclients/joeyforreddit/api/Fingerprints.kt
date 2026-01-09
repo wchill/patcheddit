@@ -28,3 +28,33 @@ internal val getClientIdFingerprint = Fingerprint(
         classDef.sourceFile == "AuthUtility.java"
     }
 )
+
+internal val oauthHelperConstructorFingerprint = Fingerprint(
+    accessFlags = listOf(AccessFlags.CONSTRUCTOR, AccessFlags.PUBLIC),
+    filters = listOf(OpcodeFilter(Opcode.INVOKE_STATIC))
+)
+
+internal val jrawAuthenticationMethodCheckFingerprint = Fingerprint(
+    strings = listOf("This method is not appropriate for this authentication method")
+)
+
+internal val oauthShouldOverrideUrlLoadingFingerprint = Fingerprint(
+    filters = OpcodesFilter.opcodesToFilters(
+        Opcode.IF_EQZ,
+        Opcode.INVOKE_DIRECT
+    ),
+    custom = { method, classDef ->
+        method.name == "shouldOverrideUrlLoading" && classDef.sourceFile == "LoginActivity.java"
+    }
+)
+
+internal val oauthContainsCodeFingerprint = Fingerprint(
+    strings = listOf("code="),
+    filters = OpcodesFilter.opcodesToFilters(
+        Opcode.MOVE_RESULT,
+        Opcode.RETURN
+    ),
+    custom = { _, classDef ->
+        classDef.sourceFile == "LoginActivity.java"
+    }
+)

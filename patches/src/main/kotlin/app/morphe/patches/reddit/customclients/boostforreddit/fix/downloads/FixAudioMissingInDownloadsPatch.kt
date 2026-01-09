@@ -22,7 +22,7 @@ val fixAudioMissingInDownloadsPatch = bytecodePatch(
     description = "Fixes audio missing in videos downloaded from v.redd.it.",
 ) {
     dependsOn(sharedExtensionPatch, interceptHttpRequests)
-    compatibleWith("com.rubenmayayo.reddit")
+    compatibleWith("com.rubenmayayo.reddit"("1.12.12"))
 
     execute {
         downloadAudioFingerprint.method.apply {

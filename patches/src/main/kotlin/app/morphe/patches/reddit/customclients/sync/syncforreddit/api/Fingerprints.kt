@@ -17,3 +17,7 @@ internal val getUserAgentFingerprint = Fingerprint(
 internal val imgurImageAPIFingerprint = Fingerprint(
     strings = listOf("https://imgur-apiv3.p.rapidapi.com/3/image")
 )
+
+internal val getRedirectUriFingerprint = Fingerprint(
+    strings = listOf("http://redditsync/auth")
+)

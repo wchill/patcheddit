@@ -50,9 +50,8 @@ public final class app/morphe/patches/reddit/customclients/FixSLinksPatchKt {
 
 public final class app/morphe/patches/reddit/customclients/SpoofClientPatchKt {
 	public static final fun spoofClientPatch (Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lapp/morphe/patcher/patch/BytecodePatch;
-	public static final fun spoofClientPatch (Lkotlin/jvm/functions/Function3;)Lapp/morphe/patcher/patch/BytecodePatch;
+	public static final fun spoofClientPatch (Lkotlin/jvm/functions/Function4;)Lapp/morphe/patcher/patch/BytecodePatch;
 	public static synthetic fun spoofClientPatch$default (Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lapp/morphe/patcher/patch/BytecodePatch;
-	public static final fun spoofUserAgentPatch (Lkotlin/jvm/functions/Function2;)Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
 public final class app/morphe/patches/reddit/customclients/baconreader/api/SpoofClientPatchKt {
@@ -74,7 +73,6 @@ public final class app/morphe/patches/reddit/customclients/boostforreddit/ads/Di
 public final class app/morphe/patches/reddit/customclients/boostforreddit/api/SpoofClientPatchKt {
 	public static final field JRAW_NEW_URL_EXTENSION_CLASS_DESCRIPTOR Ljava/lang/String;
 	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-	public static final fun getUserAgentPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
 public final class app/morphe/patches/reddit/customclients/boostforreddit/debug/HookExceptionHandlerKt {
@@ -135,8 +133,20 @@ public final class app/morphe/patches/reddit/customclients/joeyforreddit/detecti
 	public static final fun getDisablePiracyDetectionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
+public final class app/morphe/patches/reddit/customclients/redditisfun/ads/FakePremiumKt {
+	public static final fun getFakePremiumPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/redditisfun/api/ImgurAlbumsPatchKt {
+	public static final fun getImgurAlbumsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
 public final class app/morphe/patches/reddit/customclients/redditisfun/api/SpoofClientPatchKt {
 	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/redditisfun/misc/extension/SharedExtensionPatchKt {
+	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
 public final class app/morphe/patches/reddit/customclients/relayforreddit/api/SpoofClientPatchKt {
@@ -194,10 +204,6 @@ public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/fi
 }
 
 public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/fix/video/FixVideoDownloadsPatchKt {
-	public static final fun getFixVideoDownloadsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/syncforreddit/fix/video/FixVideoDownloadsPatchKt {
 	public static final fun getFixVideoDownloadsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
