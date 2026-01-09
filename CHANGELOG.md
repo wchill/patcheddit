@@ -1,3 +1,10 @@
+# [1.1.0-dev.2](https://github.com/wchill/patcheddit/compare/v1.1.0-dev.1...v1.1.0-dev.2) (2026-01-09)
+
+
+### Features
+
+* Add support for patching Relay with custom redirect URI ([55a1958](https://github.com/wchill/patcheddit/commit/55a1958008086651e7d97a1588c728325a08a7aa))
+
 # [1.1.0-dev.1](https://github.com/wchill/patcheddit/compare/v1.0.1...v1.1.0-dev.1) (2026-01-09)
 
 

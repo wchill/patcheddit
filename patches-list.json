@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0-dev.1",
+  "version": "1.1.0-dev.2",
   "patches": [
     {
       "name": "Add archive links to context menu",
@@ -484,15 +484,37 @@
       "use": true,
       "dependencies": [],
       "compatiblePackages": {
-        "free.reddit.news": null,
-        "reddit.news": null
+        "free.reddit.news": [
+          "10.2.40"
+        ],
+        "reddit.news": [
+          "10.2.40"
+        ]
       },
       "options": [
         {
           "key": "client-id",
           "title": "OAuth client ID",
-          "description": "The Reddit OAuth client ID. You can get your client ID from https://www.reddit.com/prefs/apps. The application type has to be \"Installed app\" and the redirect URI has to be set to \"dbrady://relay\".",
-          "required": true,
+          "description": "The Reddit OAuth client ID. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing client ID.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "redirect-uri",
+          "title": "Redirect URI",
+          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing redirect URI.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "user-agent",
+          "title": "User agent",
+          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing user agent.",
+          "required": false,
           "type": "kotlin.String",
           "default": null,
           "values": null
