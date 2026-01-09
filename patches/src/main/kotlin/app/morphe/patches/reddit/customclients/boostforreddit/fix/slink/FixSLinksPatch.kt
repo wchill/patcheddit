@@ -15,7 +15,7 @@ const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boostforreddit/Fix
 val fixSlinksPatch = fixSLinksPatch(
     extensionPatch = sharedExtensionPatch,
 ) {
-    compatibleWith("com.rubenmayayo.reddit")
+    compatibleWith("com.rubenmayayo.reddit"("1.12.12"))
 
     execute {
         // region Patch navigation handler.

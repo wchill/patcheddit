@@ -16,7 +16,7 @@ val addArchiveLinks = bytecodePatch(
     name="Add archive links to context menu"
 ) {
     dependsOn(sharedExtensionPatch)
-    compatibleWith("com.rubenmayayo.reddit")
+    compatibleWith("com.rubenmayayo.reddit"("1.12.12"))
     execute {
         linkBuildContextMenuFingerprint.method.apply {
             val index = linkBuildContextMenuFingerprint.instructionMatches.last().index

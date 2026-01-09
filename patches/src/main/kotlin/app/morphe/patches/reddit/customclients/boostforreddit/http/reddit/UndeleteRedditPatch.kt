@@ -35,7 +35,7 @@ val undeleteRedditPatch = bytecodePatch(
     name="Automatically undelete Reddit content"
 ) {
     dependsOn(sharedExtensionPatch, interceptHttpRequests)
-    compatibleWith("com.rubenmayayo.reddit")
+    compatibleWith("com.rubenmayayo.reddit"("1.12.12"))
 
     execute {
         installJrawInterceptorFingerprint.method.apply {

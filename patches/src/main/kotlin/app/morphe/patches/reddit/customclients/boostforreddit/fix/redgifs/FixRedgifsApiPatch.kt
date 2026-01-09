@@ -14,7 +14,7 @@ private const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boostforre
 val fixRedgifsApi = fixRedgifsApiPatch(
     extensionPatch = sharedExtensionPatch
 ) {
-    compatibleWith("com.rubenmayayo.reddit")
+    compatibleWith("com.rubenmayayo.reddit"("1.12.12"))
 
     execute {
         // region Patch Redgifs OkHttp3 client.
