@@ -60,3 +60,11 @@ internal val cActivityJFingerprint = Fingerprint(
         method.name == "j"
     }
 )
+
+// Should usually match: g2/c.x()
+internal val imgurApiFingerprint = Fingerprint(
+    accessFlags = listOf(AccessFlags.PRIVATE, AccessFlags.STATIC),
+    returnType = "Landroid/net/Uri;",
+    parameters = listOf("Ljava/lang/String;", "Z"),
+    strings = listOf("https", "api", "imgur", "3", "gallery", "album")
+)
