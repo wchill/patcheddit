@@ -60,9 +60,9 @@ val spoofClientPatch = spoofClientPatch(
     description = "Allows modifying Continuum's client ID, redirect URI and user agent in API Keys settings menu. " +
         "Patch options will modify default values.",
 ) { clientIdOption, redirectUriOption, userAgentOption ->
-    val clientId by clientIdOption
-    val redirectUri by redirectUriOption
-    val userAgent by userAgentOption
+    val clientId = clientIdOption.value?.trim()
+    val redirectUri = redirectUriOption.value?.trim()
+    val userAgent = userAgentOption.value?.trim()
     dependsOn(
         settingsPatch,
         sharedExtensionPatch,
@@ -76,7 +76,7 @@ val spoofClientPatch = spoofClientPatch(
                     for (i in 0 until nodeList.length) {
                         val node = nodeList.item(i)
                         if (node.attributes?.getNamedItem("name")?.nodeValue == "default_client_id") {
-                            node.textContent = clientId!!.trim()
+                            node.textContent = clientId
                             break
                         }
                     }
@@ -94,7 +94,7 @@ val spoofClientPatch = spoofClientPatch(
                 }
 
                 val stringReference = instruction.getReference<StringReference>()
-                if (stringReference?.string?.matches(Regex("""android:org\.cygnusx1\.continuum:\d+\.\d+\.\d+\.\d+ (by /u/edgan)""")) == true) {
+                if (stringReference?.string?.matches(Regex("""android:org\.cygnusx1\.continuum:\d+\.\d+\.\d+\.\d+ \(by /u/edgan\)""")) == true) {
                     return@transformInstructionsPatch Triple(stringReference.string, instruction, instructionIndex)
                 }
 
@@ -130,15 +130,15 @@ val spoofClientPatch = spoofClientPatch(
     compatibleWith("org.cygnusx1.continuum")
     execute {
         if (clientId != null) {
-            getDefaultClientIdFingerprint.method.returnEarly(clientId!!.trim())
+            getDefaultClientIdFingerprint.method.returnEarly(clientId)
         }
 
         if (redirectUri != null) {
-            getDefaultRedirectUriFingerprint.method.returnEarly(redirectUri!!.trim())
+            getDefaultRedirectUriFingerprint.method.returnEarly(redirectUri)
         }
 
         if (userAgent != null) {
-            getDefaultUserAgentFingerprint.method.returnEarly(userAgent!!.trim())
+            getDefaultUserAgentFingerprint.method.returnEarly(userAgent)
         }
 
         apiKeysOnCreatePreferencesFingerprint.method.apply {

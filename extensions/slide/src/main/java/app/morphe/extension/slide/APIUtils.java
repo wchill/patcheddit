@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.google.android.material.textfield.TextInputLayout;
 
+import app.morphe.extension.shared.Logger;
 import app.morphe.extension.shared.Utils;
 
 /**
@@ -32,7 +33,7 @@ public class APIUtils {
 
     public static String getClientId() {
         SharedPreferences sharedPreferences = getSharedPreferences();
-        return sharedPreferences.getString(CLIENT_ID_PREF_KEY, getDefaultUserAgent());
+        return sharedPreferences.getString(CLIENT_ID_PREF_KEY, getDefaultClientId());
     }
 
     public static String getUserAgent() {
@@ -57,6 +58,7 @@ public class APIUtils {
         return "KI2Nl9A_ouG9Qw";
     }
 
+    // FIXME: This method adds the EditText fields in reverse order in settings fragment for some reason.
     public static void modifyDialog(LinearLayout dialogContainer) {
         // At this point, the input row for the client ID should have already been added.
         SharedPreferences prefs = getSharedPreferences();
@@ -65,8 +67,8 @@ public class APIUtils {
 
         Context context = dialogContainer.getContext();
 
-        redirectUriInput = createTextInputLayout(context, savedRedirectUri, "Enter redirect URI");
-        userAgentInput = createTextInputLayout(context, savedUserAgent, "Enter user agent");
+        redirectUriInput = createEditText(context, savedRedirectUri, "Enter redirect URI");
+        userAgentInput = createEditText(context, savedUserAgent, "Enter user agent");
 
         dialogContainer.addView(redirectUriInput);
         dialogContainer.addView(userAgentInput);
@@ -75,20 +77,24 @@ public class APIUtils {
     public static void persistSettings() {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
 
-        String redirectUriText = redirectUriInput.getText().toString().trim();
-        if (redirectUriText.isEmpty()) {
-            editor.remove(REDIRECT_URI_PREF_KEY);
-        } else {
-            editor.putString(REDIRECT_URI_PREF_KEY, redirectUriText);
-        }
+        if (redirectUriInput != null && userAgentInput != null) {
+            String redirectUriText = redirectUriInput.getText().toString().trim();
+            if (redirectUriText.isEmpty()) {
+                editor.remove(REDIRECT_URI_PREF_KEY);
+            } else {
+                editor.putString(REDIRECT_URI_PREF_KEY, redirectUriText);
+            }
 
-        String userAgentText = userAgentInput.getText().toString().trim();
-        if (userAgentText.isEmpty()) {
-            editor.remove(USER_AGENT_PREF_KEY);
+            String userAgentText = userAgentInput.getText().toString().trim();
+            if (userAgentText.isEmpty()) {
+                editor.remove(USER_AGENT_PREF_KEY);
+            } else {
+                editor.putString(USER_AGENT_PREF_KEY, userAgentText);
+            }
+            editor.commit();
         } else {
-            editor.putString(USER_AGENT_PREF_KEY, userAgentText);
+            Logger.printException(() -> "APIUtils.persistSettings called before inputs were initialized!");
         }
-        editor.apply();
 
         redirectUriInput = null;
         userAgentInput = null;
