@@ -1,0 +1,25 @@
+<!--
+
+    Strings with new lines must be raw strings where they're wrapped in quotes and new lines are not encoded.
+    Raw strings still requires escaping embedded double quotes but escaping embedded single quotes is optional.
+
+    Raw strings are required because Crowdin AI translations regularly gets confused and
+    replace \n with an encoded new line character.
+
+    Bad:
+        <string name="summary_key">First \'item\' text\nSecond \"item\" text</string>
+
+    Good:
+        <string name="summary_key">"First 'item' text
+Second \"item\" text"</string>
+
+-->
+<resources>
+    <string name="morphe_default_redirect_uri" translatable="false">continuum://localhost</string>
+    <string name="morphe_redirect_uri_pref_key" translatable="false">morphe_redirect_uri_pref_key</string>
+    <string name="morphe_settings_redirect_uri_title">Redirect URI</string>
+    <string name="morphe_tap_to_set_redirect_uri">Tap to set custom redirect URI</string>
+    <string name="morphe_user_agent_pref_key" translatable="false">morphe_user_agent_pref_key</string>
+    <string name="morphe_settings_user_agent_title">User Agent</string>
+    <string name="morphe_tap_to_set_user_agent">Tap to set custom user agent</string>
+</resources>
