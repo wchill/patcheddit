@@ -40,14 +40,16 @@ fun spoofClientPatch(
  * @param block The patch block. It is called with the client ID option and redirect URI option.
  */
 fun spoofClientPatch(
+    name: String,
+    description: String,
     block: BytecodePatchBuilder.(
         clientIdOption: Option<String>,
         redirectUriOption: Option<String>,
         userAgentOption: Option<String>
     ) -> Unit,
 ) = bytecodePatch(
-    name = "Spoof client",
-    description = "Restores functionality of the app by using custom client ID.",
+    name = name,
+    description = description,
 ) {
     val clientIdOption = stringOption(
         "client-id",
@@ -84,3 +86,15 @@ fun spoofClientPatch(
         clientIdOption, redirectUriOption, userAgentOption
     )
 }
+
+fun spoofClientPatch(
+    block: BytecodePatchBuilder.(
+        clientIdOption: Option<String>,
+        redirectUriOption: Option<String>,
+        userAgentOption: Option<String>
+    ) -> Unit,
+) = spoofClientPatch(
+    name = "Spoof client",
+    description = "Restores functionality of the app by using custom client ID.",
+    block = block,
+)

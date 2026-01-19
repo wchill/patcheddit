@@ -1,0 +1,7 @@
+package ml.docilealligator.infinityforreddit.customviews.preference;
+
+import androidx.preference.PreferenceFragmentCompat;
+
+public abstract class CustomFontPreferenceFragmentCompat extends PreferenceFragmentCompat implements PreferenceFragmentCompat.OnPreferenceDisplayDialogCallback {
+
+}
