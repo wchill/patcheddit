@@ -1,3 +1,10 @@
+# [1.2.0-dev.2](https://github.com/wchill/patcheddit/compare/v1.2.0-dev.1...v1.2.0-dev.2) (2026-01-19)
+
+
+### Features
+
+* Add client ID patching support for Slide for Reddit fork ([#18](https://github.com/wchill/patcheddit/issues/18)) ([cf0f0f1](https://github.com/wchill/patcheddit/commit/cf0f0f18f984c9ad367f790fca7203325ed29d25))
+
 # [1.2.0-dev.1](https://github.com/wchill/patcheddit/compare/v1.1.0...v1.2.0-dev.1) (2026-01-19)
 
 
