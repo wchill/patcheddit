@@ -17,14 +17,18 @@ public class JrawUtils {
             if (uri.getFragment() != null) {
                 path += "#" + uri.getFragment();
             }
-            return new URL(uri.getScheme(), uri.getRawAuthority(), uri.getPort(), path, new NoOpUrlStreamHandler());
+            return new URL(uri.getScheme(), uri.getAuthority(), uri.getPort(), path, new NoOpUrlStreamHandler());
         } catch (URISyntaxException | MalformedURLException e) {
             throw new IllegalArgumentException("Malformed URL", e);
         }
     }
 
     public static String fixOauthFinalUrl(String originalUrl) {
-        String[] parts = originalUrl.split("\\?");
+        String[] parts = originalUrl.split("\\?", 2);
+        if (parts.length < 2 || parts[1].isEmpty()) {
+            // No query string present; return base localhost URL without a trailing '?'
+            return "https://localhost";
+        }
         return "https://localhost?" + parts[1];
     }
 }

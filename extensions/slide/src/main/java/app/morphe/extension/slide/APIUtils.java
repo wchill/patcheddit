@@ -70,18 +70,6 @@ public class APIUtils {
 
         dialogContainer.addView(redirectUriInput);
         dialogContainer.addView(userAgentInput);
-
-        /*
-        TextInputLayout redirectUriInputLayout = createTextInputLayout(context, savedRedirectUri, "Enter redirect URI");
-        TextInputLayout userAgentInputLayout = createTextInputLayout(context, savedUserAgent, "Enter user agent");
-
-        dialogContainer.addView(redirectUriInputLayout);
-        dialogContainer.addView(userAgentInputLayout);
-
-        redirectUriInput = redirectUriInputLayout.getEditText();
-        userAgentInput = userAgentInputLayout.getEditText();
-
-         */
     }
 
     public static void persistSettings() {
@@ -106,7 +94,7 @@ public class APIUtils {
         userAgentInput = null;
     }
 
-    private static EditText createTextInputLayout(Context contextThemeWrapper, String savedValue, String hintText) {
+    private static EditText createEditText(Context contextThemeWrapper, String savedValue, String hintText) {
         // Declare EditText here and make it final
         final EditText input = new EditText(contextThemeWrapper);
         input.setText(savedValue);

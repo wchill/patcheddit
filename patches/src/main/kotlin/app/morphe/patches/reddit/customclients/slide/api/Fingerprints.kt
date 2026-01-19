@@ -114,7 +114,7 @@ internal val showClientIdDialogLoadDefaultClientIdFingerprint = Fingerprint(
     }
 )
 
-// This is the anonymous lambda inside showClientIDDialog.
+// Anonymous lambda (onClick handler) inside showClientIDDialog that saves the client ID override.
 internal val showClientIdDialogSaveFingerprint = Fingerprint(
     filters = listOf(
         fieldAccess(definingClass = "Lme/edgan/redditslide/SettingValues;", name = "prefs"),

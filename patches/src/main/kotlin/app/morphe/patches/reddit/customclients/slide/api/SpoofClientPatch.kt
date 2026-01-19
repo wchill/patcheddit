@@ -138,9 +138,9 @@ val spoofClientPatch = spoofClientPatch(
             addInstructions(
                 index,
                 """
-                invoke-static       { p0 }, $JRAW_UTILS_EXTENSION_CLASS_NAME->createUrl(Ljava/lang/String;)Ljava/net/URL;
-                move-result-object  v0
-                return-object v0
+                    invoke-static { p0 }, $JRAW_UTILS_EXTENSION_CLASS_NAME->createUrl(Ljava/lang/String;)Ljava/net/URL;
+                    move-result-object v0
+                    return-object v0
                 """
             )
         }
