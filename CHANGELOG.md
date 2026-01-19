@@ -1,3 +1,10 @@
+# [1.2.0-dev.3](https://github.com/wchill/patcheddit/compare/v1.2.0-dev.2...v1.2.0-dev.3) (2026-01-19)
+
+
+### Bug Fixes
+
+* Fix broken Sync for Reddit ad removal patch ([673825c](https://github.com/wchill/patcheddit/commit/673825c91cca62c6596c0709a8886b9c5672385f))
+
 # [1.2.0-dev.2](https://github.com/wchill/patcheddit/compare/v1.2.0-dev.1...v1.2.0-dev.2) (2026-01-19)
 
 
