@@ -1,5 +1,5 @@
 {
-  "version": "1.1.0",
+  "version": "1.2.0-dev.1",
   "patches": [
     {
       "name": "Add archive links to context menu",
@@ -412,20 +412,41 @@
     },
     {
       "name": "Spoof client",
-      "description": "Restores functionality of the app by using custom client ID.",
+      "description": "Allows modifying Continuum's client ID, redirect URI and user agent in API Keys settings menu. Patch options will modify default values.",
       "use": true,
-      "dependencies": [],
+      "dependencies": [
+        "ResourcePatch",
+        "BytecodePatch",
+        "ResourcePatch",
+        "BytecodePatch"
+      ],
       "compatiblePackages": {
-        "ml.docilealligator.infinityforreddit": null,
-        "ml.docilealligator.infinityforreddit.plus": null,
-        "ml.docilealligator.infinityforreddit.patreon": null
+        "org.cygnusx1.continuum": null
       },
       "options": [
         {
           "key": "client-id",
           "title": "OAuth client ID",
-          "description": "The Reddit OAuth client ID. You can get your client ID from https://www.reddit.com/prefs/apps. The application type has to be \"Installed app\" and the redirect URI has to be set to \"infinity://localhost\".",
-          "required": true,
+          "description": "The Reddit OAuth client ID. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing client ID.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "redirect-uri",
+          "title": "Redirect URI",
+          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing redirect URI.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "user-agent",
+          "title": "User agent",
+          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. An empty value keeps the app's existing user agent.",
+          "required": false,
           "type": "kotlin.String",
           "default": null,
           "values": null
@@ -627,20 +648,6 @@
       "dependencies": [],
       "compatiblePackages": {
         "com.reddit.frontpage": null
-      },
-      "options": []
-    },
-    {
-      "name": "Unlock subscription",
-      "description": "Unlocks the subscription feature but requires a custom client ID.",
-      "use": true,
-      "dependencies": [
-        "BytecodePatch"
-      ],
-      "compatiblePackages": {
-        "ml.docilealligator.infinityforreddit": null,
-        "ml.docilealligator.infinityforreddit.plus": null,
-        "ml.docilealligator.infinityforreddit.patreon": null
       },
       "options": []
     },
