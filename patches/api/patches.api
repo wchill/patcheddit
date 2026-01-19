@@ -158,6 +158,10 @@ public final class app/morphe/patches/reddit/customclients/slide/api/SpoofClient
 	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
+public final class app/morphe/patches/reddit/customclients/slide/misc/extension/SharedExtensionPatchKt {
+	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
 public final class app/morphe/patches/reddit/customclients/sync/ads/DisableAdsPatchKt {
 	public static final fun disableAdsPatch (Lkotlin/jvm/functions/Function1;)Lapp/morphe/patcher/patch/BytecodePatch;
 	public static synthetic fun disableAdsPatch$default (Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lapp/morphe/patcher/patch/BytecodePatch;
