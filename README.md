@@ -37,7 +37,7 @@ You can use the client ID from other working 3rd party reddit apps (sadly not th
 3. In Morphe Manager, make sure you set these values for the `Spoof client` patch. Make sure there are no extra spaces or slashes at the end.
    * `OAuth client ID` - set this to the random looking string from the email.
    * `Redirect URI` - set this to `redreader://rr_oauth_redir` (or the appropriate value if you got the client ID from a different app).
-   * `User agent` - set this to `RedReader/1.25.1`. Ignore the description that says what the user agent format should be.
+   * `User agent` - set this to `org.quantumbadger.redreader/1.25.1`. Ignore the description that says what the user agent format should be.
    * Depending on your app, you may not need to set all of these values for it to work, but it is highly recommended that you do so.
 5. Select your other desired patches and patch as normal.
 
