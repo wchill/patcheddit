@@ -51,7 +51,7 @@ public class APIUtils {
     public static void setupRedirectUriPreference(CustomFontPreferenceFragmentCompat fragment) {
         EditTextPreference redirectUriPref = fragment.findPreference(REDIRECT_URI_PREF_KEY);
         if (redirectUriPref != null) {
-            setupPreference(redirectUriPref, APIUtils::getDefaultRedirectUri, "Tap to set redirect Uri");
+            setupPreference(redirectUriPref, APIUtils::getDefaultRedirectUri, "Tap to set redirect URI");
         }
     }
 

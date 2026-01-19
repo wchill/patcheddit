@@ -75,8 +75,8 @@ val spoofClientPatch = spoofClientPatch(
                     val nodeList = document.getElementsByTagName("string")
                     for (i in 0 until nodeList.length) {
                         val node = nodeList.item(i)
-                        if (node.nodeName == "default_client_id") {
-                            node.nodeValue = clientId!!.trim()
+                        if (node.attributes?.getNamedItem("name")?.nodeValue == "default_client_id") {
+                            node.textContent = clientId!!.trim()
                             break
                         }
                     }
@@ -94,7 +94,7 @@ val spoofClientPatch = spoofClientPatch(
                 }
 
                 val stringReference = instruction.getReference<StringReference>()
-                if (stringReference?.string?.matches(Regex("""android:org\.cygnusx1\.continuum:\d\.\d\.\d\.\d (by /u/edgan)""")) == true) {
+                if (stringReference?.string?.matches(Regex("""android:org\.cygnusx1\.continuum:\d+\.\d+\.\d+\.\d+ (by /u/edgan)""")) == true) {
                     return@transformInstructionsPatch Triple(stringReference.string, instruction, instructionIndex)
                 }
 
