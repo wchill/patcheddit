@@ -12,10 +12,11 @@ import app.morphe.util.getNode
 import app.morphe.util.getReference
 import app.morphe.util.returnEarly
 import com.android.tools.smali.dexlib2.Opcode
+import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.StringReference
 
-internal const val EXTENSION_CLASS_NAME = "Lapp/morphe/extensions/continuum/APIUtils;"
+internal const val EXTENSION_CLASS_NAME = "Lapp/morphe/extension/continuum/APIUtils;"
 internal const val FRAGMENT_CLASS_NAME = "Lml/docilealligator/infinityforreddit/customviews/preference/CustomFontPreferenceFragmentCompat;"
 internal const val GET_USER_AGENT_METHOD = "$EXTENSION_CLASS_NAME->getUserAgent"
 internal const val GET_REDIRECT_URI_METHOD = "$EXTENSION_CLASS_NAME->getRedirectUri"
@@ -30,10 +31,7 @@ internal val settingsPatch = resourcePatch {
         addAppResources("continuum")
 
         document("res/xml/api_keys_preferences.xml").use { document ->
-            val rootNode = document.getNode("PreferenceScreen")
-            assert(rootNode.childNodes.length == 2)
-            val giphyPreferenceNode = rootNode.childNodes.item(1)
-
+            val rootNode = document.getNode("androidx.preference.PreferenceScreen")
             val redirectUriPreferenceNode = document.createElement("EditTextPreference").apply {
                 setAttribute("android:defaultValue", "@string/morphe_default_redirect_uri")
                 setAttribute("android:key", "@string/morphe_redirect_uri_pref_key")
@@ -51,8 +49,8 @@ internal val settingsPatch = resourcePatch {
                 setAttribute("app:useSimpleSummaryProvider", "true")
             }
 
-            rootNode.insertBefore(redirectUriPreferenceNode, giphyPreferenceNode)
-            rootNode.insertBefore(userAgentPreferenceNode, giphyPreferenceNode)
+            rootNode.insertBefore(redirectUriPreferenceNode, null)
+            rootNode.insertBefore(userAgentPreferenceNode, null)
         }
     }
 }
@@ -145,7 +143,7 @@ val spoofClientPatch = spoofClientPatch(
 
         apiKeysOnCreatePreferencesFingerprint.method.apply {
             val inst = apiKeysOnCreatePreferencesFingerprint.instructionMatches.first().instruction
-            val register = (inst as OneRegisterInstruction).registerA
+            val register = (inst as FiveRegisterInstruction).registerC
             val index = apiKeysOnCreatePreferencesFingerprint.instructionMatches.last().index
             addInstructions(
                 index,
