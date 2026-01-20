@@ -1,3 +1,36 @@
+# [1.2.0-dev.4](https://github.com/wchill/patcheddit/compare/v1.2.0-dev.3...v1.2.0-dev.4) (2026-01-20)
+
+
+### Features
+
+* Add support for /s/ links in Relay ([#21](https://github.com/wchill/patcheddit/issues/21)) ([eb0ba9b](https://github.com/wchill/patcheddit/commit/eb0ba9b08b8e45ca31a03a3354e82ebc3eed9987))
+
+# [1.2.0-dev.3](https://github.com/wchill/patcheddit/compare/v1.2.0-dev.2...v1.2.0-dev.3) (2026-01-19)
+
+
+### Bug Fixes
+
+* Fix broken Sync for Reddit ad removal patch ([673825c](https://github.com/wchill/patcheddit/commit/673825c91cca62c6596c0709a8886b9c5672385f))
+
+# [1.2.0-dev.2](https://github.com/wchill/patcheddit/compare/v1.2.0-dev.1...v1.2.0-dev.2) (2026-01-19)
+
+
+### Features
+
+* Add client ID patching support for Slide for Reddit fork ([#18](https://github.com/wchill/patcheddit/issues/18)) ([cf0f0f1](https://github.com/wchill/patcheddit/commit/cf0f0f18f984c9ad367f790fca7203325ed29d25))
+
+# [1.2.0-dev.1](https://github.com/wchill/patcheddit/compare/v1.1.0...v1.2.0-dev.1) (2026-01-19)
+
+
+### Bug Fixes
+
+* Remove Infinity for Reddit patches (use Continuum for Reddit instead) ([32e92a0](https://github.com/wchill/patcheddit/commit/32e92a07ed33696ee2c92c51eb2f916420803f48))
+
+
+### Features
+
+* Add client ID patching support for Continuum for Reddit ([#16](https://github.com/wchill/patcheddit/issues/16)) ([32e5408](https://github.com/wchill/patcheddit/commit/32e5408fadc61503d4a528828474f4aeb514fbdc))
+
 # [1.1.0](https://github.com/wchill/patcheddit/compare/v1.0.1...v1.1.0) (2026-01-09)
 
 

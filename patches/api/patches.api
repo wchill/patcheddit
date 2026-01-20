@@ -49,6 +49,7 @@ public final class app/morphe/patches/reddit/customclients/FixSLinksPatchKt {
 }
 
 public final class app/morphe/patches/reddit/customclients/SpoofClientPatchKt {
+	public static final fun spoofClientPatch (Ljava/lang/String;Ljava/lang/String;Lkotlin/jvm/functions/Function4;)Lapp/morphe/patcher/patch/BytecodePatch;
 	public static final fun spoofClientPatch (Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lapp/morphe/patcher/patch/BytecodePatch;
 	public static final fun spoofClientPatch (Lkotlin/jvm/functions/Function4;)Lapp/morphe/patcher/patch/BytecodePatch;
 	public static synthetic fun spoofClientPatch$default (Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lapp/morphe/patcher/patch/BytecodePatch;
@@ -113,12 +114,12 @@ public final class app/morphe/patches/reddit/customclients/boostforreddit/misc/e
 	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/reddit/customclients/infinityforreddit/api/SpoofClientPatchKt {
+public final class app/morphe/patches/reddit/customclients/continuum/api/SpoofClientPatchKt {
 	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/reddit/customclients/infinityforreddit/subscription/UnlockSubscriptionPatchKt {
-	public static final fun getUnlockSubscriptionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+public final class app/morphe/patches/reddit/customclients/continuum/misc/extension/SharedExtensionPatchKt {
+	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
 public final class app/morphe/patches/reddit/customclients/joeyforreddit/ads/DisableAdsPatchKt {
@@ -149,12 +150,25 @@ public final class app/morphe/patches/reddit/customclients/redditisfun/misc/exte
 	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/reddit/customclients/relayforreddit/api/SpoofClientPatchKt {
+public final class app/morphe/patches/reddit/customclients/relay/api/SpoofClientPatchKt {
 	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/relay/fix/slink/FixSLinksPatchKt {
+	public static final field EXTENSION_CLASS_DESCRIPTOR Ljava/lang/String;
+	public static final fun getFixSLinksPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/relay/misc/extension/SharedExtensionPatchKt {
+	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
 public final class app/morphe/patches/reddit/customclients/slide/api/SpoofClientPatchKt {
 	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/slide/misc/extension/SharedExtensionPatchKt {
+	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
 public final class app/morphe/patches/reddit/customclients/sync/ads/DisableAdsPatchKt {
