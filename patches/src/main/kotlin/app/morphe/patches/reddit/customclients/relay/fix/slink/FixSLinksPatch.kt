@@ -62,21 +62,21 @@ val fixSLinksPatch = fixSLinksPatch(
     execute {
         // region Patch navigation handler.
 
-intentFilterActivityFingerprint.method.apply {
-    val index = intentFilterActivityFingerprint.instructionMatches.last().index
-    val register = getInstruction<OneRegisterInstruction>(index).registerA
+        intentFilterActivityFingerprint.method.apply {
+            val index = intentFilterActivityFingerprint.instructionMatches.last().index
+            val register = getInstruction<OneRegisterInstruction>(index).registerA
 
-    addInstructionsWithLabels(
-        index + 1,
-        """
-            invoke-static { v$register }, $EXTENSION_CLASS_DESCRIPTOR->$RESOLVE_S_LINK_METHOD
-            move-result v5
-            if-eqz v5, :continue
-            return-void
-        """,
-        ExternalLabel("continue", getInstruction(index + 1)),
-    )
-}
+            addInstructionsWithLabels(
+                index + 1,
+                """
+                    invoke-static { v$register }, $EXTENSION_CLASS_DESCRIPTOR->$RESOLVE_S_LINK_METHOD
+                    move-result v5
+                    if-eqz v5, :continue
+                    return-void
+                """,
+                ExternalLabel("continue", getInstruction(index + 1)),
+            )
+        }
 
         // endregion
     }
