@@ -150,8 +150,17 @@ public final class app/morphe/patches/reddit/customclients/redditisfun/misc/exte
 	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/reddit/customclients/relayforreddit/api/SpoofClientPatchKt {
+public final class app/morphe/patches/reddit/customclients/relay/api/SpoofClientPatchKt {
 	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/relay/fix/slink/FixSLinksPatchKt {
+	public static final field EXTENSION_CLASS_DESCRIPTOR Ljava/lang/String;
+	public static final fun getFixSLinksPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/relay/misc/extension/SharedExtensionPatchKt {
+	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
 public final class app/morphe/patches/reddit/customclients/slide/api/SpoofClientPatchKt {
