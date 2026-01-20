@@ -1,3 +1,10 @@
+# [1.2.0-dev.4](https://github.com/wchill/patcheddit/compare/v1.2.0-dev.3...v1.2.0-dev.4) (2026-01-20)
+
+
+### Features
+
+* Add support for /s/ links in Relay ([#21](https://github.com/wchill/patcheddit/issues/21)) ([eb0ba9b](https://github.com/wchill/patcheddit/commit/eb0ba9b08b8e45ca31a03a3354e82ebc3eed9987))
+
 # [1.2.0-dev.3](https://github.com/wchill/patcheddit/compare/v1.2.0-dev.2...v1.2.0-dev.3) (2026-01-19)
 
 

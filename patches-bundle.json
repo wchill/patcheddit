@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-01-19T23:16:38",
-  "description": "# [1.2.0-dev.3](https://github.com/wchill/patcheddit/compare/v1.2.0-dev.2...v1.2.0-dev.3) (2026-01-19)\n\n\n### Bug Fixes\n\n* Fix broken Sync for Reddit ad removal patch ([673825c](https://github.com/wchill/patcheddit/commit/673825c91cca62c6596c0709a8886b9c5672385f))",
-  "download_url": "https://github.com/wchill/patcheddit/releases/download/v1.2.0-dev.3/patches-1.2.0-dev.3.mpp",
-  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v1.2.0-dev.3/patches-1.2.0-dev.3.mpp.asc",
-  "version": "1.2.0-dev.3"
+  "created_at": "2026-01-20T02:26:13",
+  "description": "# [1.2.0-dev.4](https://github.com/wchill/patcheddit/compare/v1.2.0-dev.3...v1.2.0-dev.4) (2026-01-20)\n\n\n### Features\n\n* Add support for /s/ links in Relay ([#21](https://github.com/wchill/patcheddit/issues/21)) ([eb0ba9b](https://github.com/wchill/patcheddit/commit/eb0ba9b08b8e45ca31a03a3354e82ebc3eed9987))",
+  "download_url": "https://github.com/wchill/patcheddit/releases/download/v1.2.0-dev.4/patches-1.2.0-dev.4.mpp",
+  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v1.2.0-dev.4/patches-1.2.0-dev.4.mpp.asc",
+  "version": "1.2.0-dev.4"
 }
