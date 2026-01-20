@@ -1,4 +1,4 @@
-    package app.morphe.patches.reddit.customclients.relayforreddit.api
+    package app.morphe.patches.reddit.customclients.relay.api
 
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.OpcodeFilter
