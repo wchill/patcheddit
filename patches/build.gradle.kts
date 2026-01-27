@@ -1,3 +1,5 @@
+import java.util.Properties
+
 group = "app.morphe"
 
 patches {
@@ -41,6 +43,25 @@ tasks {
         classpath = sourceSets["main"].runtimeClasspath
         mainClass.set("app.morphe.util.PatchListGeneratorKt")
     }
+
+    register("createProperties") {
+        doLast {
+            project.sourceSets.main.configure {
+                val resources = output.resourcesDir!!
+                File("$resources/addresources/version.properties").writer().use { w ->
+                    val props = Properties()
+                    props["version"] = project.version.toString()
+                    props["buildTime"] = System.currentTimeMillis().toString()
+                    props.store(w, null)
+                }
+            }
+        }
+    }
+
+    classes {
+        finalizedBy("createProperties")
+    }
+
     // Used by gradle-semantic-release-plugin.
     publish {
         dependsOn("generatePatchesList")

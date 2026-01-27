@@ -7,3 +7,6 @@
 -keep class com.google.** {
   *;
 }
+-keep class io.sentry.** {
+  *;
+}

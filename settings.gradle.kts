@@ -42,4 +42,3 @@ settings {
 }
 
 include(":patches:stub")
-include(":extensions:continuum:stub")

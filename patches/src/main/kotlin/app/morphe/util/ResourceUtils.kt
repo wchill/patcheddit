@@ -42,6 +42,7 @@ import org.w3c.dom.NodeList
 import java.io.InputStream
 import java.nio.file.Files
 import java.nio.file.StandardCopyOption
+import java.util.Properties
 
 private val classLoader = object {}.javaClass.classLoader
 
@@ -232,4 +233,3 @@ internal fun ResourcePatchContext.findPlayStoreServicesVersion(): Int =
             "google_play_services_version",
         ).textContent.toInt()
     }
-
