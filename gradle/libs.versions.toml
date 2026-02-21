@@ -1,5 +1,5 @@
 [versions]
-morphe-patcher = "1.1.1"
+morphe-patcher = "1.2.0-dev.3" # TODO: change to 1.2.0 before merging to dev
 #noinspection GradleDependency
 smali = "b6365a84f4"
 gson = "2.13.2"
