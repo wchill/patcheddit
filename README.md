@@ -25,6 +25,8 @@ and the [About](patches/build.gradle.kts#L5-L11))
 that are included in the repository), the [issue templates](.github/ISSUE_TEMPLATE)[^2]  and the [contribution guidelines](CONTRIBUTING.md)[^3]
 4. Choose a name for your patches project. Keep in mind you must use a unique name that does not imply or suggest authorship by the Morphe open source project.
    See the [NOTICE](NOTICE) for details.
+5. (Optional): Add `patches-bundle.png` to the project if you want a custom icon to show in
+   Morphe Manager instead of your GitHub profile avatar.
 
 🎉 You are now ready to start creating patches!
 
