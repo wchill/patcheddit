@@ -1,16 +1,56 @@
+/*
+ * Copyright 2025 Morphe.
+ * https://github.com/MorpheApp/morphe-patches
+ *
+ * File-Specific License Notice (GPLv3 Section 7 Terms)
+ *
+ * This file is part of the Morphe patches project and is licensed under
+ * the GNU General Public License version 3 (GPLv3), with the Additional
+ * Terms under Section 7 described in the Morphe patches
+ * LICENSE file: https://github.com/MorpheApp/morphe-patches/blob/main/NOTICE
+ *
+ * https://www.gnu.org/licenses/gpl-3.0.html
+ *
+ * File-Specific Exception to Section 7b:
+ * -------------------------------------
+ * Section 7b (Attribution Requirement) of the Morphe patches LICENSE
+ * does not apply to THIS FILE. Use of this file does NOT require any
+ * user-facing, in-application, or UI-visible attribution.
+ *
+ * For this file only, attribution under Section 7b is satisfied by
+ * retaining this comment block in the source code of this file.
+ *
+ * Distribution and Derivative Works:
+ * ----------------------------------
+ * This comment block MUST be preserved in all copies, distributions,
+ * and derivative works of this file, whether in source or modified
+ * form.
+ *
+ * All other terms of the Morphe Patches LICENSE, including Section 7c
+ * (Project Name Restriction) and the GPLv3 itself, remain fully
+ * applicable to this file.
+ */
+
 package app.morphe.patches.all.misc.resources
 
 import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patches.all.misc.resources.StringResourceSanitizer.sanitizeAndroidResourceString
 import app.morphe.util.forEachChildElement
 import app.morphe.util.getNode
 import app.morphe.util.inputStreamFromBundledResource
-import app.morphe.util.resource.StringResource.Companion.sanitizeAndroidResourceString
+import org.w3c.dom.Element
+import org.w3c.dom.Node
 import java.util.Locale
-import java.util.logging.Level
 import java.util.logging.Logger
-import kotlin.jvm.javaClass
+import kotlin.collections.listOf
 
-internal val locales = listOf(
+/**
+ * If any added string resources replace existing strings in the target app.
+ * Required if using APKTool CLI patching and any added strings have the same key as the target app.
+ */
+private const val PATCH_STRINGS_REPLACE_EXISTING = false
+
+internal val localesYouTube = listOf(
     AppLocale("", ""), // Default English locale. Must be first.
     AppLocale("af-rZA", "af"),
     AppLocale("am-rET", "am"),
@@ -89,8 +129,95 @@ internal val locales = listOf(
     AppLocale("zh-rTW", "zh-rTW"),
     AppLocale("zu-rZA", "zu"),
     // Languages not found in YouTube.
-    AppLocale("ga-rIE", "ga", isBuiltInLanguage = false)
+    AppLocale("ga-rIE", "ga", false),
+    AppLocale("kmr-rTR", "kmr", false)
 )
+
+internal val localesReddit = listOf(
+    AppLocale("", ""), // Default English locale. Must be first.
+    AppLocale("ar-rSA", "ar"),
+    AppLocale("de-rDE", "de"),
+    AppLocale("es-rES", "es"),
+    AppLocale("fi-rFI", "fi"),
+    AppLocale("fr-rFR", "fr"),
+    AppLocale("hi-rIN", "hi"),
+    AppLocale("hu-rHU", "hu"),
+    AppLocale("it-rIT", "it"),
+    AppLocale("ja-rJP", "ja"),
+    AppLocale("ko-rKR", "ko"),
+    AppLocale("ms-rMY", "ms"),
+    AppLocale("nl-rNL", "nl"),
+    AppLocale("pl-rPL", "pl"),
+    AppLocale("pt-rBR", "pt-rBR"),
+    AppLocale("pt-rPT", "pt-rPT"),
+    AppLocale("ru-rRU", "ru"),
+    AppLocale("th-rTH", "th"),
+    AppLocale("tr-rTR", "tr"),
+    AppLocale("uk-rUA", "uk"),
+    AppLocale("vi-rVN", "vi"),
+    AppLocale("zh-rCN", "zh-rCN"),
+    AppLocale("zh-rTW", "zh-rTW"),
+
+    // Languages not found in Reddit.
+    AppLocale("af-rZA", "af", false),
+    AppLocale("am-rET", "am", false),
+    AppLocale("as-rIN", "as", false),
+    AppLocale("az-rAZ", "az", false),
+    AppLocale("be-rBY", "be", false),
+    AppLocale("bg-rBG", "bg", false),
+    AppLocale("bn-rBD", "bn", false),
+    AppLocale("bs-rBA", "bs", false),
+    AppLocale("ca-rES", "ca", false),
+    AppLocale("cs-rCZ", "cs", false),
+    AppLocale("da-rDK", "da", false),
+    AppLocale("el-rGR", "el", false),
+    AppLocale("et-rEE", "et", false),
+    AppLocale("eu-rES", "eu", false),
+    AppLocale("fa-rIR", "fa", false),
+    AppLocale("fil-rPH", "tl", false),
+    AppLocale("gl-rES", "gl", false),
+    AppLocale("gu-rIN", "gu", false),
+    AppLocale("hr-rHR", "hr", false),
+    AppLocale("hy-rAM", "hy", false),
+    AppLocale("in-rID", "in", false),
+    AppLocale("is-rIS", "is", false),
+    AppLocale("iw-rIL", "iw", false),
+    AppLocale("ka-rGE", "ka", false),
+    AppLocale("kk-rKZ", "kk", false),
+    AppLocale("km-rKH", "km", false),
+    AppLocale("kn-rIN", "kn", false),
+    AppLocale("ky-rKG", "ky", false),
+    AppLocale("lo-rLA", "lo", false),
+    AppLocale("lt-rLT", "lt", false),
+    AppLocale("lv-rLV", "lv", false),
+    AppLocale("mk-rMK", "mk", false),
+    AppLocale("ml-rIN", "ml", false),
+    AppLocale("mn-rMN", "mn", false),
+    AppLocale("mr-rIN", "mr", false),
+    AppLocale("my-rMM", "my", false),
+    AppLocale("nb-rNO", "nb", false),
+    AppLocale("ne-rNP", "ne", false),
+    AppLocale("or-rIN", "or", false),
+    AppLocale("pa-rIN", "pa", false),
+    AppLocale("ro-rRO", "ro", false),
+    AppLocale("sk-rSK", "sk", false),
+    AppLocale("si-rLK", "si", false),
+    AppLocale("sl-rSI", "sl", false),
+    AppLocale("sq-rAL", "sq", false),
+    AppLocale("sr-rCS", "b+sr+Latn", false),
+    AppLocale("sr-rSP", "sr", false),
+    AppLocale("sv-rSE", "sv", false),
+    AppLocale("sw-rKE", "sw", false),
+    AppLocale("ta-rIN", "ta", false),
+    AppLocale("te-rIN", "te", false),
+    AppLocale("ur-rIN", "ur", false),
+    AppLocale("uz-rUZ", "uz", false),
+    AppLocale("zu-rZA", "zu", false),
+    AppLocale("ga-rIE", "ga", false),
+    AppLocale("kmr-rTR", "kmr", false)
+)
+
+internal val localesAll by lazy { (localesYouTube + localesReddit).distinct() }
 
 internal class AppLocale(
     private val srcLocale: String,
@@ -107,6 +234,24 @@ internal class AppLocale(
                 "isBuiltInLanguage=$isBuiltInLanguage)"
     }
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as AppLocale
+
+        if (srcLocale != other.srcLocale) return false
+        if (destLocale != other.destLocale) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = srcLocale.hashCode()
+        result = 31 * result + destLocale.hashCode()
+        return result
+    }
+
     private companion object {
         private fun getValuesFolderName(localeName: String): String {
             val folderName = "values"
@@ -121,8 +266,10 @@ internal class AppLocale(
 }
 
 private enum class BundledResourceType {
-    STRINGS,
-    ARRAYS;
+    // Add more resource xml files as needed.
+    ARRAYS,
+    COLORS,
+    STRINGS;
 
     override fun toString(): String {
         return super.toString().lowercase(Locale.US)
@@ -130,6 +277,12 @@ private enum class BundledResourceType {
 }
 
 private val appsToInclude = mutableSetOf<String>()
+
+internal lateinit var locales : List<AppLocale>
+
+internal fun setAddResourceLocale(appLocale: List<AppLocale>) {
+    locales = appLocale
+}
 
 /**
  * Add all resources for the given app.
@@ -143,7 +296,6 @@ internal val addResourcesPatch = resourcePatch(
 ) {
 
     val defaultResourcesAdded = mutableSetOf<String>()
-
 
     finalize {
         fun getLogger(): Logger = Logger.getLogger(AppLocale.javaClass.name)
@@ -163,7 +315,7 @@ internal val addResourcesPatch = resourcePatch(
             )
 
             if (srcStream == null) {
-                // Localized arrays are optional, but string files are expected.
+                // String files are expected but other resource types are optional.
                 if (resourceType == BundledResourceType.STRINGS) {
                     throw IllegalArgumentException("Could not find: $srcSubPath")
                 }
@@ -174,9 +326,12 @@ internal val addResourcesPatch = resourcePatch(
                 val destFile = this@finalize[destSubPath]
                 if (!destFile.exists()) {
                     if (locale.isBuiltInLanguage) {
-                        throw IllegalStateException(
-                            "Expected to find locale: $locale but file does not exist in target app: $destFile"
-                        )
+                        // Either the user provided a bad APKM that doesn't have all languages,
+                        // or something changed and YouTube removed a language from the universal APK releases.
+                        getLogger().warning {
+                            "!!! Provided app does not contain all region localizations. " +
+                                    "Locale: $locale does not exist in provided app file: $destSubPath"
+                        }
                     }
 
                     destFile.parentFile?.mkdirs()
@@ -189,8 +344,27 @@ internal val addResourcesPatch = resourcePatch(
                 document(destSubPath).use { destDoc ->
                     val destResourceNode = destDoc.getNode("resources")
 
+                    val existingNodes = if (PATCH_STRINGS_REPLACE_EXISTING) {
+                        val children = destResourceNode.childNodes
+
+                        // Build lookup table once per destination file.
+                        HashMap<Pair<String, String>, Node>(
+                            2 * children.length, 0.5f
+                        ).also {
+                            for (i in 0 until children.length) {
+                                val node = children.item(i)
+                                if (node.nodeType == Node.ELEMENT_NODE) {
+                                    val el = node as Element
+                                    val key = el.tagName to el.getAttribute("name")
+                                    it[key] = el
+                                }
+                            }
+                        }
+                    } else {
+                        emptyMap()
+                    }
+
                     document(srcStream).use { srcDoc ->
-                        // Check for bad localized files with duplicate strings.
                         val localeStringsAdded = mutableSetOf<String>()
 
                         srcDoc.getElementsByTagName(
@@ -200,7 +374,9 @@ internal val addResourcesPatch = resourcePatch(
                             if (resourceType == BundledResourceType.STRINGS) {
                                 // Check for bad text strings that will fail resource compilation.
                                 val textContent = srcNode.textContent
-                                val sanitized = sanitizeAndroidResourceString(resourceName, textContent)
+                                val sanitized = sanitizeAndroidResourceString(
+                                    resourceName, textContent, destSubPath
+                                )
                                 if (textContent != sanitized) {
                                     srcNode.textContent = sanitized
                                 }
@@ -215,19 +391,30 @@ internal val addResourcesPatch = resourcePatch(
                             }
 
                             if (isDefaultLocale) {
-                                // Duplicate check alreday handled above.
+                                // Duplicate check already handled above.
                                 defaultResourcesAdded.add(resourceName)
                             } else if (!defaultResourcesAdded.contains(resourceName)) {
-                                // TODO: Enable when patcher/CLI supports debug/dev logging.
-                                if (false) getLogger().log(Level.INFO) {
-                                    "Ignoring removed default resource for locale (Issue will be fixed after next Crowdin sync): " +
+                                getLogger().fine {
+                                    "Ignoring removed default resource for locale " +
+                                            "(Issue will be fixed after next Crowdin sync): " +
                                             "$srcFolderName resource: $resourceName"
                                 }
                                 return@forEachChildElement
                             }
 
-                            val importedSrcNode = destDoc.importNode(srcNode, true)
-                            destResourceNode.appendChild(importedSrcNode)
+                            // Remove existing resources with the same name.
+                            // ARSCLib doesn't check for duplicates and uses the last added,
+                            // but Apktool crashes if duplicates exist.
+                            if (PATCH_STRINGS_REPLACE_EXISTING) {
+                                val key = srcNode.tagName to resourceName
+                                existingNodes[key]?.let { existing ->
+                                    destResourceNode.removeChild(existing)
+                                }
+                            }
+
+                            // Import and append.
+                            val imported = destDoc.importNode(srcNode, true)
+                            destResourceNode.appendChild(imported)
                         }
                     }
                 }
@@ -236,9 +423,62 @@ internal val addResourcesPatch = resourcePatch(
 
         appsToInclude.forEach { app ->
             locales.forEach { locale ->
-                addResourcesFromFile(app, locale, BundledResourceType.STRINGS)
-                addResourcesFromFile(app, locale, BundledResourceType.ARRAYS)
+                BundledResourceType.entries.forEach { type ->
+                    addResourcesFromFile(app, locale, type)
+                }
             }
         }
+    }
+}
+
+internal object StringResourceSanitizer {
+    // Matches unescaped double quotes.
+    private val UNESCAPED_DOUBLE_QUOTE = Regex("(?<!\\\\)\"")
+
+    // Matches unescaped single or double quotes.
+    private val UNESCAPED_QUOTE = Regex("(?<!\\\\)['\"]")
+
+    /**
+     * @param key String key
+     * @param value Text to validate and sanitize
+     * @param filePath Path to include in any exception thrown.
+     * @param throwException If true, will throw an exception on problems; otherwise, sanitizes.
+     * @return sanitized string
+     */
+    fun sanitizeAndroidResourceString(
+        key: String,
+        value: String,
+        filePath: String? = null,
+        throwException: Boolean = false
+    ): String {
+        val logger = Logger.getLogger(StringResourceSanitizer::class.java.name)
+        var sanitized = value
+
+        // Could check for other invalid strings, but for now just check quotes.
+        if (value.startsWith('"') && value.endsWith('"')) {
+            // Raw strings allow unescaped single quotes but not double quotes.
+            val inner = value.substring(1, value.length - 1)
+            if (UNESCAPED_DOUBLE_QUOTE.containsMatchIn(inner)) {
+                val message = "$filePath String $key contains unescaped double quotes: $value"
+                if (throwException) throw IllegalArgumentException(message)
+                logger.warning(message)
+                sanitized = "\"" + UNESCAPED_DOUBLE_QUOTE.replace(inner, "") + "\""
+            }
+        } else {
+            if (value.contains('\n')) {
+                val message = "$filePath String $key is not raw but contains newline characters: $value"
+                if (throwException) throw IllegalArgumentException(message)
+                logger.warning(message)
+            }
+
+            if (UNESCAPED_QUOTE.containsMatchIn(value)) {
+                val message = "$filePath String $key contains unescaped quotes: $value"
+                if (throwException) throw IllegalArgumentException(message)
+                logger.warning(message)
+                sanitized = UNESCAPED_QUOTE.replace(value, "")
+            }
+        }
+
+        return sanitized
     }
 }
