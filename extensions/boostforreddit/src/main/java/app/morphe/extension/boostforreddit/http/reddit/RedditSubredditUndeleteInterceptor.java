@@ -34,7 +34,7 @@ public class RedditSubredditUndeleteInterceptor implements Interceptor {
     private static final Pattern SUBREDDIT_ABOUT_API_REGEX = Pattern.compile("^https?://\\w+\\.reddit\\.com/r/(\\w+)/about$");
     private static final Pattern SUBREDDIT_ABOUT_RULES_API_REGEX = Pattern.compile("^https?://\\w+\\.reddit\\.com/r/(\\w+)/about/rules$");
     private static final Pattern SUBREDDIT_POSTS_API_REGEX = Pattern.compile("^https?://\\w+\\.reddit\\.com/r/(\\w+)/(?:hot|new|rising|top|controversial)");
-    private final AutoSavingCache subredditCache = new AutoSavingCache("RedditSubreddits", 1000);
+    private final AutoSavingCache subredditCache = new AutoSavingCache("RedditSubreddits", 10);
     @NotNull
     @Override
     public Response intercept(@NotNull Chain chain) throws IOException {

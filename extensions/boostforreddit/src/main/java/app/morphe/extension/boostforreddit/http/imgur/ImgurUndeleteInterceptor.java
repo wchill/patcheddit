@@ -27,7 +27,7 @@ import okhttp3.Response;
 import okhttp3.Request;
 
 public class ImgurUndeleteInterceptor implements Interceptor {
-    private static final AutoSavingCache imgurCache = new AutoSavingCache("Imgur", 10000);
+    private static final AutoSavingCache imgurCache = new AutoSavingCache("Imgur", 100);
 
     @NotNull
     @Override

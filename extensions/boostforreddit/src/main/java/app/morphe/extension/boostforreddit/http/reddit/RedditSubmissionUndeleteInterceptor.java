@@ -36,8 +36,8 @@ import okhttp3.Response;
 public class RedditSubmissionUndeleteInterceptor implements Interceptor {
     private static final Pattern SUBMISSION_API_REGEX = Pattern.compile("^https?://\\w+\\.reddit\\.com/comments/");
     private static final Pattern GALLERY_REGEX = Pattern.compile("window\\.___r\\s*=\\s*(\\{.+\\})\\s*</script>", Pattern.DOTALL | Pattern.MULTILINE);
-    private final AutoSavingCache submissionCache = new AutoSavingCache("RedditSubmissions", 1000);
-    private final AutoSavingCache commentsCache = new AutoSavingCache("RedditComments", 100000);
+    private final AutoSavingCache submissionCache = new AutoSavingCache("RedditSubmissions", 10);
+    private final AutoSavingCache commentsCache = new AutoSavingCache("RedditComments", 10000);
 
     @NotNull
     @Override
