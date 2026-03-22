@@ -6,6 +6,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patches.all.misc.transformation.transformInstructionsPatch
 import app.morphe.patches.reddit.customclients.slide.misc.extension.sharedExtensionPatch
+import app.morphe.patches.reddit.customclients.slide.SlideCompatible
 import app.morphe.patches.reddit.customclients.spoofClientPatch
 import app.morphe.util.getReference
 import app.morphe.util.indexOfFirstInstructionOrThrow
@@ -82,7 +83,7 @@ val spoofClientPatch = spoofClientPatch(
             }
         )
     )
-    compatibleWith("me.edgan.redditslide")
+    compatibleWith(*SlideCompatible)
 
     val clientId = clientIdOption.value?.trim()
     val redirectUri = redirectUriOption.value?.trim()

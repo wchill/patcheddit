@@ -2,6 +2,7 @@ package app.morphe.patches.reddit.customclients.boostforreddit.http
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.boostforreddit.BoostCompatible
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.sharedExtensionPatch
 import app.morphe.util.indexOfFirstInstructionReversed
 import com.android.tools.smali.dexlib2.Opcode
@@ -11,10 +12,10 @@ internal const val OKHTTP_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/bo
 
 @Suppress("unused")
 val interceptHttpRequests = bytecodePatch(
-    name="Intercept HTTP requests"
+    default = false
 ) {
     dependsOn(sharedExtensionPatch)
-    compatibleWith("com.rubenmayayo.reddit"("1.12.12"))
+    compatibleWith(*BoostCompatible)
 
     execute {
         installOkHttpInterceptorFingerprint.method.apply {

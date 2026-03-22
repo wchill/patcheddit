@@ -5,6 +5,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patches.reddit.customclients.INSTALL_NEW_CLIENT_METHOD
 import app.morphe.patches.reddit.customclients.fixRedgifsApiPatch
+import app.morphe.patches.reddit.customclients.sync.SyncForRedditCompatible
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.extension.sharedExtensionPatch
 import app.morphe.util.getReference
 import app.morphe.util.indexOfFirstInstructionOrThrow
@@ -17,11 +18,7 @@ internal const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/syncforre
 val fixRedgifsApi = fixRedgifsApiPatch(
     extensionPatch = sharedExtensionPatch
 ) {
-    compatibleWith(
-        "com.laurencedawson.reddit_sync",
-        "com.laurencedawson.reddit_sync.pro",
-        "com.laurencedawson.reddit_sync.dev",
-    )
+    compatibleWith(*SyncForRedditCompatible)
 
     execute {
         // region Patch Redgifs OkHttp3 client.

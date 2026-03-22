@@ -6,6 +6,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patches.reddit.customclients.spoofClientPatch
+import app.morphe.patches.reddit.customclients.redditisfun.RedditIsFunCompatible
 import app.morphe.util.getReference
 import app.morphe.util.indexOfFirstInstructionOrThrow
 import app.morphe.util.returnEarly
@@ -13,9 +14,7 @@ import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.StringReference
 
 val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, userAgentOption ->
-    compatibleWith(
-        "com.andrewshu.android.reddit"("5.6.22")
-    )
+    compatibleWith(*RedditIsFunCompatible)
 
     val clientId by clientIdOption
     val redirectUri by redirectUriOption

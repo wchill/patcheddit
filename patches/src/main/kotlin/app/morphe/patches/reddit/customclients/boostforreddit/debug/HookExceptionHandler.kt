@@ -2,6 +2,7 @@ package app.morphe.patches.reddit.customclients.boostforreddit.debug
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.boostforreddit.BoostCompatible
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.sharedExtensionPatch
 
 const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boostforreddit/debug/ExceptionHook;"
@@ -10,10 +11,10 @@ const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boostforreddit/deb
 val hookExceptionHandler = bytecodePatch(
     name="Hook exception handler",
     description = "Hook the exception handler in Boost. Don't enable except for development purposes",
-    use=false
+    default = false
 ) {
     dependsOn(sharedExtensionPatch)
-    compatibleWith("com.rubenmayayo.reddit"("1.12.12"))
+    compatibleWith(*BoostCompatible)
 
     execute {
         exceptionHandlerFingerprint.method.apply {

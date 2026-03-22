@@ -2,15 +2,17 @@ package app.morphe.patches.reddit.customclients.joeyforreddit.ads
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.joeyforreddit.JoeyForRedditFreeCompatible
 import app.morphe.patches.reddit.customclients.joeyforreddit.detection.piracy.disablePiracyDetectionPatch
 
 @Suppress("unused")
 val disableAdsPatch = bytecodePatch(
     name = "Disable ads",
+    default = true
 ) {
     dependsOn(disablePiracyDetectionPatch)
 
-    compatibleWith("o.o.joey")
+    compatibleWith(JoeyForRedditFreeCompatible)
 
     execute {
         isAdFreeUserFingerprint.method.addInstructions(

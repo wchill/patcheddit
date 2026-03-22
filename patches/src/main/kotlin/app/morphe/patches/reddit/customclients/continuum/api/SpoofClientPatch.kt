@@ -6,6 +6,7 @@ import app.morphe.patcher.patch.resourcePatch
 import app.morphe.patches.all.misc.resources.addAppResources
 import app.morphe.patches.all.misc.resources.addResourcesPatch
 import app.morphe.patches.all.misc.transformation.transformInstructionsPatch
+import app.morphe.patches.reddit.customclients.continuum.ContinuumCompatible
 import app.morphe.patches.reddit.customclients.continuum.misc.extension.sharedExtensionPatch
 import app.morphe.patches.reddit.customclients.spoofClientPatch
 import app.morphe.util.getNode
@@ -21,11 +22,13 @@ internal const val FRAGMENT_CLASS_NAME = "Lml/docilealligator/infinityforreddit/
 internal const val GET_USER_AGENT_METHOD = "$EXTENSION_CLASS_NAME->getUserAgent"
 internal const val GET_REDIRECT_URI_METHOD = "$EXTENSION_CLASS_NAME->getRedirectUri"
 
-internal val settingsPatch = resourcePatch {
+internal val settingsPatch = resourcePatch(
+    default = true
+) {
     dependsOn(
         addResourcesPatch
     )
-    compatibleWith("org.cygnusx1.continuum")
+    compatibleWith(*ContinuumCompatible)
 
     execute {
         addAppResources("continuum")
@@ -127,7 +130,7 @@ val spoofClientPatch = spoofClientPatch(
             }
         )
     )
-    compatibleWith("org.cygnusx1.continuum")
+    compatibleWith(*ContinuumCompatible)
     execute {
         if (clientId != null) {
             getDefaultClientIdFingerprint.method.returnEarly(clientId)

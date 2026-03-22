@@ -5,16 +5,14 @@ import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patches.reddit.customclients.spoofClientPatch
+import app.morphe.patches.reddit.customclients.relay.RelayCompatible
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction10t
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction21t
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 
 val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, userAgentOption ->
-    compatibleWith(
-        "free.reddit.news"("10.2.40"),
-        "reddit.news"("10.2.40"),
-    )
+    compatibleWith(*RelayCompatible)
 
     val clientId by clientIdOption
     val redirectUri by redirectUriOption

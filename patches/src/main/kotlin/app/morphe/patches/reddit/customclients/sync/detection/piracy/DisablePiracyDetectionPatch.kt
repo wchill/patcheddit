@@ -5,6 +5,7 @@ import app.morphe.patcher.patch.bytecodePatch
 
 val disablePiracyDetectionPatch = bytecodePatch(
     description = "Disables detection of modified versions.",
+    default = false
 ) {
 
     execute {

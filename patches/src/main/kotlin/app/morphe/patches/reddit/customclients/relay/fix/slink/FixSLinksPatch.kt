@@ -8,6 +8,7 @@ import app.morphe.patches.all.misc.transformation.transformInstructionsPatch
 import app.morphe.patches.reddit.customclients.RESOLVE_S_LINK_METHOD
 import app.morphe.patches.reddit.customclients.SET_ACCESS_TOKEN_METHOD
 import app.morphe.patches.reddit.customclients.fixSLinksPatch
+import app.morphe.patches.reddit.customclients.relay.RelayCompatible
 import app.morphe.patches.reddit.customclients.relay.misc.extension.sharedExtensionPatch
 import app.morphe.util.getReference
 import com.android.tools.smali.dexlib2.Opcode
@@ -54,10 +55,7 @@ val fixSLinksPatch = fixSLinksPatch(
         )
     )
 
-    compatibleWith(
-        "free.reddit.news"("10.2.40"),
-        "reddit.news"("10.2.40"),
-    )
+    compatibleWith(*RelayCompatible)
 
     execute {
         // region Patch navigation handler.

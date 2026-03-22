@@ -10,6 +10,7 @@ import app.morphe.patcher.util.proxy.mutableTypes.MutableField.Companion.toMutab
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
 import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.patcher.util.smali.toInstructions
+import app.morphe.patches.reddit.customclients.boostforreddit.BoostCompatible
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.sharedExtensionPatch
 import app.morphe.patches.reddit.customclients.boostforreddit.http.interceptHttpRequests
 import app.morphe.util.addInstructionsAtControlFlowLabel
@@ -32,10 +33,11 @@ internal const val EXTRA_EMOJI_GETTER = "getExtraEmoji"
 
 @Suppress("unused")
 val undeleteRedditPatch = bytecodePatch(
-    name="Automatically undelete Reddit content"
+    name = "Automatically undelete Reddit content",
+    default = true
 ) {
     dependsOn(sharedExtensionPatch, interceptHttpRequests)
-    compatibleWith("com.rubenmayayo.reddit"("1.12.12"))
+    compatibleWith(*BoostCompatible)
 
     execute {
         installJrawInterceptorFingerprint.method.apply {

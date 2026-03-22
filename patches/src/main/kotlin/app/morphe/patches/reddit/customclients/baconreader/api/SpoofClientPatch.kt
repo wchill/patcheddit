@@ -4,6 +4,7 @@ import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.PatchException
+import app.morphe.patches.reddit.customclients.baconreader.BaconReaderCompatible
 import app.morphe.patches.reddit.customclients.spoofClientPatch
 import app.morphe.patches.shared.misc.string.replaceStringPatch
 import app.morphe.util.returnEarly
@@ -16,10 +17,7 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
         replaceStringPatch("ssl.reddit.com", "www.reddit.com")
     )
 
-    compatibleWith(
-        "com.onelouder.baconreader",
-        "com.onelouder.baconreader.premium",
-    )
+    compatibleWith(*BaconReaderCompatible)
 
     val clientId by clientIdOption
     val redirectUri by redirectUriOption

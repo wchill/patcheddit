@@ -3,6 +3,7 @@ package app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.video
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.sync.SyncForRedditCompatible
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.extension.sharedExtensionPatch
 import com.android.tools.smali.dexlib2.iface.instruction.formats.Instruction35c
 
@@ -14,14 +15,11 @@ private const val GET_LINKS_METHOD = "getLinks([B)[Ljava/lang/String;"
 val fixVideoDownloadsPatch = bytecodePatch(
     name = "Fix video downloads",
     description = "Fixes a bug in Sync's MPD parser resulting in only the audio-track being saved.",
+    default = true
 ) {
     dependsOn(sharedExtensionPatch)
 
-    compatibleWith(
-        "com.laurencedawson.reddit_sync",
-        "com.laurencedawson.reddit_sync.pro",
-        "com.laurencedawson.reddit_sync.dev",
-    )
+    compatibleWith(*SyncForRedditCompatible)
 
     execute {
         val scanResult = parseRedditVideoNetworkResponseFingerprint.instructionMatches

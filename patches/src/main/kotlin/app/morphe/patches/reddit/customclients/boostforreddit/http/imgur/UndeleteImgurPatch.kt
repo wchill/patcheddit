@@ -2,6 +2,7 @@ package app.morphe.patches.reddit.customclients.boostforreddit.http.imgur
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.boostforreddit.BoostCompatible
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.sharedExtensionPatch
 import app.morphe.patches.reddit.customclients.boostforreddit.http.interceptHttpRequests
 import app.morphe.util.getReference
@@ -13,10 +14,11 @@ internal const val OKHTTP_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/bo
 
 @Suppress("unused")
 val interceptImgurRequests = bytecodePatch(
-    name="Automatically undelete Imgur images"
+    name = "Automatically undelete Imgur images",
+    default = true
 ) {
     dependsOn(sharedExtensionPatch, interceptHttpRequests)
-    compatibleWith("com.rubenmayayo.reddit"("1.12.12"))
+    compatibleWith(*BoostCompatible)
 
     execute {
         arrayOf(installImgurFreeOkHttpInterceptorFingerprint, installImgurPaidOkHttpInterceptorFingerprint)

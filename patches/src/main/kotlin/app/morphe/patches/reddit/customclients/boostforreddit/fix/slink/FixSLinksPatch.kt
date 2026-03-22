@@ -6,6 +6,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.patches.reddit.customclients.RESOLVE_S_LINK_METHOD
 import app.morphe.patches.reddit.customclients.SET_ACCESS_TOKEN_METHOD
+import app.morphe.patches.reddit.customclients.boostforreddit.BoostCompatible
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.sharedExtensionPatch
 import app.morphe.patches.reddit.customclients.fixSLinksPatch
 
@@ -15,7 +16,7 @@ const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boostforreddit/Fix
 val fixSlinksPatch = fixSLinksPatch(
     extensionPatch = sharedExtensionPatch,
 ) {
-    compatibleWith("com.rubenmayayo.reddit"("1.12.12"))
+    compatibleWith(*BoostCompatible)
 
     execute {
         // region Patch navigation handler.

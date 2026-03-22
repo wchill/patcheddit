@@ -10,7 +10,10 @@ const val CREATE_NEW_CLIENT_METHOD = "createClient()Lokhttp3/OkHttpClient;"
 fun fixRedgifsApiPatch(
     extensionPatch: Patch<*>,
     block: BytecodePatchBuilder.() -> Unit = {},
-) = bytecodePatch(name = "Fix Redgifs API") {
+) = bytecodePatch(
+    name = "Fix Redgifs API",
+    default = true
+) {
     dependsOn(extensionPatch)
 
     block()

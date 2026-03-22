@@ -18,6 +18,7 @@ fun spoofClientPatch(
 ) = bytecodePatch(
     name = "Spoof client",
     description = "Restores functionality of the app by using custom client ID.",
+    default = true
 ) {
     block(
         stringOption(
@@ -50,6 +51,7 @@ fun spoofClientPatch(
 ) = bytecodePatch(
     name = name,
     description = description,
+    default = true
 ) {
     val clientIdOption = stringOption(
         "client-id",

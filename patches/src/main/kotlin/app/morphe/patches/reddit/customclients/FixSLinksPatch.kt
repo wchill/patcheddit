@@ -10,7 +10,10 @@ const val SET_ACCESS_TOKEN_METHOD = "patchSetAccessToken(Ljava/lang/String;)V"
 fun fixSLinksPatch(
     extensionPatch: Patch<*>,
     block: BytecodePatchBuilder.() -> Unit = {},
-) = bytecodePatch(name = "Fix /s/ links") {
+) = bytecodePatch(
+    name = "Fix /s/ links",
+    default = true
+) {
     dependsOn(extensionPatch)
 
     block()

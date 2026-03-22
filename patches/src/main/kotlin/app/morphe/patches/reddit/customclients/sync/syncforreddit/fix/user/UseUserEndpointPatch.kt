@@ -3,6 +3,7 @@ package app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.user
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.sync.SyncForRedditCompatible
 import app.morphe.util.getReference
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.StringReference
@@ -11,14 +12,9 @@ import com.android.tools.smali.dexlib2.iface.reference.StringReference
 val useUserEndpointPatch = bytecodePatch(
     name = "Use /user/ endpoint",
     description = "Replaces the deprecated endpoint for viewing user profiles /u with /user, that used to fix a bug.",
-    use = false,
-
+    default = false,
 ) {
-    compatibleWith(
-        "com.laurencedawson.reddit_sync",
-        "com.laurencedawson.reddit_sync.pro",
-        "com.laurencedawson.reddit_sync.dev",
-    )
+    compatibleWith(*SyncForRedditCompatible)
 
     execute {
         arrayOf(

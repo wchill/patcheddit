@@ -5,6 +5,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patches.reddit.customclients.spoofClientPatch
 import app.morphe.patches.reddit.customclients.sync.detection.piracy.disablePiracyDetectionPatch
+import app.morphe.patches.reddit.customclients.sync.SyncForRedditCompatible
 import app.morphe.patches.shared.misc.string.replaceStringPatch
 import app.morphe.util.returnEarly
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
@@ -20,11 +21,7 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
         replaceStringPatch("ssl.reddit.com", "www.reddit.com")
     )
 
-    compatibleWith(
-        "com.laurencedawson.reddit_sync",
-        "com.laurencedawson.reddit_sync.pro",
-        "com.laurencedawson.reddit_sync.dev",
-    )
+    compatibleWith(*SyncForRedditCompatible)
 
     val clientId by clientIdOption
     val redirectUri by redirectUriOption
