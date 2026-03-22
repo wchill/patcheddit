@@ -49,7 +49,7 @@ tasks {
 
 kotlin {
     compilerOptions {
-        freeCompilerArgs = listOf("-Xcontext-parameters")
+        freeCompilerArgs = listOf("-Xcontext-receivers")
     }
 }
 

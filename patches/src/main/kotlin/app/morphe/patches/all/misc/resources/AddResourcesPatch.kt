@@ -123,7 +123,8 @@ internal fun addAppResources(appId: String) {
 }
 
 internal val addResourcesPatch = resourcePatch(
-    description = "Add resources such as strings or arrays to the app."
+    description = "Add resources such as strings or arrays to the app.",
+    default = false
 ) {
 
     val defaultResourcesAdded = mutableSetOf<String>()

@@ -76,6 +76,7 @@ val undeleteRedditPatch = bytecodePatch(
                 MutableMethodImplementation(2),
             ).toMutable().apply {
                 addInstructions(
+                    0,
                     """
                     iget-object v0, p0, $type->$EXTRA_EMOJI_CONTEXT_KEY:$fieldType
                     return-object v0
