@@ -1,3 +1,16 @@
+# [1.3.0-dev.1](https://github.com/wchill/patcheddit/compare/v1.2.0...v1.3.0-dev.1) (2026-03-22)
+
+
+### Bug Fixes
+
+* Check for HTTP 5xx when loading posts in Boost ([511fae0](https://github.com/wchill/patcheddit/commit/511fae08a7380343a26675cfa873588ecde1d714))
+
+
+### Features
+
+* Update to Morphe patcher 1.3.0 ([ded92dc](https://github.com/wchill/patcheddit/commit/ded92dc15a062f0defd9eb655e567c24b0373c98))
+* Use sqlite-backed cache implementation for Boost ([2cfea64](https://github.com/wchill/patcheddit/commit/2cfea642704aef15793d3f0c3548d870ff021690))
+
 # [1.2.0](https://github.com/wchill/patcheddit/compare/v1.1.0...v1.2.0) (2026-01-20)
 
 
