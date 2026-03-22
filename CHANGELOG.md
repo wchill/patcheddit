@@ -1,3 +1,10 @@
+# [1.3.0-dev.2](https://github.com/wchill/patcheddit/compare/v1.3.0-dev.1...v1.3.0-dev.2) (2026-03-22)
+
+
+### Bug Fixes
+
+* Fix issues loading patch bundle ([d644b35](https://github.com/wchill/patcheddit/commit/d644b3582ba7f6f6267f2239d9bee87ffa39c885))
+
 # [1.3.0-dev.1](https://github.com/wchill/patcheddit/compare/v1.2.0...v1.3.0-dev.1) (2026-03-22)
 
 
