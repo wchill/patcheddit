@@ -5,7 +5,7 @@ import app.morphe.patcher.patch.Compatibility
 
 internal val SlideCompatible = arrayOf(
     Compatibility(
-        name = "Slide",
+        name = "Slide (fork)",
         packageName = "me.edgan.redditslide",
         targets = listOf(AppTarget(version = null))
     )

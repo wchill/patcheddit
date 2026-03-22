@@ -12,12 +12,12 @@ internal val JoeyForRedditFreeCompatible = Compatibility(
 internal val JoeyForRedditCompatible = arrayOf(
     JoeyForRedditFreeCompatible,
     Compatibility(
-        name = "Joey for Reddit",
+        name = "Joey for Reddit Pro",
         packageName = "o.o.joey.pro",
         targets = listOf(AppTarget(version = null))
     ),
     Compatibility(
-        name = "Joey for Reddit",
+        name = "Joey for Reddit Dev",
         packageName = "o.o.joey.dev",
         targets = listOf(AppTarget(version = null))
     )

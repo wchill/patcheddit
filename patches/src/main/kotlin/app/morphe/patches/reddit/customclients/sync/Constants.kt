@@ -18,12 +18,12 @@ internal val SyncForLemmyCompatible = Compatibility(
 internal val SyncForRedditCompatible = arrayOf(
     SyncForRedditFreeCompatible,
     Compatibility(
-        name = "Sync for Reddit",
+        name = "Sync for Reddit Pro",
         packageName = "com.laurencedawson.reddit_sync.pro",
         targets = listOf(AppTarget(version = null))
     ),
     Compatibility(
-        name = "Sync for Reddit",
+        name = "Sync for Reddit Dev",
         packageName = "com.laurencedawson.reddit_sync.dev",
         targets = listOf(AppTarget(version = null))
     )

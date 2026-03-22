@@ -5,7 +5,7 @@ import app.morphe.patcher.patch.Compatibility
 
 internal val RelayCompatible = arrayOf(
     Compatibility(
-        name = "Relay for Reddit",
+        name = "Relay for Reddit Free",
         packageName = "free.reddit.news",
         targets = listOf(AppTarget(version = "10.2.40"))
     ),

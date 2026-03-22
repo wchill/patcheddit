@@ -10,7 +10,7 @@ internal val BaconReaderCompatible = arrayOf(
         targets = listOf(AppTarget(version = null))
     ),
     Compatibility(
-        name = "BaconReader",
+        name = "BaconReader Premium",
         packageName = "com.onelouder.baconreader.premium",
         targets = listOf(AppTarget(version = null))
     )
