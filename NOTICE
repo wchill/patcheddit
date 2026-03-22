@@ -11,6 +11,12 @@ https://www.gnu.org/licenses/gpl-3.0.html
 7c. Project Name Restriction
 ----------------------------
 
-The project name "Morphe" may not be used for derivative works.
-Derivatives must adopt a completely different identity that is not related
-to or similar to the name "Morphe".
+This license does not grant permission to use the name "Morphe", or any name, logo, or branding that is confusingly similar, as the name or primary identifying mark of any modified version, fork, or derivative work.
+
+Any redistribution or derivative work must adopt a distinct name and branding that clearly differentiates it from the Morphe project and does not cause confusion as to source or origin.
+
+References to Morphe are permitted solely for descriptive compatibility purposes (e.g., "compatible with Morphe" or "XYZ patches for use with Morphe"), provided that such references:
+
+- Are accurate, factual, and non-misleading;
+- Do not suggest authorship by the Morphe project; and
+- Appear only in a secondary or descriptive context, not as part of the product or project name.
