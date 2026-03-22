@@ -82,7 +82,7 @@ public class RedditSubredditUndeleteInterceptor implements Interceptor {
 
     private Response handleRules(Chain chain, Request request, String subredditName) throws IOException {
         Optional<String> cached = subredditCache.get(subredditName);
-        if (!cached.isPresent()) {
+        if (cached.isEmpty()) {
             Response response = chain.proceed(request);
             if (response.isSuccessful()) {
                 return response;
@@ -101,9 +101,11 @@ public class RedditSubredditUndeleteInterceptor implements Interceptor {
 
     private Response handlePosts(Chain chain, Request request, String subredditName) throws IOException {
         Optional<String> cached = subredditCache.get(subredditName);
-        if (!cached.isPresent()) {
+        if (cached.isEmpty()) {
             Response response = chain.proceed(request);
-            if (response.isSuccessful()) {
+            // Check for HTTP 5xx because this can also indicate that reddit is having issues.
+            // In these situations, we don't want to mark the subreddit as banned.
+            if (response.isSuccessful() || response.code() >= 500) {
                 return response;
             }
         }
