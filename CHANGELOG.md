@@ -1,3 +1,10 @@
+# [1.3.0-dev.3](https://github.com/wchill/patcheddit/compare/v1.3.0-dev.2...v1.3.0-dev.3) (2026-03-22)
+
+
+### Bug Fixes
+
+* Use separate names for pro/dev versions of apps ([c060aef](https://github.com/wchill/patcheddit/commit/c060aefbbc6ce28f274278b8d0649bcb7cba30f6))
+
 # [1.3.0-dev.2](https://github.com/wchill/patcheddit/compare/v1.3.0-dev.1...v1.3.0-dev.2) (2026-03-22)
 
 
