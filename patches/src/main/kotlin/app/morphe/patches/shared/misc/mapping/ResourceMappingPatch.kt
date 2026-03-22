@@ -113,7 +113,9 @@ fun resourceLiteral(
 ) = literal({ getResourceId(type, name) }, null, location)
 
 
-val resourceMappingPatch = resourcePatch {
+val resourceMappingPatch = resourcePatch(
+    default = false
+) {
     execute {
         // Use a stream of the file, since no modifications are done
         // and using a File parameter causes the file to be re-wrote when closed.

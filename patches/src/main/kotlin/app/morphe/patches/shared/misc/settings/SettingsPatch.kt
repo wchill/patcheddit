@@ -50,7 +50,9 @@ private val settingsColorPatch = bytecodePatch {
 fun settingsPatch (
     rootPreferences: List<Pair<BasePreference, String>>? = null,
     preferences: Set<BasePreference>,
-) = resourcePatch {
+) = resourcePatch(
+    default = false
+) {
     dependsOn(
         addResourcesPatch,
         settingsColorPatch

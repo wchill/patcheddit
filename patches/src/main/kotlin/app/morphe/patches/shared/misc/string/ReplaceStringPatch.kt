@@ -13,6 +13,7 @@ fun replaceStringPatch(
     to: String
 ) = bytecodePatch(
     description = "Replaces occurrences of '$from' with '$to' in string references.",
+    default = false,
 ) {
     dependsOn(
         transformInstructionsPatch(

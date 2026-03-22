@@ -69,7 +69,9 @@ val spoofClientPatch = spoofClientPatch(
     dependsOn(
         settingsPatch,
         sharedExtensionPatch,
-        resourcePatch {
+        resourcePatch(
+            default = false
+        ) {
             execute {
                 if (clientId == null) {
                     return@execute

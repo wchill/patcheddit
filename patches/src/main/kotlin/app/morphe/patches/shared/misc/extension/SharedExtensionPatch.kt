@@ -20,7 +20,9 @@ internal const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/shared/Ut
 fun sharedExtensionPatch(
     extensionName: String,
     vararg hooks: ExtensionHook,
-) = bytecodePatch {
+) = bytecodePatch(
+    default = false
+) {
     dependsOn(sharedExtensionPatch(*hooks))
 
     extendWith("extensions/$extensionName.mpe")
@@ -34,7 +36,9 @@ fun sharedExtensionPatch(
  */
 fun sharedExtensionPatch(
     vararg hooks: ExtensionHook,
-) = bytecodePatch {
+) = bytecodePatch(
+    default = false
+) {
     extendWith("extensions/shared.mpe")
 
     execute {
