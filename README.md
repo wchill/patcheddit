@@ -2,7 +2,6 @@
 
 Morphe patches for Reddit apps.
 
-&nbsp;
 ## ❓ About
 
 TODO: Add description of patches.

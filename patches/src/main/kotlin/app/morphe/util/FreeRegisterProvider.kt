@@ -1,12 +1,13 @@
 /*
  * Copyright 2025 Morphe.
- * https://github.com/morpheapp/morphe-patches
+ * https://github.com/MorpheApp/morphe-patches
  *
- * File-Specific License Notice (GPLv3 Section 7 Additional Permission).
+ * File-Specific License Notice (GPLv3 Section 7 Terms)
  *
  * This file is part of the Morphe patches project and is licensed under
  * the GNU General Public License version 3 (GPLv3), with the Additional
- * Terms under Section 7 described in the Morphe patches LICENSE file.
+ * Terms under Section 7 described in the Morphe patches
+ * LICENSE file: https://github.com/MorpheApp/morphe-patches/blob/main/NOTICE
  *
  * https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -27,7 +28,7 @@
  *
  * All other terms of the Morphe Patches LICENSE, including Section 7c
  * (Project Name Restriction) and the GPLv3 itself, remain fully
-  * applicable to this file.
+ * applicable to this file.
  */
 
 package app.morphe.util
@@ -142,7 +143,7 @@ class FreeRegisterProvider internal constructor(
      * (registers are read from by the original code), and all free registers previously provided
      * by this class using [getFreeRegister].
      *
-     * @return List of all registers that are un-safe to use at this time.
+     * @return List of all registers that are unsafe to use at this time.
      */
     fun getUsedAndUnAvailableRegisters(): List<Int> {
         val allRegisters = 0 until method.implementation!!.registerCount
@@ -226,21 +227,26 @@ class FreeRegisterProvider internal constructor(
 }
 
 /**
- * Starting from and including the instruction at index [index], finds the next register
- * that is written to and not read from.
+ * Starting from and including the instruction at index [index],
+ * finds the next register that is written to and not read from. If a return instruction
+ * is encountered, then the lowest unused register is returned.
  *
- * This method can return a non 4-bit register, and the calling code may need to temporarily
- * swap register contents if a 4-bit register is required.
+ * This method should work for all situations including inserting at a branch statement,
+ * but this may not work if the index is at or just before a switch statement or if the branch
+ * paths have no common free registers.
  *
- * @param index Inclusive starting index.
+ * If you need multiple free registers, then instead use [Method.getFreeRegisterProvider].
+ *
+ * @param index Index you need a use a free register at.
  * @param registersToExclude Registers to exclude, and consider as used. For most use cases,
  *                           all registers used in injected code should be specified.
  * @return The lowest register number (usually a 4-bit register) that is free at the given index.
  * @throws IllegalArgumentException If no free registers can be found at the given index.
  *                                  This includes unusual method indexes that read from every register
  *                                  before any registers are wrote to, or if a switch statement is
- *                                  encountered before any free registers are found.
- * @see [FreeRegisterProvider]
+ *                                  encountered before any free registers are found, or if the index is
+ *                                  at/before a branch statement and the method has an unusually high
+ *                                  amount of branching where no common free registers exist in both branch paths.
  */
 fun Method.findFreeRegister(
     index: Int,
@@ -257,7 +263,8 @@ fun Method.findFreeRegister(
  * is encountered, then the lowest unused register is returned.
  *
  * This method should work for all situations including inserting at a branch statement,
- * but this may not work if the index is at or just before a switch statement.
+ * but this may not work if the index is at or just before a switch statement or if the branch
+ * paths have no common free registers.
  *
  * If you need multiple free registers, then instead use [Method.getFreeRegisterProvider].
  *
@@ -265,9 +272,12 @@ fun Method.findFreeRegister(
  * @param registersToExclude Registers to exclude, and consider as used. For most use cases,
  *                           all registers used in injected code should be specified.
  * @return The lowest register number (usually a 4-bit register) that is free at the given index.
- * @throws IllegalArgumentException If no free registers exist at the given index, and should only
- *                                  occur if a switch statement is encountered before a free
- *                                  register is found.
+ * @throws IllegalArgumentException If no free registers can be found at the given index.
+ *                                  This includes unusual method indexes that read from every register
+ *                                  before any registers are wrote to, or if a switch statement is
+ *                                  encountered before any free registers are found, or if the index is
+ *                                  at/before a branch statement and the method has an unusually high
+ *                                  amount of branching where no common free registers exist in both branch paths.
  */
 fun Method.findFreeRegister(
     index: Int,
@@ -336,7 +346,7 @@ private fun Method.findFreeRegistersInternal(
     check(implementation != null) {
         "Method has no implementation: $this"
     }
-    check(startIndex > 0 && startIndex < instructions.count()) {
+    check(startIndex >= 0 && startIndex < instructions.count()) {
         "startIndex out of bounds: $startIndex methodInstructionCount: ${instructions.count()}"
     }
     check(numberOfFreeRegistersNeeded > 0) {
@@ -364,7 +374,7 @@ private fun Method.findFreeRegistersInternal(
             // Check if this register is ONLY written to (not also read)
             // Count occurrences of writeRegister in instructionRegisters.
             val occurrences = instructionRegisters.count { it == writeRegister }
-            // If it appears only once, it's write-only (the write).
+            // If it appears only once, it's write-only (to write).
             // If it appears more than once, it's also read.
             if (occurrences <= 1) {
                 if (logFreeRegisterSearch) println("Found free register at $i: $writeRegister " +
@@ -402,7 +412,7 @@ private fun Method.findFreeRegistersInternal(
         if (instruction.isUnconditionalBranchInstruction) {
             if (logFreeRegisterSearch) println("encountered unconditional branch index: $i opcode: " + instruction.opcode)
 
-            // Continue searching from the goto index.
+            // Continue searching from the go-to index.
             return (freeRegisters + findFreeRegistersInternal(
                 startIndex = getBranchTargetInstructionIndex(instruction, i, offsetArray),
                 numberOfFreeRegistersNeeded = numberOfFreeRegistersNeeded,
@@ -443,7 +453,7 @@ private fun Method.findFreeRegistersInternal(
 
     // A return or branch instruction will be encountered before all instructions can be iterated.
     // Some methods have switch payload instructions after the last actual instruction,
-    // but these cannot be reached thru normal control flow.
+    // but these cannot be reached through normal control flow.
     throw IllegalArgumentException("Start index is outside normal control flow: $startIndex")
 }
 
@@ -476,7 +486,7 @@ private fun Method.buildInstructionOffsetArray(): IntArray {
 }
 
 /**
- * Returns a instruction index for a given branch instruction.
+ * Returns an instruction index for a given branch instruction.
  *
  * @param instruction The branch instruction
  * @param index Current instruction index
@@ -586,8 +596,8 @@ internal val Instruction.isUnconditionalBranchInstruction: Boolean
     get() = this.opcode in unconditionalBranchOpcodes
 
 /**
-* @return If this instruction is a switch opcode.
-*/
+ * @return If this instruction is a switch opcode.
+ */
 internal val Instruction.isSwitchInstruction: Boolean
     get() = this.opcode in switchOpcodes
 

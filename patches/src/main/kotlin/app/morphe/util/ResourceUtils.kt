@@ -1,12 +1,16 @@
 /*
  * Copyright 2025 Morphe.
- * https://github.com/morpheapp/morphe-patches
+ * https://github.com/MorpheApp/morphe-patches
  *
- * File-Specific License Notice (GPLv3 Section 7 Additional Permission).
+ * Original code hard forked from:
+ * https://github.com/ReVanced/revanced-patches/blob/bd2a939a72e0106b14bd67f46bec646b53a0a0d4/patches/src/main/kotlin/app/revanced/util/ResourceUtils.kt
+ *
+ * File-Specific License Notice (GPLv3 Section 7 Terms)
  *
  * This file is part of the Morphe patches project and is licensed under
  * the GNU General Public License version 3 (GPLv3), with the Additional
- * Terms under Section 7 described in the Morphe patches LICENSE file.
+ * Terms under Section 7 described in the Morphe patches
+ * LICENSE file: https://github.com/MorpheApp/morphe-patches/blob/main/NOTICE
  *
  * https://www.gnu.org/licenses/gpl-3.0.html
  *
@@ -27,8 +31,9 @@
  *
  * All other terms of the Morphe Patches LICENSE, including Section 7c
  * (Project Name Restriction) and the GPLv3 itself, remain fully
-  * applicable to this file.
+ * applicable to this file.
  */
+
 package app.morphe.util
 
 import app.morphe.patcher.patch.PatchException
@@ -107,6 +112,11 @@ fun ResourcePatchContext.copyResources(
 
     for (resourceGroup in resources) {
         resourceGroup.resources.forEach { resource ->
+            // Create the target directory if it doesn't exist.
+            Files.createDirectories(
+                targetResourceDirectory.resolve(resourceGroup.resourceDirectoryName).toPath()
+            )
+
             val resourceFile = "${resourceGroup.resourceDirectoryName}/$resource"
             val stream = inputStreamFromBundledResource(sourceResourceDirectory, resourceFile)
             if (stream == null) {
@@ -136,8 +146,8 @@ class ResourceGroup(val resourceDirectoryName: String, vararg val resources: Str
 
 /**
  * Iterate through the children of a node by its tag.
- * @param resource The xml resource.
- * @param targetTag The target xml node.
+ * @param resource The XML resource.
+ * @param targetTag The target XML node.
  * @param callback The callback to call when iterating over the nodes.
  */
 fun ResourcePatchContext.iterateXmlNodeChildren(
@@ -189,6 +199,12 @@ internal fun Node.addResource(
 
 internal fun Document.getNode(tagName: String) = getElementsByTagName(tagName).item(0)
 
+internal fun Node.adoptChild(tagName: String, block: Element.() -> Unit) {
+    val child = ownerDocument.createElement(tagName)
+    child.block()
+    appendChild(child)
+}
+
 internal fun NodeList.findElementByAttributeValue(attributeName: String, value: String): Element? {
     for (i in 0 until length) {
         val node = item(i)
@@ -232,4 +248,9 @@ internal fun ResourcePatchContext.findPlayStoreServicesVersion(): Int =
             "google_play_services_version",
         ).textContent.toInt()
     }
+
+internal fun String.trimIndentMultiline() =
+    this.split("\n")
+        .joinToString("\n") { it.trimIndent() } // Remove the leading whitespace from each line.
+        .trimIndent() // Remove the leading newline.
 
