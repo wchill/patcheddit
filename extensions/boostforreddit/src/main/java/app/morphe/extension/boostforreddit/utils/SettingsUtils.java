@@ -11,6 +11,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import app.morphe.extension.shared.ResourceType;
+import app.morphe.extension.shared.ResourceUtils;
 import app.morphe.extension.shared.Utils;
 
 /**
@@ -37,7 +38,7 @@ public class SettingsUtils {
         ReflectionUtils.invoke(menuOption, setMenuOptionDivider, true);
         options.add(menuOption);
 
-        int drawableId = Utils.getResourceIdentifier(ResourceType.DRAWABLE, "ic_library_24dp");
+        int drawableId = ResourceUtils.getDrawableIdentifier("ic_library_24dp");
         menuOption = ReflectionUtils.construct(MENU_OPTION_CLASS);
         ReflectionUtils.invoke(menuOption, setMenuOptionValue, 101);
         ReflectionUtils.invoke(menuOption, setMenuOptionTitle, "Open with Wayback Machine");
