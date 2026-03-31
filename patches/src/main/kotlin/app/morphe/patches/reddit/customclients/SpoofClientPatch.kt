@@ -42,7 +42,7 @@ fun spoofClientPatch(
             if (value.isNullOrBlank()) {
                 return@stringOption false
             }
-            if (!value.matches(Regex("^[a-zA-Z0-9]{22}\$"))) {
+            if (!value.matches(Regex("^\\w{22}$"))) {
                 return@stringOption false
             }
             true
