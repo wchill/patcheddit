@@ -1,3 +1,15 @@
+# [1.3.0-dev.4](https://github.com/wchill/patcheddit/compare/v1.3.0-dev.3...v1.3.0-dev.4) (2026-03-31)
+
+
+### Bug Fixes
+
+* Sync for reddit patch errored with "Collection is empty" ([bdb71c4](https://github.com/wchill/patcheddit/commit/bdb71c4349c4e9d4b6c1ff15720814a3c94079e6))
+
+
+### Features
+
+* Support reddit is fun golden platinum ([a768745](https://github.com/wchill/patcheddit/commit/a768745cdc1a1d703dd5a31b8e026e61a5454cb8))
+
 # [1.3.0-dev.3](https://github.com/wchill/patcheddit/compare/v1.3.0-dev.2...v1.3.0-dev.3) (2026-03-22)
 
 
