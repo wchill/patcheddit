@@ -19,8 +19,7 @@ an easily accessible, user-facing message with the exact wording:
 
     This app uses code from Patcheddit. To learn more, visit https://reddit.com/r/patcheddit
 
-The message must be presented in a way that allows the end user to easily
-visit the URL (e.g., clickable link, UI button, or equivalent).
+The message must be displayed in a manner that is clearly visible to users, such as in an "About" section or a toast during app startup. The message should not be hidden or obscured in any way.
 
 7c. Project Name Restriction
 ----------------------------
