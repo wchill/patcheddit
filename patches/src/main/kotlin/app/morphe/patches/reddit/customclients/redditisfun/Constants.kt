@@ -10,10 +10,18 @@ package app.morphe.patches.reddit.customclients.redditisfun
 import app.morphe.patcher.patch.AppTarget
 import app.morphe.patcher.patch.Compatibility
 
-internal val RedditIsFunCompatible = arrayOf(
+internal val RedditIsFunFreeCompatible =
     Compatibility(
-        name = "Reddit is Fun",
+        name = "reddit is fun",
         packageName = "com.andrewshu.android.reddit",
+        targets = listOf(AppTarget(version = "5.6.22"))
+    )
+
+internal val RedditIsFunCompatible = arrayOf(
+    RedditIsFunFreeCompatible,
+    Compatibility(
+        name = "reddit is fun golden platinum",
+        packageName = "com.andrewshu.android.redditdonation",
         targets = listOf(AppTarget(version = "5.6.22"))
     )
 )
