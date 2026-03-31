@@ -150,41 +150,5 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
                 """, ExternalLabel("skip", method.getInstruction(index))
             )
         }
-
-        extensionSettingsFragmentMethodFingerprint.method.apply {
-            name = baseCustomFragmentMethodFingerprint.method.name
-
-            // Fix references to setPreferencesFromResource(int, String);
-            extensionSetPreferencesFromResourceFingerprint.match().apply {
-                val match = instructionMatches[0]
-                val registers = match.instruction.registersUsed
-                val index = match.index
-                val calledMethod = (baseCustomFragmentMethodFingerprint.instructionMatches[0].instruction as ReferenceInstruction).reference.toString()
-                method.replaceInstruction(index,
-                    """
-                        invoke-virtual { v${registers[0]}, v${registers[1]}, v${registers[2]} }, $calledMethod
-                    """
-                )
-            }
-
-            // Fix references to findPreference(String);
-            extensionFindResourceFingerprint.match().apply {
-                val match = instructionMatches[0]
-                val registers = match.instruction.registersUsed
-                val index = match.index
-                val calledMethod = (baseCustomFragmentMethodFingerprint.instructionMatches[1].instruction as ReferenceInstruction).reference.toString()
-                method.replaceInstruction(index,
-                    """
-                        invoke-virtual { v${registers[0]}, v${registers[1]} }, $calledMethod
-                    """
-                )
-            }
-
-            // TODO: Fix up references to Preference listeners
-
-            val customFontFragmentType = classDefBy(baseCustomFragmentMethodFingerprint.classDef.superclass!!)
-            val prefFragmentCompatType = classDefBy(customFontFragmentType.superclass!!)
-
-        }
     }
 }

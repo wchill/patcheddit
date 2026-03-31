@@ -2,4 +2,4 @@ package app.morphe.patches.reddit.customclients.infinity.misc.extension.hooks
 
 import app.morphe.patches.shared.misc.extension.activityOnCreateExtensionHook
 
-internal val initHook = activityOnCreateExtensionHook("Lml/docilealligator/infinityforreddit/activities/MainActivity;")
+internal val initHook = activityOnCreateExtensionHook("Lml/docilealligator/infinityforreddit/Infinity;")

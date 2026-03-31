@@ -64,56 +64,6 @@ internal val settingsActivityOnBackStackChangedFingerprint = Fingerprint(
     )
 )
 
-internal val baseCustomFragmentMethodFingerprint = Fingerprint(
-    definingClass = "Lml/docilealligator/infinityforreddit/settings/VideoPreferenceFragment;",
-    parameters = listOf("Landroid/os/Bundle;", "Ljava/lang/String;"),
-    returnType = "V",
-    filters = listOf(
-        methodCall(
-            opcode = Opcode.INVOKE_VIRTUAL,
-            parameters = listOf("I", "Ljava/lang/String;"),
-            returnType = "V"
-        ),
-        methodCall(
-            opcode = Opcode.INVOKE_VIRTUAL,
-            parameters = listOf("Ljava/lang/CharSequence;"),
-            returnType = "Landroidx/preference/Preference;"
-        )
-    )
-)
-
-internal val extensionSettingsFragmentMethodFingerprint = Fingerprint(
-    definingClass = "Lapp/morphe/extension/infinity/APIKeysPreferenceFragment;",
-    parameters = listOf("Landroid/os/Bundle;", "Ljava/lang/String;"),
-    returnType = "V",
-)
-
-internal val extensionSetPreferencesFromResourceFingerprint = Fingerprint(
-    definingClass = "Lapp/morphe/extension/infinity/APIKeysPreferenceFragment;",
-    parameters = listOf("I", "Ljava/lang/String;"),
-    returnType = "V",
-    filters = listOf(
-        methodCall(
-            opcode = Opcode.INVOKE_VIRTUAL,
-            parameters = listOf("I", "Ljava/lang/String;"),
-            returnType = "V"
-        )
-    )
-)
-
-internal val extensionFindResourceFingerprint = Fingerprint(
-    definingClass = "Lapp/morphe/extension/infinity/APIKeysPreferenceFragment;",
-    parameters = listOf("Ljava/lang/String;"),
-    returnType = "Landroidx/preference/Preference;",
-    filters = listOf(
-        methodCall(
-            opcode = Opcode.INVOKE_VIRTUAL,
-            parameters = listOf("Ljava/lang/CharSequence;"),
-            returnType = "Landroidx/preference/Preference;"
-        )
-    )
-)
-
 internal val billingClientOnServiceConnectedFingerprint = Fingerprint(
     strings = listOf("Billing service connected")
 )
