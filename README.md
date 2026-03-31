@@ -1,19 +1,50 @@
 # 👋🧩 Patcheddit
 
-Morphe patches for Reddit apps.
+Morphe compatible patches for third party Reddit apps.
 
 ## ❓ About
 
-TODO: Add description of patches.
+Patcheddit is a Morphe compatible patch bundle that supports patching the OAuth login information for 3rd party reddit apps.
 
-In the meantime, see https://github.com/wchill/revanced-patches for a list of the changes present in this patch.
+In addition, patches for some apps contain additional features that were not present in ReVanced.
+
+## Differences from official patch set
+
+### All clients
+* Client ID, redirect URI and user agent are all patchable.
+    * By default, redirect URI and user agent are set to the values used by RedReader.
+    * See https://github.com/ReVanced/revanced-patches/pull/4551 for context.
+
+### Boost for Reddit
+* The content of deleted Reddit posts and comments can be loaded from [Project Arctic Shift](https://github.com/ArthurHeitmann/arctic_shift).
+    * This only works for text and images, and not all content can be restored. Videos are unlikely to be available.
+    * Posts/comments that were deleted are marked as follows:
+        * 🗑️ if removed by the author
+        * 🧹 if removed by a subreddit mod
+        * 🚓 if removed by reddit admins
+        * 🤖 if removed by anti-spam
+        * ©️ if removed due to a takedown notice
+        * 👿 if removed by Anti-Evil Operations
+        * 🚫 if the subreddit is banned
+    * Banned subreddits can be browsed with this functionality; however, rules/wiki pages are unavailable and the only sort option is by new.
+    * In order to view a deleted post, you need to already have a direct link to the post. Subreddit feeds will not show deleted posts (unless the subreddit was banned); this is because of the lack of sorting options and the high likelihood of seeing a ton of spam posts.
+    * Currently, this functionality is not working on user profiles. Removed posts you encounter on user pages need to be opened and refreshed for their content to load.
+    * This feature makes extra network requests, so posts will load a little slower. In particular, retrieving images from the Wayback Machine is heavily ratelimited.
+        * Caching is implemented to try and limit the impact of this.
+* Imgur images and albums are automatically loaded from the Wayback Machine if a 404 is detected.
+* The context menu for posts now contains additional options for opening a site in the Wayback Machine or archive.is. This is useful for if the undeleting functionality has issues or you want to bypass a content paywall.
+* Fixes audio in downloaded videos for all videos using a proper MPD parser. The official fix fixes this for new videos but breaks it for older ones.
+
+### reddit is fun
+* Imgur album URLs are rewritten to use the newer format.
+* Enables pro features without ads.
 
 ## 🚀 Get started
 
 1. Install [Morphe Manager](https://morphe.software/) and switch it to advanced/expert mode.
 2. Click [this link](https://morphe.software/add-source?github=wchill/patcheddit) to add this patch source to Morphe Manager.
 3. In Morphe Manager, find the app you want to patch.
-   * The supported apps are Boost, RIF, Sync, Relay, BaconReader, Joey, Continuum, and the cygnusx1 fork of Slide.
+   * The supported apps are Boost, RIF, Sync, Relay, BaconReader, Joey, Infinity+, Continuum, and the cygnusx1 fork of Slide.
 4. Get the APK for your preferred, supported 3rd party reddit app. If you don't have it, you can download it from in the app. APKM bundles (aka split APKs) will also work.
    * You should get the last available version for your reddit app, unless you are patching Relay. Relay v10.2.40 should be used instead of the latest.
    * Continuum and the cygnusx1 fork of Slide need to be downloaded manually from their respective GitHub releases pages, as they are not available on the Play Store.
@@ -41,6 +72,46 @@ You can use the client ID from other working 3rd party reddit apps (sadly not th
 4. Select your other desired patches and patch as normal.
 
 If you're wondering why I'm asking you to go through these steps instead of just including the client ID in the patch, it's because including the client ID in the patch would make it accessible to web scrapers and would likely result in the client ID being revoked, breaking the patch for everyone.
+
+### Resolving login problems
+
+I am unable to select the username/password fields on the login page - my keyboard pops up and then disappears quickly
+
+* Switch your phone to landscape mode. There is a cookie banner that needs to be dismissed, but it is bugged and only shows up on landscape mode.
+
+I either get `{}` or `Error: Invalid request to Oauth API`
+
+* Your redirect URI is probably wrong. It has to match exactly between the patching settings and your reddit installed app. If you're reusing an installed app you made before, then update the URI at https://www.reddit.com/prefs/apps/. Make sure you don't add `/` at the end.
+
+I cannot login, reddit is telling me that my username/password are invalid even though they are correct
+
+* Reddit doesn't like the network you're logging in from (corporate/work network, country with banned IP ranges due to abuse, etc). Try using a VPN or switching to cellular data.
+* Alternatively, this problem may go away if you restart your phone, clear cookies for Chrome, clear app data for Android System WebView, or update Android System WebView to the latest version.
+* See https://github.com/cygnusx-1-org/continuum/blob/master/SETUP.md#common-errors
+
+I cannot hit Accept on the Authorize screen
+
+* Change your reddit site language to English. There are reports that this screen does not work properly otherwise.
+
+I still get 403 Blocked
+
+* If you filled your user agent in with garbage, it will eventually be blocked by reddit. Also, reddit blocks any mention of rubenmayayo in the user agent.
+* Your user agent can also be blocked due to other terms: a user reported that he was getting 403 after patching, and it turned out to be because his username included `isfun` (which triggers a block from reddit's side due to them blocking the app Reddit is Fun).
+
+I get 401 when I open the app
+
+* You probably created a web app instead of an installed app. Delete the app, create an installed app and then repatch with the new client ID.
+* Don't use autofill when logging into Reddit. Manually type in or copy+paste your password.
+
+I'm getting 400 Bad Request while logged in
+
+* Either try logging out and logging back in, or uninstall the app (back up your settings first) then reinstall it.
+
+I get a `null: null` error when I open the app
+
+* Your client ID is incorrect, check that you copied it correctly.
+
+
 
 ## 🧑‍💻 Development
 
