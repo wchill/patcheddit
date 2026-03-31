@@ -7,13 +7,9 @@
 
 package app.morphe.patches.reddit.customclients.infinity.api
 
-import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
-import app.morphe.patcher.extensions.InstructionExtensions.instructions
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
-import app.morphe.patcher.literal
-import app.morphe.patcher.methodCall
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.patch.resourcePatch
 import app.morphe.patcher.resource.utf8Writer
@@ -22,12 +18,10 @@ import app.morphe.patches.reddit.customclients.infinity.InfinityCompatible
 import app.morphe.patches.reddit.customclients.infinity.misc.extension.sharedExtensionPatch
 import app.morphe.patches.reddit.customclients.spoofClientPatch
 import app.morphe.util.getNode
-import app.morphe.util.insertFirst
 import app.morphe.util.registersUsed
 import app.morphe.util.replaceStringMatchesWithFunc
 import app.morphe.util.returnEarly
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
-import com.android.tools.smali.dexlib2.iface.reference.TypeReference
 
 internal const val EXTENSION_CLASS_NAME = "Lapp/morphe/extension/infinity/APIUtils;"
 internal const val FRAGMENT_CLASS_NAME = "app.morphe.extension.infinity.APIKeysPreferenceFragment"
