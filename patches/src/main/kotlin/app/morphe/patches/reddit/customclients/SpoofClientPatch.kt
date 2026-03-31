@@ -32,7 +32,7 @@ fun spoofClientPatch(
 ) {
     val clientIdOption = stringOption(
         "client-id",
-        null,
+        "yH0aTnJEt6qUgGn835B4vg",
         null,
         "OAuth client ID",
         "The Reddit OAuth client ID. Refer to Patcheddit documentation for more " +

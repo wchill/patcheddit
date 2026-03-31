@@ -30,14 +30,14 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.view.Window;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Toast;
 
+import androidx.annotation.ChecksSdkIntAtLeast;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.lang.ref.WeakReference;
 import java.text.Bidi;
 import java.text.Collator;
 import java.text.Normalizer;
@@ -58,11 +58,12 @@ import java.util.regex.Pattern;
 import app.morphe.extension.shared.settings.AppLanguage;
 import app.morphe.extension.shared.settings.BaseSettings;
 import app.morphe.extension.shared.settings.BooleanSetting;
-import app.morphe.extension.shared.settings.preference.MorpheAboutPreference;
+import app.morphe.extension.shared.settings.StringSetting;
 import app.morphe.extension.shared.ui.Dim;
 
 @SuppressWarnings("NewApi")
 public class Utils {
+    private static WeakReference<Activity> activityRef = new WeakReference<>(null);
 
     @SuppressLint("StaticFieldLeak")
     static volatile Context context;
@@ -143,11 +144,13 @@ public class Utils {
         if (applicationLabel == null) {
             try {
                 ApplicationInfo applicationInfo = getPackageInfo().applicationInfo;
-                applicationLabel = (String) applicationInfo.loadLabel(context.getPackageManager());
+                if (applicationInfo != null) {
+                    return applicationLabel = (String) applicationInfo.loadLabel(context.getPackageManager());
+                }
             } catch (Exception ex) {
                 Logger.printException(() -> "Failed to get application name", ex);
-                applicationLabel = "Unknown";
             }
+            applicationLabel = "Unknown";
         }
 
         return applicationLabel;
@@ -181,7 +184,7 @@ public class Utils {
     }
 
     /**
-     * Hide a view by setting its visibility to GONE.
+     * Hide a view by setting its visibility as GONE.
      *
      * @param setting The setting to check for hiding the view.
      * @param view      The view to hide.
@@ -193,7 +196,7 @@ public class Utils {
     }
 
     /**
-     * Hide a view by setting its visibility to GONE.
+     * Hide a view by setting its visibility as GONE.
      *
      * @param condition The setting to check for hiding the view.
      * @param view      The view to hide.
@@ -263,7 +266,7 @@ public class Utils {
             // Could do a thread sleep, but that will trigger an exception if the thread is interrupted.
             meaninglessValue += Long.numberOfLeadingZeros((long) Math.exp(Math.random()));
         }
-        // Return the value, otherwise the compiler or VM might optimize and remove the meaningless time wasting work,
+        // Return the value, otherwise the compiler or VM might optimize and remove the meaningless time-wasting work,
         // leaving an empty loop that hammers on the System.currentTimeMillis native call.
         return meaninglessValue;
     }
@@ -273,73 +276,61 @@ public class Utils {
     }
 
     public static int indexOfFirstFound(String value, String... targets) {
-        for (String string : targets) {
-            if (!string.isEmpty()) {
-                final int indexOf = value.indexOf(string);
-                if (indexOf >= 0) return indexOf;
+        if (isNotEmpty(value)) {
+            for (String string : targets) {
+                if (!string.isEmpty()) {
+                    final int indexOf = value.indexOf(string);
+                    if (indexOf >= 0) return indexOf;
+                }
             }
         }
         return -1;
     }
 
-    /**
-     * @return zero, if the resource is not found.
-     */
-    @SuppressLint("DiscouragedApi")
-    public static int getResourceIdentifier(Context context, @Nullable ResourceType type, String resourceIdentifierName) {
-        return context.getResources().getIdentifier(resourceIdentifierName,
-                type == null ? null : type.value, context.getPackageName());
-    }
-
-    public static int getResourceIdentifierOrThrow(Context context, @Nullable ResourceType type, String resourceIdentifierName) {
-        final int resourceId = getResourceIdentifier(context, type, resourceIdentifierName);
-        if (resourceId == 0) {
-            throw new Resources.NotFoundException("No resource id exists with name: " + resourceIdentifierName
-                    + " type: " + type);
+    public static boolean equalsAny(String value, String...targets) {
+        if (isNotEmpty(value)) {
+            for (String string : targets) {
+                if (value.equals(string)) {
+                    return true;
+                }
+            }
         }
-        return resourceId;
+        return false;
     }
 
     /**
-     * @return zero, if the resource is not found.
-     * @see #getResourceIdentifierOrThrow(ResourceType, String)
+     * Checks if a specific app package is installed and enabled on the device.
+     *
+     * @param packageName The application package name to check (e.g., "app.morphe.android.apps.youtube.music").
+     * @return True if the package is installed and enabled, false otherwise.
      */
-    public static int getResourceIdentifier(@Nullable ResourceType type, String resourceIdentifierName) {
-        return getResourceIdentifier(getContext(), type, resourceIdentifierName);
+    public static boolean isPackageEnabled(String packageName) {
+        Context currentContext = getContext();
+        if (currentContext == null || !isNotEmpty(packageName)) {
+            return false;
+        }
+
+        try {
+            PackageManager pm = currentContext.getPackageManager();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                return pm.getApplicationInfo(packageName, PackageManager.ApplicationInfoFlags.of(0)).enabled;
+            } else {
+                return pm.getApplicationInfo(packageName, 0).enabled;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
     }
 
-    /**
-     * @return zero, if the resource is not found.
-     * @see #getResourceIdentifier(ResourceType, String)
-     */
-    public static int getResourceIdentifierOrThrow(@Nullable ResourceType type, String resourceIdentifierName) {
-        return getResourceIdentifierOrThrow(getContext(), type, resourceIdentifierName);
-    }
-
-    public static int getResourceInteger(String resourceIdentifierName) throws Resources.NotFoundException {
-        return getContext().getResources().getInteger(getResourceIdentifierOrThrow(ResourceType.INTEGER, resourceIdentifierName));
-    }
-
-    public static Animation getResourceAnimation(String resourceIdentifierName) throws Resources.NotFoundException {
-        return AnimationUtils.loadAnimation(getContext(), getResourceIdentifierOrThrow(ResourceType.ANIM, resourceIdentifierName));
-    }
-
-    @ColorInt
-    public static int getResourceColor(String resourceIdentifierName) throws Resources.NotFoundException {
-        //noinspection deprecation
-        return getContext().getResources().getColor(getResourceIdentifierOrThrow(ResourceType.COLOR, resourceIdentifierName));
-    }
-
-    public static int getResourceDimensionPixelSize(String resourceIdentifierName) throws Resources.NotFoundException {
-        return getContext().getResources().getDimensionPixelSize(getResourceIdentifierOrThrow(ResourceType.DIMEN, resourceIdentifierName));
-    }
-
-    public static float getResourceDimension(String resourceIdentifierName) throws Resources.NotFoundException {
-        return getContext().getResources().getDimension(getResourceIdentifierOrThrow(ResourceType.DIMEN, resourceIdentifierName));
-    }
-
-    public static String[] getResourceStringArray(String resourceIdentifierName) throws Resources.NotFoundException {
-        return getContext().getResources().getStringArray(getResourceIdentifierOrThrow(ResourceType.ARRAY, resourceIdentifierName));
+    public static boolean startsWithAny(String value, String...targets) {
+        if (isNotEmpty(value)) {
+            for (String string : targets) {
+                if (isNotEmpty(string) && value.startsWith(string)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public interface MatchFilter<T> {
@@ -350,7 +341,7 @@ public class Utils {
      * Includes sub children.
      */
     public static <R extends View> R getChildViewByResourceName(View view, String str) {
-        var child = view.findViewById(Utils.getResourceIdentifierOrThrow(ResourceType.ID, str));
+        var child = view.findViewById(ResourceUtils.getIdentifierOrThrow(ResourceType.ID, str));
         //noinspection unchecked
         return (R) child;
     }
@@ -399,6 +390,20 @@ public class Utils {
         return null;
     }
 
+    public static List<String> getFilterStrings(StringSetting setting) {
+        String[] filterArray = setting.get().split("\\n");
+        List<String> filters = new ArrayList<>(filterArray.length);
+
+        for (String line : filterArray) {
+            String trimmed = line.trim();
+            if (!trimmed.isEmpty()) {
+                filters.add(trimmed);
+            }
+        }
+
+        return filters;
+    }
+
     public static void restartApp(Context context) {
         String packageName = context.getPackageName();
         Intent intent = Objects.requireNonNull(context.getPackageManager().getLaunchIntentForPackage(packageName));
@@ -410,9 +415,36 @@ public class Utils {
         System.exit(0);
     }
 
+    public static Resources getResources() {
+        return getResources(true);
+    }
+
+    public static Resources getResources(boolean useContext) {
+        if (useContext) {
+            if (context != null) {
+                return context.getResources();
+            }
+            Activity mActivity = activityRef.get();
+            if (mActivity != null) {
+                return mActivity.getResources();
+            }
+        }
+
+        return Resources.getSystem();
+    }
+
+    public static Activity getActivity() {
+        return activityRef.get();
+    }
+
+    public static void setActivity(Activity mainActivity) {
+        Logger.printInfo(() -> "Set activity: " + mainActivity);
+        activityRef = new WeakReference<>(mainActivity);
+    }
+
     public static Context getContext() {
         if (context == null) {
-            Logger.printException(() -> "Context is not set by extension hook, returning null",  null);
+            Logger.printException(() -> "Context is not set by extension hook, returning null");
         }
         return context;
     }
@@ -423,6 +455,11 @@ public class Utils {
         Logger.printInfo(() -> "Set context: " + appContext);
         // Must initially set context to check the app language.
         context = appContext;
+
+        // Set activity if not already set.
+        if (appContext instanceof Activity activity && getActivity() == null) {
+            setActivity(activity);
+        }
 
         AppLanguage language = BaseSettings.MORPHE_LANGUAGE.get();
         if (language != AppLanguage.DEFAULT) {
@@ -444,6 +481,10 @@ public class Utils {
         clipboard.setPrimaryClip(clip);
     }
 
+    public static boolean isNotEmpty(@Nullable String str) {
+        return str != null && !str.isEmpty();
+    }
+
     public static boolean isTablet() {
         return context.getResources().getConfiguration().smallestScreenWidthDp >= 600;
     }
@@ -452,7 +493,7 @@ public class Utils {
     private static Boolean isRightToLeftTextLayout;
 
     /**
-     * @return If the device language uses right to left text layout (Hebrew, Arabic, etc).
+     * @return If the device language uses right to left text layout (Hebrew, Arabic, etc.).
      *         If this should match any Morphe language override then instead use
      *         {@link #isRightToLeftLocale(Locale)} with {@link BaseSettings#MORPHE_LANGUAGE}.
      *         This is the default locale of the device, which may differ if
@@ -466,7 +507,7 @@ public class Utils {
     }
 
     /**
-     * @return If the locale uses right to left text layout (Hebrew, Arabic, etc).
+     * @return If the locale uses right to left text layout (Hebrew, Arabic, etc.).
      */
     public static boolean isRightToLeftLocale(Locale locale) {
         String displayLanguage = locale.getDisplayLanguage();
@@ -495,7 +536,7 @@ public class Utils {
 
     /**
      * @return if the text contains at least 1 number character,
-     *         including any unicode numbers such as Arabic.
+     *         including any Unicode numbers such as Arabic.
      */
     @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean containsNumber(CharSequence text) {
@@ -708,6 +749,20 @@ public class Utils {
         }
     }
 
+    private static volatile long lastClickTime;
+
+    /**
+     * @return true if the action occurred within 500ms of the last recorded action.
+     */
+    public static boolean isFastClick() {
+        long now = android.os.SystemClock.elapsedRealtime();
+        if (now - lastClickTime < 500) {
+            return true; // Ignore fast double click.
+        }
+        lastClickTime = now;
+        return false;
+    }
+
     public static void openLink(String url) {
         try {
             Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(url));
@@ -805,6 +860,14 @@ public class Utils {
 
         window.setAttributes(params); // Apply window attributes.
         window.setBackgroundDrawable(null); // Remove default dialog background
+    }
+
+    /**
+     * The recommended app version of this app to patch. Set during patching.
+     * Returns an empty string if not set.
+     */
+    public static String getRecommendedAppVersion() {
+        return "";
     }
 
     /**
@@ -1016,77 +1079,6 @@ public class Utils {
     }
 
     /**
-     * Sorts a {@link PreferenceGroup} and all nested subgroups by title or key.
-     * <p>
-     * The sort order is controlled by the {@link Sort} suffix present in the preference key.
-     * Preferences without a key or without a {@link Sort} suffix remain in their original order.
-     * <p>
-     * Sorting is performed using {@link Collator} with the current user locale,
-     * ensuring correct alphabetical ordering for all supported languages
-     * (e.g., Ukrainian "і", German "ß", French accented characters, etc.).
-     *
-     * @param group the {@link PreferenceGroup} to sort
-     */
-    @SuppressWarnings("deprecation")
-    public static void sortPreferenceGroups(PreferenceGroup group) {
-        Sort groupSort = Sort.fromKey(group.getKey(), Sort.UNSORTED);
-        List<Pair<String, Preference>> preferences = new ArrayList<>();
-
-        // Get cached Collator for locale-aware string comparison.
-        Collator collator = getCollator();
-
-        for (int i = 0, prefCount = group.getPreferenceCount(); i < prefCount; i++) {
-            Preference preference = group.getPreference(i);
-
-            final Sort preferenceSort;
-            if (preference instanceof PreferenceGroup subGroup) {
-                sortPreferenceGroups(subGroup);
-                preferenceSort = groupSort; // Sort value for groups is for it's content, not itself.
-            } else {
-                // Allow individual preferences to set a key sorting.
-                // Used to force a preference to the top or bottom of a group.
-                preferenceSort = Sort.fromKey(preference.getKey(), groupSort);
-            }
-
-            final String sortValue;
-            switch (preferenceSort) {
-                case BY_TITLE:
-                    sortValue = removePunctuationToLowercase(preference.getTitle());
-                    break;
-                case BY_KEY:
-                    sortValue = preference.getKey();
-                    break;
-                case UNSORTED:
-                    continue; // Keep original sorting.
-                default:
-                    throw new IllegalStateException();
-            }
-
-            preferences.add(new Pair<>(sortValue, preference));
-        }
-
-        // Sort the list using locale-specific collation rules.
-        Collections.sort(preferences, (pair1, pair2)
-                -> collator.compare(pair1.first, pair2.first));
-
-        // Reassign order values to reflect the new sorted sequence
-        int index = 0;
-        for (Pair<String, Preference> pair : preferences) {
-            int order = index++;
-            Preference pref = pair.second;
-
-            // Move any screens, intents, and the one off About preference to the top.
-            if (pref instanceof PreferenceScreen || pref instanceof MorpheAboutPreference
-                    || pref.getIntent() != null) {
-                // Any arbitrary large number.
-                order -= 1000;
-            }
-
-            pref.setOrder(order);
-        }
-    }
-
-    /**
      * Set all preferences to multiline titles if the device is not using an English variant.
      * The English strings are heavily scrutinized and all titles fit on screen
      * except 2 or 3 preference strings and those do not affect readability.
@@ -1123,11 +1115,11 @@ public class Utils {
         if (colorString.startsWith("#")) {
             return Color.parseColor(colorString);
         }
-        return getResourceColor(colorString);
+        return ResourceUtils.getColor(colorString);
     }
 
     /**
-     * Uses {@link #adjustColorBrightness(int, float)} depending if light or dark mode is active.
+     * Uses {@link #adjustColorBrightness(int, float)} depending on if light or dark mode is active.
      */
     @ColorInt
     public static int adjustColorBrightness(@ColorInt int baseColor, float lightThemeFactor, float darkThemeFactor) {
@@ -1196,5 +1188,13 @@ public class Utils {
                 return size() > maxSize;
             }
         };
+    }
+
+    /**
+     * @return whether the device's API level is higher than a specific SDK version.
+     */
+    @ChecksSdkIntAtLeast(parameter = 0)
+    public static boolean isSDKAbove(int sdk) {
+        return Build.VERSION.SDK_INT >= sdk;
     }
 }
