@@ -11,17 +11,15 @@ import app.morphe.patcher.extensions.InstructionExtensions.addInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
-import app.morphe.patches.all.misc.transformation.transformInstructionsPatch
-import app.morphe.patches.reddit.customclients.slide.misc.extension.sharedExtensionPatch
 import app.morphe.patches.reddit.customclients.slide.SlideCompatible
+import app.morphe.patches.reddit.customclients.slide.misc.extension.sharedExtensionPatch
 import app.morphe.patches.reddit.customclients.spoofClientPatch
 import app.morphe.util.getReference
 import app.morphe.util.indexOfFirstInstructionOrThrow
+import app.morphe.util.replaceStringMatchesWithFunc
 import app.morphe.util.returnEarly
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
-import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
-import com.android.tools.smali.dexlib2.iface.reference.StringReference
 import com.android.tools.smali.dexlib2.iface.reference.TypeReference
 
 internal const val EXTENSION_CLASS_NAME = "Lapp/morphe/extension/slide/APIUtils;"
@@ -35,68 +33,27 @@ val spoofClientPatch = spoofClientPatch(
     description = "Allows modifying Slide's client ID, redirect URI and user agent in settings. " +
             "Patch options will modify default values.",
 ) { clientIdOption, redirectUriOption, userAgentOption ->
+
+    val clientId by clientIdOption
+    val redirectUri by redirectUriOption
+    val userAgent by userAgentOption
+
     dependsOn(
-        sharedExtensionPatch,
-        transformInstructionsPatch(
-            filterMap = { classDef, _, instruction, instructionIndex ->
-                if (classDef.type.startsWith("Lapp/morphe/")) {
-                    return@transformInstructionsPatch null
-                }
-
-                if (instruction.opcode != Opcode.CONST_STRING) {
-                    return@transformInstructionsPatch null
-                }
-
-                val stringReference = instruction.getReference<StringReference>()
-
-                if (stringReference?.string?.startsWith("android:me.edgan.RedditSlide:v") == true) {
-                    return@transformInstructionsPatch Triple(stringReference.string, instruction, instructionIndex)
-                }
-
-                if (stringReference?.string?.matches(Regex("""me\.edgan\.redditslide/\d+\.\d+\.\d+""")) == true) {
-                    return@transformInstructionsPatch Triple(stringReference.string, instruction, instructionIndex)
-                }
-
-                if (stringReference?.string == "Slide flair search") {
-                    return@transformInstructionsPatch Triple(stringReference.string, instruction, instructionIndex)
-                }
-
-                if (stringReference?.string == "http://www.ccrama.me") {
-                    return@transformInstructionsPatch Triple(stringReference.string, instruction, instructionIndex)
-                }
-
-                return@transformInstructionsPatch null
-            },
-            transform = { method, entry ->
-                val (stringConst, instruction, index) = entry
-                val register = (instruction as OneRegisterInstruction).registerA
-                method.replaceInstruction(index, "nop")
-
-                if (stringConst == "http://www.ccrama.me") {
-                    method.addInstructions(index,
-                        """
-                        invoke-static {}, $GET_REDIRECT_URI_METHOD()Ljava/lang/String;
-                        move-result-object v$register
-                    """
-                    )
-                } else {
-                    method.addInstructions(index,
-                        """
-                        invoke-static {}, $GET_USER_AGENT_METHOD()Ljava/lang/String;
-                        move-result-object v$register
-                    """
-                    )
-                }
-            }
-        )
+        sharedExtensionPatch
     )
     compatibleWith(*SlideCompatible)
 
-    val clientId = clientIdOption.value?.trim()
-    val redirectUri = redirectUriOption.value?.trim()
-    val userAgent = userAgentOption.value?.trim()
-
     execute {
+        userAgentFingerprints(packageMetadata.versionName).forEach { fingerprint ->
+            fingerprint.matchAll().forEach { match ->
+                match.replaceStringMatchesWithFunc(GET_USER_AGENT_METHOD)
+            }
+        }
+
+        redirectUriFingerprint.matchAll().forEach { match ->
+            match.replaceStringMatchesWithFunc(GET_REDIRECT_URI_METHOD)
+        }
+
         tutorialFingerprint.method.apply {
             val index = tutorialFingerprint.instructionMatches.last().index
             val register = (getInstruction(index) as FiveRegisterInstruction).registerC
@@ -163,33 +120,20 @@ val spoofClientPatch = spoofClientPatch(
             )
         }
 
-        if (!clientId.isNullOrEmpty()) {
-            listOf(
-                showClientIdDialogLoadDefaultClientIdFingerprint,
-                showClientIdDialogDefaultStringFingerprint,
-                tutorialLoadDefaultFingerprint,
-                settingsFragmentShowClientIdFingerprint
-            ).forEach { fingerprint ->
-                fingerprint.method.apply {
-                    val index = fingerprint.instructionMatches.last().index
-                    replaceInstruction(
-                        index,
-                        """
-                            invoke-static {}, $EXTENSION_CLASS_NAME->getClientId()Ljava/lang/String;
-                        """
-                    )
-                }
+        loadClientIdFingerprint.matchAll().forEach { match ->
+            match.method.apply {
+                val index = match.instructionMatches.last().index
+                replaceInstruction(
+                    index,
+                    """
+                        invoke-static {}, $EXTENSION_CLASS_NAME->getClientId()Ljava/lang/String;
+                    """
+                )
             }
-
-            getDefaultClientIdFingerprint.method.returnEarly(clientId)
         }
 
-        if (!redirectUri.isNullOrEmpty()) {
-            getDefaultRedirectUriFingerprint.method.returnEarly(redirectUri)
-        }
-
-        if (!userAgent.isNullOrEmpty()) {
-            getDefaultUserAgentFingerprint.method.returnEarly(userAgent)
-        }
+        getDefaultClientIdFingerprint.method.returnEarly(clientId!!)
+        getDefaultRedirectUriFingerprint.method.returnEarly(redirectUri!!)
+        getDefaultUserAgentFingerprint.method.returnEarly(userAgent!!)
     }
 }

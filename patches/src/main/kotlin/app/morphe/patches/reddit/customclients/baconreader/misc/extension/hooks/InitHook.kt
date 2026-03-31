@@ -7,6 +7,12 @@
 
 package app.morphe.patches.reddit.customclients.baconreader.misc.extension.hooks
 
-import app.morphe.patches.shared.misc.extension.activityOnCreateExtensionHook
+import app.morphe.patcher.Fingerprint
+import app.morphe.patches.shared.misc.extension.ExtensionHook
 
-internal val initHook = activityOnCreateExtensionHook("Lcom/onelouder/baconreader/BaconReader;")
+internal val initHook = ExtensionHook(
+    Fingerprint(
+        definingClass = "Lcom/onelouder/baconreader/BaconReader;",
+        name = "onCreate",
+    )
+)

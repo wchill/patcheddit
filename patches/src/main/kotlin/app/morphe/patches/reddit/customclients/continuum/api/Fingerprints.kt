@@ -26,11 +26,13 @@ internal val getDefaultClientIdFingerprint = Fingerprint(
     name = "getDefaultClientId"
 )
 
+internal fun userAgentFingerprint(versionName: String) = Fingerprint(
+    strings = listOf("android:org.cygnusx1.continuum:$versionName (by /u/edgan)")
+)
+
 internal val redirectUriFingerprint = Fingerprint(
-    strings = listOf("continuum://localhost"),
-    custom = { _, classDef ->
-        !classDef.type.startsWith("Lapp/morphe/extension/")
-    }
+    definingClass = "Lml/docilealligator",
+    strings = listOf("continuum://localhost")
 )
 
 internal val apiKeysOnCreatePreferencesFingerprint = Fingerprint(

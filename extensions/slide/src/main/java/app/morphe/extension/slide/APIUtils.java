@@ -91,7 +91,7 @@ public class APIUtils {
             } else {
                 editor.putString(USER_AGENT_PREF_KEY, userAgentText);
             }
-            editor.commit();
+            editor.apply();
         } else {
             Logger.printException(() -> "APIUtils.persistSettings called before inputs were initialized!");
         }

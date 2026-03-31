@@ -5,9 +5,8 @@ import app.morphe.patches.shared.misc.extension.ExtensionHook
 
 internal val initHook = ExtensionHook(
     Fingerprint(
-        custom = { method, _ ->
-            method.definingClass == "Lcom/rubenmayayo/reddit/MyApplication;" && method.name == "onCreate"
-        }
+        definingClass = "Lcom/rubenmayayo/reddit/MyApplication;",
+        name = "onCreate",
     ),
     insertIndexResolver = { 1 }
 )

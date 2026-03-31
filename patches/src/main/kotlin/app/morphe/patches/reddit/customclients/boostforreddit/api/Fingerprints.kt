@@ -18,16 +18,13 @@ internal val getClientIdFingerprint = Fingerprint(
     name = "getClientId",
 )
 
-internal val loginActivityOnCreateFingerprint = Fingerprint(
-    definingClass = "LoginActivity;",
-    name = "onCreate",
-    strings = listOf("http://rubenmayayo.com"),
+internal val redirectUriFingerprint = Fingerprint(
+    strings = listOf("http://rubenmayayo.com")
 )
 
-internal val loginActivityAShouldOverrideUrlLoadingFingerprint = Fingerprint(
-    definingClass = "LoginActivity\$a;",
-    name = "shouldOverrideUrlLoading",
-    strings = listOf("http://rubenmayayo.com"),
+internal val shouldOverrideUrlLoadingFingerprint = Fingerprint(
+    definingClass = "Lcom/rubenmayayo/reddit/ui/activities/LoginActivity\$a;",
+    name = "shouldOverrideUrlLoading"
 )
 
 internal val jrawNewUrlFingerprint = Fingerprint(

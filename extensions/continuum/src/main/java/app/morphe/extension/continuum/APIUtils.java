@@ -69,10 +69,8 @@ public class APIUtils {
 
             // Get current and default values
             String currentValue = preference.getText();
-            String defaultValue = defaultValueSupplier.get();
 
-            // Clear the text field only if the current value is the default value
-            if (currentValue == null || currentValue.isEmpty() || currentValue.equals(defaultValue)) {
+            if (currentValue == null || currentValue.isEmpty()) {
                 editText.setText("");
             }
         });
@@ -80,8 +78,7 @@ public class APIUtils {
         // Set a summary provider that hides the default value but shows custom ones
         preference.setSummaryProvider((Preference.SummaryProvider<EditTextPreference>) pref -> {
             String currentValue = pref.getText();
-            String defaultValue = defaultValueSupplier.get();
-            if (currentValue == null || currentValue.isEmpty() || currentValue.equals(defaultValue)) {
+            if (currentValue == null || currentValue.isEmpty()) {
                 // TODO: Localize this string
                 return hintText;
             } else {

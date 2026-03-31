@@ -7,6 +7,7 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.api
 
+import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
@@ -35,28 +36,28 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
         // endregion
 
         // region Patch redirect URI.
-        listOf(loginActivityOnCreateFingerprint, loginActivityAShouldOverrideUrlLoadingFingerprint).forEach { fingerprint ->
-            fingerprint.method.let {
-                fingerprint.stringMatches.forEach { match ->
-                    val register = it.getInstruction<OneRegisterInstruction>(match.index).registerA
-                    it.replaceInstruction(match.index, "const-string v$register, \"$redirectUriOption\"")
-                }
-            }
-        }
-
-        loginActivityAShouldOverrideUrlLoadingFingerprint.method.apply {
+        shouldOverrideUrlLoadingFingerprint.method.apply {
             val index = indexOfFirstInstructionOrThrow {
                 opcode == Opcode.IF_EQZ
             }
             addInstructions(
                 index + 1,
                 """
-                    const-string v1, "$redirectUriOption"
+                    const-string v1, "$redirectUri"
                     const-string v2, "http://localhost"
                     invoke-virtual {v6, v1, v2}, Ljava/lang/String;->replace(Ljava/lang/CharSequence;Ljava/lang/CharSequence;)Ljava/lang/String;
                     move-result-object v6
                 """
             )
+        }
+
+        redirectUriFingerprint.matchAll().forEach { match ->
+            match.method.let {
+                match.stringMatches.forEach { match ->
+                    val register = it.getInstruction<OneRegisterInstruction>(match.index).registerA
+                    it.replaceInstruction(match.index, "const-string v$register, \"$redirectUri\"")
+                }
+            }
         }
 
         jrawNewUrlFingerprint.method.apply {
@@ -78,7 +79,7 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
         buildUserAgentFingerprint.method.let {
             buildUserAgentFingerprint.stringMatches.forEach { match ->
                 val register = it.getInstruction<OneRegisterInstruction>(match.index).registerA
-                it.replaceInstruction(match.index, "const-string v$register, \"$userAgentOption\"")
+                it.replaceInstruction(match.index, "const-string v$register, \"$userAgent\"")
             }
         }
         // endregion
