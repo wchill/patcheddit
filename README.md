@@ -11,18 +11,18 @@ In the meantime, see https://github.com/wchill/revanced-patches for a list of th
 ## 🚀 Get started
 
 1. Install [Morphe Manager](https://morphe.software/) and switch it to advanced/expert mode.
-2. In Morphe Manager, in the Patch Bundles tab, select `Enter URL` and copy-paste **ONE** of the following URLs:
-   * Stable branch: `https://raw.githubusercontent.com/wchill/patcheddit/refs/heads/main/patches-bundle.json`
-   * Dev branch: `https://raw.githubusercontent.com/wchill/patcheddit/refs/heads/dev/patches-bundle.json`
-3. Get the APK for your preferred, supported 3rd party reddit app. If you don't have it, you can download it from https://apkmirror.com. APKM bundles (aka split APKs) will also work.
-   * The supported apps are Boost, RIF, Sync, Relay, BaconReader, and Joey.
-   * Infinity and Slide are open source and have actively maintained forks; see https://github.com/cygnusx-1-org/continuum and https://github.com/cygnusx-1-org/Slide instead of using these patches.
+2. Click [this link](https://morphe.software/add-source?github=wchill/patcheddit) to add this patch source to Morphe Manager.
+3. In Morphe Manager, find the app you want to patch.
+   * The supported apps are Boost, RIF, Sync, Relay, BaconReader, Joey, Continuum, and the cygnusx1 fork of Slide.
+4. Get the APK for your preferred, supported 3rd party reddit app. If you don't have it, you can download it from in the app. APKM bundles (aka split APKs) will also work.
    * You should get the last available version for your reddit app, unless you are patching Relay. Relay v10.2.40 should be used instead of the latest.
-4. In Morphe Manager, in the Apps tab, tap the + (plus) icon > Select from storage > the APK file you downloaded in step 3.
-5. Select appropriate patches and hit Save, then Patch.
-   * Make sure you have `Spoof client` selected, at a minimum. Make sure to fill in all the relevant fields to appropriate values.
+   * Continuum and the cygnusx1 fork of Slide need to be downloaded manually from their respective GitHub releases pages, as they are not available on the Play Store.
+       * Continuum: https://github.com/cygnusx-1-org/continuum/releases
+       * Slide (cygnusx1 fork): https://github.com/cygnusx-1-org/slide/releases
+5. Select desired patches, then patch.
    * You will need to have an OAuth client ID from https://www.reddit.com/prefs/apps/, however reddit is no longer issuing new ones without an approval process that usually results in denial. In order to work around this, see the subsection `What if I don't have a client ID?` below.
-7. Once patching is complete, install the app and set it up as usual.
+   * Make sure that the redirect URI in `Spoof client` options and on https://www.reddit.com/prefs/apps/ match. If you don't know what to set the redirect URI/user agent to, use the values from `What if I don't have a client ID?`
+6. Once patching is complete, install the app and set it up as usual.
 
 For assistance with patching, please post a thread in [/r/Patcheddit](https://www.reddit.com/r/Patcheddit/) or [/r/MorpheApp](https://www.reddit.com/r/MorpheApp/). Only use the GitHub issue tracker for legitimate bug reports or feature requests.
 
@@ -38,7 +38,9 @@ You can use the client ID from other working 3rd party reddit apps (sadly not th
    * `Redirect URI` - set this to `redreader://rr_oauth_redir` (or the appropriate value if you got the client ID from a different app).
    * `User agent` - set this to `org.quantumbadger.redreader/1.25.1`. Ignore the description that says what the user agent format should be.
    * Depending on your app, you may not need to set all of these values for it to work, but it is highly recommended that you do so.
-5. Select your other desired patches and patch as normal.
+4. Select your other desired patches and patch as normal.
+
+If you're wondering why I'm asking you to go through these steps instead of just including the client ID in the patch, it's because including the client ID in the patch would make it accessible to web scrapers and would likely result in the client ID being revoked, breaking the patch for everyone.
 
 ## 🧑‍💻 Development
 
