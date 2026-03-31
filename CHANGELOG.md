@@ -1,3 +1,10 @@
+# [1.3.0-dev.5](https://github.com/wchill/patcheddit/compare/v1.3.0-dev.4...v1.3.0-dev.5) (2026-03-31)
+
+
+### Features
+
+* Add support for Infinity+ ([9c62c1c](https://github.com/wchill/patcheddit/commit/9c62c1cae2f1ffdfcb4f0f488f38dff910355f57))
+
 # [1.3.0-dev.4](https://github.com/wchill/patcheddit/compare/v1.3.0-dev.3...v1.3.0-dev.4) (2026-03-31)
 
 
