@@ -1,3 +1,10 @@
+# [1.3.0-dev.7](https://github.com/wchill/patcheddit/compare/v1.3.0-dev.6...v1.3.0-dev.7) (2026-03-31)
+
+
+### Bug Fixes
+
+* Improper regex for client ID ([90b8161](https://github.com/wchill/patcheddit/commit/90b816125a3ec5c9ac99b636f5570aacdc86fa5e))
+
 # [1.3.0-dev.6](https://github.com/wchill/patcheddit/compare/v1.3.0-dev.5...v1.3.0-dev.6) (2026-03-31)
 
 
