@@ -1,3 +1,10 @@
+# [1.3.0-dev.6](https://github.com/wchill/patcheddit/compare/v1.3.0-dev.5...v1.3.0-dev.6) (2026-03-31)
+
+
+### Bug Fixes
+
+* Client ID validation not working ([00545a8](https://github.com/wchill/patcheddit/commit/00545a8b925b12578d2e113f6481eddaa93dfeef))
+
 # [1.3.0-dev.5](https://github.com/wchill/patcheddit/compare/v1.3.0-dev.4...v1.3.0-dev.5) (2026-03-31)
 
 
