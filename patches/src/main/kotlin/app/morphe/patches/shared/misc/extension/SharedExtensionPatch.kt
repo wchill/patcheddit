@@ -117,27 +117,16 @@ open class ExtensionHook(
  *
  * @param activityClassType Either the full activity class type such as `Lcom/company/MainActivity;`
  *                          or the 'ends with' string for the activity such as `/MainActivity;`
- * @param targetBundleMethod If the extension should hook `onCreate(Landroid/os/Bundle;)` or `onCreate()`
  */
-fun activityOnCreateExtensionHook(activityClassType: String, targetBundleMethod: Boolean = true): ExtensionHook {
+fun activityOnCreateExtensionHook(activityClassType: String): ExtensionHook {
     require(activityClassType.endsWith(';')) {
         "Class type must end with a semicolon: $activityClassType"
     }
 
-    val fullClassType = activityClassType.startsWith('L')
-
     val fingerprint = Fingerprint(
+        definingClass = activityClassType,
+        name = "onCreate",
         returnType = "V",
-        parameters = if (targetBundleMethod) {
-            listOf("Landroid/os/Bundle;")
-        } else {
-            listOf()
-        },
-        custom = { method, classDef ->
-            method.name == "onCreate" &&
-                    if (fullClassType) classDef.type == activityClassType
-                    else classDef.type.endsWith(activityClassType)
-        }
     )
 
     return ExtensionHook(fingerprint)
