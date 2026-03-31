@@ -1,3 +1,10 @@
+/*
+ * Copyright 2026 wchill.
+ * https://github.com/wchill/patcheddit
+ *
+ * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
+ */
+
 package app.morphe.patches.reddit.customclients.joeyforreddit.api
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
@@ -24,47 +31,37 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
     val userAgent by userAgentOption
 
     execute {
-        if (clientIdOption.value == null && redirectUriOption.value == null && userAgentOption.value == null) {
-            throw PatchException("When spoofing client, at least one of clientId, redirectUri or userAgent should be set.")
-        }
-
         // region Patch client id.
-        if (clientId != null) {
-            getClientIdFingerprint.method.returnEarly(clientId!!)
-        }
+        getClientIdFingerprint.method.returnEarly(clientId!!)
         // endregion
 
         // region Patch redirect URI.
-        if (redirectUri != null) {
-            oauthHelperConstructorFingerprint.match(jrawAuthenticationMethodCheckFingerprint.classDef).apply {
-                val invokeStaticIndex = instructionMatches.first().index
-                val stringRegister = method.getInstruction<FiveRegisterInstruction>(invokeStaticIndex).registerC
-                method.addInstructions(invokeStaticIndex, "const-string v$stringRegister, \"$redirectUri\"")
-            }
-            oauthContainsCodeFingerprint.apply {
-                val index = instructionMatches.first().index
-                val register = method.getInstruction<OneRegisterInstruction>(index).registerA
-                method.replaceInstruction(index, "const/4 v$register, 0x1")
-            }
-            oauthShouldOverrideUrlLoadingFingerprint.apply {
-                val ifIndex = instructionMatches.first().index
-                val resultRegister = method.getInstruction<OneRegisterInstruction>(ifIndex).registerA
+        oauthHelperConstructorFingerprint.apply {
+            val invokeStaticIndex = instructionMatches.first().index
+            val stringRegister = method.getInstruction<FiveRegisterInstruction>(invokeStaticIndex).registerC
+            method.addInstructions(invokeStaticIndex, "const-string v$stringRegister, \"$redirectUri\"")
+        }
+        oauthContainsCodeFingerprint.apply {
+            val index = instructionMatches.first().index
+            val register = method.getInstruction<OneRegisterInstruction>(index).registerA
+            method.replaceInstruction(index, "const/4 v$register, 0x1")
+        }
+        oauthShouldOverrideUrlLoadingFingerprint.apply {
+            val ifIndex = instructionMatches.first().index
+            val resultRegister = method.getInstruction<OneRegisterInstruction>(ifIndex).registerA
 
-                val invokeDirectIndex = instructionMatches.last().index
-                val invokeInstruction = method.getInstruction<FiveRegisterInstruction>(invokeDirectIndex)
-                val invokeReference = invokeInstruction.getReference<MethodReference>()
-                method.addInstructionsWithLabels(ifIndex + 1, """
-                    invoke-direct { v${invokeInstruction.registerC}, v${invokeInstruction.registerD} }, $invokeReference
-                    return v$resultRegister
-                """)
-            }
+            val invokeDirectIndex = instructionMatches.last().index
+            val invokeInstruction = method.getInstruction<FiveRegisterInstruction>(invokeDirectIndex)
+            val invokeReference = invokeInstruction.getReference<MethodReference>()
+            method.addInstructionsWithLabels(ifIndex + 1, """
+                invoke-direct { v${invokeInstruction.registerC}, v${invokeInstruction.registerD} }, $invokeReference
+                return v$resultRegister
+            """)
         }
         // endregion
 
         // region Patch user agent.
-        if (userAgent != null) {
-            authUtilityUserAgentFingerprint.method.returnEarly(userAgent!!)
-        }
+        authUtilityUserAgentFingerprint.method.returnEarly(userAgent!!)
         // endregion
     }
 }

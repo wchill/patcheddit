@@ -1,3 +1,10 @@
+/*
+ * Copyright 2026 wchill.
+ * https://github.com/wchill/patcheddit
+ *
+ * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
+ */
+
 package app.morphe.patches.reddit.customclients.joeyforreddit.api
 
 import app.morphe.patcher.Fingerprint
@@ -10,7 +17,7 @@ internal val authUtilityUserAgentFingerprint = Fingerprint(
     accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC),
     returnType = "Ljava/lang/String;",
     filters = listOf(OpcodeFilter(Opcode.APUT_OBJECT)),
-    custom = { method, classDef ->
+    custom = { _, classDef ->
         classDef.sourceFile == "AuthUtility.java"
     }
 )
@@ -29,22 +36,24 @@ internal val getClientIdFingerprint = Fingerprint(
     }
 )
 
-internal val oauthHelperConstructorFingerprint = Fingerprint(
-    accessFlags = listOf(AccessFlags.CONSTRUCTOR, AccessFlags.PUBLIC),
-    filters = listOf(OpcodeFilter(Opcode.INVOKE_STATIC))
-)
-
 internal val jrawAuthenticationMethodCheckFingerprint = Fingerprint(
     strings = listOf("This method is not appropriate for this authentication method")
 )
 
+internal val oauthHelperConstructorFingerprint = Fingerprint(
+    classFingerprint = jrawAuthenticationMethodCheckFingerprint,
+    accessFlags = listOf(AccessFlags.CONSTRUCTOR, AccessFlags.PUBLIC),
+    filters = listOf(OpcodeFilter(Opcode.INVOKE_STATIC))
+)
+
 internal val oauthShouldOverrideUrlLoadingFingerprint = Fingerprint(
+    name = "shouldOverrideUrlLoading",
     filters = OpcodesFilter.opcodesToFilters(
         Opcode.IF_EQZ,
         Opcode.INVOKE_DIRECT
     ),
-    custom = { method, classDef ->
-        method.name == "shouldOverrideUrlLoading" && classDef.sourceFile == "LoginActivity.java"
+    custom = { _, classDef ->
+        classDef.sourceFile == "LoginActivity.java"
     }
 )
 

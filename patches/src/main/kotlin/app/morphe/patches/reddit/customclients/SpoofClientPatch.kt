@@ -1,39 +1,16 @@
+/*
+ * Copyright 2026 wchill.
+ * https://github.com/wchill/patcheddit
+ *
+ * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
+ */
+
 package app.morphe.patches.reddit.customclients
 
 import app.morphe.patcher.patch.BytecodePatchBuilder
 import app.morphe.patcher.patch.Option
-import app.morphe.patcher.patch.PatchException
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.patch.stringOption
-
-/**
- * Base class for patches that spoof the Reddit client.
- *
- * @param redirectUri The redirect URI of the Reddit OAuth client.
- * @param block The patch block. It is called with the client ID option.
- */
-fun spoofClientPatch(
-    redirectUri: String,
-    block: BytecodePatchBuilder.(Option<String>) -> Unit = {},
-) = bytecodePatch(
-    name = "Spoof client",
-    description = "Restores functionality of the app by using custom client ID.",
-    default = true
-) {
-    block(
-        stringOption(
-            "client-id",
-            null,
-            null,
-            "OAuth client ID",
-            "The Reddit OAuth client ID. " +
-                "You can get your client ID from https://www.reddit.com/prefs/apps. " +
-                "The application type has to be \"Installed app\" " +
-                "and the redirect URI has to be set to \"$redirectUri\".",
-            true,
-        ),
-    )
-}
 
 /**
  * Base class for patches that spoof the Reddit client.
@@ -58,30 +35,36 @@ fun spoofClientPatch(
         null,
         null,
         "OAuth client ID",
-        "The Reddit OAuth client ID. Refer to Patcheddit documentation for " +
-                "more information on what to put here. An empty value keeps the app's " +
-                "existing client ID.",
-        false,
+        "The Reddit OAuth client ID. Refer to Patcheddit documentation for more " +
+                "information on what to put here.",
+        true,
+        validator = { value ->
+            if (value.isNullOrBlank()) {
+                return@stringOption false
+            }
+            if (!value.matches(Regex("^[a-zA-Z0-9]{22}\$"))) {
+                return@stringOption false
+            }
+            true
+        }
     )
     val redirectUriOption = stringOption(
         "redirect-uri",
-        null,
+        "redreader://rr_oauth_redir",
         null,
         "Redirect URI",
-        "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for " +
-                "more information on what to put here. An empty value keeps the app's " +
-                "existing redirect URI.",
-        false,
+        "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more " +
+                "information on what to put here. Default value is RedReader's redirect URI.",
+        true,
     )
     val userAgentOption = stringOption(
         "user-agent",
-        null,
+        "org.quantumbadger.redreader/1.25.1",
         null,
         "User agent",
-        "The app's user agent. Refer to Patcheddit documentation for " +
-                "more information on what to put here. An empty value keeps the app's existing " +
-                "user agent.",
-        false
+        "The app's user agent. Refer to Patcheddit documentation for more information " +
+                "on what to put here. Default value is RedReader's user agent.",
+        true
     )
 
     block(

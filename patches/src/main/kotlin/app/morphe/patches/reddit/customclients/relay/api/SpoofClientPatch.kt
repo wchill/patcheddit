@@ -1,3 +1,10 @@
+/*
+ * Copyright 2026 wchill.
+ * https://github.com/wchill/patcheddit
+ *
+ * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
+ */
+
 package app.morphe.patches.reddit.customclients.relay.api
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
@@ -19,26 +26,20 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
     val userAgent by userAgentOption
 
     execute {
-        if (clientId == null) {
-            throw PatchException("When spoofing client, clientId must be set.")
-        }
-
         // region Patch redirect URI.
-        if (redirectUri != null) {
-            setOf(
-                loginActivityRedirectUriFingerprint,
-                shouldOverrideUrlLoadingRedirectUriFingerprint,
-                redditAccountManagerRedirectUriFingerprint
-            ).forEach { fingerprint ->
-                val redirectUriIndex = fingerprint.stringMatches.last().index
-                fingerprint.method.apply {
-                    val redirectUriRegister = getInstruction<OneRegisterInstruction>(redirectUriIndex).registerA
+        setOf(
+            loginActivityRedirectUriFingerprint,
+            shouldOverrideUrlLoadingRedirectUriFingerprint,
+            redditAccountManagerRedirectUriFingerprint
+        ).forEach { fingerprint ->
+            val redirectUriIndex = fingerprint.stringMatches.last().index
+            fingerprint.method.apply {
+                val redirectUriRegister = getInstruction<OneRegisterInstruction>(redirectUriIndex).registerA
 
-                    fingerprint.method.replaceInstruction(
-                        redirectUriIndex,
-                        "const-string v$redirectUriRegister, \"$redirectUri\"",
-                    )
-                }
+                fingerprint.method.replaceInstruction(
+                    redirectUriIndex,
+                    "const-string v$redirectUriRegister, \"$redirectUri\"",
+                )
             }
         }
         // endregion
@@ -63,20 +64,18 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
         // endregion
 
         // region Patch user agent.
-        if (userAgent != null) {
-            networkModuleUserAgentFingerprint.apply {
-                val invokeDirectIndex = instructionMatches.first().index
-                val invokeDirectRegister = method.getInstruction<OneRegisterInstruction>(invokeDirectIndex).registerA
+        networkModuleUserAgentFingerprint.apply {
+            val invokeDirectIndex = instructionMatches.first().index
+            val invokeDirectRegister = method.getInstruction<OneRegisterInstruction>(invokeDirectIndex).registerA
 
-                val userAgentField = classDef.fields.first { field ->
-                    field.type == "Ljava/lang/String;"
-                }
-
-                method.addInstructions(invokeDirectIndex, """
-                    const-string v$invokeDirectRegister, "$userAgent"
-                    sput-object v$invokeDirectRegister, ${userAgentField.definingClass}->${userAgentField.name}:Ljava/lang/String;
-                """)
+            val userAgentField = classDef.fields.first { field ->
+                field.type == "Ljava/lang/String;"
             }
+
+            method.addInstructions(invokeDirectIndex, """
+                const-string v$invokeDirectRegister, "$userAgent"
+                sput-object v$invokeDirectRegister, ${userAgentField.definingClass}->${userAgentField.name}:Ljava/lang/String;
+            """)
         }
         // endregion
 

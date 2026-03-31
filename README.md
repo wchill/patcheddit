@@ -73,8 +73,7 @@ Patcheddit is licensed under the [GNU General Public License v3.0](LICENSE), wit
 
 - **Attribution (7b):** Any use of this code, including derivatives, must display a visible notice:
 
-  > This app uses code from Patcheddit. To learn more, visit https://github.com/wchill/patcheddit or https://reddit.com/r/patcheddit
-  > This app uses code from Morphe. To learn more, visit http://morphe.software
+  > This app uses code from Patcheddit. To learn more, visit https://reddit.com/r/patcheddit
 
 - **Name Restriction (7c):** The name **"Patcheddit"** may not be used for derivative works.  
   Derivatives must adopt a distinct identity unrelated to "Patcheddit".

@@ -1,3 +1,10 @@
+/*
+ * Copyright 2026 wchill.
+ * https://github.com/wchill/patcheddit
+ *
+ * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
+ */
+
 package app.morphe.patches.reddit.customclients.boostforreddit.api
 
 import app.morphe.patcher.Fingerprint
@@ -7,34 +14,23 @@ internal val buildUserAgentFingerprint = Fingerprint(
 )
 
 internal val getClientIdFingerprint = Fingerprint(
-    custom = { method, classDef ->
-        if (!classDef.endsWith("Credentials;")) return@Fingerprint false
-
-        method.name == "getClientId"
-    }
+    definingClass = "Credentials;",
+    name = "getClientId",
 )
 
 internal val loginActivityOnCreateFingerprint = Fingerprint(
+    definingClass = "LoginActivity;",
+    name = "onCreate",
     strings = listOf("http://rubenmayayo.com"),
-    custom = { method, classDef ->
-        if (!classDef.endsWith("LoginActivity;")) return@Fingerprint false
-
-        method.name == "onCreate"
-    }
 )
 
 internal val loginActivityAShouldOverrideUrlLoadingFingerprint = Fingerprint(
+    definingClass = "LoginActivity\$a;",
+    name = "shouldOverrideUrlLoading",
     strings = listOf("http://rubenmayayo.com"),
-    custom = { method, classDef ->
-        if (!classDef.endsWith("LoginActivity${'$'}a;")) return@Fingerprint false
-
-        method.name == "shouldOverrideUrlLoading"
-    }
 )
 
 internal val jrawNewUrlFingerprint = Fingerprint(
-    custom = { method, classDef ->
-        if (!classDef.endsWith("JrawUtils;")) return@Fingerprint false
-        method.name == "newUrl"
-    }
+    definingClass = "JrawUtils;",
+    name = "newUrl",
 )

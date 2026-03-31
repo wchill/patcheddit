@@ -1,3 +1,10 @@
+/*
+ * Copyright 2026 wchill.
+ * https://github.com/wchill/patcheddit
+ *
+ * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
+ */
+
 package app.morphe.patches.reddit.customclients.continuum.api
 
 import app.morphe.patcher.Fingerprint
@@ -5,30 +12,33 @@ import app.morphe.patcher.OpcodesFilter
 import com.android.tools.smali.dexlib2.Opcode
 
 internal val getDefaultUserAgentFingerprint = Fingerprint(
-    custom = { method, classDef ->
-        method.name == "getDefaultUserAgent" && classDef.type == EXTENSION_CLASS_NAME
-    }
+    definingClass = EXTENSION_CLASS_NAME,
+    name = "getDefaultUserAgent"
 )
 
 internal val getDefaultRedirectUriFingerprint = Fingerprint(
-    custom = { method, classDef ->
-        method.name == "getDefaultRedirectUri" && classDef.type == EXTENSION_CLASS_NAME
-    }
+    definingClass = EXTENSION_CLASS_NAME,
+    name = "getDefaultRedirectUri"
 )
 
 internal val getDefaultClientIdFingerprint = Fingerprint(
-    custom = { method, classDef ->
-        method.name == "getDefaultClientId" && classDef.type == EXTENSION_CLASS_NAME
+    definingClass = EXTENSION_CLASS_NAME,
+    name = "getDefaultClientId"
+)
+
+internal val redirectUriFingerprint = Fingerprint(
+    strings = listOf("continuum://localhost"),
+    custom = { _, classDef ->
+        !classDef.type.startsWith("Lapp/morphe/extension/")
     }
 )
 
 internal val apiKeysOnCreatePreferencesFingerprint = Fingerprint(
+    definingClass = "Lml/docilealligator/infinityforreddit/settings/APIKeysPreferenceFragment",
+    name = "onCreatePreferences",
     filters = OpcodesFilter.opcodesToFilters(
         Opcode.INVOKE_DIRECT,
         Opcode.INVOKE_DIRECT,
         Opcode.RETURN_VOID
-    ),
-    custom = { method, classDef ->
-        method.name == "onCreatePreferences" && classDef.sourceFile == "APIKeysPreferenceFragment.java"
-    }
+    )
 )
