@@ -50,6 +50,7 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
             default = false
         ) {
             execute {
+                /*
                 get("res/xml/api_keys_preferences.xml").utf8Writer().use { writer ->
                     writer.write("""
                         <?xml version="1.0" encoding="utf-8"?>
@@ -104,6 +105,7 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
                     // TODO: Uncomment this when preference menu works
                     //rootNode.insertFirst(apiPreferenceNode)
                 }
+                */
             }
         }
     )
@@ -132,6 +134,7 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
             match.replaceStringMatchesWithFunc(GET_REDIRECT_URI_METHOD)
         }
 
+        /*
         settingsActivityOnBackStackChangedFingerprint.match().apply {
             val match = instructionMatches[3]
             val index = match.index
@@ -150,5 +153,6 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
                 """, ExternalLabel("skip", method.getInstruction(index))
             )
         }
+        */
     }
 }
