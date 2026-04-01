@@ -1,3 +1,10 @@
+# [1.3.0-dev.10](https://github.com/wchill/patcheddit/compare/v1.3.0-dev.9...v1.3.0-dev.10) (2026-04-01)
+
+
+### Bug Fixes
+
+* Bump gradle plugin version ([2fd848b](https://github.com/wchill/patcheddit/commit/2fd848bee2cd95eefacd0c236093efc4799610fd))
+
 # [1.3.0-dev.9](https://github.com/wchill/patcheddit/compare/v1.3.0-dev.8...v1.3.0-dev.9) (2026-04-01)
 
 
