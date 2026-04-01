@@ -10,7 +10,8 @@ package app.morphe.patches.reddit.customclients.sync.syncforreddit.api
 import app.morphe.patcher.Fingerprint
 
 internal val getAuthorizationStringFingerprint = Fingerprint(
-    strings = listOf("https://ssl.reddit.com/api/v1/authorize.compact?client_id=Q43fSpTe8LckEg&response_type=code&state=")
+    // This is evaluated after replaceStringPatch, so the modified string is used for matching.
+    strings = listOf("https://www.reddit.com/api/v1/authorize.compact?client_id=Q43fSpTe8LckEg&response_type=code&state=")
 )
 
 internal val getBearerTokenFingerprint = Fingerprint(

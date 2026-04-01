@@ -7,6 +7,7 @@
 
 package app.morphe.patches.reddit.customclients.sync.syncforreddit.api
 
+import app.morphe.patcher.StringComparisonType
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patches.all.misc.string.replaceStringPatch
@@ -24,7 +25,7 @@ val spoofClientPatch = spoofClientPatch { clientId, redirectUri, userAgent ->
         disablePiracyDetectionPatch,
         // Redirects from SSL to WWW domain are bugged causing auth problems.
         // Manually rewrite the URLs to fix this.
-        replaceStringPatch("ssl.reddit.com", "www.reddit.com")
+        replaceStringPatch("ssl.reddit.com", "www.reddit.com", comparison = StringComparisonType.CONTAINS)
     )
 
     compatibleWith(*SyncForRedditCompatible)
