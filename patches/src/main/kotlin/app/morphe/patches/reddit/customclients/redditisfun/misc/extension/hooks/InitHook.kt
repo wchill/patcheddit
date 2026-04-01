@@ -8,7 +8,7 @@
 package app.morphe.patches.reddit.customclients.redditisfun.misc.extension.hooks
 
 import app.morphe.patcher.Fingerprint
-import app.morphe.patches.shared.misc.extension.ExtensionHook
+import app.morphe.patches.all.misc.extension.ExtensionHook
 
 internal val initHook = ExtensionHook(
     Fingerprint(

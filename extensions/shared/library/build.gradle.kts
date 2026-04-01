@@ -17,6 +17,8 @@ android {
 }
 
 dependencies {
+    implementation(libs.morphe.extensions.library)
+    implementation(libs.gson)
     compileOnly(libs.annotation)
     compileOnly(libs.okhttp)
 }

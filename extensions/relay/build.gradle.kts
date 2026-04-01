@@ -1,4 +1,5 @@
 dependencies {
+    compileOnly(libs.morphe.extensions.library)
     compileOnly(project(":extensions:shared:library"))
     compileOnly(project(":extensions:relay:stub"))
     compileOnly(libs.annotation)

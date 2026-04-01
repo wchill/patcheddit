@@ -12,7 +12,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patches.reddit.customclients.baconreader.BaconReaderCompatible
 import app.morphe.patches.reddit.customclients.spoofClientPatch
-import app.morphe.patches.shared.misc.string.replaceStringPatch
+import app.morphe.patches.all.misc.string.replaceStringPatch
 import app.morphe.util.returnEarly
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 

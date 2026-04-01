@@ -9,11 +9,10 @@ package app.morphe.patches.reddit.customclients.sync.syncforreddit.api
 
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
-import app.morphe.patcher.patch.PatchException
+import app.morphe.patches.all.misc.string.replaceStringPatch
 import app.morphe.patches.reddit.customclients.spoofClientPatch
-import app.morphe.patches.reddit.customclients.sync.detection.piracy.disablePiracyDetectionPatch
 import app.morphe.patches.reddit.customclients.sync.SyncForRedditCompatible
-import app.morphe.patches.shared.misc.string.replaceStringPatch
+import app.morphe.patches.reddit.customclients.sync.detection.piracy.disablePiracyDetectionPatch
 import app.morphe.util.returnEarly
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction

@@ -98,7 +98,6 @@ def patch_apk(jar: Path, patches: Path, apk: Path) -> subprocess.CompletedProces
     cmd = [
         "java", "-jar", str(jar),
         "patch",
-        "-i",
         f"--patches={patches}",
         str(apk),
     ]
