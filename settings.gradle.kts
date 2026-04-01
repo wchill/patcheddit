@@ -28,8 +28,7 @@ dependencyResolutionManagement {
 }
 
 plugins {
-    id("app.morphe.patches") version "1.2.0"
-    id("org.jetbrains.kotlin.jvm") version "2.2.0" apply false
+    id("app.morphe.patches") version "1.3.0-dev.3"
 }
 
 settings {
