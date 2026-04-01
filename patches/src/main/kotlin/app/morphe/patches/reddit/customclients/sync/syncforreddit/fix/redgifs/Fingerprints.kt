@@ -33,9 +33,8 @@ internal val createOkHttpClientFingerprint = Fingerprint(
 )
 
 internal val getDefaultUserAgentFingerprint = Fingerprint(
-    custom = { method, classDef ->
-        method.name == "getDefaultUserAgent" && classDef.type == EXTENSION_CLASS_DESCRIPTOR
-    }
+    definingClass = EXTENSION_CLASS_DESCRIPTOR,
+    name = "getDefaultUserAgent",
 )
 
 internal val getOriginalUserAgentFingerprint = Fingerprint(

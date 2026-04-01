@@ -6,6 +6,7 @@ import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 
 internal val piracyDetectionFingerprint = Fingerprint(
+    definingClass = "/ProcessLifeCyleListener;",
     accessFlags = listOf(AccessFlags.PRIVATE, AccessFlags.STATIC),
     returnType = "V",
     filters = OpcodesFilter.opcodesToFilters(
@@ -16,7 +17,4 @@ internal val piracyDetectionFingerprint = Fingerprint(
         Opcode.INVOKE_VIRTUAL,
         Opcode.RETURN_VOID
     ),
-    custom = { _, classDef ->
-        classDef.endsWith("ProcessLifeCyleListener;")
-    }
 )

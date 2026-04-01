@@ -13,18 +13,9 @@ import app.morphe.patcher.OpcodesFilter
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 
-internal fun baseClientIdFingerprint(str: String) = Fingerprint(
-    strings = listOf("dj-xCIZQYiLbEg", str)
+internal val clientIdFingerprint = Fingerprint(
+    strings = listOf("dj-xCIZQYiLbEg")
 )
-
-
-internal val getLoggedInBearerTokenFingerprint = baseClientIdFingerprint("authorization_code")
-
-internal val getLoggedOutBearerTokenFingerprint = baseClientIdFingerprint("https://oauth.reddit.com/grants/installed_client")
-
-internal val getRefreshTokenFingerprint = baseClientIdFingerprint("refresh_token")
-
-internal val loginActivityClientIdFingerprint = baseClientIdFingerprint("&duration=permanent")
 
 internal val redditCheckDisableAPIFingerprint = Fingerprint(
     strings = listOf("Reddit Disabled"),
@@ -38,20 +29,8 @@ internal val setRemoteConfigFingerprint = Fingerprint(
     strings = listOf("reddit_oauth_url")
 )
 
-// Lreddit/news/oauth/LoginActivity;->onCreate
-internal val loginActivityRedirectUriFingerprint = Fingerprint(
-    definingClass = "Lreddit/news/oauth/LoginActivity;",
-    strings = listOf("dbrady://relay"),
-)
-
-// Lreddit/news/oauth/LoginActivity$1;->shouldOverrideUrlLoading
-internal val shouldOverrideUrlLoadingRedirectUriFingerprint = Fingerprint(
-    strings = listOf("login url: ", "dbrady://relay")
-)
-
-internal val redditAccountManagerRedirectUriFingerprint = Fingerprint(
-    definingClass = "Lreddit/news/oauth/RedditAccountManager;",
-    strings = listOf("dbrady://relay"),
+internal val redirectUriFingerprint = Fingerprint(
+    strings = listOf("dbrady://relay")
 )
 
 // Lreddit/news/oauth/dagger/modules/NetworkModule;

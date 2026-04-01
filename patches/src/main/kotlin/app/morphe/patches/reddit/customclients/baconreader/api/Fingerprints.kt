@@ -13,12 +13,6 @@ internal val getAuthorizationUrlFingerprint = Fingerprint(
     strings = listOf("client_id=zACVn0dSFGdWqQ")
 )
 
-internal val getClientIdFingerprint = Fingerprint(
-    definingClass = "RedditOAuth;",
-    name = "getAuthorizeUrl",
-    strings = listOf("client_id=zACVn0dSFGdWqQ"),
-)
-
 internal val requestTokenFingerprint = Fingerprint(
     strings = listOf(
         // App ID and secret.

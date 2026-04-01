@@ -1,5 +1,5 @@
 {
-  "version": "1.3.0",
+  "version": "1.3.1-dev.4",
   "patches": [
     {
       "name": "Add archive links to context menu",
@@ -149,7 +149,6 @@
       "description": null,
       "use": true,
       "dependencies": [
-        "BytecodePatch",
         "BytecodePatch"
       ],
       "compatiblePackages": {
@@ -186,8 +185,12 @@
         "BytecodePatch"
       ],
       "compatiblePackages": {
-        "com.onelouder.baconreader": null,
-        "com.onelouder.baconreader.premium": null
+        "com.onelouder.baconreader": [
+          "6.1.4"
+        ],
+        "com.onelouder.baconreader.premium": [
+          "6.1.4"
+        ]
       },
       "options": []
     },
@@ -289,8 +292,12 @@
         "BytecodePatch"
       ],
       "compatiblePackages": {
-        "com.onelouder.baconreader": null,
-        "com.onelouder.baconreader.premium": null
+        "com.onelouder.baconreader": [
+          "6.1.4"
+        ],
+        "com.onelouder.baconreader.premium": [
+          "6.1.4"
+        ]
       },
       "options": [
         {
@@ -662,7 +669,7 @@
     {
       "name": "Use /user/ endpoint",
       "description": "Replaces the deprecated endpoint for viewing user profiles /u with /user, that used to fix a bug.",
-      "use": false,
+      "use": true,
       "dependencies": [],
       "compatiblePackages": {
         "com.laurencedawson.reddit_sync": [

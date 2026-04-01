@@ -7,7 +7,7 @@ internal val linkHelperOpenLinkFingerprint = Fingerprint(
 )
 
 internal val setAuthorizationHeaderFingerprint = Fingerprint(
+    definingClass = "Lcom/laurencedawson/reddit_sync/singleton/a;",
     returnType = "Ljava/util/HashMap;",
     strings = listOf("Authorization", "bearer "),
-    custom = { method, _ -> method.definingClass == "Lcom/laurencedawson/reddit_sync/singleton/a;" }
 )

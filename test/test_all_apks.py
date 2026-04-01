@@ -95,9 +95,12 @@ def rebuild_patches() -> None:
 
 def patch_apk(jar: Path, patches: Path, apk: Path) -> subprocess.CompletedProcess:
     """Run morphe-cli patch on a single APK."""
+    with open(TEST_DIR / "config.json", "r") as f:
+        config = json.load(f)
     cmd = [
         "java", "-jar", str(jar),
         "patch",
+        "--options-file=" + str(TEST_DIR / "config.json"),
         f"--patches={patches}",
         str(apk),
     ]
