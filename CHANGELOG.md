@@ -1,3 +1,20 @@
+# [1.3.0-dev.5](https://github.com/wchill/patcheddit/compare/v1.3.0-dev.4...v1.3.0-dev.5) (2026-04-01)
+
+
+### Bug Fixes
+
+* Bump gradle plugin version ([6435231](https://github.com/wchill/patcheddit/commit/6435231016b9799e978f059d3f35f6cd69add853))
+* Client ID validation not working ([d6a5e50](https://github.com/wchill/patcheddit/commit/d6a5e500accb41dd001c1f3a6e9bb320c53a41c8))
+* Continuum crashing when cold opening reddit links ([7848ebd](https://github.com/wchill/patcheddit/commit/7848ebdea255379b306fa570712cff0a586a8955))
+* Crash in Infinity+ settings ([3ff1829](https://github.com/wchill/patcheddit/commit/3ff1829bbe0f6f6834bff32e176a1d37a979a79c))
+* Improper regex for client ID ([707b2ba](https://github.com/wchill/patcheddit/commit/707b2ba95edfcf784138f4fa5fe0702978cf0d81))
+* Infinity crashing when cold opening reddit links ([688f574](https://github.com/wchill/patcheddit/commit/688f5744818ef8be5386c7a7097ef14c2a9fc399))
+
+
+### Features
+
+* Add support for Infinity+ ([9e28199](https://github.com/wchill/patcheddit/commit/9e28199844e770d3c6b56eaaab6b2417c30560a2))
+
 # [1.3.0-dev.9](https://github.com/wchill/patcheddit/compare/v1.3.0-dev.8...v1.3.0-dev.9) (2026-04-01)
 
 

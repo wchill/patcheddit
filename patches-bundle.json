@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-04-01T02:29:56",
-  "description": "# [1.3.0-dev.9](https://github.com/wchill/patcheddit/compare/v1.3.0-dev.8...v1.3.0-dev.9) (2026-04-01)\n\n\n### Bug Fixes\n\n* Crash in Infinity+ settings ([6bfa378](https://github.com/wchill/patcheddit/commit/6bfa378f303eeb952117e5c108dcb6185c7bab48))",
-  "download_url": "https://github.com/wchill/patcheddit/releases/download/v1.3.0-dev.9/patches-1.3.0-dev.9.mpp",
-  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v1.3.0-dev.9/patches-1.3.0-dev.9.mpp.asc",
-  "version": "1.3.0-dev.9"
+  "created_at": "2026-04-01T13:38:25",
+  "description": "# [1.3.0-dev.5](https://github.com/wchill/patcheddit/compare/v1.3.0-dev.4...v1.3.0-dev.5) (2026-04-01)\n\n\n### Bug Fixes\n\n* Bump gradle plugin version ([6435231](https://github.com/wchill/patcheddit/commit/6435231016b9799e978f059d3f35f6cd69add853))\n* Client ID validation not working ([d6a5e50](https://github.com/wchill/patcheddit/commit/d6a5e500accb41dd001c1f3a6e9bb320c53a41c8))\n* Continuum crashing when cold opening reddit links ([7848ebd](https://github.com/wchill/patcheddit/commit/7848ebdea255379b306fa570712cff0a586a8955))\n* Crash in Infinity+ settings ([3ff1829](https://github.com/wchill/patcheddit/commit/3ff1829bbe0f6f6834bff32e176a1d37a979a79c))\n* Improper regex for client ID ([707b2ba](https://github.com/wchill/patcheddit/commit/707b2ba95edfcf784138f4fa5fe0702978cf0d81))\n* Infinity crashing when cold opening reddit links ([688f574](https://github.com/wchill/patcheddit/commit/688f5744818ef8be5386c7a7097ef14c2a9fc399))\n\n\n### Features\n\n* Add support for Infinity+ ([9e28199](https://github.com/wchill/patcheddit/commit/9e28199844e770d3c6b56eaaab6b2417c30560a2))",
+  "download_url": "https://github.com/wchill/patcheddit/releases/download/v1.3.0-dev.5/patches-1.3.0-dev.5.mpp",
+  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v1.3.0-dev.5/patches-1.3.0-dev.5.mpp.asc",
+  "version": "1.3.0-dev.5"
 }
