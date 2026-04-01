@@ -1,3 +1,10 @@
+/*
+ * Copyright 2026 wchill.
+ * https://github.com/wchill/patcheddit
+ *
+ * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
+ */
+
 package app.morphe.extension.boostforreddit.http.wayback;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -14,7 +21,7 @@ import okhttp3.Request;
 public class WaybackMachine {
     private static final String WAYBACK_MACHINE_CDX_URL = "https://web.archive.org/web/timemap/json/%s";
     private static final String WAYBACK_MACHINE_CONTENT_URL = "https://web.archive.org/web/%sif_/%s";
-    private static final AutoSavingCache waybackCache = new AutoSavingCache("WaybackMachine", 100000);
+    private static final AutoSavingCache waybackCache = new AutoSavingCache("WaybackMachine", 100);
 
     public static Optional<WaybackResponse> fetchUrlFromCache(Request request, String contentUrl) throws IOException {
         Optional<String> cached = waybackCache.get(contentUrl);

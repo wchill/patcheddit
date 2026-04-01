@@ -1,3 +1,10 @@
+/*
+ * Copyright 2026 wchill.
+ * https://github.com/wchill/patcheddit
+ *
+ * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
+ */
+
 package app.morphe.extension.boostforreddit.http.reddit;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -34,7 +41,7 @@ public class RedditSubredditUndeleteInterceptor implements Interceptor {
     private static final Pattern SUBREDDIT_ABOUT_API_REGEX = Pattern.compile("^https?://\\w+\\.reddit\\.com/r/(\\w+)/about$");
     private static final Pattern SUBREDDIT_ABOUT_RULES_API_REGEX = Pattern.compile("^https?://\\w+\\.reddit\\.com/r/(\\w+)/about/rules$");
     private static final Pattern SUBREDDIT_POSTS_API_REGEX = Pattern.compile("^https?://\\w+\\.reddit\\.com/r/(\\w+)/(?:hot|new|rising|top|controversial)");
-    private final AutoSavingCache subredditCache = new AutoSavingCache("RedditSubreddits", 1000);
+    private final AutoSavingCache subredditCache = new AutoSavingCache("RedditSubreddits", 10);
     @NotNull
     @Override
     public Response intercept(@NotNull Chain chain) throws IOException {
@@ -82,7 +89,7 @@ public class RedditSubredditUndeleteInterceptor implements Interceptor {
 
     private Response handleRules(Chain chain, Request request, String subredditName) throws IOException {
         Optional<String> cached = subredditCache.get(subredditName);
-        if (!cached.isPresent()) {
+        if (cached.isEmpty()) {
             Response response = chain.proceed(request);
             if (response.isSuccessful()) {
                 return response;
@@ -101,9 +108,11 @@ public class RedditSubredditUndeleteInterceptor implements Interceptor {
 
     private Response handlePosts(Chain chain, Request request, String subredditName) throws IOException {
         Optional<String> cached = subredditCache.get(subredditName);
-        if (!cached.isPresent()) {
+        if (cached.isEmpty()) {
             Response response = chain.proceed(request);
-            if (response.isSuccessful()) {
+            // Check for HTTP 5xx because this can also indicate that reddit is having issues.
+            // In these situations, we don't want to mark the subreddit as banned.
+            if (response.isSuccessful() || response.code() >= 500) {
                 return response;
             }
         }

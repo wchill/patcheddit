@@ -1,4 +1,11 @@
-    package app.morphe.patches.reddit.customclients.relay.api
+/*
+ * Copyright 2026 wchill.
+ * https://github.com/wchill/patcheddit
+ *
+ * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
+ */
+
+package app.morphe.patches.reddit.customclients.relay.api
 
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.OpcodeFilter
@@ -33,10 +40,8 @@ internal val setRemoteConfigFingerprint = Fingerprint(
 
 // Lreddit/news/oauth/LoginActivity;->onCreate
 internal val loginActivityRedirectUriFingerprint = Fingerprint(
+    definingClass = "Lreddit/news/oauth/LoginActivity;",
     strings = listOf("dbrady://relay"),
-    custom = { _, classDef ->
-        classDef.type == "Lreddit/news/oauth/LoginActivity;"
-    }
 )
 
 // Lreddit/news/oauth/LoginActivity$1;->shouldOverrideUrlLoading
@@ -45,10 +50,8 @@ internal val shouldOverrideUrlLoadingRedirectUriFingerprint = Fingerprint(
 )
 
 internal val redditAccountManagerRedirectUriFingerprint = Fingerprint(
+    definingClass = "Lreddit/news/oauth/RedditAccountManager;",
     strings = listOf("dbrady://relay"),
-    custom = { _, classDef ->
-        classDef.type == "Lreddit/news/oauth/RedditAccountManager;"
-    }
 )
 
 // Lreddit/news/oauth/dagger/modules/NetworkModule;

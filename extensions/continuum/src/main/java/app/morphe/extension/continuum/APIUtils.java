@@ -1,3 +1,10 @@
+/*
+ * Copyright 2026 wchill.
+ * https://github.com/wchill/patcheddit
+ *
+ * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
+ */
+
 package app.morphe.extension.continuum;
 
 import android.annotation.SuppressLint;
@@ -69,10 +76,8 @@ public class APIUtils {
 
             // Get current and default values
             String currentValue = preference.getText();
-            String defaultValue = defaultValueSupplier.get();
 
-            // Clear the text field only if the current value is the default value
-            if (currentValue == null || currentValue.isEmpty() || currentValue.equals(defaultValue)) {
+            if (currentValue == null || currentValue.isEmpty()) {
                 editText.setText("");
             }
         });
@@ -80,8 +85,7 @@ public class APIUtils {
         // Set a summary provider that hides the default value but shows custom ones
         preference.setSummaryProvider((Preference.SummaryProvider<EditTextPreference>) pref -> {
             String currentValue = pref.getText();
-            String defaultValue = defaultValueSupplier.get();
-            if (currentValue == null || currentValue.isEmpty() || currentValue.equals(defaultValue)) {
+            if (currentValue == null || currentValue.isEmpty()) {
                 // TODO: Localize this string
                 return hintText;
             } else {

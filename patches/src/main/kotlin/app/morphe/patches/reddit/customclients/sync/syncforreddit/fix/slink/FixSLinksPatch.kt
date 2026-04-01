@@ -7,6 +7,7 @@ import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.patches.reddit.customclients.RESOLVE_S_LINK_METHOD
 import app.morphe.patches.reddit.customclients.SET_ACCESS_TOKEN_METHOD
 import app.morphe.patches.reddit.customclients.fixSLinksPatch
+import app.morphe.patches.reddit.customclients.sync.SyncForRedditCompatible
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.extension.sharedExtensionPatch
 
 const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/syncforreddit/FixSLinksPatch;"
@@ -15,11 +16,7 @@ const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/syncforreddit/FixS
 val fixSLinksPatch = fixSLinksPatch(
     extensionPatch = sharedExtensionPatch,
 ) {
-    compatibleWith(
-        "com.laurencedawson.reddit_sync",
-        "com.laurencedawson.reddit_sync.pro",
-        "com.laurencedawson.reddit_sync.dev",
-    )
+    compatibleWith(*SyncForRedditCompatible)
 
     execute {
         // region Patch navigation handler.

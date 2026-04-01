@@ -1,3 +1,10 @@
+/*
+ * Copyright 2026 wchill.
+ * https://github.com/wchill/patcheddit
+ *
+ * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
+ */
+
 package app.morphe.patches.reddit.customclients.baconreader.fix.redgifs
 
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
@@ -5,6 +12,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.removeInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.removeInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patches.reddit.customclients.INSTALL_NEW_CLIENT_METHOD
+import app.morphe.patches.reddit.customclients.baconreader.BaconReaderCompatible
 import app.morphe.patches.reddit.customclients.baconreader.misc.extension.sharedExtensionPatch
 import app.morphe.patches.reddit.customclients.fixRedgifsApiPatch
 import app.morphe.util.getReference
@@ -20,10 +28,7 @@ internal const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/baconread
 val fixRedgifsApi = fixRedgifsApiPatch(
     extensionPatch = sharedExtensionPatch
 ) {
-    compatibleWith(
-        "com.onelouder.baconreader",
-        "com.onelouder.baconreader.premium",
-    )
+    compatibleWith(*BaconReaderCompatible)
 
     execute {
         // region Patch Redgifs OkHttp3 client.

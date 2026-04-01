@@ -1,11 +1,18 @@
+/*
+ * Copyright 2026 wchill.
+ * https://github.com/wchill/patcheddit
+ *
+ * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
+ */
+
 package app.morphe.patches.reddit.customclients.baconreader.api
 
-import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.Match
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
-import app.morphe.patcher.patch.PatchException
+import app.morphe.patches.reddit.customclients.baconreader.BaconReaderCompatible
 import app.morphe.patches.reddit.customclients.spoofClientPatch
-import app.morphe.patches.shared.misc.string.replaceStringPatch
+import app.morphe.patches.all.misc.string.replaceStringPatch
 import app.morphe.util.returnEarly
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 
@@ -16,64 +23,35 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
         replaceStringPatch("ssl.reddit.com", "www.reddit.com")
     )
 
-    compatibleWith(
-        "com.onelouder.baconreader",
-        "com.onelouder.baconreader.premium",
-    )
+    compatibleWith(*BaconReaderCompatible)
 
     val clientId by clientIdOption
     val redirectUri by redirectUriOption
     val userAgent by userAgentOption
 
     execute {
-        if (clientIdOption.value == null && redirectUriOption.value == null && userAgentOption.value == null) {
-            throw PatchException("When spoofing client, at least one of clientId, redirectUri or userAgent should be set.")
-        }
+        fun Match.patch(replacementString: String) {
+            val clientIdIndex = stringMatches.first().index
 
-        if (clientId != null) {
-            fun Fingerprint.patch(replacementString: String) {
-                val clientIdIndex = stringMatches.first().index
-
-                method.apply {
-                    val clientIdRegister = getInstruction<OneRegisterInstruction>(clientIdIndex).registerA
-                    replaceInstruction(
-                        clientIdIndex,
-                        "const-string v$clientIdRegister, \"$replacementString\"",
-                    )
-                }
-            }
-
-            // Patch client id in authorization url.
-            getAuthorizationUrlFingerprint.patch("client_id=$clientId")
-
-            // Patch client id for access token request.
-            requestTokenFingerprint.patch(clientId!!)
-        }
-
-        if (redirectUri != null) {
-            getAuthorizeUrlFingerprint.method.apply {
-                val stringIndex = getAuthorizeUrlFingerprint.stringMatches.first().index
-                val stringRegister = getInstruction<OneRegisterInstruction>(stringIndex).registerA
+            method.apply {
+                val clientIdRegister = getInstruction<OneRegisterInstruction>(clientIdIndex).registerA
                 replaceInstruction(
-                    stringIndex,
-                    "const-string v$stringRegister, \"redirect_uri=$redirectUri\""
+                    clientIdIndex,
+                    "const-string v$clientIdRegister, \"$replacementString\"",
                 )
             }
-            setOf(runTaskFingerprint, isRedirectUrlFingerprint).forEach { fingerprint ->
-                fingerprint.method.apply {
-                    val stringIndex = fingerprint.stringMatches.first().index
-                    val stringRegister = getInstruction<OneRegisterInstruction>(stringIndex).registerA
-                    replaceInstruction(
-                        stringIndex,
-                        "const-string v$stringRegister, \"$redirectUri\""
-                    )
-                }
-            }
         }
 
-        if (userAgent != null) {
-            getRestClientUserAgentFingerprint.method.returnEarly(userAgent!!)
-            getRedditUserAgentFingerprint.method.returnEarly(userAgent!!)
-        }
+        // Patch client id in authorization url.
+        getAuthorizationUrlFingerprint.match().patch("client_id=$clientId")
+
+        // Patch client id for access token request.
+        requestTokenFingerprint.match().patch(clientId!!)
+
+        getAuthorizeUrlFingerprint.match().patch(redirectUri!!)
+        authUrlFingerprint.matchAll().forEach { match -> match.patch(redirectUri!!) }
+
+        getRestClientUserAgentFingerprint.method.returnEarly(userAgent!!)
+        getRedditUserAgentFingerprint.method.returnEarly(userAgent!!)
     }
 }

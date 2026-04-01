@@ -1,37 +1,43 @@
 [versions]
 desugar_jdk_libs = "2.1.5"
-morphe-patcher = "1.0.0"
+morphe-patcher = "1.+"
+morphe-patches-library = "1.+"
 # Tracking https://github.com/google/smali/issues/100.
 smali = "b6365a84f4"
-# 8.3.0 causes java verifier error: https://github.com/ReVanced/revanced-patches/issues/2818.
-#noinspection GradleDependency
-agp = "8.2.2"
 annotation = "1.9.1"
+ksp = "2.3.6"
+room = "2.7.1"
 gson = "2.13.2"
 guava = "33.5.0-jre"
 okhttp = "5.3.2"
 androidx-preference = "1.2.1"
-material = "1.9.0"
+material = "1.13.0"
 
 [libraries]
+morphe-patches-library = { module = "app.morphe:morphe-patches-library", version.ref = "morphe-patches-library" }
+morphe-extensions-library = { module = "app.morphe:morphe-extensions-library", version.ref = "morphe-patches-library" }
 annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+#noinspection SimilarGradleDependency
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 androidx-preference = { module = "androidx.preference:preference", version.ref = "androidx-preference" }
 material = { module = "com.google.android.material:material", version.ref = "material" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 
 #noinspection NewerVersionAvailable
 jackson-databind-boost = { module = "com.fasterxml.jackson.core:jackson-databind", version = "2.6.0" }
 jraw-boost = { module = "com.github.wchill:JRAW", version = "454a2f9" }
 #noinspection NewerVersionAvailable
 slf4j-boost = { module = "org.slf4j:slf4j-api", version = "1.7.13" }
-#noinspection NewerVersionAvailable
+#noinspection SimilarGradleDependency,NewerVersionAvailable
 guava-boost = { module = "com.google.guava:guava", version = "19.0" }
 
 [plugins]
 android-library = { id = "com.android.library" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 [bundles]
 boost = ["jackson-databind-boost", "jraw-boost", "guava-boost", "slf4j-boost"]

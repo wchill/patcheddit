@@ -1,3 +1,10 @@
+/*
+ * Copyright 2026 wchill.
+ * https://github.com/wchill/patcheddit
+ *
+ * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
+ */
+
 package app.morphe.extension.slide;
 
 import android.annotation.SuppressLint;
@@ -91,7 +98,7 @@ public class APIUtils {
             } else {
                 editor.putString(USER_AGENT_PREF_KEY, userAgentText);
             }
-            editor.commit();
+            editor.apply();
         } else {
             Logger.printException(() -> "APIUtils.persistSettings called before inputs were initialized!");
         }

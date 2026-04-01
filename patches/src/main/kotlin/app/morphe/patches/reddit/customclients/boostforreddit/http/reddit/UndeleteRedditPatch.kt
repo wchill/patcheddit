@@ -1,3 +1,10 @@
+/*
+ * Copyright 2026 wchill.
+ * https://github.com/wchill/patcheddit
+ *
+ * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
+ */
+
 package app.morphe.patches.reddit.customclients.boostforreddit.http.reddit
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
@@ -10,6 +17,7 @@ import app.morphe.patcher.util.proxy.mutableTypes.MutableField.Companion.toMutab
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
 import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.patcher.util.smali.toInstructions
+import app.morphe.patches.reddit.customclients.boostforreddit.BoostCompatible
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.sharedExtensionPatch
 import app.morphe.patches.reddit.customclients.boostforreddit.http.interceptHttpRequests
 import app.morphe.util.addInstructionsAtControlFlowLabel
@@ -32,10 +40,11 @@ internal const val EXTRA_EMOJI_GETTER = "getExtraEmoji"
 
 @Suppress("unused")
 val undeleteRedditPatch = bytecodePatch(
-    name="Automatically undelete Reddit content"
+    name = "Automatically undelete Reddit content",
+    default = true
 ) {
     dependsOn(sharedExtensionPatch, interceptHttpRequests)
-    compatibleWith("com.rubenmayayo.reddit"("1.12.12"))
+    compatibleWith(*BoostCompatible)
 
     execute {
         installJrawInterceptorFingerprint.method.apply {
@@ -74,6 +83,7 @@ val undeleteRedditPatch = bytecodePatch(
                 MutableMethodImplementation(2),
             ).toMutable().apply {
                 addInstructions(
+                    0,
                     """
                     iget-object v0, p0, $type->$EXTRA_EMOJI_CONTEXT_KEY:$fieldType
                     return-object v0

@@ -1,3 +1,10 @@
+/*
+ * Copyright 2026 wchill.
+ * https://github.com/wchill/patcheddit
+ *
+ * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
+ */
+
 package app.morphe.patches.reddit.customclients.baconreader.api
 
 import app.morphe.patcher.Fingerprint
@@ -7,12 +14,9 @@ internal val getAuthorizationUrlFingerprint = Fingerprint(
 )
 
 internal val getClientIdFingerprint = Fingerprint(
+    definingClass = "RedditOAuth;",
+    name = "getAuthorizeUrl",
     strings = listOf("client_id=zACVn0dSFGdWqQ"),
-    custom = {
-            method, classDef ->
-        if (!classDef.endsWith("RedditOAuth;")) return@Fingerprint false
-        method.name == "getAuthorizeUrl"
-    }
 )
 
 internal val requestTokenFingerprint = Fingerprint(
@@ -24,31 +28,19 @@ internal val requestTokenFingerprint = Fingerprint(
 )
 
 internal val getRestClientUserAgentFingerprint = Fingerprint(
-    custom = { method, classDef ->
-        classDef.type == "Lcom/onelouder/baconreader/connectivity/RestClient;" && method.name == "getUserAgent"
-    }
+    definingClass = "Lcom/onelouder/baconreader/connectivity/RestClient;",
+    name = "getUserAgent",
 )
 
 internal val getRedditUserAgentFingerprint = Fingerprint(
-    custom = { method, classDef ->
-        classDef.endsWith("RedditRetrofitClientModule;") && method.name == "getUserAgent"
-    }
+    definingClass = "RedditRetrofitClientModule;",
+    name = "getUserAgent",
 )
 
 internal val getAuthorizeUrlFingerprint = Fingerprint(
     strings = listOf("redirect_uri=http://baconreader.com/auth")
 )
 
-internal val isRedirectUrlFingerprint = Fingerprint(
+internal val authUrlFingerprint = Fingerprint(
     strings = listOf("http://baconreader.com/auth"),
-    custom = { method, _ ->
-        method.name == "isRedirectUrl"
-    }
-)
-
-internal val runTaskFingerprint = Fingerprint(
-    strings = listOf("http://baconreader.com/auth"),
-    custom = { method, _ ->
-        method.name == "runTask"
-    }
 )

@@ -1,3 +1,10 @@
+/*
+ * Copyright 2026 wchill.
+ * https://github.com/wchill/patcheddit
+ *
+ * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
+ */
+
 package app.morphe.extension.boostforreddit.http.imgur;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -27,7 +34,7 @@ import okhttp3.Response;
 import okhttp3.Request;
 
 public class ImgurUndeleteInterceptor implements Interceptor {
-    private static final AutoSavingCache imgurCache = new AutoSavingCache("Imgur", 10000);
+    private static final AutoSavingCache imgurCache = new AutoSavingCache("Imgur", 100);
 
     @NotNull
     @Override
