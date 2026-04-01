@@ -1,3 +1,10 @@
+## [1.3.1-dev.2](https://github.com/wchill/patcheddit/compare/v1.3.1-dev.1...v1.3.1-dev.2) (2026-04-01)
+
+
+### Bug Fixes
+
+* Attempt to fix compatibility with Manager 1.14.0 ([174d6ad](https://github.com/wchill/patcheddit/commit/174d6ad6420ba6172f41948053592fea9097d49f))
+
 ## [1.3.1-dev.1](https://github.com/wchill/patcheddit/compare/v1.3.0...v1.3.1-dev.1) (2026-04-01)
 
 
