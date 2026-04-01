@@ -27,16 +27,12 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
 
     execute {
         // region Patch redirect URI.
-        setOf(
-            loginActivityRedirectUriFingerprint,
-            shouldOverrideUrlLoadingRedirectUriFingerprint,
-            redditAccountManagerRedirectUriFingerprint
-        ).forEach { fingerprint ->
-            val redirectUriIndex = fingerprint.stringMatches.last().index
-            fingerprint.method.apply {
+        redirectUriFingerprint.matchAll().forEach { match ->
+            val redirectUriIndex = match.stringMatches.last().index
+            match.method.apply {
                 val redirectUriRegister = getInstruction<OneRegisterInstruction>(redirectUriIndex).registerA
 
-                fingerprint.method.replaceInstruction(
+                match.method.replaceInstruction(
                     redirectUriIndex,
                     "const-string v$redirectUriRegister, \"$redirectUri\"",
                 )
@@ -45,17 +41,12 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
         // endregion
 
         // region Patch client id.
-        setOf(
-            loginActivityClientIdFingerprint,
-            getLoggedInBearerTokenFingerprint,
-            getLoggedOutBearerTokenFingerprint,
-            getRefreshTokenFingerprint,
-        ).forEach { fingerprint ->
-            val clientIdIndex = fingerprint.stringMatches.first().index
-            fingerprint.method.apply {
+        clientIdFingerprint.matchAll().forEach { match ->
+            val clientIdIndex = match.stringMatches.first().index
+            match.method.apply {
                 val clientIdRegister = getInstruction<OneRegisterInstruction>(clientIdIndex).registerA
 
-                fingerprint.method.replaceInstruction(
+                match.method.replaceInstruction(
                     clientIdIndex,
                     "const-string v$clientIdRegister, \"$clientId\"",
                 )

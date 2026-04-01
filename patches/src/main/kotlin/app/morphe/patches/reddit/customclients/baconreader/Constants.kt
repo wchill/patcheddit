@@ -14,11 +14,11 @@ internal val BaconReaderCompatible = arrayOf(
     Compatibility(
         name = "BaconReader",
         packageName = "com.onelouder.baconreader",
-        targets = listOf(AppTarget(version = null))
+        targets = listOf(AppTarget(version = "6.1.4"))
     ),
     Compatibility(
         name = "BaconReader Premium",
         packageName = "com.onelouder.baconreader.premium",
-        targets = listOf(AppTarget(version = null))
+        targets = listOf(AppTarget(version = "6.1.4"))
     )
 )

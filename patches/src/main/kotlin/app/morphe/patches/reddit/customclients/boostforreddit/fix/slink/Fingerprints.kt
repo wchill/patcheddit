@@ -4,10 +4,10 @@ import app.morphe.patcher.Fingerprint
 import com.android.tools.smali.dexlib2.AccessFlags
 
 internal val getOAuthAccessTokenFingerprint = Fingerprint(
+    definingClass = "Lnet/dean/jraw/http/oauth/OAuthData;",
     accessFlags = listOf(AccessFlags.PUBLIC),
     returnType = "Ljava/lang/String",
     strings = listOf("access_token"),
-    custom = { method, _ -> method.definingClass == "Lnet/dean/jraw/http/oauth/OAuthData;" }
 )
 
 internal val handleNavigationFingerprint = Fingerprint(

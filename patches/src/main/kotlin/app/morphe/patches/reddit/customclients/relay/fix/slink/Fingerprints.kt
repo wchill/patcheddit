@@ -8,6 +8,7 @@ import app.morphe.patcher.string
 import com.android.tools.smali.dexlib2.Opcode
 
 internal val intentFilterActivityFingerprint = Fingerprint(
+    definingClass = "Lreddit/news/IntentFilterActivity;",
     strings = listOf("path", "amp.reddit.com"),
     filters = listOf(
         string("path"),
@@ -17,7 +18,6 @@ internal val intentFilterActivityFingerprint = Fingerprint(
         methodCall(name = "getDataString"),
         OpcodeFilter(Opcode.MOVE_RESULT_OBJECT)
     ),
-    custom = { _, classDef -> classDef.type == "Lreddit/news/IntentFilterActivity;" }
 )
 
 internal val refreshTokenAccessFilter = fieldAccess(

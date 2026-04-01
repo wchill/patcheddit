@@ -12,7 +12,7 @@ import app.morphe.patcher.patch.Compatibility
 
 internal val RedditIsFunFreeCompatible =
     Compatibility(
-        name = "reddit is fun",
+        name = "rif is fun",
         packageName = "com.andrewshu.android.reddit",
         targets = listOf(AppTarget(version = "5.6.22"))
     )
@@ -20,7 +20,7 @@ internal val RedditIsFunFreeCompatible =
 internal val RedditIsFunCompatible = arrayOf(
     RedditIsFunFreeCompatible,
     Compatibility(
-        name = "reddit is fun golden platinum",
+        name = "rif is fun golden platinum",
         packageName = "com.andrewshu.android.redditdonation",
         targets = listOf(AppTarget(version = "5.6.22"))
     )

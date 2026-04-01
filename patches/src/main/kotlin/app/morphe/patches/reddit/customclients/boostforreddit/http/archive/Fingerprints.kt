@@ -12,7 +12,10 @@ import app.morphe.patcher.OpcodesFilter
 import com.android.tools.smali.dexlib2.Opcode
 
 internal val linkBuildContextMenuFingerprint = Fingerprint(
-    // Lcom/rubenmayayo/reddit/ui/customviews/t;->f(Ljava/lang/String;)V
+    definingClass = "Lcom/rubenmayayo/reddit/ui/customviews/t;",
+    name = "f",
+    parameters = listOf("Ljava/lang/String;"),
+    returnType = "V",
     filters = OpcodesFilter.opcodesToFilters(
         Opcode.INVOKE_INTERFACE,
         Opcode.NEW_INSTANCE,
@@ -28,17 +31,13 @@ internal val linkBuildContextMenuFingerprint = Fingerprint(
         Opcode.INVOKE_INTERFACE,
         Opcode.NEW_INSTANCE
     ),
-    custom = {
-        method, _ -> method.name == "f" && method.definingClass == "Lcom/rubenmayayo/reddit/ui/customviews/t;"
-    }
 )
 
 internal val onClickContextMenuFingerprint = Fingerprint(
+    definingClass = "Lcom/rubenmayayo/reddit/ui/customviews/t;",
+    name = "c",
     filters = OpcodesFilter.opcodesToFilters(
         Opcode.MOVE_RESULT,
         Opcode.IF_EQZ
     ),
-    custom = {
-        method, _ -> method.name == "c" && method.definingClass == "Lcom/rubenmayayo/reddit/ui/customviews/t;"
-    }
 )
