@@ -29,6 +29,7 @@ dependencyResolutionManagement {
 
 plugins {
     id("app.morphe.patches") version "1.2.0"
+    id("org.jetbrains.kotlin.jvm") version "2.2.0" apply false
 }
 
 settings {
@@ -43,3 +44,30 @@ settings {
 
 include(":patches:stub")
 include(":extensions:continuum:stub")
+
+// Include morphe-patcher as composite build if it exists locally
+mapOf(
+    "morphe-patcher" to "app.morphe:morphe-patcher",
+).forEach { (libraryPath, libraryName) ->
+    val libDir = file("../$libraryPath")
+    if (libDir.exists()) {
+        includeBuild(libDir) {
+            dependencySubstitution {
+                substitute(module(libraryName)).using(project(":"))
+            }
+        }
+    }
+}
+
+// Include morphe-patches-library as composite build if it exists locally.
+// It is a multi-module project, so each artifact maps to a specific subproject.
+file("../morphe-patches-library").let { libDir ->
+    if (libDir.exists()) {
+        includeBuild(libDir) {
+            dependencySubstitution {
+                substitute(module("app.morphe:morphe-patches-library")).using(project(":patch-library"))
+                substitute(module("app.morphe:morphe-extensions-library")).using(project(":extension-library"))
+            }
+        }
+    }
+}
