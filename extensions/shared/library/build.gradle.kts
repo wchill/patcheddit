@@ -3,17 +3,8 @@ plugins {
 }
 
 android {
-    namespace = "app.morphe.extension"
-    compileSdk = 34
-
-    defaultConfig {
-        minSdk = 23
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
+    namespace = "app.morphe.extension.patcheddit"
+    compileSdk = 36
 }
 
 dependencies {
