@@ -1,5 +1,5 @@
 {
-  "version": "1.4.0-dev.1",
+  "version": "1.4.0-dev.2",
   "patches": [
     {
       "name": "Add archive links to context menu",
@@ -128,6 +128,21 @@
       "options": []
     },
     {
+      "name": "Fix /r/all",
+      "description": null,
+      "use": true,
+      "dependencies": [
+        "BytecodePatch",
+        "BytecodePatch"
+      ],
+      "compatiblePackages": {
+        "com.rubenmayayo.reddit": [
+          "1.12.12"
+        ]
+      },
+      "options": []
+    },
+    {
       "name": "Fix /s/ links",
       "description": null,
       "use": true,
@@ -179,6 +194,7 @@
       "description": null,
       "use": true,
       "dependencies": [
+        "BytecodePatch",
         "BytecodePatch"
       ],
       "compatiblePackages": {
@@ -197,6 +213,7 @@
       "use": true,
       "dependencies": [
         "BytecodePatch",
+        "BytecodePatch",
         "BytecodePatch"
       ],
       "compatiblePackages": {
@@ -211,6 +228,7 @@
       "description": null,
       "use": true,
       "dependencies": [
+        "BytecodePatch",
         "BytecodePatch"
       ],
       "compatiblePackages": {
