@@ -5,6 +5,9 @@ plugins {
 android {
     namespace = "app.morphe.extension.patcheddit"
     compileSdk = 36
+    defaultConfig {
+        minSdk = 23
+    }
 }
 
 dependencies {

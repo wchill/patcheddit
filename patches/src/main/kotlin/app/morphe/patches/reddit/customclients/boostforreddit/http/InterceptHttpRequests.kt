@@ -30,6 +30,7 @@ val interceptHttpRequests = bytecodePatch(
             addInstructions(
                 index,
                 """
+                invoke-static       { }, $OKHTTP_EXTENSION_CLASS_DESCRIPTOR->init()V
                 invoke-static       { p0 }, $OKHTTP_EXTENSION_CLASS_DESCRIPTOR->installInterceptor(Lokhttp3/OkHttpClient${'$'}Builder;)Lokhttp3/OkHttpClient${'$'}Builder;
                 move-result-object  p0
                 """
