@@ -100,6 +100,7 @@ def patch_apk(jar: Path, patches: Path, apk: Path) -> subprocess.CompletedProces
     cmd = [
         "java", "-jar", str(jar),
         "patch",
+        "--install",
         "--options-file=" + str(TEST_DIR / "config.json"),
         f"--patches={patches}",
         str(apk),

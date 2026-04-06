@@ -64,8 +64,8 @@ file("../morphe-patches-library").let { libDir ->
     if (libDir.exists()) {
         includeBuild(libDir) {
             dependencySubstitution {
-                substitute(module("app.morphe:morphe-patches-library")).using(project(":patch-library"))
-                substitute(module("app.morphe:morphe-extensions-library")).using(project(":extension-library"))
+                //substitute(module("app.morphe:morphe-patches-library")).using(project(":patch-library"))
+                //substitute(module("app.morphe:morphe-extensions-library")).using(project(":extension-library"))
             }
         }
     }
