@@ -18,7 +18,7 @@ val fakePremiumPatch = bytecodePatch(
     description = "Allows using pro features without ads.",
     default = true
 ) {
-    compatibleWith(*RedditIsFunCompatible)
+    compatibleWith(RedditIsFunFreeCompatible)
 
     execute {
         userPremiumFingerprint.method.returnEarly(true)
