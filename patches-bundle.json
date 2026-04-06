@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-04-06T20:06:42",
-  "description": "# [1.4.0-dev.2](https://github.com/wchill/patcheddit/compare/v1.4.0-dev.1...v1.4.0-dev.2) (2026-04-06)\n\n\n### Bug Fixes\n\n* Make /r/all patch available ([9740e3d](https://github.com/wchill/patcheddit/commit/9740e3d2ba1c67ae5ba7247f992f3724e8837dbe))",
-  "download_url": "https://github.com/wchill/patcheddit/releases/download/v1.4.0-dev.2/patches-1.4.0-dev.2.mpp",
-  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v1.4.0-dev.2/patches-1.4.0-dev.2.mpp.asc",
-  "version": "1.4.0-dev.2"
+  "created_at": "2026-04-06T23:43:32",
+  "description": "# [1.4.0-dev.3](https://github.com/wchill/patcheddit/compare/v1.4.0-dev.2...v1.4.0-dev.3) (2026-04-06)\n\n\n### Features\n\n* Add experimental patch to help resolve some login issues ([3a1025e](https://github.com/wchill/patcheddit/commit/3a1025e0370e9d7f5f5f0c8a5f4202e81f434979))",
+  "download_url": "https://github.com/wchill/patcheddit/releases/download/v1.4.0-dev.3/patches-1.4.0-dev.3.mpp",
+  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v1.4.0-dev.3/patches-1.4.0-dev.3.mpp.asc",
+  "version": "1.4.0-dev.3"
 }
