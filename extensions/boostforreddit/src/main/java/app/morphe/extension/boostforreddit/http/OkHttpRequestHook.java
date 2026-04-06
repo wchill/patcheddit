@@ -20,6 +20,7 @@ import app.morphe.extension.boostforreddit.http.reddit.RedditSubmissionUndeleteI
 import app.morphe.extension.boostforreddit.http.reddit.RedditSubredditUndeleteInterceptor;
 import app.morphe.extension.boostforreddit.http.wayback.WaybackThrottlingInterceptor;
 import app.morphe.extension.boostforreddit.utils.LoggingUtils;
+import app.morphe.extension.shared.fixes.feed.RAllPatch;
 import okhttp3.Call;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -30,7 +31,6 @@ import okhttp3.Response;
  * @noinspection unused
  */
 public class OkHttpRequestHook {
-    public static final String BYPASS_HOOK_TAG = "BypassHook";
     private static final OkHttpRequestHook instance = new OkHttpRequestHook();
     private final Map<String, StackTraceElement[]> callStackOfPendingRequests = Collections.synchronizedMap(new HashMap<>());
 
@@ -79,6 +79,7 @@ public class OkHttpRequestHook {
         return builder
             .addInterceptor(new ImgurUndeleteInterceptor())
             .addInterceptor(new RedditMediaUndeleteInterceptor())
+            .addInterceptor(new RAllPatch())
             .addInterceptor(new RedditSubredditUndeleteInterceptor())
             .addInterceptor(new RedditSubmissionUndeleteInterceptor())
             .addInterceptor(new RedditFixAudioInDownloadsInterceptor())

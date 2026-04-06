@@ -11,11 +11,11 @@ import app.morphe.patcher.patch.BytecodePatchBuilder
 import app.morphe.patcher.patch.Patch
 import app.morphe.patcher.patch.bytecodePatch
 
-fun fixRedgifsApiPatch(
+fun fixRedditAllSubreddits(
     extensionPatch: Patch<*>,
     block: BytecodePatchBuilder.() -> Unit = {},
 ) = bytecodePatch(
-    name = "Fix Redgifs API",
+    name = "Fix /r/all",
     default = true
 ) {
     dependsOn(extensionPatch)
