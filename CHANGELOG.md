@@ -1,3 +1,18 @@
+# [1.4.0](https://github.com/wchill/patcheddit/compare/v1.3.1...v1.4.0) (2026-04-07)
+
+
+### Bug Fixes
+
+* Don't show fake premium patch for reddit is fun golden platinum ([15d372e](https://github.com/wchill/patcheddit/commit/15d372e09cd36252483cf468a7d0a09188d2d4d1))
+* Make /r/all patch available ([9740e3d](https://github.com/wchill/patcheddit/commit/9740e3d2ba1c67ae5ba7247f992f3724e8837dbe))
+* reddit is fun imgur album loading ([66c73c9](https://github.com/wchill/patcheddit/commit/66c73c969acbbfa038d52cd020533eb39f95f224))
+
+
+### Features
+
+* /r/all patch for Boost ([60b8743](https://github.com/wchill/patcheddit/commit/60b8743b6fe47aea55fe10d87124b416d692c355))
+* Add experimental patch to help resolve some login issues ([3a1025e](https://github.com/wchill/patcheddit/commit/3a1025e0370e9d7f5f5f0c8a5f4202e81f434979))
+
 # [1.4.0-dev.3](https://github.com/wchill/patcheddit/compare/v1.4.0-dev.2...v1.4.0-dev.3) (2026-04-06)
 
 
