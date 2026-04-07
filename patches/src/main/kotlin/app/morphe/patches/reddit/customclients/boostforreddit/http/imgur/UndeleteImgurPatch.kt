@@ -38,6 +38,7 @@ val interceptImgurRequests = bytecodePatch(
                     addInstructions(
                         index + 1,
                         """
+                        invoke-static       { }, $OKHTTP_EXTENSION_CLASS_DESCRIPTOR->init()V
                         invoke-static       { v1 }, $OKHTTP_EXTENSION_CLASS_DESCRIPTOR->installInterceptor(Lokhttp3/OkHttpClient${'$'}Builder;)Lokhttp3/OkHttpClient${'$'}Builder;
                         """
                     )

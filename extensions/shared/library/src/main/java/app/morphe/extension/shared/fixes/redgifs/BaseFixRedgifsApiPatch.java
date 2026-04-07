@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 
 import app.morphe.extension.shared.Logger;
+import app.morphe.extension.shared.requests.PatchedditInterceptor;
 import okhttp3.Interceptor;
 import okhttp3.MediaType;
 import okhttp3.Protocol;
@@ -16,13 +17,18 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 
-public abstract class BaseFixRedgifsApiPatch implements Interceptor {
+public abstract class BaseFixRedgifsApiPatch extends PatchedditInterceptor {
     protected static BaseFixRedgifsApiPatch INSTANCE;
     public abstract String getDefaultUserAgent();
 
+    public boolean isPatchIncluded() {
+        // Overridden by patch.
+        return false;
+    }
+
     @NonNull
     @Override
-    public Response intercept(@NonNull Chain chain) throws IOException {
+    public Response doIntercept(@NonNull Chain chain) throws IOException {
         Request request = chain.request();
         if (!request.url().host().equals("api.redgifs.com")) {
             return chain.proceed(request);

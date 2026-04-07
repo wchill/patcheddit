@@ -8,7 +8,6 @@
 package app.morphe.patches.reddit.customclients.baconreader.fix.redgifs
 
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
-import app.morphe.patcher.extensions.InstructionExtensions.removeInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.removeInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patches.reddit.customclients.INSTALL_NEW_CLIENT_METHOD

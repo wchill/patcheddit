@@ -9,28 +9,28 @@ package app.morphe.patches.reddit.customclients
 
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.patch.BytecodePatchBuilder
+import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.Patch
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.util.returnEarly
 
-fun fixRedgifsApiPatch(
-    extensionPatch: Patch<*>,
-    block: BytecodePatchBuilder.() -> Unit = {},
+fun fixRAllPatch(
+    extensionPatch: Array<Patch<*>>,
+    compatible: Array<Compatibility>
 ) = bytecodePatch(
-    name = "Fix Redgifs API",
+    name = "Fix /r/all",
     default = true
 ) {
+    compatibleWith(*compatible)
+
     dependsOn(
-        extensionPatch,
-        bytecodePatch {
-            execute {
-                Fingerprint(
-                    definingClass = "Lapp/morphe/extension/shared/fixes/redgifs/BaseFixRedgifsApiPatch;",
-                    name = "isPatchIncluded",
-                ).method.returnEarly(true)
-            }
-        }
+        *extensionPatch,
     )
 
-    block()
+    execute {
+        Fingerprint(
+            definingClass = "Lapp/morphe/extension/shared/fixes/feed/RAllPatch;",
+            name = "isPatchIncluded",
+        ).method.returnEarly(true)
+    }
 }

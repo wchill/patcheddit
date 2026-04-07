@@ -16,8 +16,10 @@ public class ImgurAlbumsPatch {
                 .appendPath("3");
         if (isGallery) {
             builder.appendPath("gallery");
+        } else {
+            builder.appendPath("album");
         }
-        return builder.appendPath("album")
+        return builder
                 .appendPath(albumId)
                 .build();
     }
