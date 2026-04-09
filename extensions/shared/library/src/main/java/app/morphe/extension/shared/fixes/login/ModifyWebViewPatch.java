@@ -13,35 +13,49 @@ import android.webkit.WebView;
 
 import java.util.Map;
 
-import app.morphe.extension.shared.Logger;
-
+@SuppressWarnings("unused")
 public class ModifyWebViewPatch {
     @SuppressLint("SetJavaScriptEnabled")
     public static void loadUrl(WebView webView, String url, Map<String, String> additionalHeaders) {
-        if (!url.contains("reddit.com/login") && !url.contains("reddit.com/api/v1/authorize")) {
-            webView.loadUrl(url, additionalHeaders);
-            return;
+        if (url.contains("reddit.com/login") || url.contains("reddit.com/api/v1/authorize")) {
+            WebSettings webSettings = webView.getSettings();
+            webSettings.setUserAgentString(
+                    "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) " +
+                            "Chrome/147.0.0.0 Mobile Safari/537.36"
+            );
+            webSettings.setJavaScriptEnabled(true);
         }
-
-        WebSettings webSettings = webView.getSettings();
-        webSettings.setUserAgentString(
-                "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) " +
-                        "Chrome/147.0.0.0 Mobile Safari/537.36"
-        );
-        webSettings.setJavaScriptEnabled(true);
         webView.loadUrl(url, additionalHeaders);
-        webView.evaluateJavascript(
-            "function(){" +
-                "document.addEventListener('DOMContentLoaded',(e)=>{" +
-                    "document.querySelector('#data-protection-consent-dialog > rpl-modal-card > button.button-secondary')" +
-                    ".click()" +
-                "});" +
-            "}()",
-            (result) -> {}
-        );
     }
 
     public static void loadUrl(WebView webView, String url) {
         loadUrl(webView, url, Map.of());
+    }
+
+    public static void onPageFinished(WebView webView, String url) {
+        if (!url.contains("reddit.com/login") && !url.contains("reddit.com/api/v1/authorize")) {
+            return;
+        }
+
+        webView.evaluateJavascript(
+            "(function(){" +
+            "    document.addEventListener('DOMContentLoaded', function(e) {" +
+            "        document.querySelector('#data-protection-consent-dialog > rpl-modal-card > button.button-secondary')" +
+            "        .click()" +
+            "    });" +
+            "})()",
+            null
+        );
+
+        webView.evaluateJavascript(
+            "(function() {" +
+            "  document.addEventListener('submit', function(e) {" +
+            "    if (e.submitter && e.submitter.name === 'authorize') {" +
+            "      e.submitter.value = 'Allow';" +
+            "    }" +
+            "  }, true);" +
+            "})();",
+            null
+        );
     }
 }

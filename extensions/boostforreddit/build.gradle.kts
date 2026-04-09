@@ -11,7 +11,6 @@ dependencies {
     compileOnly(libs.okhttp)
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
-    coreLibraryDesugaring(libs.desugar.jdk.libs)
 }
 
 android {
