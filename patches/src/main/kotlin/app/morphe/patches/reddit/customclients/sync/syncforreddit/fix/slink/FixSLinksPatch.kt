@@ -6,22 +6,22 @@ import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.patches.reddit.customclients.RESOLVE_S_LINK_METHOD
 import app.morphe.patches.reddit.customclients.SET_ACCESS_TOKEN_METHOD
+import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.fixSLinksPatch
-import app.morphe.patches.reddit.customclients.sync.SyncForRedditCompatible
-import app.morphe.patches.reddit.customclients.sync.syncforreddit.extension.sharedExtensionPatch
 
 const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/syncforreddit/FixSLinksPatch;"
 
 @Suppress("unused")
 val fixSLinksPatch = fixSLinksPatch(
-    extensionPatch = sharedExtensionPatch,
+    extensionPatch = ExtensionPatches.Sync,
 ) {
-    compatibleWith(*SyncForRedditCompatible)
+    compatibleWith(*AppCompatibility.SyncForReddit)
 
     execute {
         // region Patch navigation handler.
 
-        linkHelperOpenLinkFingerprint.method.apply {
+        LinkHelperOpenLinkFingerprint.method.apply {
             val urlRegister = "p3"
             val tempRegister = "v2"
 
@@ -41,7 +41,7 @@ val fixSLinksPatch = fixSLinksPatch(
 
         // region Patch set access token.
 
-        setAuthorizationHeaderFingerprint.method.addInstruction(
+        SetAuthorizationHeaderFingerprint.method.addInstruction(
             0,
             "invoke-static { p0 }, $EXTENSION_CLASS_DESCRIPTOR->$SET_ACCESS_TOKEN_METHOD",
         )

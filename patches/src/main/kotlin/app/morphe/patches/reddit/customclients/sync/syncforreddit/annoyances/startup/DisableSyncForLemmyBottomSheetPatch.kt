@@ -2,7 +2,7 @@ package app.morphe.patches.reddit.customclients.sync.syncforreddit.annoyances.st
 
 import app.morphe.patcher.extensions.InstructionExtensions.removeInstruction
 import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patches.reddit.customclients.sync.SyncForRedditCompatible
+import app.morphe.patches.reddit.customclients.AppCompatibility
 
 @Suppress("unused")
 val disableSyncForLemmyBottomSheetPatch = bytecodePatch(
@@ -10,10 +10,10 @@ val disableSyncForLemmyBottomSheetPatch = bytecodePatch(
     description = "Disables the bottom sheet at the startup that asks you to signup to \"Sync for Lemmy\".",
     default = true
 ) {
-    compatibleWith(*SyncForRedditCompatible)
+    compatibleWith(*AppCompatibility.SyncForReddit)
 
     execute {
-        mainActivityOnCreateFingerprint.method.apply {
+        MainActivityOnCreateFingerprint.method.apply {
             val showBottomSheetIndex = implementation!!.instructions.lastIndex - 1
 
             removeInstruction(showBottomSheetIndex)

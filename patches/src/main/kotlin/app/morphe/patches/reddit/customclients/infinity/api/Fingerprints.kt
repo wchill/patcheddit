@@ -15,22 +15,22 @@ import app.morphe.patcher.literal
 import app.morphe.patcher.methodCall
 import com.android.tools.smali.dexlib2.Opcode
 
-internal val getDefaultUserAgentFingerprint = Fingerprint(
+internal object GetDefaultUserAgentFingerprint : Fingerprint(
     definingClass = EXTENSION_CLASS_NAME,
     name = "getDefaultUserAgent"
 )
 
-internal val getDefaultRedirectUriFingerprint = Fingerprint(
+internal object GetDefaultRedirectUriFingerprint : Fingerprint(
     definingClass = EXTENSION_CLASS_NAME,
     name = "getDefaultRedirectUri"
 )
 
-internal val getDefaultClientIdFingerprint = Fingerprint(
+internal object GetDefaultClientIdFingerprint : Fingerprint(
     definingClass = EXTENSION_CLASS_NAME,
     name = "getDefaultClientId"
 )
 
-internal val clientIdFingerprint = Fingerprint(
+internal object ClientIdFingerprint : Fingerprint(
     filters = listOf(
         methodCall(
             definingClass = "Lml/docilealligator/infinityforreddit/utils/APIUtils;",
@@ -45,12 +45,12 @@ internal fun userAgentFingerprint(versionName: String) = Fingerprint(
     strings = listOf("android:ml.docilealligator.infinityforreddit:$versionName (by /u/Hostilenemy)")
 )
 
-internal val redirectUriFingerprint = Fingerprint(
+internal object RedirectUriFingerprint : Fingerprint(
     definingClass = "Lml/docilealligator",
     strings = listOf("infinity://localhost")
 )
 
-internal val settingsActivityOnBackStackChangedFingerprint = Fingerprint(
+internal object SettingsActivityOnBackStackChangedFingerprint : Fingerprint(
     definingClass = "Lml/docilealligator/infinityforreddit/activities/SettingsActivity;",
     filters = OpcodesFilter.opcodesToFilters(
         Opcode.CONST,
@@ -64,11 +64,11 @@ internal val settingsActivityOnBackStackChangedFingerprint = Fingerprint(
     )
 )
 
-internal val billingClientOnServiceConnectedFingerprint = Fingerprint(
+internal object BillingClientOnServiceConnectedFingerprint : Fingerprint(
     strings = listOf("Billing service connected")
 )
 
-internal val infinityStartSubscriptionActivityFingerprint = Fingerprint(
+internal object InfinityStartSubscriptionActivityFingerprint : Fingerprint(
     definingClass = "Lml/docilealligator/infinityforreddit/Infinity;",
     filters = listOf(
         methodCall(

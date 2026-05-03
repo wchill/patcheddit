@@ -13,28 +13,28 @@ import app.morphe.patcher.OpcodesFilter
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 
-internal val clientIdFingerprint = Fingerprint(
+internal object ClientIdFingerprint : Fingerprint(
     strings = listOf("dj-xCIZQYiLbEg")
 )
 
-internal val redditCheckDisableAPIFingerprint = Fingerprint(
+internal object RedditCheckDisableAPIFingerprint : Fingerprint(
     strings = listOf("Reddit Disabled"),
     filters = listOf(
         OpcodeFilter(Opcode.IF_EQZ)
     )
 )
 
-internal val setRemoteConfigFingerprint = Fingerprint(
+internal object SetRemoteConfigFingerprint : Fingerprint(
     parameters = listOf("Lcom/google/firebase/remoteconfig/FirebaseRemoteConfig;"),
     strings = listOf("reddit_oauth_url")
 )
 
-internal val redirectUriFingerprint = Fingerprint(
+internal object RedirectUriFingerprint : Fingerprint(
     strings = listOf("dbrady://relay")
 )
 
 // Lreddit/news/oauth/dagger/modules/NetworkModule;
-internal val networkModuleUserAgentFingerprint = Fingerprint(
+internal object NetworkModuleUserAgentFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.STATIC),
     returnType = "Lokhttp3/OkHttpClient;",
     filters = OpcodesFilter.opcodesToFilters(

@@ -7,11 +7,11 @@
 
 package app.morphe.patches.reddit.customclients.relay.fix.login
 
-import app.morphe.patches.reddit.customclients.relay.misc.extension.sharedExtensionPatch
+import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.modifyWebViewPatch
-import app.morphe.patches.reddit.customclients.relay.RelayCompatible
 
 internal val modifyLoginWebView = modifyWebViewPatch(
-    extensionPatch = arrayOf(sharedExtensionPatch),
-    compatible = RelayCompatible
+    extensionPatch = ExtensionPatches.Relay,
+    compatible = AppCompatibility.Relay
 )

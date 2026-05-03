@@ -2,7 +2,7 @@ package app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.thumbnail
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patches.reddit.customclients.sync.SyncForRedditCompatible
+import app.morphe.patches.reddit.customclients.AppCompatibility
 
 @Suppress("unused")
 val fixPostThumbnailsPatch = bytecodePatch(
@@ -11,11 +11,11 @@ val fixPostThumbnailsPatch = bytecodePatch(
     default = true
 ) {
 
-    compatibleWith(*SyncForRedditCompatible)
+    compatibleWith(*AppCompatibility.SyncForReddit)
 
     // Image URLs contain escaped ampersands (&amp;), let's replace these with unescaped ones (&).
     execute {
-        customImageViewLoadFingerprint.method.addInstructions(
+        CustomImageViewLoadFingerprint.method.addInstructions(
             0,
             """
 	            # url = url.replace("&amp;", "&");

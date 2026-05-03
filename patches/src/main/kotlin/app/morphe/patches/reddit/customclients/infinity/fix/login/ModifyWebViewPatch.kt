@@ -7,11 +7,11 @@
 
 package app.morphe.patches.reddit.customclients.infinity.fix.login
 
-import app.morphe.patches.reddit.customclients.infinity.InfinityCompatible
-import app.morphe.patches.reddit.customclients.infinity.misc.extension.sharedExtensionPatch
+import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.modifyWebViewPatch
 
 internal val modifyLoginWebView = modifyWebViewPatch(
-    extensionPatch = arrayOf(sharedExtensionPatch),
-    compatible = InfinityCompatible
+    extensionPatch = ExtensionPatches.Infinity,
+    compatible = AppCompatibility.Infinity
 )

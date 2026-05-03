@@ -9,26 +9,26 @@ package app.morphe.patches.reddit.customclients.sync.syncforreddit.api
 
 import app.morphe.patcher.Fingerprint
 
-internal val getAuthorizationStringFingerprint = Fingerprint(
+internal object GetAuthorizationStringFingerprint : Fingerprint(
     // This is evaluated after replaceStringPatch, so the modified string is used for matching.
     strings = listOf("https://www.reddit.com/api/v1/authorize.compact?client_id=Q43fSpTe8LckEg&response_type=code&state=")
 )
 
-internal val getBearerTokenFingerprint = Fingerprint(
+internal object GetBearerTokenFingerprint : Fingerprint(
     classFingerprint = Fingerprint(
         strings = listOf("authorize.compact?client_id")
     ),
     strings = listOf("Basic")
 )
 
-internal val getUserAgentFingerprint = Fingerprint(
+internal object GetUserAgentFingerprint : Fingerprint(
     strings = listOf("android:com.laurencedawson.reddit_sync")
 )
 
-internal val imgurImageAPIFingerprint = Fingerprint(
+internal object ImgurImageAPIFingerprint : Fingerprint(
     strings = listOf("https://imgur-apiv3.p.rapidapi.com/3/image")
 )
 
-internal val getRedirectUriFingerprint = Fingerprint(
+internal object GetRedirectUriFingerprint : Fingerprint(
     strings = listOf("http://redditsync/auth")
 )

@@ -10,7 +10,7 @@ package app.morphe.patches.reddit.customclients.redditisfun.api
 import app.morphe.patcher.Match
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
-import app.morphe.patches.reddit.customclients.redditisfun.RedditIsFunCompatible
+import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.spoofClientPatch
 import app.morphe.util.getReference
 import app.morphe.util.indexOfFirstInstructionOrThrow
@@ -19,7 +19,7 @@ import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.StringReference
 
 val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, userAgentOption ->
-    compatibleWith(*RedditIsFunCompatible)
+    compatibleWith(*AppCompatibility.RedditIsFun)
 
     val clientId by clientIdOption
     val redirectUri by redirectUriOption
@@ -48,32 +48,32 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
         }
 
         // Patch OAuth authorization.
-        buildAuthorizationStringFingerprint.matchAll().replaceWith(clientId!!) { first().index + 4 }
+         BuildAuthorizationStringFingerprint.matchAll().replaceWith(clientId!!) { first().index + 4 }
 
-        // Path basic authorization.
-        basicAuthorizationFingerprint.matchAll().replaceWith("$clientId:") { last().index + 7 }
+         // Path basic authorization.
+         BasicAuthorizationFingerprint.matchAll().replaceWith("$clientId:") { last().index + 7 }
         // endregion
 
-        // region Patch redirect URI.
-        redirectUriFingerprint.matchAll().forEach { match ->
-            match.method.let {
-                match.stringMatches.forEach { stringMatch ->
-                    val register = it.getInstruction<OneRegisterInstruction>(stringMatch.index).registerA
-                    it.replaceInstruction(stringMatch.index, "const-string v$register, \"$redirectUri\"")
-                }
-            }
-        }
-        // endregion
+         // region Patch redirect URI.
+         RedirectUriFingerprint.matchAll().forEach { match ->
+             match.method.let {
+                 match.stringMatches.forEach { stringMatch ->
+                     val register = it.getInstruction<OneRegisterInstruction>(stringMatch.index).registerA
+                     it.replaceInstruction(stringMatch.index, "const-string v$register, \"$redirectUri\"")
+                 }
+             }
+         }
+         // endregion
 
-        // region Patch user agent.
-        getUserAgentFingerprint.method.returnEarly(userAgent!!)
-        // endregion
+         // region Patch user agent.
+         GetUserAgentFingerprint.method.returnEarly(userAgent!!)
+         // endregion
 
-        // region Patch miscellaneous.
+         // region Patch miscellaneous.
 
-        // Reddit messed up and does not append a redirect uri to the authorization url to old.reddit.com/login.
-        // Replace old.reddit.com with www.reddit.com to fix this.
-        buildAuthorizationStringFingerprint.method.apply {
+         // Reddit messed up and does not append a redirect uri to the authorization url to old.reddit.com/login.
+         // Replace old.reddit.com with www.reddit.com to fix this.
+         BuildAuthorizationStringFingerprint.method.apply {
             val index = indexOfFirstInstructionOrThrow {
                 getReference<StringReference>()?.contains("old.reddit.com") == true
             }

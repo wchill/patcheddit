@@ -13,6 +13,10 @@ import app.morphe.patcher.patch.Patch
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.util.returnEarly
 
+internal const val INSTALL_NEW_CLIENT_METHOD =
+    $$"install(Lokhttp3/OkHttpClient$Builder;)Lokhttp3/OkHttpClient;"
+internal const val CREATE_NEW_CLIENT_METHOD = "createClient()Lokhttp3/OkHttpClient;"
+
 fun fixRedgifsApiPatch(
     extensionPatch: Patch<*>,
     block: BytecodePatchBuilder.() -> Unit = {},

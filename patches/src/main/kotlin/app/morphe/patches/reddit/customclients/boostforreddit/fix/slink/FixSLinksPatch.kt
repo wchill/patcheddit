@@ -4,24 +4,24 @@ import app.morphe.patcher.extensions.InstructionExtensions.addInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.util.smali.ExternalLabel
+import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.RESOLVE_S_LINK_METHOD
 import app.morphe.patches.reddit.customclients.SET_ACCESS_TOKEN_METHOD
-import app.morphe.patches.reddit.customclients.boostforreddit.BoostCompatible
-import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.sharedExtensionPatch
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.fixSLinksPatch
 
-const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boostforreddit/FixSLinksPatch;"
+const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boost/FixSLinksPatch;"
 
 @Suppress("unused")
 val fixSlinksPatch = fixSLinksPatch(
-    extensionPatch = sharedExtensionPatch,
+    extensionPatch = ExtensionPatches.Boost,
 ) {
-    compatibleWith(*BoostCompatible)
+    compatibleWith(*AppCompatibility.Boost)
 
     execute {
         // region Patch navigation handler.
 
-        handleNavigationFingerprint.method.apply {
+        HandleNavigationFingerprint.method.apply {
             val urlRegister = "p1"
             val tempRegister = "v1"
 
@@ -41,7 +41,7 @@ val fixSlinksPatch = fixSLinksPatch(
 
         // region Patch set access token.
 
-        getOAuthAccessTokenFingerprint.method.addInstruction(
+        GetOAuthAccessTokenFingerprint.method.addInstruction(
             3,
             "invoke-static { v0 }, $EXTENSION_CLASS_DESCRIPTOR->$SET_ACCESS_TOKEN_METHOD",
         )

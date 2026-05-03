@@ -11,7 +11,7 @@ import app.morphe.patcher.Fingerprint
 import com.android.tools.smali.dexlib2.AccessFlags
 
 // Should usually match: o5/i0.a()
-internal val userPremiumFingerprint = Fingerprint(
+internal object UserPremiumFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC),
     returnType = "Z",
     parameters = listOf(),

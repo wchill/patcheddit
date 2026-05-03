@@ -4,7 +4,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.fingerprint
 import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patches.reddit.customclients.sync.SyncForRedditCompatible
+import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.util.getReference
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.StringReference
@@ -15,7 +15,7 @@ val useUserEndpointPatch = bytecodePatch(
     description = "Replaces the deprecated endpoint for viewing user profiles /u with /user, that used to fix a bug.",
     default = true,
 ) {
-    compatibleWith(*SyncForRedditCompatible)
+    compatibleWith(*AppCompatibility.SyncForReddit)
 
     execute {
         userEndpointFingerprints.forEach { fingerprint ->

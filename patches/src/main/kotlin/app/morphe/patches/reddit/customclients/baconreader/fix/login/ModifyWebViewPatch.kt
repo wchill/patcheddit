@@ -7,11 +7,11 @@
 
 package app.morphe.patches.reddit.customclients.baconreader.fix.login
 
-import app.morphe.patches.reddit.customclients.baconreader.BaconReaderCompatible
-import app.morphe.patches.reddit.customclients.baconreader.misc.extension.sharedExtensionPatch
+import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.modifyWebViewPatch
 
 internal val modifyLoginWebView = modifyWebViewPatch(
-    extensionPatch = arrayOf(sharedExtensionPatch),
-    compatible = BaconReaderCompatible
+    extensionPatch = ExtensionPatches.BaconReader,
+    compatible = AppCompatibility.BaconReader
 )

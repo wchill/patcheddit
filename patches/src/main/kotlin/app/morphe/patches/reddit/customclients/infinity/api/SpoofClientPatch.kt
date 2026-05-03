@@ -7,21 +7,14 @@
 
 package app.morphe.patches.reddit.customclients.infinity.api
 
-import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
-import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.patch.resourcePatch
-import app.morphe.patcher.resource.utf8Writer
-import app.morphe.patcher.util.smali.ExternalLabel
-import app.morphe.patches.reddit.customclients.infinity.InfinityCompatible
-import app.morphe.patches.reddit.customclients.infinity.misc.extension.sharedExtensionPatch
+import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.spoofClientPatch
-import app.morphe.util.getNode
-import app.morphe.util.registersUsed
 import app.morphe.util.replaceStringMatchesWithFunc
 import app.morphe.util.returnEarly
-import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
 
 internal const val EXTENSION_CLASS_NAME = "Lapp/morphe/extension/infinity/APIUtils;"
 internal const val FRAGMENT_CLASS_NAME = "app.morphe.extension.infinity.APIKeysPreferenceFragment"
@@ -33,8 +26,8 @@ private val disableBillingPatch = bytecodePatch(
     default = false
 ) {
     execute {
-        billingClientOnServiceConnectedFingerprint.methodOrNull?.returnEarly()
-        infinityStartSubscriptionActivityFingerprint.method.returnEarly()
+        BillingClientOnServiceConnectedFingerprint.methodOrNull?.returnEarly()
+        InfinityStartSubscriptionActivityFingerprint.method.returnEarly()
     }
 }
 
@@ -45,7 +38,7 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
 
     dependsOn(
         disableBillingPatch,
-        sharedExtensionPatch,
+        ExtensionPatches.Infinity,
         resourcePatch(
             default = false
         ) {
@@ -109,13 +102,13 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
             }
         }
     )
-    compatibleWith(*InfinityCompatible)
+    compatibleWith(*AppCompatibility.Infinity)
     execute {
-        getDefaultClientIdFingerprint.method.returnEarly(clientId!!)
-        getDefaultRedirectUriFingerprint.method.returnEarly(redirectUri!!)
-        getDefaultUserAgentFingerprint.method.returnEarly(userAgent!!)
+        GetDefaultClientIdFingerprint.method.returnEarly(clientId!!)
+        GetDefaultRedirectUriFingerprint.method.returnEarly(redirectUri!!)
+        GetDefaultUserAgentFingerprint.method.returnEarly(userAgent!!)
 
-        clientIdFingerprint.matchAll().forEach { match ->
+        ClientIdFingerprint.matchAll().forEach { match ->
             match.method.apply {
                 replaceInstruction(
                     match.instructionMatches[0].index,
@@ -130,7 +123,7 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
             match.replaceStringMatchesWithFunc(GET_USER_AGENT_METHOD)
         }
 
-        redirectUriFingerprint.matchAll().forEach { match ->
+        RedirectUriFingerprint.matchAll().forEach { match ->
             match.replaceStringMatchesWithFunc(GET_REDIRECT_URI_METHOD)
         }
 

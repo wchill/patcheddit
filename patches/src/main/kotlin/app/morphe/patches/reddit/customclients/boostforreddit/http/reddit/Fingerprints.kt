@@ -10,13 +10,8 @@ package app.morphe.patches.reddit.customclients.boostforreddit.http.reddit
 import app.morphe.patcher.Fingerprint
 import com.android.tools.smali.dexlib2.AccessFlags
 
-internal val installJrawInterceptorFingerprint = Fingerprint(
-    definingClass = "Lnet/dean/jraw/http/OkHttpAdapter;",
-    name = "newOkHttpClient",
-)
-
 // Lcom/rubenmayayo/reddit/ui/adapters/CommentViewHolder;->O(Lcom/rubenmayayo/reddit/models/reddit/CommentModel;
-internal val setCommentBabushkaTextFingerprint = Fingerprint(
+internal object SetCommentBabushkaTextFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PUBLIC),
     returnType = "V",
     parameters = listOf("Lcom/rubenmayayo/reddit/models/reddit/CommentModel"),
@@ -24,53 +19,53 @@ internal val setCommentBabushkaTextFingerprint = Fingerprint(
 )
 
 // Lcom/rubenmayayo/reddit/ui/adapters/SubmissionViewHolder;->n0(Lcom/rubenmayayo/reddit/models/reddit/SubmissionModel;)V
-internal val setSubmissionBabushkaTextFingerprint = Fingerprint(
+internal object SetSubmissionBabushkaTextFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PUBLIC),
     returnType = "V",
     parameters = listOf("Lcom/rubenmayayo/reddit/models/reddit/SubmissionModel"),
     strings = listOf("\uD83D\uDD12")
 )
 
-internal val contributionModelConstructorFingerprint = Fingerprint(
+internal object ContributionModelConstructorFingerprint : Fingerprint(
     definingClass = "Lcom/rubenmayayo/reddit/models/reddit/ContributionModel;",
     accessFlags = listOf(AccessFlags.PROTECTED, AccessFlags.CONSTRUCTOR),
     returnType = "V",
 )
 
-internal val contributionModelWriteToParcelFingerprint = Fingerprint(
+internal object ContributionModelWriteToParcelFingerprint : Fingerprint(
     definingClass = "Lcom/rubenmayayo/reddit/models/reddit/ContributionModel;",
     name = "writeToParcel",
     accessFlags = listOf(AccessFlags.PUBLIC),
     returnType = "V",
 )
 
-internal val submissionModelDeserializeFingerprint = Fingerprint(
+internal object SubmissionModelDeserializeFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC),
     returnType = "Lcom/rubenmayayo/reddit/models/reddit/SubmissionModel",
     parameters = listOf("Lnet/dean/jraw/models/Submission")
 )
 
-internal val commentModelDeserializeFingerprint = Fingerprint(
+internal object CommentModelDeserializeFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC),
     returnType = "Lcom/rubenmayayo/reddit/models/reddit/CommentModel",
     parameters = listOf("Lnet/dean/jraw/models/Comment")
 )
 
-internal val stateSubmissionViewGetHeaderFingerprint = Fingerprint(
+internal object StateSubmissionViewGetHeaderFingerprint : Fingerprint(
     definingClass = "Lcom/rubenmayayo/reddit/ui/customviews/StateSubmissionView;",
     name = "a",
     accessFlags = listOf(AccessFlags.PRIVATE),
     strings = listOf("copyright_takedown", "reddit"),
 )
 
-internal val stateSubmissionViewGetSummaryFingerprint = Fingerprint(
+internal object StateSubmissionViewGetSummaryFingerprint : Fingerprint(
     definingClass = "Lcom/rubenmayayo/reddit/ui/customviews/StateSubmissionView;",
     name = "b",
     accessFlags = listOf(AccessFlags.PRIVATE),
     strings = listOf("copyright_takedown", "reddit"),
 )
 
-internal val stateSubmissionViewHasValidRemovalReasonFingerprint = Fingerprint(
+internal object StateSubmissionViewHasValidRemovalReasonFingerprint : Fingerprint(
     definingClass = "Lcom/rubenmayayo/reddit/ui/customviews/StateSubmissionView;",
     name = "d",
     accessFlags = listOf(AccessFlags.PRIVATE),

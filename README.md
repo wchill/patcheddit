@@ -44,12 +44,9 @@ In addition, patches for some apps contain additional features that were not pre
 1. Install [Morphe Manager](https://morphe.software/) and switch it to advanced/expert mode.
 2. Click [this link](https://morphe.software/add-source?github=wchill/patcheddit) to add this patch source to Morphe Manager.
 3. In Morphe Manager, find the app you want to patch.
-   * The supported apps are Boost, RIF, Sync, Relay, BaconReader, Joey, Infinity+, Continuum, and the cygnusx1 fork of Slide.
+   * The supported apps are Boost, RIF, Sync, Relay, BaconReader, Joey, and Infinity+.
 4. Get the APK for your preferred, supported 3rd party reddit app. If you don't have it, you can download it from in the app. APKM bundles (aka split APKs) will also work.
    * You should get the last available version for your reddit app, unless you are patching Relay. Relay v10.2.40 should be used instead of the latest.
-   * Continuum and the cygnusx1 fork of Slide need to be downloaded manually from their respective GitHub releases pages, as they are not available on the Play Store.
-       * Continuum: https://github.com/cygnusx-1-org/continuum/releases
-       * Slide (cygnusx1 fork): https://github.com/cygnusx-1-org/slide/releases
 5. Select desired patches, then patch.
    * You will need to have an OAuth client ID from https://www.reddit.com/prefs/apps/, however reddit is no longer issuing new ones without an approval process that usually results in denial. In order to work around this, see the subsection `What if I don't have a client ID?` below.
    * Make sure that the redirect URI in `Spoof client` options and on https://www.reddit.com/prefs/apps/ match. If you don't know what to set the redirect URI/user agent to, use the values from `What if I don't have a client ID?`

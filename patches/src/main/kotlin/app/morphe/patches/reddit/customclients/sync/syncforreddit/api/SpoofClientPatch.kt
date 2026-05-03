@@ -12,7 +12,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patches.all.misc.string.replaceStringPatch
 import app.morphe.patches.reddit.customclients.spoofClientPatch
-import app.morphe.patches.reddit.customclients.sync.SyncForRedditCompatible
+import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.sync.detection.piracy.disablePiracyDetectionPatch
 import app.morphe.util.returnEarly
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
@@ -28,18 +28,18 @@ val spoofClientPatch = spoofClientPatch { clientId, redirectUri, userAgent ->
         replaceStringPatch("ssl.reddit.com", "www.reddit.com", comparison = StringComparisonType.CONTAINS)
     )
 
-    compatibleWith(*SyncForRedditCompatible)
+    compatibleWith(*AppCompatibility.SyncForReddit)
 
     execute {
         // region Patch client id.
-        getBearerTokenFingerprint.method.apply {
+        GetBearerTokenFingerprint.method.apply {
             val auth = Base64.getEncoder().encodeToString("$clientId:".toByteArray(Charsets.UTF_8))
             returnEarly("Basic $auth")
 
             val occurrenceIndex =
-                getAuthorizationStringFingerprint.stringMatches.first().index
+                GetAuthorizationStringFingerprint.stringMatches.first().index
 
-            getAuthorizationStringFingerprint.method.apply {
+            GetAuthorizationStringFingerprint.method.apply {
                 val authorizationStringInstruction = getInstruction<ReferenceInstruction>(occurrenceIndex)
                 val targetRegister = (authorizationStringInstruction as OneRegisterInstruction).registerA
                 val reference = authorizationStringInstruction.reference as StringReference
@@ -58,16 +58,16 @@ val spoofClientPatch = spoofClientPatch { clientId, redirectUri, userAgent ->
         // endregion
 
         // region Patch redirect URI.
-        getRedirectUriFingerprint.method.returnEarly(redirectUri.value!!)
+        GetRedirectUriFingerprint.method.returnEarly(redirectUri.value!!)
         // endregion
 
         // region Patch user agent.
-        getUserAgentFingerprint.method.returnEarly(userAgent.value!!)
+        GetUserAgentFingerprint.method.returnEarly(userAgent.value!!)
         // endregion
 
         // region Patch Imgur API URL.
 
-        imgurImageAPIFingerprint.let {
+        ImgurImageAPIFingerprint.let {
             val apiUrlIndex = it.stringMatches.first().index
             it.method.replaceInstruction(
                 apiUrlIndex,

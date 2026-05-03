@@ -12,19 +12,15 @@ import app.morphe.patcher.OpcodesFilter
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 
-internal fun baseClientIdFingerprint(str: String) = Fingerprint(
-    strings = listOf("yyOCBp.RHJhDKd", str)
+internal object BasicAuthorizationFingerprint : Fingerprint(
+    strings = listOf("yyOCBp.RHJhDKd", "fJOxVwBUyo*=f:<OoejWs:AqmIJ") // Encrypted basic authorization string.
 )
 
-internal val basicAuthorizationFingerprint = baseClientIdFingerprint(
-    str = "fJOxVwBUyo*=f:<OoejWs:AqmIJ", // Encrypted basic authorization string.
+internal object BuildAuthorizationStringFingerprint : Fingerprint(
+    strings = listOf("yyOCBp.RHJhDKd", "client_id")
 )
 
-internal val buildAuthorizationStringFingerprint = baseClientIdFingerprint(
-    str = "client_id",
-)
-
-internal val getUserAgentFingerprint = Fingerprint(
+internal object GetUserAgentFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC),
     returnType = "Ljava/lang/String;",
     parameters = listOf(),
@@ -38,12 +34,12 @@ internal val getUserAgentFingerprint = Fingerprint(
     )
 )
 
-internal val redirectUriFingerprint = Fingerprint(
+internal object RedirectUriFingerprint : Fingerprint(
     strings = listOf("redditisfun://auth"),
 )
 
 // Should usually match: g2/c.x()
-internal val imgurApiFingerprint = Fingerprint(
+internal object ImgurApiFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PRIVATE, AccessFlags.STATIC),
     returnType = "Landroid/net/Uri;",
     parameters = listOf("Ljava/lang/String;", "Z"),

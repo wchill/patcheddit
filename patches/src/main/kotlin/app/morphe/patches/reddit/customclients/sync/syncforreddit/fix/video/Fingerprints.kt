@@ -4,7 +4,7 @@ import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.OpcodesFilter
 import com.android.tools.smali.dexlib2.Opcode
 
-internal val parseRedditVideoNetworkResponseFingerprint = Fingerprint(
+internal object ParseRedditVideoNetworkResponseFingerprint : Fingerprint(
     name = "parseNetworkResponse",
     filters = OpcodesFilter.opcodesToFilters(
         Opcode.NEW_INSTANCE,

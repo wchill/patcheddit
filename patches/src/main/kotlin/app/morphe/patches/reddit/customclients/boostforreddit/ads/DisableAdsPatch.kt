@@ -8,7 +8,7 @@
 package app.morphe.patches.reddit.customclients.boostforreddit.ads
 
 import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patches.reddit.customclients.boostforreddit.BoostCompatible
+import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.util.returnEarly
 
 @Suppress("unused")
@@ -16,10 +16,10 @@ val disableAdsPatch = bytecodePatch(
     name = "Disable ads",
     default = true
 ) {
-    compatibleWith(*BoostCompatible)
+    compatibleWith(*AppCompatibility.Boost)
 
     execute {
-        arrayOf(maxMediationFingerprint, admobMediationFingerprint).forEach { fingerprint ->
+        arrayOf(MaxMediationFingerprint, AdmobMediationFingerprint).forEach { fingerprint ->
             fingerprint.method.returnEarly()
         }
     }

@@ -12,11 +12,11 @@ import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLa
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.util.smali.ExternalLabel
-import app.morphe.patches.reddit.customclients.boostforreddit.BoostCompatible
-import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.sharedExtensionPatch
+import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 
 
-internal val SETTINGS_UTILS_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boostforreddit/utils/SettingsUtils;"
+internal val SETTINGS_UTILS_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boost/utils/SettingsUtils;"
 
 
 @Suppress("unused")
@@ -24,11 +24,11 @@ val addArchiveLinks = bytecodePatch(
     name="Add archive links to context menu",
     default = true
 ) {
-    dependsOn(sharedExtensionPatch)
-    compatibleWith(*BoostCompatible)
+    dependsOn(ExtensionPatches.Boost)
+    compatibleWith(*AppCompatibility.Boost)
     execute {
-        linkBuildContextMenuFingerprint.method.apply {
-            val index = linkBuildContextMenuFingerprint.instructionMatches.last().index
+        LinkBuildContextMenuFingerprint.method.apply {
+            val index = LinkBuildContextMenuFingerprint.instructionMatches.last().index
             addInstructions(
                 index,
                 """
@@ -37,8 +37,8 @@ val addArchiveLinks = bytecodePatch(
             )
         }
 
-        onClickContextMenuFingerprint.method.apply {
-            val index = onClickContextMenuFingerprint.instructionMatches.last().index
+        OnClickContextMenuFingerprint.method.apply {
+            val index = OnClickContextMenuFingerprint.instructionMatches.last().index
             val openLinkDialogName = "Lcom/rubenmayayo/reddit/ui/customviews/t;"
             val navigationName = "Lcom/rubenmayayo/reddit/ui/activities/i;"
             val openUriName = "d0"

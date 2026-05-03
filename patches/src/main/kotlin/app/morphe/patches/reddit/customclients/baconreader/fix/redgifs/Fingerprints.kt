@@ -10,7 +10,7 @@ package app.morphe.patches.reddit.customclients.baconreader.fix.redgifs
 import app.morphe.patcher.Fingerprint
 import com.android.tools.smali.dexlib2.AccessFlags
 
-internal val getOkHttpClientFingerprint = Fingerprint(
+internal object GetOkHttpClientFingerprint : Fingerprint(
     definingClass = "Lcom/onelouder/baconreader/media/gfycat/RedGifsManager;",
     name = "getOkhttpClient",
     accessFlags = listOf(AccessFlags.PRIVATE, AccessFlags.FINAL),

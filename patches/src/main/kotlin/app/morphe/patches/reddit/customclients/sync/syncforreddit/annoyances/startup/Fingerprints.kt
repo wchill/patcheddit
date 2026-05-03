@@ -2,7 +2,7 @@ package app.morphe.patches.reddit.customclients.sync.syncforreddit.annoyances.st
 
 import app.morphe.patcher.Fingerprint
 
-internal val mainActivityOnCreateFingerprint = Fingerprint(
+internal object MainActivityOnCreateFingerprint : Fingerprint(
     definingClass = "/MainActivity;",
     name = "onCreate",
 )

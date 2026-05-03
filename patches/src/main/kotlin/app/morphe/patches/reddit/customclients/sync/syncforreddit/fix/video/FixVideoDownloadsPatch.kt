@@ -3,8 +3,8 @@ package app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.video
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patches.reddit.customclients.sync.SyncForRedditCompatible
-import app.morphe.patches.reddit.customclients.sync.syncforreddit.extension.sharedExtensionPatch
+import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import com.android.tools.smali.dexlib2.iface.instruction.formats.Instruction35c
 
 private const val EXTENSION_CLASS_DESCRIPTOR =
@@ -17,19 +17,19 @@ val fixVideoDownloadsPatch = bytecodePatch(
     description = "Fixes a bug in Sync's MPD parser resulting in only the audio-track being saved.",
     default = true
 ) {
-    dependsOn(sharedExtensionPatch)
+    dependsOn(ExtensionPatches.Sync)
 
-    compatibleWith(*SyncForRedditCompatible)
+    compatibleWith(*AppCompatibility.SyncForReddit)
 
     execute {
-        val scanResult = parseRedditVideoNetworkResponseFingerprint.instructionMatches
+        val scanResult = ParseRedditVideoNetworkResponseFingerprint.instructionMatches
         val newInstanceIndex = scanResult.first().index
         val invokeDirectIndex = scanResult.last().index - 1
 
         val buildResponseInstruction =
-            parseRedditVideoNetworkResponseFingerprint.method.getInstruction<Instruction35c>(invokeDirectIndex)
+            ParseRedditVideoNetworkResponseFingerprint.method.getInstruction<Instruction35c>(invokeDirectIndex)
 
-        parseRedditVideoNetworkResponseFingerprint.method.addInstructions(
+        ParseRedditVideoNetworkResponseFingerprint.method.addInstructions(
             newInstanceIndex + 1,
             """
                 # Get byte array from response.

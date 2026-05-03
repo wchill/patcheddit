@@ -8,7 +8,7 @@ import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.reference.Reference
 
-internal val piracyDetectionFingerprint = Fingerprint(
+internal object PiracyDetectionFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PRIVATE, AccessFlags.FINAL),
     returnType = "V",
     filters = OpcodesFilter.opcodesToFilters (
@@ -19,8 +19,7 @@ internal val piracyDetectionFingerprint = Fingerprint(
         Opcode.INVOKE_VIRTUAL,
     ),
     custom = { method, _ ->
-        method.implementation ?: return@Fingerprint false
-        method.instructions.any {
+        (method.implementation != null) && method.instructions.any {
             it.getReference<Reference>()?.toString() == "Lcom/github/javiersantos/piracychecker/PiracyChecker;"
         }
     }

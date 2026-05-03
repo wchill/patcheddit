@@ -7,34 +7,16 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.http
 
-import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patches.reddit.customclients.boostforreddit.BoostCompatible
-import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.sharedExtensionPatch
-import app.morphe.util.indexOfFirstInstructionReversed
-import com.android.tools.smali.dexlib2.Opcode
+import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
+import app.morphe.patches.reddit.customclients.interceptHttpRequestsPatch
 
 
-internal const val OKHTTP_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boostforreddit/http/OkHttpRequestHook;"
+internal const val BOOST_OKHTTP_HOOK_DESCRIPTOR = "Lapp/morphe/extension/boost/http/OkHttpRequestHook;"
 
 @Suppress("unused")
-val interceptHttpRequests = bytecodePatch(
-    default = false
-) {
-    dependsOn(sharedExtensionPatch)
-    compatibleWith(*BoostCompatible)
-
-    execute {
-        installOkHttpInterceptorFingerprint.method.apply {
-            val index = indexOfFirstInstructionReversed(Opcode.INVOKE_VIRTUAL)
-            addInstructions(
-                index,
-                """
-                invoke-static       { }, $OKHTTP_EXTENSION_CLASS_DESCRIPTOR->init()V
-                invoke-static       { p0 }, $OKHTTP_EXTENSION_CLASS_DESCRIPTOR->installInterceptor(Lokhttp3/OkHttpClient${'$'}Builder;)Lokhttp3/OkHttpClient${'$'}Builder;
-                move-result-object  p0
-                """
-            )
-        }
-    }
-}
+val interceptHttpRequests = interceptHttpRequestsPatch(
+    dependsOn = arrayOf(ExtensionPatches.Boost),
+    compatibleWith = AppCompatibility.Boost,
+    extensionClassDescriptor = BOOST_OKHTTP_HOOK_DESCRIPTOR
+)

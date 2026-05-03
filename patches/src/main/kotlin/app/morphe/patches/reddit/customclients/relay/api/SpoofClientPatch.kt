@@ -12,14 +12,16 @@ import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.PatchException
 import app.morphe.patches.reddit.customclients.spoofClientPatch
-import app.morphe.patches.reddit.customclients.relay.RelayCompatible
+import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
+import app.morphe.util.returnEarly
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction10t
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction21t
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 
 val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, userAgentOption ->
-    compatibleWith(*RelayCompatible)
+    compatibleWith(*AppCompatibility.Relay)
 
     val clientId by clientIdOption
     val redirectUri by redirectUriOption
@@ -27,7 +29,7 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
 
     execute {
         // region Patch redirect URI.
-        redirectUriFingerprint.matchAll().forEach { match ->
+        RedirectUriFingerprint.matchAll().forEach { match ->
             val redirectUriIndex = match.stringMatches.last().index
             match.method.apply {
                 val redirectUriRegister = getInstruction<OneRegisterInstruction>(redirectUriIndex).registerA
@@ -41,7 +43,7 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
         // endregion
 
         // region Patch client id.
-        clientIdFingerprint.matchAll().forEach { match ->
+        ClientIdFingerprint.matchAll().forEach { match ->
             val clientIdIndex = match.stringMatches.first().index
             match.method.apply {
                 val clientIdRegister = getInstruction<OneRegisterInstruction>(clientIdIndex).registerA
@@ -55,7 +57,7 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
         // endregion
 
         // region Patch user agent.
-        networkModuleUserAgentFingerprint.apply {
+        NetworkModuleUserAgentFingerprint.apply {
             val invokeDirectIndex = instructionMatches.first().index
             val invokeDirectRegister = method.getInstruction<OneRegisterInstruction>(invokeDirectIndex).registerA
 
@@ -73,12 +75,12 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
         // region Patch miscellaneous.
 
         // Do not load remote config which disables OAuth login remotely.
-        setRemoteConfigFingerprint.method.addInstructions(0, "return-void")
+        SetRemoteConfigFingerprint.method.returnEarly()
 
         // Prevent OAuth login being disabled remotely.
-        val checkIsOAuthRequestIndex = redditCheckDisableAPIFingerprint.instructionMatches.first().index
+        val checkIsOAuthRequestIndex = RedditCheckDisableAPIFingerprint.instructionMatches.first().index
 
-        redditCheckDisableAPIFingerprint.method.apply {
+        RedditCheckDisableAPIFingerprint.method.apply {
             val returnNextChain = getInstruction<BuilderInstruction21t>(checkIsOAuthRequestIndex).target
             replaceInstruction(checkIsOAuthRequestIndex, BuilderInstruction10t(Opcode.GOTO, returnNextChain))
         }

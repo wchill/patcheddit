@@ -10,9 +10,9 @@ package app.morphe.patches.reddit.customclients.baconreader.fix.redgifs
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.removeInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
+import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.INSTALL_NEW_CLIENT_METHOD
-import app.morphe.patches.reddit.customclients.baconreader.BaconReaderCompatible
-import app.morphe.patches.reddit.customclients.baconreader.misc.extension.sharedExtensionPatch
 import app.morphe.patches.reddit.customclients.fixRedgifsApiPatch
 import app.morphe.util.getReference
 import app.morphe.util.indexOfFirstInstructionOrThrow
@@ -25,14 +25,14 @@ internal const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/baconread
 
 @Suppress("unused")
 val fixRedgifsApi = fixRedgifsApiPatch(
-    extensionPatch = sharedExtensionPatch
+    extensionPatch = ExtensionPatches.BaconReader
 ) {
-    compatibleWith(*BaconReaderCompatible)
+    compatibleWith(*AppCompatibility.BaconReader)
 
     execute {
         // region Patch Redgifs OkHttp3 client.
 
-        getOkHttpClientFingerprint.method.apply {
+        GetOkHttpClientFingerprint.method.apply {
             // Remove conflicting OkHttp interceptors.
             val originalInterceptorInstallIndex = indexOfFirstInstructionOrThrow {
                 opcode == Opcode.NEW_INSTANCE && getReference<TypeReference>()?.type == "Lcom/onelouder/baconreader/media/gfycat/RedGifsManager\$HeaderInterceptor;"

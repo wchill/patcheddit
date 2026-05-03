@@ -8,21 +8,12 @@
 package app.morphe.patches.reddit.customclients.boostforreddit.fix.downloads
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
-import app.morphe.patcher.extensions.InstructionExtensions.removeInstructions
-import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patches.reddit.customclients.boostforreddit.BoostCompatible
+import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.boostforreddit.http.interceptHttpRequests
-import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.sharedExtensionPatch
-import app.morphe.util.getReference
-import app.morphe.util.indexOfFirstInstructionOrThrow
-import app.morphe.util.indexOfFirstInstructionReversedOrThrow
-import com.android.tools.smali.dexlib2.Opcode
-import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
-import com.android.tools.smali.dexlib2.iface.reference.TypeReference
 
-private const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boostforreddit/http/reddit/RedditFixAudioInDownloadsInterceptor;"
+private const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boost/http/reddit/RedditFixAudioInDownloadsInterceptor;"
 
 @Suppress("unused")
 val fixAudioMissingInDownloadsPatch = bytecodePatch(
@@ -30,11 +21,11 @@ val fixAudioMissingInDownloadsPatch = bytecodePatch(
     description = "Fixes audio missing in videos downloaded from v.redd.it.",
     default = true
 ) {
-    dependsOn(sharedExtensionPatch, interceptHttpRequests)
-    compatibleWith(*BoostCompatible)
+    dependsOn(ExtensionPatches.Boost, interceptHttpRequests)
+    compatibleWith(*AppCompatibility.Boost)
 
     execute {
-        downloadAudioFingerprint.method.apply {
+        DownloadAudioFingerprint.method.apply {
             // Just need to set an enable flag since HTTP interceptor will already be enabled
             addInstructions(
                 0,

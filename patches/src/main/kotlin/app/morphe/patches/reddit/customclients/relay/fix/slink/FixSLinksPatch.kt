@@ -6,9 +6,9 @@ import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.patches.reddit.customclients.RESOLVE_S_LINK_METHOD
 import app.morphe.patches.reddit.customclients.SET_ACCESS_TOKEN_METHOD
+import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.fixSLinksPatch
-import app.morphe.patches.reddit.customclients.relay.RelayCompatible
-import app.morphe.patches.reddit.customclients.relay.misc.extension.sharedExtensionPatch
 import app.morphe.util.findInstructionIndicesReversedOrThrow
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
@@ -17,12 +17,12 @@ const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/relay/FixSLinksPat
 
 @Suppress("unused")
 val fixSLinksPatch = fixSLinksPatch(
-    extensionPatch = sharedExtensionPatch,
+    extensionPatch = ExtensionPatches.Relay,
 ) {
-    compatibleWith(*RelayCompatible)
+    compatibleWith(*AppCompatibility.Relay)
 
     execute {
-        refreshTokenAccessFingerprint.matchAll().forEach { match ->
+        RefreshTokenAccessFingerprint.matchAll().forEach { match ->
             match.method.findInstructionIndicesReversedOrThrow(refreshTokenAccessFilter).forEach { index ->
                 // Now inject a call to our extension method to also set the access token there.
                 val instruction = match.method.getInstruction(index)
@@ -38,8 +38,8 @@ val fixSLinksPatch = fixSLinksPatch(
 
         // region Patch navigation handler.
 
-        intentFilterActivityFingerprint.method.apply {
-            val index = intentFilterActivityFingerprint.instructionMatches.last().index
+        IntentFilterActivityFingerprint.method.apply {
+            val index = IntentFilterActivityFingerprint.instructionMatches.last().index
             val register = getInstruction<OneRegisterInstruction>(index).registerA
 
             addInstructionsWithLabels(

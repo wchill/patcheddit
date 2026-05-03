@@ -9,8 +9,8 @@ package app.morphe.patches.reddit.customclients.redditisfun.api
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patches.reddit.customclients.redditisfun.RedditIsFunCompatible
-import app.morphe.patches.reddit.customclients.redditisfun.misc.extension.sharedExtensionPatch
+import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 
 private const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/redditisfun/ImgurAlbumsPatch;"
 
@@ -19,11 +19,11 @@ val imgurAlbumsPatch = bytecodePatch(
     description = "Fix imgur albums not loading.",
     default = true
 ) {
-    dependsOn(sharedExtensionPatch)
-    compatibleWith(*RedditIsFunCompatible)
+    dependsOn(ExtensionPatches.RIF)
+    compatibleWith(*AppCompatibility.RedditIsFun)
 
     execute {
-        val m = imgurApiFingerprint.method
+        val m = ImgurApiFingerprint.method
         m.addInstructions(0, """
             invoke-static       { p0, p1 }, $EXTENSION_CLASS_DESCRIPTOR->buildImgurUri(Ljava/lang/String;Z)Landroid/net/Uri;
             move-result-object p0

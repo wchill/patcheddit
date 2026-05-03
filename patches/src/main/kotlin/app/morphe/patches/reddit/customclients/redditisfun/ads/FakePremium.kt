@@ -8,8 +8,7 @@
 package app.morphe.patches.reddit.customclients.redditisfun.ads
 
 import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patches.reddit.customclients.redditisfun.RedditIsFunCompatible
-import app.morphe.patches.reddit.customclients.redditisfun.RedditIsFunFreeCompatible
+import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.util.returnEarly
 
 // Based on: https://github.com/ReVanced/revanced-patches/issues/661#issuecomment-2549674017
@@ -18,9 +17,9 @@ val fakePremiumPatch = bytecodePatch(
     description = "Allows using pro features without ads.",
     default = true
 ) {
-    compatibleWith(RedditIsFunFreeCompatible)
+    compatibleWith(AppCompatibility.RedditIsFunFree)
 
     execute {
-        userPremiumFingerprint.method.returnEarly(true)
+        UserPremiumFingerprint.method.returnEarly(true)
     }
 }

@@ -7,7 +7,7 @@ import app.morphe.patcher.methodCall
 import app.morphe.patcher.string
 import com.android.tools.smali.dexlib2.Opcode
 
-internal val intentFilterActivityFingerprint = Fingerprint(
+internal object IntentFilterActivityFingerprint : Fingerprint(
     definingClass = "Lreddit/news/IntentFilterActivity;",
     strings = listOf("path", "amp.reddit.com"),
     filters = listOf(
@@ -26,7 +26,7 @@ internal val refreshTokenAccessFilter = fieldAccess(
     opcode = Opcode.IPUT_OBJECT,
 )
 
-internal val refreshTokenAccessFingerprint = Fingerprint(
+internal object RefreshTokenAccessFingerprint : Fingerprint(
     filters = listOf(
         refreshTokenAccessFilter
     ),

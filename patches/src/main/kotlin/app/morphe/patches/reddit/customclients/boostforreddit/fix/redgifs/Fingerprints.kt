@@ -12,7 +12,7 @@ import app.morphe.patcher.OpcodesFilter
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 
-internal val createOkHttpClientFingerprint = Fingerprint(
+internal object CreateOkHttpClientFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PRIVATE),
     filters = OpcodesFilter.opcodesToFilters(
         Opcode.NEW_INSTANCE,

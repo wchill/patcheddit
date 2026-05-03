@@ -18,6 +18,6 @@ val disablePiracyDetectionPatch = bytecodePatch(
     execute {
         // Do not throw an error if the fingerprint is not resolved.
         // This is fine because new versions of the target app do not need this patch.
-        piracyDetectionFingerprint.methodOrNull?.returnEarly()
+        PiracyDetectionFingerprint.methodOrNull?.returnEarly()
     }
 }

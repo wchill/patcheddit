@@ -16,7 +16,7 @@ import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.formats.Instruction11n
 
 
-internal val createOkHttpClientFingerprint = Fingerprint(
+internal object CreateOkHttpClientFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PRIVATE, AccessFlags.STATIC),
     returnType = "V",
     parameters = listOf(),
@@ -32,12 +32,12 @@ internal val createOkHttpClientFingerprint = Fingerprint(
     }
 )
 
-internal val getDefaultUserAgentFingerprint = Fingerprint(
+internal object GetDefaultUserAgentFingerprint : Fingerprint(
     definingClass = EXTENSION_CLASS_DESCRIPTOR,
     name = "getDefaultUserAgent",
 )
 
-internal val getOriginalUserAgentFingerprint = Fingerprint(
+internal object GetOriginalUserAgentFingerprint : Fingerprint(
     accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC),
     returnType = "Ljava/lang/String;",
     parameters = listOf(),

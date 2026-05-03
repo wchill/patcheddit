@@ -7,11 +7,11 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.fix.login
 
-import app.morphe.patches.reddit.customclients.boostforreddit.BoostCompatible
-import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.sharedExtensionPatch
+import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.modifyWebViewPatch
 
 internal val modifyLoginWebView = modifyWebViewPatch(
-    extensionPatch = arrayOf(sharedExtensionPatch),
-    compatible = BoostCompatible
+    extensionPatch = ExtensionPatches.Boost,
+    compatible = AppCompatibility.Boost
 )

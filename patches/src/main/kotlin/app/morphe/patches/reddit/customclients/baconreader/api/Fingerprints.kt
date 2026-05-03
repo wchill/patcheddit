@@ -9,11 +9,11 @@ package app.morphe.patches.reddit.customclients.baconreader.api
 
 import app.morphe.patcher.Fingerprint
 
-internal val getAuthorizationUrlFingerprint = Fingerprint(
+internal object GetAuthorizationUrlFingerprint : Fingerprint(
     strings = listOf("client_id=zACVn0dSFGdWqQ")
 )
 
-internal val requestTokenFingerprint = Fingerprint(
+internal object RequestTokenFingerprint : Fingerprint(
     strings = listOf(
         // App ID and secret.
         "zACVn0dSFGdWqQ",
@@ -21,20 +21,20 @@ internal val requestTokenFingerprint = Fingerprint(
     )
 )
 
-internal val getRestClientUserAgentFingerprint = Fingerprint(
+internal object GetRestClientUserAgentFingerprint : Fingerprint(
     definingClass = "Lcom/onelouder/baconreader/connectivity/RestClient;",
     name = "getUserAgent",
 )
 
-internal val getRedditUserAgentFingerprint = Fingerprint(
+internal object GetRedditUserAgentFingerprint : Fingerprint(
     definingClass = "RedditRetrofitClientModule;",
     name = "getUserAgent",
 )
 
-internal val getAuthorizeUrlFingerprint = Fingerprint(
+internal object GetAuthorizeUrlFingerprint : Fingerprint(
     strings = listOf("redirect_uri=http://baconreader.com/auth")
 )
 
-internal val authUrlFingerprint = Fingerprint(
+internal object AuthUrlFingerprint : Fingerprint(
     strings = listOf("http://baconreader.com/auth"),
 )

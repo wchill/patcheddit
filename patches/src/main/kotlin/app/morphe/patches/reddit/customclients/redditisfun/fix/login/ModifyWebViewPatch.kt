@@ -7,11 +7,11 @@
 
 package app.morphe.patches.reddit.customclients.redditisfun.fix.login
 
-import app.morphe.patches.reddit.customclients.redditisfun.RedditIsFunCompatible
-import app.morphe.patches.reddit.customclients.redditisfun.misc.extension.sharedExtensionPatch
+import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.modifyWebViewPatch
 
 internal val modifyLoginWebView = modifyWebViewPatch(
-    extensionPatch = arrayOf(sharedExtensionPatch),
-    compatible = RedditIsFunCompatible
+    extensionPatch = ExtensionPatches.RIF,
+    compatible = AppCompatibility.RedditIsFun
 )

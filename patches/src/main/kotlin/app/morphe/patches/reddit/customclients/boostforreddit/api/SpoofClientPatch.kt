@@ -7,11 +7,10 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.api
 
-import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
-import app.morphe.patches.reddit.customclients.boostforreddit.BoostCompatible
+import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.spoofClientPatch
 import app.morphe.util.getReference
 import app.morphe.util.indexOfFirstInstructionOrThrow
@@ -20,10 +19,10 @@ import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.TypeReference
 
-const val JRAW_NEW_URL_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boostforreddit/http/HttpUtils;"
+const val JRAW_NEW_URL_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boost/http/HttpUtils;"
 
 val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, userAgentOption ->
-    compatibleWith(*BoostCompatible)
+    compatibleWith(*AppCompatibility.Boost)
 
     val clientId by clientIdOption
     val redirectUri by redirectUriOption
@@ -31,12 +30,12 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
 
     execute {
         // region Patch client id.
-        getClientIdFingerprint.method.returnEarly(clientId!!)
+        GetClientIdFingerprint.method.returnEarly(clientId!!)
 
         // endregion
 
         // region Patch redirect URI.
-        shouldOverrideUrlLoadingFingerprint.method.apply {
+        ShouldOverrideUrlLoadingFingerprint.method.apply {
             val index = indexOfFirstInstructionOrThrow {
                 opcode == Opcode.IF_EQZ
             }
@@ -51,7 +50,7 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
             )
         }
 
-        redirectUriFingerprint.matchAll().forEach { match ->
+        RedirectUriFingerprint.matchAll().forEach { match ->
             match.method.let {
                 match.stringMatches.forEach { match ->
                     val register = it.getInstruction<OneRegisterInstruction>(match.index).registerA
@@ -60,7 +59,7 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
             }
         }
 
-        jrawNewUrlFingerprint.method.apply {
+        JrawNewUrlFingerprint.method.apply {
             val index = indexOfFirstInstructionOrThrow {
                 opcode == Opcode.NEW_INSTANCE && getReference<TypeReference>()?.type == "Ljava/net/URL;"
             }
@@ -76,8 +75,8 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
         // endregion
 
         // Patch user agent.
-        buildUserAgentFingerprint.method.let {
-            buildUserAgentFingerprint.stringMatches.forEach { match ->
+        BuildUserAgentFingerprint.method.let {
+            BuildUserAgentFingerprint.stringMatches.forEach { match ->
                 val register = it.getInstruction<OneRegisterInstruction>(match.index).registerA
                 it.replaceInstruction(match.index, "const-string v$register, \"$userAgent\"")
             }

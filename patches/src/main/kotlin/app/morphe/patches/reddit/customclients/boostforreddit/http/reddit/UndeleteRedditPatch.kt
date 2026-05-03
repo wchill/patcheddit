@@ -17,8 +17,8 @@ import app.morphe.patcher.util.proxy.mutableTypes.MutableField.Companion.toMutab
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
 import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.patcher.util.smali.toInstructions
-import app.morphe.patches.reddit.customclients.boostforreddit.BoostCompatible
-import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.sharedExtensionPatch
+import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.boostforreddit.http.interceptHttpRequests
 import app.morphe.util.addInstructionsAtControlFlowLabel
 import app.morphe.util.getReference
@@ -34,7 +34,7 @@ import com.android.tools.smali.dexlib2.immutable.ImmutableField
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethod
 
 
-internal const val OKHTTP_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boostforreddit/http/OkHttpRequestHook;"
+internal const val OKHTTP_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boost/http/OkHttpRequestHook;"
 internal const val EXTRA_EMOJI_CONTEXT_KEY = "extraEmoji"
 internal const val EXTRA_EMOJI_GETTER = "getExtraEmoji"
 
@@ -43,25 +43,13 @@ val undeleteRedditPatch = bytecodePatch(
     name = "Automatically undelete Reddit content",
     default = true
 ) {
-    dependsOn(sharedExtensionPatch, interceptHttpRequests)
-    compatibleWith(*BoostCompatible)
+    dependsOn(ExtensionPatches.Boost, interceptHttpRequests)
+    compatibleWith(*AppCompatibility.Boost)
 
     execute {
-        installJrawInterceptorFingerprint.method.apply {
-            val index = indexOfFirstInstructionReversed(Opcode.INVOKE_VIRTUAL)
-            addInstructions(
-                index,
-                """
-                invoke-static       { }, $OKHTTP_EXTENSION_CLASS_DESCRIPTOR->init()V
-                invoke-static       { v0 }, $OKHTTP_EXTENSION_CLASS_DESCRIPTOR->installInterceptor(Lokhttp3/OkHttpClient${'$'}Builder;)Lokhttp3/OkHttpClient${'$'}Builder;
-                move-result-object  v0
-                """
-            )
-        }
-
         // region Add additional field and marshaling code for ContributionModel.
         val fieldType = "Ljava/lang/String;"
-        contributionModelConstructorFingerprint.classDef.apply {
+        ContributionModelConstructorFingerprint.classDef.apply {
             fields.add(
                 ImmutableField(
                 type,
@@ -92,7 +80,7 @@ val undeleteRedditPatch = bytecodePatch(
                 )
             },)
         }
-        contributionModelConstructorFingerprint.method.apply {
+        ContributionModelConstructorFingerprint.method.apply {
             addInstructions(
                 instructions.lastIndex,
                 """
@@ -102,7 +90,7 @@ val undeleteRedditPatch = bytecodePatch(
                 """
             )
         }
-        contributionModelWriteToParcelFingerprint.method.apply {
+        ContributionModelWriteToParcelFingerprint.method.apply {
             addInstructions(
                 instructions.lastIndex,
                 """
@@ -114,7 +102,7 @@ val undeleteRedditPatch = bytecodePatch(
         // endregion
 
         // region Modify SubmissionModel/CommentModel deserialization.
-        arrayOf(submissionModelDeserializeFingerprint, commentModelDeserializeFingerprint).forEach {
+        arrayOf(SubmissionModelDeserializeFingerprint, CommentModelDeserializeFingerprint).forEach {
             it.method.apply {
                 val index = indexOfFirstInstruction(Opcode.INVOKE_VIRTUAL)
                 addInstructions(
@@ -131,8 +119,7 @@ val undeleteRedditPatch = bytecodePatch(
         // endregion
 
         // region Extend emojis used for BabushkaText.
-        val babushkaText = "\$a"
-        setCommentBabushkaTextFingerprint.method.apply {
+        SetCommentBabushkaTextFingerprint.method.apply {
             val babushkaTextCheckGotoIndex = indexOfFirstInstruction(Opcode.GOTO)
             val gotoTarget = getInstruction<BuilderInstruction10t>(babushkaTextCheckGotoIndex).target
             replaceInstruction(babushkaTextCheckGotoIndex - 1, BuilderInstruction10t(Opcode.GOTO, gotoTarget))
@@ -151,24 +138,24 @@ val undeleteRedditPatch = bytecodePatch(
             val babushkaTextLoadIndex = indexOfFirstInstructionReversed(Opcode.GOTO_16) + 1
             addInstructionsAtControlFlowLabel(
                 babushkaTextLoadIndex,
-                """
-                    invoke-virtual      {p1}, Lcom/rubenmayayo/reddit/models/reddit/ContributionModel;->$EXTRA_EMOJI_GETTER()Ljava/lang/String;
+                $$"""
+                    invoke-virtual      {p1}, Lcom/rubenmayayo/reddit/models/reddit/ContributionModel;->$$EXTRA_EMOJI_GETTER()Ljava/lang/String;
                     move-result-object  v2
                     invoke-static       {v2}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
                     move-result         v0
                     if-nez              v0, :continue
                     iget-object         v0, p0, Lcom/rubenmayayo/reddit/ui/adapters/CommentViewHolder;->distinguishedTv:Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText;
-                    new-instance        v1, Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$babushkaText$babushkaText;
-                    invoke-direct       {v1, v2}, Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$babushkaText$babushkaText;-><init>(Ljava/lang/String;)V
-                    invoke-virtual      {v1}, Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$babushkaText$babushkaText;->r()Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$babushkaText;
+                    new-instance        v1, Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$a$a;
+                    invoke-direct       {v1, v2}, Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$a$a;-><init>(Ljava/lang/String;)V
+                    invoke-virtual      {v1}, Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$a$a;->r()Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$a;
                     move-result-object  v1
-                    invoke-virtual      {v0, v1}, Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText;->m(Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$babushkaText;)V
+                    invoke-virtual      {v0, v1}, Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText;->m(Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$a;)V
                     :continue
                     nop
                     """
             )
         }
-        setSubmissionBabushkaTextFingerprint.method.apply {
+        SetSubmissionBabushkaTextFingerprint.method.apply {
             var babushkaTextLoadIndex = indexOfFirstInstruction {
                 val methodReference = getReference<MethodReference>()
                 opcode == Opcode.INVOKE_VIRTUAL && methodReference?.definingClass == "Lcom/rubenmayayo/reddit/models/reddit/PublicContributionModel;" && methodReference.name == "x"
@@ -176,20 +163,20 @@ val undeleteRedditPatch = bytecodePatch(
 
             addInstructionsAtControlFlowLabel(
                 babushkaTextLoadIndex,
-                """
-                    invoke-virtual      {p1}, Lcom/rubenmayayo/reddit/models/reddit/ContributionModel;->$EXTRA_EMOJI_GETTER()Ljava/lang/String;
+                $$"""
+                    invoke-virtual      {p1}, Lcom/rubenmayayo/reddit/models/reddit/ContributionModel;->$$EXTRA_EMOJI_GETTER()Ljava/lang/String;
                     move-result-object  v0
                     invoke-static       {v0}, Landroid/text/TextUtils;->isEmpty(Ljava/lang/CharSequence;)Z
                     move-result         v4
                     if-nez              v4, :continue
-                    iget-object         v4, p0, $definingClass->infoTop:Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText;
-                    iget-object         v5, p0, $definingClass->l:Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$babushkaText;
-                    invoke-virtual      {v4, v5}, Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText;->m(Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$babushkaText;)V
-                    new-instance        v5, Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$babushkaText$babushkaText;
-                    invoke-direct       {v5, v0}, Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$babushkaText$babushkaText;-><init>(Ljava/lang/String;)V
-                    invoke-virtual      {v5}, Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$babushkaText$babushkaText;->r()Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$babushkaText;
+                    iget-object         v4, p0, $$definingClass->infoTop:Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText;
+                    iget-object         v5, p0, $$definingClass->l:Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$a;
+                    invoke-virtual      {v4, v5}, Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText;->m(Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$a;)V
+                    new-instance        v5, Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$a$a;
+                    invoke-direct       {v5, v0}, Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$a$a;-><init>(Ljava/lang/String;)V
+                    invoke-virtual      {v5}, Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$a$a;->r()Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$a;
                     move-result-object  v5
-                    invoke-virtual      {v4, v5}, Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText;->m(Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$babushkaText;)V
+                    invoke-virtual      {v4, v5}, Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText;->m(Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText$a;)V
                     :continue
                     nop
                     """
@@ -199,8 +186,8 @@ val undeleteRedditPatch = bytecodePatch(
         // endregion
 
         // region Fix the deletion reason detection
-        stateSubmissionViewGetHeaderFingerprint.method.let {
-            stateSubmissionViewGetHeaderFingerprint.stringMatches.forEach { match ->
+        StateSubmissionViewGetHeaderFingerprint.method.let {
+            StateSubmissionViewGetHeaderFingerprint.stringMatches.forEach { match ->
                 if (match.string == "copyright_takedown") {
                     it.addInstructionsAtControlFlowLabel(
                         match.index,
@@ -224,8 +211,8 @@ val undeleteRedditPatch = bytecodePatch(
                 }
             }
         }
-        stateSubmissionViewGetSummaryFingerprint.method.let {
-            stateSubmissionViewGetSummaryFingerprint.stringMatches!!.forEach { match ->
+        StateSubmissionViewGetSummaryFingerprint.method.let {
+            StateSubmissionViewGetSummaryFingerprint.stringMatches.forEach { match ->
                 if (match.string == "copyright_takedown") {
                     it.addInstructionsAtControlFlowLabel(
                         match.index,
@@ -249,8 +236,8 @@ val undeleteRedditPatch = bytecodePatch(
                 }
             }
         }
-        stateSubmissionViewHasValidRemovalReasonFingerprint.method.let {
-            stateSubmissionViewGetSummaryFingerprint.stringMatches!!.forEach { match ->
+        StateSubmissionViewHasValidRemovalReasonFingerprint.method.let {
+            StateSubmissionViewGetSummaryFingerprint.stringMatches.forEach { match ->
                 val index = it.indexOfFirstInstructionReversed(Opcode.CONST_4)
                 it.addInstructionsWithLabels(
                     match.index,

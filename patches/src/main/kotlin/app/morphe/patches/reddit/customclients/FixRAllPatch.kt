@@ -15,7 +15,7 @@ import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.util.returnEarly
 
 fun fixRAllPatch(
-    extensionPatch: Array<Patch<*>>,
+    extensionPatch: Patch<*>,
     compatible: Array<Compatibility>
 ) = bytecodePatch(
     name = "Fix /r/all",
@@ -24,7 +24,7 @@ fun fixRAllPatch(
     compatibleWith(*compatible)
 
     dependsOn(
-        *extensionPatch,
+        extensionPatch,
     )
 
     execute {

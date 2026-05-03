@@ -11,9 +11,9 @@ import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patches.reddit.customclients.INSTALL_NEW_CLIENT_METHOD
+import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.fixRedgifsApiPatch
-import app.morphe.patches.reddit.customclients.sync.SyncForRedditCompatible
-import app.morphe.patches.reddit.customclients.sync.syncforreddit.extension.sharedExtensionPatch
 import app.morphe.util.getReference
 import app.morphe.util.indexOfFirstInstructionOrThrow
 import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
@@ -23,14 +23,14 @@ internal const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/syncforre
 
 @Suppress("unused")
 val fixRedgifsApi = fixRedgifsApiPatch(
-    extensionPatch = sharedExtensionPatch
+    extensionPatch = ExtensionPatches.Sync
 ) {
-    compatibleWith(*SyncForRedditCompatible)
+    compatibleWith(*AppCompatibility.SyncForReddit)
 
     execute {
         // region Patch Redgifs OkHttp3 client.
 
-        createOkHttpClientFingerprint.method.apply {
+        CreateOkHttpClientFingerprint.method.apply {
             val index = indexOfFirstInstructionOrThrow {
                 val reference = getReference<MethodReference>()
                 reference?.name == "build" && reference.definingClass == "Lokhttp3/OkHttpClient\$Builder;"
@@ -44,11 +44,11 @@ val fixRedgifsApi = fixRedgifsApiPatch(
             )
         }
 
-        getDefaultUserAgentFingerprint.method.apply {
+        GetDefaultUserAgentFingerprint.method.apply {
             addInstructions(
                 0,
                 """
-                invoke-static { }, ${getOriginalUserAgentFingerprint.method}
+                invoke-static { }, ${GetOriginalUserAgentFingerprint.method}
                 move-result-object v0
                 return-object v0
                 """

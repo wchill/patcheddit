@@ -10,7 +10,7 @@ package app.morphe.patches.reddit.customclients.baconreader.api
 import app.morphe.patcher.Match
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
-import app.morphe.patches.reddit.customclients.baconreader.BaconReaderCompatible
+import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.spoofClientPatch
 import app.morphe.patches.all.misc.string.replaceStringPatch
 import app.morphe.util.returnEarly
@@ -23,7 +23,7 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
         replaceStringPatch("ssl.reddit.com", "www.reddit.com")
     )
 
-    compatibleWith(*BaconReaderCompatible)
+    compatibleWith(*AppCompatibility.BaconReader)
 
     val clientId by clientIdOption
     val redirectUri by redirectUriOption
@@ -43,15 +43,15 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
         }
 
         // Patch client id in authorization url.
-        getAuthorizationUrlFingerprint.match().patch("client_id=$clientId")
+        GetAuthorizationUrlFingerprint.match().patch("client_id=$clientId")
 
         // Patch client id for access token request.
-        requestTokenFingerprint.match().patch(clientId!!)
+        RequestTokenFingerprint.match().patch(clientId!!)
 
-        getAuthorizeUrlFingerprint.match().patch(redirectUri!!)
-        authUrlFingerprint.matchAll().forEach { match -> match.patch(redirectUri!!) }
+        GetAuthorizeUrlFingerprint.match().patch(redirectUri!!)
+        AuthUrlFingerprint.matchAll().forEach { match -> match.patch(redirectUri!!) }
 
-        getRestClientUserAgentFingerprint.method.returnEarly(userAgent!!)
-        getRedditUserAgentFingerprint.method.returnEarly(userAgent!!)
+        GetRestClientUserAgentFingerprint.method.returnEarly(userAgent!!)
+        GetRedditUserAgentFingerprint.method.returnEarly(userAgent!!)
     }
 }
