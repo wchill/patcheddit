@@ -90,4 +90,12 @@ public class RedgifsTokenManager {
         responseObject.put("token_type", "Bearer");
         return responseObject.toString();
     }
+
+    public static String getEmulatedIpResponseBody() throws JSONException {
+        // The real endpoint is gone, and current Redgifs endpoints accept but ignore the
+        // "user-addr" value that's populated from this response, so any placeholder works.
+        JSONObject responseObject = new JSONObject();
+        responseObject.put("remote-addr", "0.0.0.0");
+        return responseObject.toString();
+    }
 }

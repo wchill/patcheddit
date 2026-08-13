@@ -48,20 +48,19 @@ public abstract class BaseFixRedgifsApiPatch extends PatchedditInterceptor {
         }
 
         try {
+            // Emulate response for the old client IP lookup endpoint, which Redgifs has removed.
+            // It was only ever used to populate the legacy "user-addr" query parameter, which
+            // current Redgifs endpoints accept but ignore, so the actual value doesn't matter.
+            if (request.url().encodedPath().equals("/info")) {
+                return buildLocalJsonResponse(request, RedgifsTokenManager.getEmulatedIpResponseBody());
+            }
+
             RedgifsTokenManager.RedgifsToken token = RedgifsTokenManager.refreshToken(userAgent);
 
             // Emulate response for old OAuth endpoint
             if (request.url().encodedPath().equals("/v2/oauth/client")) {
                 String responseBody = RedgifsTokenManager.getEmulatedOAuthResponseBody(token);
-                return new Response.Builder()
-                        .message("OK")
-                        .code(HttpURLConnection.HTTP_OK)
-                        .protocol(Protocol.HTTP_1_1)
-                        .request(request)
-                        .header("Content-Type", "application/json")
-                        .body(ResponseBody.create(
-                                responseBody, MediaType.get("application/json")))
-                        .build();
+                return buildLocalJsonResponse(request, responseBody);
             }
 
             Request modifiedRequest = request.newBuilder()
@@ -73,5 +72,16 @@ public abstract class BaseFixRedgifsApiPatch extends PatchedditInterceptor {
             Logger.printException(() -> "Could not parse Redgifs response", ex);
             throw new IOException(ex);
         }
+    }
+
+    private static Response buildLocalJsonResponse(Request request, String jsonBody) {
+        return new Response.Builder()
+                .message("OK")
+                .code(HttpURLConnection.HTTP_OK)
+                .protocol(Protocol.HTTP_1_1)
+                .request(request)
+                .header("Content-Type", "application/json")
+                .body(ResponseBody.create(jsonBody, MediaType.get("application/json")))
+                .build();
     }
 }
