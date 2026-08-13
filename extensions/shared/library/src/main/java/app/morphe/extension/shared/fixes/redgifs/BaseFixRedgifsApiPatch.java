@@ -54,6 +54,11 @@ public abstract class BaseFixRedgifsApiPatch extends PatchedditInterceptor {
             }
             Logger.printInfo(() -> "Redgifs: request failed (existing Authorization) for " + path
                     + ", code=" + response.code() + "; refreshing token");
+            // The cached token (if any) is presumably the one that was just rejected, since it's
+            // what the app used to build its own Authorization header. isValid() only checks
+            // time-based expiry, so without invalidating it here, the refreshToken() call below
+            // would just hand back the same already-rejected token instead of minting a new one.
+            RedgifsTokenManager.invalidateToken(userAgent);
             // It's possible that the user agent is being overwritten later down in the interceptor
             // chain, so make sure we grab the new user agent from the request headers.
             userAgent = response.request().header("User-Agent");
