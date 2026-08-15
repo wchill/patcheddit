@@ -38,6 +38,7 @@ public abstract class BaseFixRedgifsApiPatch extends PatchedditInterceptor {
         Logger.printInfo(() -> "Redgifs: intercepted " + request.method() + " " + path);
 
         String userAgent = getDefaultUserAgent();
+        boolean forceTokenRefresh = false;
 
         if (request.header("Authorization") != null) {
             Response response;
@@ -54,15 +55,18 @@ public abstract class BaseFixRedgifsApiPatch extends PatchedditInterceptor {
             }
             Logger.printInfo(() -> "Redgifs: request failed (existing Authorization) for " + path
                     + ", code=" + response.code() + "; refreshing token");
-            // The cached token (if any) is presumably the one that was just rejected, since it's
-            // what the app used to build its own Authorization header. isValid() only checks
-            // time-based expiry, so without invalidating it here, the refreshToken() call below
-            // would just hand back the same already-rejected token instead of minting a new one.
-            RedgifsTokenManager.invalidateToken(userAgent);
             // It's possible that the user agent is being overwritten later down in the interceptor
             // chain, so make sure we grab the new user agent from the request headers.
-            userAgent = response.request().header("User-Agent");
+            String responseUserAgent = response.request().header("User-Agent");
+            if (responseUserAgent != null && !responseUserAgent.isEmpty()) {
+                userAgent = responseUserAgent;
+            }
             response.close();
+
+            // Redgifs tokens are tied to the IP address that requested them. A cached token can
+            // therefore become invalid before its normal expiry when the device changes networks.
+            // Do not retry the failed request with the same cached token.
+            forceTokenRefresh = true;
         }
         final String finalUserAgent = userAgent;
 
@@ -77,7 +81,7 @@ public abstract class BaseFixRedgifsApiPatch extends PatchedditInterceptor {
 
             RedgifsTokenManager.RedgifsToken token;
             try {
-                token = RedgifsTokenManager.refreshToken(userAgent);
+                token = RedgifsTokenManager.refreshToken(userAgent, forceTokenRefresh);
             } catch (IOException ex) {
                 Logger.printException(() -> "Redgifs: failed to obtain temporary token for user agent \""
                         + finalUserAgent + "\"", ex);

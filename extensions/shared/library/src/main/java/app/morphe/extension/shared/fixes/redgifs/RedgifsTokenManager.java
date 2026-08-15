@@ -63,17 +63,16 @@ public class RedgifsTokenManager {
         return responseObject.getString("token");
     }
 
-    public static void invalidateToken(String userAgent) {
-        synchronized(tokenMap) {
-            tokenMap.remove(userAgent);
-        }
+    public static RedgifsToken refreshToken(String userAgent) throws IOException, JSONException {
+        return refreshToken(userAgent, false);
     }
 
-    public static RedgifsToken refreshToken(String userAgent) throws IOException, JSONException {
+    public static RedgifsToken refreshToken(String userAgent, boolean forceRefresh)
+            throws IOException, JSONException {
         synchronized(tokenMap) {
             // Reference: https://github.com/JeffreyCA/Apollo-ImprovedCustomApi/pull/67
             RedgifsToken token = tokenMap.get(userAgent);
-            if (token != null && token.isValid()) {
+            if (!forceRefresh && token != null && token.isValid()) {
                 return token;
             }
 
