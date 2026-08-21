@@ -8,7 +8,6 @@
 package app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.redgifswebview
 
 import app.morphe.patcher.Fingerprint
-import com.android.tools.smali.dexlib2.AccessFlags
 
 // ImageViewerFragment$g0.onErrorResponse(VolleyError): the single failure funnel for
 // Sync's Redgifs playback flow. The OAuth token request, the /info request, and the
@@ -43,15 +42,4 @@ internal val webViewFragmentOnViewCreatedFingerprint = Fingerprint(
     name = "o2",
     parameters = listOf("Landroid/view/View;", "Landroid/os/Bundle;"),
     returnType = "V",
-)
-
-// SettingsSingleton.p(Context): builds a Settings instance by reading each known boolean
-// (and other) preference individually via SharedPreferences.getBoolean(key, default) --
-// NOT via Gson/reflection. A field added to Settings without a corresponding read here
-// never actually gets populated from SharedPreferences; it just stays at its Java default.
-internal val loadSettingsFingerprint = Fingerprint(
-    accessFlags = listOf(AccessFlags.PRIVATE),
-    returnType = "Lcom/laurencedawson/reddit_sync/singleton/SettingsSingleton\$Settings;",
-    parameters = listOf("Landroid/content/Context;"),
-    strings = listOf("doh"),
 )
