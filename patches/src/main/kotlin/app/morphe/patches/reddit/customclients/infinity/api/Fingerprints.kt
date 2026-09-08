@@ -79,3 +79,23 @@ internal val infinityStartSubscriptionActivityFingerprint = Fingerprint(
         literal(0x10008000)
     )
 )
+
+internal val infinityStartSubscriptionActivityNewFingerprint = Fingerprint(
+    definingClass = "Lml/docilealligator/infinityforreddit/Infinity;",
+    parameters = emptyList(),
+    returnType = "V",
+    filters = listOf(
+        literal(0x10008000),
+        methodCall(
+            definingClass = "Lml/docilealligator/infinityforreddit/activities/SubscriptionActivityNew\$",
+            parameters = listOf(
+                "Landroid/content/Context;",
+                "Z",
+                "Z",
+                "Ljava/lang/Integer;"
+            ),
+            returnType = "V",
+            opcode = Opcode.INVOKE_VIRTUAL
+        )
+    )
+)

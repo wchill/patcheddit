@@ -34,7 +34,8 @@ private val disableBillingPatch = bytecodePatch(
 ) {
     execute {
         billingClientOnServiceConnectedFingerprint.methodOrNull?.returnEarly()
-        infinityStartSubscriptionActivityFingerprint.method.returnEarly()
+        infinityStartSubscriptionActivityFingerprint.methodOrNull?.returnEarly()
+        infinityStartSubscriptionActivityNewFingerprint.methodOrNull?.returnEarly()
     }
 }
 
