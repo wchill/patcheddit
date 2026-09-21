@@ -55,5 +55,24 @@ val fixSLinksPatch = fixSLinksPatch(
         }
 
         // endregion
+
+        // region Patch in-app link handler.
+
+        urlLinkClickManagerFingerprint.method.apply {
+            // p1 holds the url. v0 is safe to clobber here because the method's locals
+            // (v0 to v7) are not yet initialised at index 0.
+            addInstructionsWithLabels(
+                0,
+                """
+                    invoke-static { p1 }, $EXTENSION_CLASS_DESCRIPTOR->$RESOLVE_S_LINK_METHOD
+                    move-result v0
+                    if-eqz v0, :continue
+                    return-void
+                """,
+                ExternalLabel("continue", getInstruction(0)),
+            )
+        }
+
+        // endregion
     }
 }
