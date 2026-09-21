@@ -12,6 +12,7 @@ fun fixSLinksPatch(
     block: BytecodePatchBuilder.() -> Unit = {},
 ) = bytecodePatch(
     name = "Fix /s/ links",
+    description = "Fixes Reddit's /s/ share links failing to open.",
     default = true
 ) {
     dependsOn(extensionPatch)

@@ -3,7 +3,7 @@ package app.morphe.extension.relay;
 import android.app.Activity;
 
 import app.morphe.extension.shared.fixes.slink.BaseFixSLinksPatch;
-import reddit.news.WebAndComments;
+import reddit.news.LicensesActivity;
 
 /**
  * @noinspection unused
@@ -14,7 +14,10 @@ public class FixSLinksPatch extends BaseFixSLinksPatch {
     }
 
     private FixSLinksPatch() {
-        webViewActivityClass = WebAndComments.class;
+        // LicensesActivity, despite the name, is Relay's in-app WebView browser.
+        // WebAndComments is the native post viewer and is driven by intent data, not an extra.
+        webViewActivityClass = LicensesActivity.class;
+        webViewActivityExtraKey = " Url";
     }
 
     public static boolean patchResolveSLink(String link) {

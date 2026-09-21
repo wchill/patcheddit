@@ -77,6 +77,12 @@ public abstract class BaseFixSLinksPatch {
     protected Class<? extends Activity> webViewActivityClass;
 
     /**
+     * The intent extra key that {@link #webViewActivityClass} reads its url from.
+     * Apps that use a different key must set this in their constructor.
+     */
+    protected String webViewActivityExtraKey = "url";
+
+    /**
      * The access token used to resolve the /s/ link.
      */
     protected String accessToken;
@@ -183,7 +189,7 @@ public abstract class BaseFixSLinksPatch {
 
     private void openInAppBrowser(Context context, String link) {
         Intent intent = new Intent(context, webViewActivityClass);
-        intent.putExtra("url", link);
+        intent.putExtra(webViewActivityExtraKey, link);
         context.startActivity(intent);
     }
 
