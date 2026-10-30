@@ -36,23 +36,21 @@ val prepareHttpLibraryResources by tasks.registering(Sync::class) {
     from({ httpLibraryResources.map { zipTree(it) } }) {
         include("okhttp3/internal/publicsuffix/PublicSuffixDatabase.gz")
         include("okhttp3/internal/publicsuffix/NOTICE")
+        into("http")
     }
-    into(layout.buildDirectory.dir("generated/http-resources/http"))
+    into(layout.buildDirectory.dir("generated/http-resources"))
     doLast {
-        check(destinationDir.resolve("okhttp3/internal/publicsuffix/PublicSuffixDatabase.gz").isFile) {
+        check(destinationDir.resolve("http/okhttp3/internal/publicsuffix/PublicSuffixDatabase.gz").isFile) {
             "OkHttp public suffix database was not found"
         }
     }
 }
 
 sourceSets.main {
-    resources.srcDir(layout.buildDirectory.dir("generated/http-resources"))
+    resources.srcDir(prepareHttpLibraryResources)
 }
 
 tasks {
-    processResources {
-        dependsOn(prepareHttpLibraryResources)
-    }
     test {
         useJUnit()
     }
