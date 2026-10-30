@@ -46,13 +46,12 @@ val prepareHttpLibraryResources by tasks.registering(Sync::class) {
 }
 
 sourceSets.main {
-    resources.srcDir(layout.buildDirectory.dir("generated/http-resources"))
+    resources.srcDir(
+        files(layout.buildDirectory.dir("generated/http-resources")).builtBy(prepareHttpLibraryResources)
+    )
 }
 
 tasks {
-    processResources {
-        dependsOn(prepareHttpLibraryResources)
-    }
     test {
         useJUnit()
     }
