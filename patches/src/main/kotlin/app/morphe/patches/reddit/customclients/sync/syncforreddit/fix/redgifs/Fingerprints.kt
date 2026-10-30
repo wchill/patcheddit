@@ -43,3 +43,15 @@ internal object GetOriginalUserAgentFingerprint : Fingerprint(
     parameters = listOf(),
     custom = { _, classDef -> classDef.sourceFile == "AccountSingleton.java" }
 )
+
+// LinkHandler.getGfycatId (y7.a.d): extracts the gif ID from a gfycat/redgifs
+// URL. Its strip-order bug (trailing slash before query) turns IDs from URLs
+// like "redgifs.com/watch/<id>/?92/" into empty strings, and the API call then
+// 404s. Class name is not obfuscated in Sync v23.06.30; the single-char method
+// name is, but the exact signature match is unique within the class.
+internal object LinkHandlerGetGfycatIdFingerprint : Fingerprint(
+    definingClass = "Ly7/a;",
+    name = "d",
+    parameters = listOf("Ljava/lang/String;"),
+    returnType = "Ljava/lang/String;",
+)

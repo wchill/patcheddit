@@ -8,7 +8,8 @@ import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.boo
 object ExtensionPatches {
     private fun hook(extensionName: String, vararg hookedClasses: String): BytecodePatch =
         sharedExtensionPatch(
-            extensionName, *hookedClasses.map { activityOnCreateExtensionHook(it) }.toTypedArray()
+            listOf(extensionName),
+            *hookedClasses.map { activityOnCreateExtensionHook(it) }.toTypedArray(),
         )
     internal val BaconReader = hook("baconreader", "Lcom/onelouder/baconreader/BaconReader;")
 
