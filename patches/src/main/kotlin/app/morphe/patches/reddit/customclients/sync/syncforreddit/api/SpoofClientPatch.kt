@@ -13,6 +13,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patches.all.misc.string.replaceStringPatch
 import app.morphe.patches.reddit.customclients.spoofClientPatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.sync.detection.piracy.disablePiracyDetectionPatch
 import app.morphe.util.returnEarly
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
@@ -22,6 +23,7 @@ import java.util.Base64
 
 val spoofClientPatch = spoofClientPatch { clientId, redirectUri, userAgent ->
     dependsOn(
+        ExtensionPatches.Sync,
         disablePiracyDetectionPatch,
         // Redirects from SSL to WWW domain are bugged causing auth problems.
         // Manually rewrite the URLs to fix this.

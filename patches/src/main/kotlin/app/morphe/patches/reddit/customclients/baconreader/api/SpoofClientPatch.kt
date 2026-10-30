@@ -12,6 +12,7 @@ import app.morphe.patcher.StringComparisonType
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.spoofClientPatch
 import app.morphe.patches.all.misc.string.replaceStringPatch
 import app.morphe.util.returnEarly
@@ -19,6 +20,7 @@ import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 
 val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, userAgentOption ->
     dependsOn(
+        ExtensionPatches.BaconReader,
         // Redirects from SSL to WWW domain are bugged causing auth problems.
         // Manually rewrite the URLs to fix this.
         replaceStringPatch("ssl.reddit.com", "www.reddit.com", comparison = StringComparisonType.CONTAINS)

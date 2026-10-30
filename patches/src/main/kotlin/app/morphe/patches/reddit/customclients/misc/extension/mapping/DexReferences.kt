@@ -4,7 +4,7 @@
  * See the included NOTICE file for GPLv3 section 7 terms.
  */
 
-package app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.mapping
+package app.morphe.patches.reddit.customclients.misc.extension.mapping
 
 import com.android.tools.smali.dexlib2.iface.Annotation
 import com.android.tools.smali.dexlib2.AnnotationVisibility

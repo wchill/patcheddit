@@ -7,9 +7,9 @@
 package app.morphe.patches.reddit.customclients.boostforreddit.bindings
 
 import app.morphe.patcher.Fingerprint
-import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.mapping.FieldId
-import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.mapping.MethodId
-import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.mapping.ProguardMapping
+import app.morphe.patches.reddit.customclients.misc.extension.mapping.FieldId
+import app.morphe.patches.reddit.customclients.misc.extension.mapping.MethodId
+import app.morphe.patches.reddit.customclients.misc.extension.mapping.ProguardMapping
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.iface.ClassDef
 import com.android.tools.smali.dexlib2.iface.Method

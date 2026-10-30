@@ -6,6 +6,11 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.mapping
 
+import app.morphe.patches.reddit.customclients.misc.extension.mapping.DexMappingRewriter
+import app.morphe.patches.reddit.customclients.misc.extension.mapping.FieldId
+import app.morphe.patches.reddit.customclients.misc.extension.mapping.MethodId
+import app.morphe.patches.reddit.customclients.misc.extension.mapping.ProguardMapping
+import app.morphe.patches.reddit.customclients.misc.extension.mapping.forEachReference
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.AnnotationVisibility
 import com.android.tools.smali.dexlib2.MethodHandleType

@@ -1,0 +1,284 @@
+# Reconstructed fixture-bound HTTP library reference mapping.
+# Copyright 2026 wchill. See NOTICE for GPLv3 section 7 terms.
+# Canonical Java API names are LEFT; actual APK declarations are RIGHT.
+# Consumer direction is observed -> canonical, not canonical -> observed.
+# This is not the original R8 map and contains no source-line information.
+# APK file: com.andrewshu.android.redditdonation_5.6.22.apk
+# APK SHA-256: 57aacb5b6fe6f6b2987f87234492027e98a575e753342e3341dd5137d65c62b9
+# Package: com.andrewshu.android.redditdonation
+# Version: 5.6.22 (4622)
+# Observed OkHttp: okhttp/5.0.0-alpha.11
+# Okio reference baseline: okio-jvm-3.2.0
+# OkHttp version is a shipped DEX user-agent literal. The exact resolved
+# Okio patch version is not independently recoverable from the shrunken APK;
+# the baseline is its published OkHttp dependency, corroborated by surviving
+# source-file names, class roles, signatures and instruction references.
+# Reference artifact: com.squareup.okhttp3:okhttp-jvm:5.0.0-alpha.11 SHA-256 506a1d3aba9f99b55570c7f8813cd79a44946531f29050d5b938474efdb4cf80
+# Reference artifact: com.squareup.okio:okio-jvm:3.2.0 SHA-256 b642baef4c570055de4cb3d1667b2b16dced901ff8066345a063691aa06025a4
+# Evidence: version-matched unshrunk Maven JAR APIs; retained identifiers;
+# class source/hierarchy and delegate roles; constructor field assignment
+# streams; resolved member references; literal flags and control-flow tests.
+# Equivalent deprecated/current getters may canonicalize to the same API.
+# Constructors retain <init>/<clinit>; no optimized prototype is guessed.
+# Covered fixture surface: 44 classes, 140 methods, 7 fields.
+# Scope includes incoming non-library instruction/declaration/override
+# references and the classes in their signatures. Original core library
+# implementations stay inert; this is not a map of their private internals.
+# Unknowns: reflection, native code, dynamic/asset DEX, other app versions.
+# native-prefix: Lokhttp3/
+# native-prefix: Lif/
+# native-prefix: Ljf/
+# native-prefix: Lkf/
+# native-prefix: Llf/
+# native-prefix: Lmf/
+# native-prefix: Lnf/
+# native-prefix: Lof/
+# native-prefix: Lpf/
+# native-prefix: Lqf/
+# native-prefix: Lrf/
+# native-prefix: Lsf/
+# native-prefix: Ltf/
+# caller-prefix: Lokhttp3/dnsoverhttps/
+# caller-prefix: Lokhttp3/logging/
+# caller-class: Lokhttp3/JavaNetCookieJar;
+# caller-class: Lokhttp3/JavaNetAuthenticator;
+# Add-on artifact classes above must remain callers unless their own complete
+# artifact is supplied. Rewrite their core references, not their class names.
+# Free/donation use different Okio packages AND different member names;
+# these fixture maps are not interchangeable.
+# HttpUrl.Builder fragment/query were distinguished by canonicalize
+# default masks 0xbb / 0xdb; addHeader/header by add versus set delegation.
+okhttp3.Address -> okhttp3.a:
+    okhttp3.Dns dns() -> c
+
+okhttp3.Authenticator -> okhttp3.b:
+    okhttp3.Request authenticate(okhttp3.Route,okhttp3.Response) -> a
+
+okhttp3.Cache -> okhttp3.c:
+    void <init>(java.io.File,long) -> <init>
+
+okhttp3.CacheControl$Builder -> okhttp3.d$a:
+    okhttp3.CacheControl build() -> a
+    okhttp3.CacheControl$Builder maxAge(int,java.util.concurrent.TimeUnit) -> j
+    void <init>() -> <init>
+
+okhttp3.CacheControl -> okhttp3.d:
+    okhttp3.CacheControl FORCE_NETWORK -> o
+
+okhttp3.Call$Factory -> okhttp3.e$a:
+    okhttp3.Call newCall(okhttp3.Request) -> a
+
+okhttp3.Call -> okhttp3.e:
+    boolean isCanceled() -> a
+    okhttp3.Response execute() -> e
+    void cancel() -> cancel
+    void enqueue(okhttp3.Callback) -> w
+
+okhttp3.Callback -> okhttp3.f:
+    void onFailure(okhttp3.Call,java.io.IOException) -> e0
+    void onResponse(okhttp3.Call,okhttp3.Response) -> T
+
+okhttp3.CertificatePinner$Builder -> okhttp3.g$a:
+    okhttp3.CertificatePinner build() -> b
+    okhttp3.CertificatePinner$Builder add(java.lang.String,java.lang.String[]) -> a
+    void <init>() -> <init>
+
+okhttp3.CertificatePinner -> okhttp3.g:
+
+okhttp3.Challenge -> okhttp3.h:
+    java.lang.String realm() -> c
+    java.lang.String scheme() -> d
+    java.nio.charset.Charset charset() -> b
+
+okhttp3.ConnectionPool -> okhttp3.k:
+    void <init>(int,long,java.util.concurrent.TimeUnit) -> <init>
+
+okhttp3.ConnectionSpec$Builder -> okhttp3.l$a:
+    okhttp3.ConnectionSpec build() -> b
+    okhttp3.ConnectionSpec$Builder allEnabledCipherSuites() -> a
+    okhttp3.ConnectionSpec$Builder tlsVersions(okhttp3.TlsVersion[]) -> g
+    void <init>(okhttp3.ConnectionSpec) -> <init>
+
+okhttp3.ConnectionSpec -> okhttp3.l:
+    okhttp3.ConnectionSpec CLEARTEXT -> k
+    okhttp3.ConnectionSpec COMPATIBLE_TLS -> j
+    okhttp3.ConnectionSpec MODERN_TLS -> i
+
+okhttp3.Cookie -> okhttp3.o:
+    java.lang.String domain() -> e
+    java.lang.String name() -> g
+    java.lang.String path() -> i
+    java.lang.String toString() -> toString
+    java.lang.String value() -> k
+    long expiresAt() -> f
+    okhttp3.Cookie parse(okhttp3.HttpUrl,java.lang.String) -> h
+
+okhttp3.CookieJar -> okhttp3.p:
+    java.util.List loadForRequest(okhttp3.HttpUrl) -> b
+    void saveFromResponse(okhttp3.HttpUrl,java.util.List) -> a
+
+okhttp3.Credentials -> okhttp3.q:
+    java.lang.String basic(java.lang.String,java.lang.String,java.nio.charset.Charset) -> a
+
+okhttp3.Dns -> okhttp3.s:
+    okhttp3.Dns SYSTEM -> b
+    java.util.List lookup(java.lang.String) -> a
+
+okhttp3.FormBody$Builder -> okhttp3.u$a:
+    okhttp3.FormBody build() -> b
+    okhttp3.FormBody$Builder add(java.lang.String,java.lang.String) -> a
+    void <init>() -> <init>
+    void <init>(java.nio.charset.Charset) -> <init>
+
+okhttp3.FormBody -> okhttp3.u:
+
+okhttp3.Headers -> okhttp3.w:
+    java.lang.String get(java.lang.String) -> b
+    java.util.Map toMultimap() -> f
+
+okhttp3.HttpUrl$Builder -> okhttp3.x$a:
+    okhttp3.HttpUrl build() -> a
+    okhttp3.HttpUrl$Builder encodedPath(java.lang.String) -> c
+    okhttp3.HttpUrl$Builder fragment(java.lang.String) -> e
+    okhttp3.HttpUrl$Builder query(java.lang.String) -> o
+    okhttp3.HttpUrl$Builder scheme(java.lang.String) -> r
+
+okhttp3.HttpUrl -> okhttp3.x:
+    boolean equals(java.lang.Object) -> equals
+    int port() -> m
+    java.lang.String host() -> h
+    java.lang.String scheme() -> q
+    java.lang.String toString() -> toString
+    java.net.URL url() -> s
+    okhttp3.HttpUrl parse(java.lang.String) -> l
+    okhttp3.HttpUrl$Builder newBuilder() -> j
+
+okhttp3.Interceptor$Chain -> okhttp3.y$a:
+    okhttp3.Request request() -> b
+    okhttp3.Response proceed(okhttp3.Request) -> a
+
+okhttp3.Interceptor -> okhttp3.y:
+    okhttp3.Response intercept(okhttp3.Interceptor$Chain) -> a
+
+okhttp3.MediaType -> okhttp3.z:
+    java.lang.String toString() -> toString
+    okhttp3.MediaType get(java.lang.String) -> c
+    okhttp3.MediaType parse(java.lang.String) -> g
+
+okhttp3.OkHttpClient$Builder -> okhttp3.a0$a:
+    okhttp3.OkHttpClient build() -> b
+    okhttp3.OkHttpClient$Builder addNetworkInterceptor(okhttp3.Interceptor) -> a
+    okhttp3.OkHttpClient$Builder cache(okhttp3.Cache) -> c
+    okhttp3.OkHttpClient$Builder certificatePinner(okhttp3.CertificatePinner) -> d
+    okhttp3.OkHttpClient$Builder connectTimeout(long,java.util.concurrent.TimeUnit) -> e
+    okhttp3.OkHttpClient$Builder connectionPool(okhttp3.ConnectionPool) -> f
+    okhttp3.OkHttpClient$Builder connectionSpecs(java.util.List) -> g
+    okhttp3.OkHttpClient$Builder cookieJar(okhttp3.CookieJar) -> h
+    okhttp3.OkHttpClient$Builder fastFallback(boolean) -> i
+    okhttp3.OkHttpClient$Builder followRedirects(boolean) -> j
+    okhttp3.OkHttpClient$Builder followSslRedirects(boolean) -> k
+    okhttp3.OkHttpClient$Builder protocols(java.util.List) -> R
+    okhttp3.OkHttpClient$Builder readTimeout(long,java.util.concurrent.TimeUnit) -> S
+    okhttp3.OkHttpClient$Builder sslSocketFactory(javax.net.ssl.SSLSocketFactory,javax.net.ssl.X509TrustManager) -> T
+    okhttp3.OkHttpClient$Builder writeTimeout(long,java.util.concurrent.TimeUnit) -> U
+    void <init>() -> <init>
+    void <init>(okhttp3.OkHttpClient) -> <init>
+
+okhttp3.OkHttpClient -> okhttp3.a0:
+    okhttp3.Call newCall(okhttp3.Request) -> a
+    okhttp3.CookieJar cookieJar() -> m
+    okhttp3.OkHttpClient$Builder newBuilder() -> z
+    void <init>() -> <init>
+    void <init>(okhttp3.OkHttpClient$Builder) -> <init>
+
+okhttp3.Protocol -> okhttp3.b0:
+    okhttp3.Protocol HTTP_1_1 -> h
+
+okhttp3.Request$Builder -> okhttp3.c0$a:
+    okhttp3.Request build() -> b
+    okhttp3.Request$Builder addHeader(java.lang.String,java.lang.String) -> a
+    okhttp3.Request$Builder cacheControl(okhttp3.CacheControl) -> c
+    okhttp3.Request$Builder delete() -> d
+    okhttp3.Request$Builder get() -> g
+    okhttp3.Request$Builder head() -> m
+    okhttp3.Request$Builder header(java.lang.String,java.lang.String) -> n
+    okhttp3.Request$Builder method(java.lang.String,okhttp3.RequestBody) -> p
+    okhttp3.Request$Builder patch(okhttp3.RequestBody) -> q
+    okhttp3.Request$Builder post(okhttp3.RequestBody) -> r
+    okhttp3.Request$Builder put(okhttp3.RequestBody) -> s
+    okhttp3.Request$Builder url(java.lang.String) -> x
+    okhttp3.Request$Builder url(java.net.URL) -> y
+    okhttp3.Request$Builder url(okhttp3.HttpUrl) -> z
+    void <init>() -> <init>
+
+okhttp3.Request -> okhttp3.c0:
+    okhttp3.HttpUrl url() -> j
+    okhttp3.Request$Builder newBuilder() -> i
+
+okhttp3.RequestBody -> okhttp3.d0:
+    long contentLength() -> a
+    okhttp3.MediaType contentType() -> b
+    okhttp3.RequestBody create(java.lang.String,okhttp3.MediaType) -> c
+    okhttp3.RequestBody create(okhttp3.MediaType,byte[]) -> d
+    void <init>() -> <init>
+    void writeTo(okio.BufferedSink) -> g
+
+okhttp3.Response$Builder -> okhttp3.e0$a:
+    okhttp3.Response build() -> c
+    okhttp3.Response$Builder body(okhttp3.ResponseBody) -> b
+
+okhttp3.Response -> okhttp3.e0:
+    boolean isRedirect() -> E
+    boolean isSuccessful() -> F
+    int code() -> r
+    java.lang.String header(java.lang.String) -> x
+    java.lang.String message() -> K
+    java.util.List challenges() -> q
+    okhttp3.Headers headers() -> C
+    okhttp3.Request request() -> a0
+    okhttp3.Response$Builder newBuilder() -> Q
+    okhttp3.ResponseBody body() -> b
+    void close() -> close
+
+okhttp3.ResponseBody -> okhttp3.f0:
+    java.io.InputStream byteStream() -> a
+    long contentLength() -> b
+    okhttp3.MediaType contentType() -> e
+    okio.BufferedSource source() -> j
+    void <init>() -> <init>
+    void close() -> close
+
+okhttp3.Route -> okhttp3.g0:
+    java.net.Proxy proxy() -> b
+    okhttp3.Address address() -> a
+
+okhttp3.TlsVersion -> okhttp3.h0:
+    okhttp3.TlsVersion TLS_1_2 -> h
+
+okio.Buffer -> sf.c:
+    java.io.OutputStream outputStream() -> E
+    long size() -> size
+    okio.Buffer writeUtf8(java.lang.String) -> I0
+    void <init>() -> <init>
+    void clear() -> b
+
+okio.BufferedSink -> sf.d:
+    long writeAll(okio.Source) -> b0
+    okio.Buffer buffer() -> c
+
+okio.BufferedSource -> sf.e:
+
+okio.ForwardingSource -> sf.l:
+    long read(okio.Buffer,long) -> T
+    void <init>(okio.Source) -> <init>
+
+okio.Okio -> sf.i0:
+    okio.BufferedSink buffer(okio.Sink) -> b
+    okio.BufferedSource buffer(okio.Source) -> c
+    okio.Sink sink(java.io.OutputStream) -> f
+    okio.Source source(java.io.InputStream) -> j
+
+okio.Sink -> sf.u0:
+
+okio.Source -> sf.w0:
+    long read(okio.Buffer,long) -> T

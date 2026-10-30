@@ -1,0 +1,8 @@
+-keep class okhttp3.** { *; }
+-keep class okio.** { *; }
+-dontwarn org.conscrypt.**
+-dontwarn org.bouncycastle.**
+-dontwarn org.openjsse.**
+-dontwarn org.codehaus.mojo.animal_sniffer.**
+-dontwarn com.oracle.svm.**
+-dontwarn org.graalvm.**

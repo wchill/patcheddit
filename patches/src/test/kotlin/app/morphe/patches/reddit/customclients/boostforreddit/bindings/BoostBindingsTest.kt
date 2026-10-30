@@ -6,8 +6,8 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.bindings
 
-import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.mapping.DexMappingRewriter
-import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.mapping.ProguardMapping
+import app.morphe.patches.reddit.customclients.misc.extension.mapping.DexMappingRewriter
+import app.morphe.patches.reddit.customclients.misc.extension.mapping.ProguardMapping
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.ClassDef

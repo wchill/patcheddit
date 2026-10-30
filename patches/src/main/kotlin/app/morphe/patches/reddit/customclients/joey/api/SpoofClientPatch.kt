@@ -12,6 +12,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLa
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.joey.detection.piracy.disablePiracyDetectionPatch
 import app.morphe.patches.reddit.customclients.spoofClientPatch
 import app.morphe.util.getReference
@@ -21,7 +22,7 @@ import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 
 val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, userAgentOption ->
-    dependsOn(disablePiracyDetectionPatch)
+    dependsOn(ExtensionPatches.Joey, disablePiracyDetectionPatch)
 
     compatibleWith(*AppCompatibility.JoeyForReddit)
 

@@ -6,6 +6,7 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.mapping
 
+import app.morphe.patches.reddit.customclients.misc.extension.mapping.forEachReference
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.ClassDef

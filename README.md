@@ -11,6 +11,7 @@ In addition, patches for some apps contain additional features that were not pre
 ## Differences from official patch set
 
 ### All clients
+* Reddit API fixes are available for BaconReader, Boost, Joey, Relay, RIF (free and paid), and Sync.
 * Client ID, redirect URI and user agent are all patchable.
     * By default, `Spoof client` uses RedReader 1.27's client ID, redirect URI and user agent. Leave the OAuth client ID option empty to use its default.
     * Custom patch options override these defaults. In Boost 1.14.0 and up, saved values in the native API settings override the patch-provided defaults.
