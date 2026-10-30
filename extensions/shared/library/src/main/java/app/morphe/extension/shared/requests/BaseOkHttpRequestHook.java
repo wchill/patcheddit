@@ -26,13 +26,24 @@ public abstract class BaseOkHttpRequestHook {
 
     public static OkHttpClient.Builder installInterceptor(OkHttpClient.Builder builder) {
         for (Interceptor interceptor : INSTANCE.getInterceptors()) {
-            builder.addInterceptor(interceptor);
+            if (!contains(builder.interceptors(), interceptor)) {
+                builder.addInterceptor(interceptor);
+            }
         }
 
         for (Interceptor interceptor : INSTANCE.getNetworkInterceptors()) {
-            builder.addNetworkInterceptor(interceptor);
+            if (!contains(builder.networkInterceptors(), interceptor)) {
+                builder.addNetworkInterceptor(interceptor);
+            }
         }
 
         return builder;
+    }
+
+    private static boolean contains(List<Interceptor> installed, Interceptor candidate) {
+        for (Interceptor interceptor : installed) {
+            if (interceptor.getClass() == candidate.getClass()) return true;
+        }
+        return false;
     }
 }

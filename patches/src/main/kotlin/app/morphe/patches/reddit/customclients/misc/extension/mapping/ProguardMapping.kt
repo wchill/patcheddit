@@ -4,7 +4,7 @@
  * See the included NOTICE file for GPLv3 section 7 terms.
  */
 
-package app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.mapping
+package app.morphe.patches.reddit.customclients.misc.extension.mapping
 
 import java.io.Reader
 
@@ -73,6 +73,15 @@ internal class ProguardMapping private constructor(
         }
         return ProguardMapping(reverseClasses, reverseMethods, reverseFields)
     }
+
+    fun mapTargets(transform: (String) -> String): ProguardMapping = ProguardMapping(
+        classes.mapValues { transform(it.value) },
+        methods,
+        fields,
+        methodOwners.mapValues { transform(it.value) },
+        fieldOwners.mapValues { transform(it.value) },
+        referenceAliases,
+    )
 
     fun withBindings(
         types: Map<String, String>,

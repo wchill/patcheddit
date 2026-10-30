@@ -21,6 +21,7 @@ import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction21t
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 
 val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, userAgentOption ->
+    dependsOn(ExtensionPatches.Relay)
     compatibleWith(*AppCompatibility.Relay)
 
     val clientId by clientIdOption

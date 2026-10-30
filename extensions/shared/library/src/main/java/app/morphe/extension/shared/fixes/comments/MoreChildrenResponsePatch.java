@@ -14,22 +14,18 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import app.morphe.extension.shared.requests.RedditRequestParameters;
 import app.morphe.extension.shared.requests.RedditRouteResponseShim;
-import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.Request;
-import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import okio.Buffer;
 
 public final class MoreChildrenResponsePatch extends RedditRouteResponseShim {
     private static final MediaType JSON = MediaType.get("application/json");
@@ -48,7 +44,7 @@ public final class MoreChildrenResponsePatch extends RedditRouteResponseShim {
     @Override
     protected Response shimResponse(@NonNull Chain chain, @NonNull Request request)
             throws IOException {
-        Map<String, String> parameters = parameters(request);
+        Map<String, String> parameters = RedditRequestParameters.read(request);
         String linkId = required(parameters, "link_id");
         String children = required(parameters, "children");
         String postId = stripPrefix(linkId, "t3_");
@@ -194,38 +190,6 @@ public final class MoreChildrenResponsePatch extends RedditRouteResponseShim {
                     emittedFullNames,
                     output
             );
-        }
-    }
-
-    private static Map<String, String> parameters(Request request) throws IOException {
-        Map<String, String> result = new HashMap<>();
-        for (String name : request.url().queryParameterNames()) {
-            String value = request.url().queryParameter(name);
-            if (value != null) result.put(name, value);
-        }
-
-        RequestBody body = request.body();
-        if (body instanceof FormBody) {
-            FormBody form = (FormBody) body;
-            for (int i = 0; i < form.size(); i++) {
-                result.put(form.name(i), form.value(i));
-            }
-        } else if (body != null) {
-            Buffer buffer = new Buffer();
-            body.writeTo(buffer);
-            parseForm(result, new String(buffer.readByteArray(), StandardCharsets.UTF_8));
-        }
-        return result;
-    }
-
-    private static void parseForm(Map<String, String> result, String form) {
-        for (String field : form.split("&")) {
-            if (field.isEmpty()) continue;
-            int separator = field.indexOf('=');
-            String name = separator < 0 ? field : field.substring(0, separator);
-            String value = separator < 0 ? "" : field.substring(separator + 1);
-            result.put(android.net.Uri.decode(name.replace("+", " ")),
-                    android.net.Uri.decode(value.replace("+", " ")));
         }
     }
 

@@ -33,8 +33,7 @@ public abstract class RedditRouteResponseShim extends PatchedditInterceptor {
     @Override
     protected final Response doIntercept(@NonNull Chain chain) throws IOException {
         Request request = chain.request();
-        String host = request.url().host().toLowerCase(Locale.ROOT);
-        if (!(host.equals("reddit.com") || host.endsWith(".reddit.com"))
+        if (!isRedditHost(request.url().host())
                 || !methods.contains(request.method().toUpperCase(Locale.ROOT))
                 || !path.equals(normalizePath(request.url().encodedPath()))) {
             return chain.proceed(request);
@@ -46,7 +45,13 @@ public abstract class RedditRouteResponseShim extends PatchedditInterceptor {
     protected abstract Response shimResponse(@NonNull Chain chain, @NonNull Request request)
             throws IOException;
 
-    private static String normalizePath(String path) {
+    public static boolean isRedditHost(String host) {
+        if (host == null) return false;
+        String normalized = host.toLowerCase(Locale.ROOT);
+        return normalized.equals("reddit.com") || normalized.endsWith(".reddit.com");
+    }
+
+    public static String normalizePath(String path) {
         String normalized = path.toLowerCase(Locale.ROOT);
         while (normalized.length() > 1 && normalized.endsWith("/")) {
             normalized = normalized.substring(0, normalized.length() - 1);
@@ -58,6 +63,15 @@ public abstract class RedditRouteResponseShim extends PatchedditInterceptor {
         }
         while (normalized.length() > 1 && normalized.endsWith("/")) {
             normalized = normalized.substring(0, normalized.length() - 1);
+        }
+        if (normalized.startsWith("/r/")) {
+            int end = normalized.indexOf('/', 3);
+            if (end > 3) {
+                String route = normalized.substring(end);
+                if (route.startsWith("/api/") || route.startsWith("/by_id/")) {
+                    normalized = route;
+                }
+            }
         }
         return normalized;
     }

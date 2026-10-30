@@ -9,8 +9,8 @@ package app.morphe.patches.reddit.customclients.boostforreddit.misc.extension
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.patch.resourcePatch
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostBindings
-import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.mapping.DexMappingRewriter
-import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.mapping.ProguardMapping
+import app.morphe.patches.reddit.customclients.misc.extension.mapping.DexMappingRewriter
+import app.morphe.patches.reddit.customclients.misc.extension.mapping.ProguardMapping
 
 import com.android.tools.smali.dexlib2.dexbacked.DexBackedDexFile
 import com.android.tools.smali.dexlib2.iface.ClassDef

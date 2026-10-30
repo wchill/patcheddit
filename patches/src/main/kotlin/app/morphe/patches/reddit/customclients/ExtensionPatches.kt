@@ -1,23 +1,22 @@
 package app.morphe.patches.reddit.customclients
 
 import app.morphe.patcher.patch.BytecodePatch
-import app.morphe.patches.all.misc.extension.activityOnCreateExtensionHook
-import app.morphe.patches.all.misc.extension.sharedExtensionPatch
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.boostExtensionPatch
+import app.morphe.patches.reddit.customclients.http.httpClientExtensionPatch
+import app.morphe.patches.reddit.customclients.misc.extension.clientExtensionPatch
 
 object ExtensionPatches {
     private fun hook(extensionName: String, vararg hookedClasses: String): BytecodePatch =
-        sharedExtensionPatch(
-            extensionName, *hookedClasses.map { activityOnCreateExtensionHook(it) }.toTypedArray()
-        )
-    internal val BaconReader = hook("baconreader", "Lcom/onelouder/baconreader/BaconReader;")
+        clientExtensionPatch(extensionName, hookedClasses)
+    private fun httpHook(extensionName: String, vararg hookedClasses: String): BytecodePatch =
+        httpClientExtensionPatch(extensionName, *hookedClasses)
+
+    internal val BaconReader = httpHook("baconreader", "Lcom/onelouder/baconreader/BaconReader;")
 
     internal val Boost = boostExtensionPatch
-    internal val Continuum = hook("continuum", "Lml/docilealligator/infinityforreddit/Infinity;")
     internal val Infinity = hook("infinity", "Lml/docilealligator/infinityforreddit/Infinity;")
-    internal val Joey = hook("joey", "Lo/o/joey/MyApplication;")
-    internal val RIF = hook("redditisfun", "Lcom/andrewshu/android/reddit/RedditIsFunApplication;")
-    internal val Relay = hook("relay", "Lreddit/news/RelayApplication;")
-    internal val Slide = hook("slide", "Lme/edgan/redditslide/Reddit;")
-    internal val Sync = hook("syncforreddit", "Lcom/laurencedawson/reddit_sync/RedditApplication;")
+    internal val Joey = httpHook("joey", "Lo/o/joey/MyApplication;")
+    internal val RIF = httpHook("redditisfun", "Lcom/andrewshu/android/reddit/RedditIsFunApplication;")
+    internal val Relay = httpHook("relay", "Lreddit/news/RelayApplication;")
+    internal val Sync = httpHook("syncforreddit", "Lcom/laurencedawson/reddit_sync/RedditApplication;")
 }

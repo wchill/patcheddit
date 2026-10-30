@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-"""
-Rebuilds the patch bundle and runs the morphe-cli patcher against all APKs in test/.
-"""
+"""Build and patch every APK fixture without installing apps unless requested."""
 
+import argparse
 import json
 import subprocess
 import sys
@@ -12,7 +11,7 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 PROJECT_DIR = SCRIPT_DIR.parent
 PATCHES_LIBS = PROJECT_DIR / "patches" / "build" / "libs"
-TEST_DIR = SCRIPT_DIR
+TEST_DIR = SCRIPT_DIR / "apks"
 CACHE_DIR = SCRIPT_DIR / ".cache"
 OUTPUT_DIR = SCRIPT_DIR / "output"
 
@@ -69,7 +68,10 @@ def download_latest_cli_jar() -> Path:
 
 def find_latest_patch_bundle(directory: Path) -> Path:
     """Find the most recently modified *.mpp in the given directory."""
-    bundles = list(directory.glob("*.mpp"))
+    bundles = [
+        path for path in directory.glob("*.mpp")
+        if not path.stem.endswith(("-sources", "-javadoc"))
+    ]
     if not bundles:
         print(f"ERROR: No patch bundle (*.mpp) found in {directory}", file=sys.stderr)
         sys.exit(1)
@@ -93,28 +95,64 @@ def rebuild_patches() -> None:
     print()
 
 
-def patch_apk(jar: Path, patches: Path, apk: Path) -> subprocess.CompletedProcess:
+def patch_apk(jar: Path, patches: Path, apk: Path, args: argparse.Namespace) -> bool:
     """Run morphe-cli patch on a single APK."""
-    with open(TEST_DIR / "config.json", "r") as f:
-        config = json.load(f)
+    output = OUTPUT_DIR / apk.stem
+    output.mkdir(parents=True, exist_ok=True)
+    report = output / "result.json"
+    report.unlink(missing_ok=True)
     cmd = [
         "java", "-jar", str(jar),
         "patch",
-        "--install",
-        "--options-file=" + str(TEST_DIR / "config.json"),
+        "--bytecode-mode=FULL",
         f"--patches={patches}",
+        f"--out={output / 'patched.apk'}",
+        f"--result-file={report}",
         str(apk),
     ]
+    config = args.options_file or SCRIPT_DIR / "config.json"
+    if config.is_file():
+        cmd.append(f"--options-file={config}")
+    elif args.options_file:
+        raise FileNotFoundError(config)
+    if args.install:
+        cmd.append("--install")
+    if args.patch:
+        cmd.append("--exclusive")
+        for patch in args.patch:
+            cmd.extend(["--enable", patch])
     print(f"  Command: {' '.join(cmd)}")
-    return subprocess.run(cmd, cwd=OUTPUT_DIR)
+    log_path = output / "patch.log"
+    with log_path.open("w") as log:
+        proc = subprocess.run(cmd, cwd=PROJECT_DIR, stdout=log, stderr=subprocess.STDOUT)
+    success = False
+    if report.is_file():
+        with report.open() as result:
+            success = json.load(result).get("success") is True
+    if proc.returncode != 0 or not success:
+        print("\n".join(log_path.read_text().splitlines()[-50:]))
+        return False
+    print(f"  Patched: {output / 'patched.apk'}")
+    return True
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--cli", type=Path, help="Use an existing Morphe CLI JAR")
+    parser.add_argument("--skip-build", action="store_true", help="Use the current patch bundle")
+    parser.add_argument("--options-file", type=Path, help="Patch options JSON")
+    parser.add_argument("--patch", action="append", help="Apply only this existing patch; repeatable")
+    parser.add_argument("--install", action="store_true", help="Also install patched APKs on ADB")
+    args = parser.parse_args()
+
     # 1. Rebuild patches
-    rebuild_patches()
+    if not args.skip_build:
+        rebuild_patches()
 
     # 2. Resolve paths
-    jar = download_latest_cli_jar()
+    jar = args.cli.resolve() if args.cli else download_latest_cli_jar()
+    if not jar.is_file():
+        parser.error(f"CLI JAR does not exist: {jar}")
     patches = find_latest_patch_bundle(PATCHES_LIBS)
     print()
 
@@ -136,8 +174,7 @@ def main() -> None:
         print("=" * 60)
         print(f"[{i}/{len(apks)}] Patching: {apk.name}")
         print("=" * 60)
-        proc = patch_apk(jar, patches, apk)
-        results[apk.name] = proc.returncode == 0
+        results[apk.name] = patch_apk(jar, patches, apk, args)
         print()
 
     # 5. Summary
