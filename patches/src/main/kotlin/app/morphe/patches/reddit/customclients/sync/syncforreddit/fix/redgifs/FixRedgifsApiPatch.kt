@@ -56,5 +56,20 @@ val fixRedgifsApi = fixRedgifsApiPatch(
         }
 
         // endregion
+
+        // region Fix gif id extraction.
+
+        // getGfycatId strips the trailing slash before the query, so links like
+        // "redgifs.com/watch/<id>/?92/" yield an empty id and the API call 404s.
+        GetGfycatIdFingerprint.method.addInstructions(
+            0,
+            """
+                invoke-static { p0 }, $EXTENSION_CLASS_DESCRIPTOR->extractGifId(Ljava/lang/String;)Ljava/lang/String;
+                move-result-object p0
+                return-object p0
+            """
+        )
+
+        // endregion
     }
 }

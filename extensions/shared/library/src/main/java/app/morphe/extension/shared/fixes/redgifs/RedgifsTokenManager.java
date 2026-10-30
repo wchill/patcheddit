@@ -64,10 +64,19 @@ public class RedgifsTokenManager {
     }
 
     public static RedgifsToken refreshToken(String userAgent) throws IOException, JSONException {
+        return refreshToken(userAgent, false);
+    }
+
+    /**
+     * @param forceRefresh Request a new token even if the cached one has not expired, for when Redgifs
+     *                     rejected it.
+     */
+    public static RedgifsToken refreshToken(String userAgent, boolean forceRefresh)
+            throws IOException, JSONException {
         synchronized(tokenMap) {
             // Reference: https://github.com/JeffreyCA/Apollo-ImprovedCustomApi/pull/67
             RedgifsToken token = tokenMap.get(userAgent);
-            if (token != null && token.isValid()) {
+            if (!forceRefresh && token != null && token.isValid()) {
                 return token;
             }
 
@@ -89,5 +98,11 @@ public class RedgifsTokenManager {
         responseObject.put("scope", "read");
         responseObject.put("token_type", "Bearer");
         return responseObject.toString();
+    }
+
+    public static String getEmulatedIpResponseBody() {
+        // Redgifs removed /info. Its "remote-addr" only fills the legacy "user-addr" query parameter,
+        // which current endpoints ignore, so a placeholder works.
+        return "{\"remote-addr\":\"0.0.0.0\"}";
     }
 }
