@@ -1,3 +1,10 @@
+## [2.0.3-dev.1](https://github.com/wchill/patcheddit/compare/v2.0.2...v2.0.3-dev.1) (2026-10-30)
+
+
+### Bug Fixes
+
+* Comment loading and gallery loading for all reddit apps ([48cb357](https://github.com/wchill/patcheddit/commit/48cb357ca0bdcaaf7aa9f8a694db479e95a7c0ae))
+
 ## [2.0.2](https://github.com/wchill/patcheddit/compare/v2.0.1...v2.0.2) (2026-10-30)
 
 
