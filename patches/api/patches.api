@@ -200,6 +200,14 @@ public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/ex
 	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
+public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/fix/comments/FixLoadMoreCommentsPatchKt {
+	public static final fun getFixLoadMoreCommentsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
+public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/fix/gallery/FixGalleriesPatchKt {
+	public static final fun getFixGalleriesPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
+}
+
 public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/fix/redgifs/FixRedgifsApiPatchKt {
 	public static final fun getFixRedgifsApi ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
