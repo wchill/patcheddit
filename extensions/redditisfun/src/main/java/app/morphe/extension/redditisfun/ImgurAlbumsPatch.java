@@ -9,6 +9,12 @@ package app.morphe.extension.redditisfun;
 
 import android.net.Uri;
 
+import java.io.IOException;
+
+import okhttp3.Interceptor;
+import okhttp3.Request;
+import okhttp3.Response;
+
 public class ImgurAlbumsPatch {
     public static Uri buildImgurUri(String albumId, boolean isGallery) {
         Uri.Builder builder = new Uri.Builder().scheme("https")
@@ -20,7 +26,20 @@ public class ImgurAlbumsPatch {
             builder.appendPath("album");
         }
         return builder
-                .appendPath(albumId)
+                // Links may be /a/album-title-id.
+                .appendPath(albumId.substring(albumId.lastIndexOf('-') + 1))
                 .build();
+    }
+
+    // RIF only authenticates album requests for its own proxy.
+    public static Response addClientId(Interceptor.Chain chain) throws IOException {
+        Request request = chain.request();
+        if (!"api.imgur.com".equals(request.url().host())) {
+            return chain.proceed(request);
+        }
+        return chain.proceed(request.newBuilder()
+                .removeHeader("x-redditisfun-key")
+                .header("Authorization", "Client-ID 4d7e2f74f1a519c")
+                .build());
     }
 }
