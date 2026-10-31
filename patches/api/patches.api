@@ -34,13 +34,6 @@ public final class app/morphe/patches/reddit/ad/general/HideAdsPatchKt {
 	public static final fun getHideAdsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
-public final class app/morphe/patches/reddit/customclients/FixRedgifsApiPatchKt {
-	public static final field CREATE_NEW_CLIENT_METHOD Ljava/lang/String;
-	public static final field INSTALL_NEW_CLIENT_METHOD Ljava/lang/String;
-	public static final fun fixRedgifsApiPatch (Lapp/morphe/patcher/patch/Patch;Lkotlin/jvm/functions/Function1;)Lapp/morphe/patcher/patch/BytecodePatch;
-	public static synthetic fun fixRedgifsApiPatch$default (Lapp/morphe/patcher/patch/Patch;Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
 public final class app/morphe/patches/reddit/customclients/FixSLinksPatchKt {
 	public static final field RESOLVE_S_LINK_METHOD Ljava/lang/String;
 	public static final field SET_ACCESS_TOKEN_METHOD Ljava/lang/String;
@@ -53,18 +46,6 @@ public final class app/morphe/patches/reddit/customclients/SpoofClientPatchKt {
 	public static final fun spoofClientPatch (Ljava/lang/String;Lkotlin/jvm/functions/Function2;)Lapp/morphe/patcher/patch/BytecodePatch;
 	public static final fun spoofClientPatch (Lkotlin/jvm/functions/Function4;)Lapp/morphe/patcher/patch/BytecodePatch;
 	public static synthetic fun spoofClientPatch$default (Ljava/lang/String;Lkotlin/jvm/functions/Function2;ILjava/lang/Object;)Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/baconreader/api/SpoofClientPatchKt {
-	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/baconreader/fix/redgifs/FixRedgifsApiPatchKt {
-	public static final fun getFixRedgifsApi ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/baconreader/misc/extension/SharedExtensionPatchKt {
-	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
 public final class app/morphe/patches/reddit/customclients/boostforreddit/ads/DisableAdsPatchKt {
@@ -112,113 +93,6 @@ public final class app/morphe/patches/reddit/customclients/boostforreddit/http/r
 
 public final class app/morphe/patches/reddit/customclients/boostforreddit/misc/extension/SharedExtensionPatchKt {
 	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/continuum/api/SpoofClientPatchKt {
-	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/continuum/misc/extension/SharedExtensionPatchKt {
-	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/joeyforreddit/ads/DisableAdsPatchKt {
-	public static final fun getDisableAdsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/joeyforreddit/api/SpoofClientPatchKt {
-	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/joeyforreddit/detection/piracy/DisablePiracyDetectionPatchKt {
-	public static final fun getDisablePiracyDetectionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/redditisfun/ads/FakePremiumKt {
-	public static final fun getFakePremiumPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/redditisfun/api/ImgurAlbumsPatchKt {
-	public static final fun getImgurAlbumsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/redditisfun/api/SpoofClientPatchKt {
-	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/redditisfun/misc/extension/SharedExtensionPatchKt {
-	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/relay/api/SpoofClientPatchKt {
-	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/relay/fix/slink/FixSLinksPatchKt {
-	public static final field EXTENSION_CLASS_DESCRIPTOR Ljava/lang/String;
-	public static final fun getFixSLinksPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/relay/misc/extension/SharedExtensionPatchKt {
-	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/slide/api/SpoofClientPatchKt {
-	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/slide/misc/extension/SharedExtensionPatchKt {
-	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/sync/ads/DisableAdsPatchKt {
-	public static final fun disableAdsPatch (Lkotlin/jvm/functions/Function1;)Lapp/morphe/patcher/patch/BytecodePatch;
-	public static synthetic fun disableAdsPatch$default (Lkotlin/jvm/functions/Function1;ILjava/lang/Object;)Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/sync/detection/piracy/DisablePiracyDetectionPatchKt {
-	public static final fun getDisablePiracyDetectionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/sync/syncforlemmy/ads/DisableAdsPatchKt {
-	public static final fun getDisableAdsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/ads/DisableAdsPatchKt {
-	public static final fun getDisableAdsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/annoyances/startup/DisableSyncForLemmyBottomSheetPatchKt {
-	public static final fun getDisableSyncForLemmyBottomSheetPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/api/SpoofClientPatchKt {
-	public static final fun getSpoofClientPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/extension/SharedExtensionPatchKt {
-	public static final fun getSharedExtensionPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/fix/redgifs/FixRedgifsApiPatchKt {
-	public static final fun getFixRedgifsApi ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/fix/slink/FixSLinksPatchKt {
-	public static final field EXTENSION_CLASS_DESCRIPTOR Ljava/lang/String;
-	public static final fun getFixSLinksPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/fix/thumbnail/FixPostThumbnailsPatchKt {
-	public static final fun getFixPostThumbnailsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/fix/user/UseUserEndpointPatchKt {
-	public static final fun getUseUserEndpointPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
-}
-
-public final class app/morphe/patches/reddit/customclients/sync/syncforreddit/fix/video/FixVideoDownloadsPatchKt {
-	public static final fun getFixVideoDownloadsPatch ()Lapp/morphe/patcher/patch/BytecodePatch;
 }
 
 public final class app/morphe/patches/reddit/layout/disablescreenshotpopup/DisableScreenshotPopupPatchKt {

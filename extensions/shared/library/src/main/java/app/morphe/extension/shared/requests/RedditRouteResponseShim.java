@@ -17,7 +17,7 @@ import java.util.Set;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public abstract class RedditRouteResponseShim extends PatchedditInterceptor {
+public abstract class RedditRouteResponseShim extends PatchInterceptor {
     private final Set<String> methods;
     private final String path;
 

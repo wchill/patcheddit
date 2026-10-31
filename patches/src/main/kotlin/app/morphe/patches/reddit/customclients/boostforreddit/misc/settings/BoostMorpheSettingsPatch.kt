@@ -19,11 +19,10 @@ import org.w3c.dom.Element
 internal fun ResourcePatchContext.addBoostSettings(resourceName: String, beforeTitle: String? = null) {
     document("res/xml/$resourceName.xml").use { source ->
         document("res/xml/morphe_boost_settings_skeleton.xml").use { target ->
-            val before = beforeTitle?.let { title ->
-                val categories = target.getElementsByTagName("PreferenceCategory")
-                (0 until categories.length).map { categories.item(it) as Element }
-                    .single { it.getAttribute("android:title") == title }
-            }
+            // Without a target, insert above About so the attribution notice stays last.
+            val categories = target.getElementsByTagName("PreferenceCategory")
+            val before = (0 until categories.length).map { categories.item(it) as Element }
+                .single { it.getAttribute("android:title") == (beforeTitle ?: "About") }
             target.documentElement.insertBefore(target.importNode(source.documentElement, true), before)
         }
     }

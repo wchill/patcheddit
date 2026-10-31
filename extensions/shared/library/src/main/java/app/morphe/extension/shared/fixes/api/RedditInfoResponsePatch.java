@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import app.morphe.extension.shared.requests.PatchedditInterceptor;
+import app.morphe.extension.shared.requests.PatchInterceptor;
 import app.morphe.extension.shared.requests.RedditRequestParameters;
 import app.morphe.extension.shared.requests.RedditRouteResponseShim;
 import okhttp3.HttpUrl;
@@ -30,7 +30,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public final class RedditInfoResponsePatch extends PatchedditInterceptor {
+public final class RedditInfoResponsePatch extends PatchInterceptor {
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private static final long MAX_CONTEXT_BYTES = 8L * 1024 * 1024;
     private static final RedditCommentContext SHARED_CONTEXT = new RedditCommentContext(10_000);

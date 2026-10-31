@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "app.morphe.extension.patcheddit"
+    namespace = "app.morphe.extension.jeddit"
     compileSdk = 36
     defaultConfig {
         minSdk = 23

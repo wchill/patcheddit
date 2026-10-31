@@ -31,5 +31,5 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v6
         with:
-          name: patcheddit
+          name: jeddit
           path: patches/build/libs

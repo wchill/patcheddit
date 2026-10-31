@@ -1,7 +1,10 @@
+Copyright (C) 2026 Jay R.
 Copyright (C) 2026 wchill and the Patcheddit developers
 Copyright (C) 2025-2026 the MorpheApp developers
 
-Patcheddit is free software: you can redistribute it and/or modify
+Jeddit is a derivative of Patcheddit (https://github.com/wchill/patcheddit).
+
+Jeddit is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.

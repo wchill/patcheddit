@@ -62,7 +62,7 @@ fun spoofClientPatch(
         REDREADER_REDIRECT_URI,
         null,
         "Redirect URI",
-        "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more " +
+        "The Reddit OAuth redirect URI. Refer to the README for more " +
                 "information on what to put here. Default value is RedReader 1.27's redirect URI.",
         true,
     )
@@ -71,7 +71,7 @@ fun spoofClientPatch(
         REDREADER_USER_AGENT,
         null,
         "User agent",
-        "The app's user agent. Refer to Patcheddit documentation for more information " +
+        "The app's user agent. Refer to the README for more information " +
                 "on what to put here. Default value is RedReader 1.27's user agent.",
         true
     )

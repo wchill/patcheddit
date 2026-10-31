@@ -1,4 +1,4 @@
-rootProject.name = "patcheddit"
+rootProject.name = "jeddit"
 
 pluginManagement {
     repositories {

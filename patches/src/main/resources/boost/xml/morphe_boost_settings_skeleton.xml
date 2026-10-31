@@ -44,4 +44,12 @@
             android:summary="Restore missing Imgur images and albums from the Wayback Machine. Links to missing Imgur media you open are sent to this third-party archive. Off by default."
             android:defaultValue="false" />
     </PreferenceCategory>
+    <!-- Wording required by GPLv3 section 7(b) in NOTICE. Do not change it. -->
+    <PreferenceCategory android:title="About">
+        <Preference
+            android:key="morphe_boost_attribution"
+            android:title="Jeddit"
+            android:summary="This app uses code from Patcheddit. To learn more, visit https://reddit.com/r/patcheddit"
+            android:selectable="false" />
+    </PreferenceCategory>
 </PreferenceScreen>

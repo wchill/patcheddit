@@ -33,13 +33,13 @@ import app.morphe.extension.boost.http.AutoSavingCache;
 import app.morphe.extension.boost.http.HttpUtils;
 import app.morphe.extension.boost.http.wayback.WaybackMachine;
 import app.morphe.extension.boost.http.wayback.WaybackResponse;
-import app.morphe.extension.shared.requests.PatchedditInterceptor;
+import app.morphe.extension.shared.requests.PatchInterceptor;
 import app.morphe.extension.boost.utils.BoostUndeleteSettings;
 import app.morphe.extension.boost.utils.LoggingUtils;
 import okhttp3.Response;
 import okhttp3.Request;
 
-public class ImgurUndeleteInterceptor extends PatchedditInterceptor {
+public class ImgurUndeleteInterceptor extends PatchInterceptor {
     private static final AutoSavingCache imgurCache = new AutoSavingCache("Imgur", 100);
     private static final String FAIL_OPEN_MARKER = "morphe_boost_undelete_imgur_fail_open";
 

@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-10-30T22:21:29",
-  "description": "## [2.0.3](https://github.com/wchill/patcheddit/compare/v2.0.2...v2.0.3) (2026-10-30)\n\n\n### Bug Fixes\n\n* Comment loading and gallery loading for all reddit apps ([48cb357](https://github.com/wchill/patcheddit/commit/48cb357ca0bdcaaf7aa9f8a694db479e95a7c0ae))",
-  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.0.3/patches-2.0.3.mpp",
-  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.0.3/patches-2.0.3.mpp.asc",
-  "version": "2.0.3"
+  "created_at": "2026-10-31T00:00:00",
+  "description": "Initial Jeddit release.",
+  "download_url": "https://github.com/jayblah/jeddit/releases/download/v1.0.0/patches-1.0.0.mpp",
+  "signature_download_url": "https://github.com/jayblah/jeddit/releases/download/v1.0.0/patches-1.0.0.mpp.asc",
+  "version": "1.0.0"
 }

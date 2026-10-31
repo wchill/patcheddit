@@ -1,23 +1,21 @@
-# 👋🧩 Patcheddit
+# 🧩 Jeddit
 
-Morphe compatible patches for third party Reddit apps.
+[Morphe](https://morphe.software/) patches for [Boost for Reddit](https://github.com/rubenmayayo/boost-for-reddit).
 
 ## ❓ About
 
-Patcheddit is a Morphe compatible patch bundle that supports patching the OAuth login information for 3rd party reddit apps.
+Jeddit patches Boost for Reddit so it keeps working with Reddit's API, and adds features Boost never had. It only supports Boost.
 
-In addition, patches for some apps contain additional features that were not present in ReVanced.
+Jeddit is a derivative of [Patcheddit](https://github.com/wchill/patcheddit) and is distributed under the same license. See [License](#-license).
 
-## Differences from official patch set
+## ✨ Features
 
-### All clients
-* Reddit API fixes are available for BaconReader, Boost, Joey, Relay, RIF (free and paid), and Sync.
-* Client ID, redirect URI and user agent are all patchable.
-    * By default, `Spoof client` uses RedReader 1.27's client ID, redirect URI and user agent. Leave the OAuth client ID option empty to use its default.
+* **Spoof client** patches the OAuth client ID, redirect URI and user agent.
+    * By default it uses RedReader 1.27's client ID, redirect URI and user agent. Leave the OAuth client ID option empty to use its default.
     * Custom patch options override these defaults. In Boost 1.14.0 and up, saved values in the native API settings override the patch-provided defaults.
-
-### Boost for Reddit
-* All Boost patches are selected by default. Individual patches can be deselected before patching and also disabled in the app settings. Patch-selection defaults do not change saved settings or runtime preference defaults.
+* Reddit API fixes keep feeds, comments and "load more comments" working.
+* Boost patches are selected by default, except **Decode NATO and binary comments**. Most can be deselected before patching and also disabled in the app settings. Patch-selection defaults do not change saved settings or runtime preference defaults.
+* Keep **Boost Morphe settings** selected. Its **Settings > Morphe** screen shows the attribution notice the license requires.
 * **Fix profile About scrolling** prevents the first swipe from stopping early while the profile header is expanded. Nested scrolling is disabled only for the About tab's inner lists; their horizontal scrolling and other profile tabs are unchanged.
 * **Log exceptions** records errors reported through Boost's existing exception handler to a private file instead of showing error toasts. It also depends on Morphe's upstream fatal-crash logger. **Settings > Morphe > Exception log** lists non-fatal reports, with **Fatal crash logs** alongside it in Diagnostics.
     * Logs are excluded from Android app backups. Common credential-bearing lines are redacted from non-fatal logs (crash logs have no filtering), but other personal or request data can remain, so review saved copies before sharing.
@@ -31,6 +29,10 @@ In addition, patches for some apps contain additional features that were not pre
     * **Use Reddit for image uploads** selects Reddit hosting for image posts and galleries, without changing editor attachments.
     * **Configure editor image hosting** adds an editor-hosting setting for Imgur Free or ImgBB. It does not change post or gallery hosting.
     * **Preview images in the editor** adds previews of supported image URLs without changing upload providers.
+* **Decode NATO and binary comments** adds the decoded text of NATO phonetic spelling (three or more code words) and 8-bit binary below the comment paragraph it appears in, with SimpCity and social media search links. Unlike other Boost patches, it is not selected by default and has no in-app toggle.
+    * The `Subreddits` option limits decoding to a comma-separated list of subreddits. Leave it empty to decode everywhere.
+    * Number words such as "one" and "two" count as code words, so ordinary sentences can produce false matches outside the listed subreddits.
+    * Only the displayed comment changes. Copying or editing a comment uses its original text.
 * The content of deleted Reddit posts and comments can be loaded from [Project Arctic Shift](https://github.com/ArthurHeitmann/arctic_shift).
     * This only works for text and images, and not all content can be restored. Videos are unlikely to be available.
     * Posts/comments that were deleted are marked as follows:
@@ -49,28 +51,18 @@ In addition, patches for some apps contain additional features that were not pre
 * Imgur images and albums are automatically loaded from the Wayback Machine if a 404 is detected.
 * The context menu for posts now contains additional options for opening a site in the Wayback Machine or archive.is. This is useful for if the undeleting functionality has issues or you want to bypass a content paywall.
 
-### reddit is fun
-* Imgur album URLs are rewritten to use the newer format.
-* Enables pro features without ads.
-
-### Infinity for Reddit
-* Supports Infinity+, Infinity++, and the Patreon variant.
-* `Spoof client` applies the configured OAuth values to login callbacks and API requests, including obfuscated code, and updates the browser-login callback intent filter.
-
 ## 🚀 Get started
 
 1. Install [Morphe Manager](https://morphe.software/) and switch it to advanced/expert mode.
-2. Click [this link](https://morphe.software/add-source?github=wchill/patcheddit) to add this patch source to Morphe Manager.
-3. In Morphe Manager, find the app you want to patch.
-   * The supported apps are Boost, RIF, Sync, Relay, BaconReader, Joey, Infinity+, Infinity++, and Infinity (Patreon).
-4. Get the APK for your preferred, supported 3rd party reddit app. If you don't have it, you can download it from in the app. APKM bundles (aka split APKs) will also work.
-   * You should get the last available version for your reddit app, unless you are patching Relay. Relay v10.2.40 should be used instead of the latest.
-5. Select desired patches, then patch.
-   * `Spoof client` includes RedReader 1.27 defaults, so you do not need to supply a client ID. See `What if I don't have a client ID?` below.
-   * If you use a custom OAuth client ID, make sure its redirect URI matches the one in `Spoof client` options and on https://www.reddit.com/prefs/apps/.
-6. Once patching is complete, install the app and set it up as usual.
+2. Click [this link](https://morphe.software/add-source?github=jayblah/jeddit) to add Jeddit as a patch source in Morphe Manager. This works once the repository has a published release.
+    * To try an unreleased build, run the **Build pull request** workflow from this repository's Actions tab on the branch you want. Download the `jeddit` artifact and add the `.mpp` file inside it to Morphe Manager as a local patch source.
+3. Get the APK for Boost for Reddit 1.14.1. APKM bundles (split APKs) also work.
+4. Select the patches you want, then patch.
+    * `Spoof client` includes RedReader 1.27 defaults, so you do not need to supply a client ID. See `What if I don't have a client ID?` below.
+    * If you use a custom OAuth client ID, make sure its redirect URI matches the one in `Spoof client` options and on https://www.reddit.com/prefs/apps/.
+5. Uninstall any existing Boost install, then install the patched app and set it up as usual.
 
-For assistance with patching, please post a thread in [/r/Patcheddit](https://www.reddit.com/r/Patcheddit/) or [/r/MorpheApp](https://www.reddit.com/r/MorpheApp/). Only use the GitHub issue tracker for legitimate bug reports or feature requests.
+For bugs and feature requests, use the [issue tracker](https://github.com/jayblah/jeddit/issues).
 
 ### What if I don't have a client ID?
 
@@ -105,7 +97,7 @@ I cannot hit Accept on the Authorize screen
 I still get 403 Blocked
 
 * If you filled your user agent in with garbage, it will eventually be blocked by reddit. Also, reddit blocks any mention of rubenmayayo in the user agent.
-* Your user agent can also be blocked due to other terms: a user reported that he was getting 403 after patching, and it turned out to be because his username included `isfun` (which triggers a block from reddit's side due to them blocking the app Reddit is Fun).
+* Your user agent can also be blocked due to other terms: a user reported that they were getting 403 after patching, and it turned out to be because their username included `isfun` (which triggers a block from reddit's side due to them blocking the app Reddit is Fun).
 
 I get 401 when I open the app
 
@@ -120,21 +112,29 @@ I get a `null: null` error when I open the app
 
 * Your client ID is incorrect, check that you copied it correctly.
 
-
 ## 🧑‍💻 Development
 
-To develop and release Patcheddit, some things need to be considered:
+- Feature branches are squashed and merged into `dev`. `dev` is merged into `main` for release.
+- Versions follow semantic versioning, from semantic commit messages (`feat:`, `fix:`, ...).
+- Pushes to `dev` and `main` run [release.yml](.github/workflows/release.yml). It builds the bundle, updates the changelog, `patches-list.json` and `patches-bundle.json`, and publishes a GitHub release. It needs the `GPG_PRIVATE_KEY` and `GPG_PASSPHRASE` secrets and the `GPG_FINGERPRINT` variable to sign the bundle.
+- [build_pull_request.yml](.github/workflows/build_pull_request.yml) builds an unsigned bundle without releasing. Run it manually from the Actions tab, or open a pull request against `dev`.
 
-- Development starts in feature branches. Once a feature branch is ready, it is squashed and merged into the `dev` branch
-- The `dev` branch is merged into the `main` branch once it is ready for release
-- Semantic versioning is used to version Patcheddit. Patcheddit has a public API for other patches to use
-- Semantic commit messages are used for commits
-- Commits on the `dev` branch and `main` branch are automatically released
-via the [release.yml](.github/workflows/release.yml) workflow, which is also responsible for generating the changelog
-and updating the version of Patcheddit. It is triggered by pushing to the `dev` or `main` branch.
-The workflow uses the `publish` task to publish the release of Patcheddit
-- The `buildAndroid` task is used to build Patcheddit so that it can be used on Android.
-The `publish` task depends on the `buildAndroid` task, so it will be run automatically when publishing a release.
+### 🛠️ Building locally
+
+Install JDK 17. Add a GitHub token with `read:packages` to `~/.gradle/gradle.properties`, which the build needs to download Morphe's packages:
+
+```properties
+gpr.user=<GitHub username>
+gpr.key=<token>
+```
+
+Then run:
+
+```
+./gradlew :patches:buildAndroid
+```
+
+The bundle is written to `patches/build/libs/`. See the [Morphe documentation](https://github.com/MorpheApp/morphe-documentation) for more.
 
 ### Updating Boost bindings
 
@@ -156,31 +156,20 @@ Only the extension payload is rebound; the app is not deobfuscated, and placehol
 
 Extension preparation does not prune classes by reachability. It retains all payload classes except duplicate copies supplied by Boost itself. The final verifier also checks native app references to extension classes so a missing helper stops patching instead of causing a runtime class-loading failure.
 
-## 📚 Everything else
+## 📙 Contributing
 
-### 📙 Contributing
-
-Thank you for considering contributing to Patcheddit.  
-You can find the contribution guidelines [here](CONTRIBUTING.md).
-
-### 🛠️ Building
-
-To build Patcheddit,
-you can follow the [Morphe documentation](https://github.com/MorpheApp/morphe-documentation).
+See the [contribution guidelines](CONTRIBUTING.md).
 
 ## 📜 License
 
-Patcheddit is licensed under the [GNU General Public License v3.0](LICENSE), with additional conditions under Section 7:
+Jeddit is licensed under the [GNU General Public License v3.0](LICENSE). It contains code from Patcheddit, which adds conditions under GPLv3 Section 7 that also apply to Jeddit:
 
 - **Attribution (7b):** Any use of this code, including derivatives, must display a visible notice:
 
   > This app uses code from Patcheddit. To learn more, visit https://reddit.com/r/patcheddit
 
-- **Name Restriction (7c):** The name **"Patcheddit"** may not be used for derivative works.  
-  Derivatives must adopt a distinct identity unrelated to "Patcheddit".
+  Jeddit shows this notice under **Settings > Morphe > About** in the patched app.
 
-The Morphe project (https://github.com/MorpheApp) may use code from this project without displaying the attribution notice.
+- **Name restriction (7c):** The name "Patcheddit" may not be used for derivative works.
 
-The Boost for Reddit project (https://github.com/rubenmayayo/boost-for-reddit) is authorized to use any Patcheddit-originated source code under Apache 2.0 license terms.
-
-See the [LICENSE](LICENSE) file for the full GPLv3 terms and the [NOTICE](NOTICE) file for full conditions of GPLv3 Section 7
+See [COPYRIGHT](COPYRIGHT), the [LICENSE](LICENSE) file for the full GPLv3 terms, and the [NOTICE](NOTICE) file for the full Section 7 conditions.
