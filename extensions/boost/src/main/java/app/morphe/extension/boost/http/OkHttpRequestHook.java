@@ -11,6 +11,7 @@ package app.morphe.extension.boost.http;
 
 import java.util.List;
 
+import app.morphe.extension.boost.decoder.CommentDecoderInterceptor;
 import app.morphe.extension.boost.http.arcticshift.ArcticShiftThrottlingInterceptor;
 import app.morphe.extension.boost.http.imgur.ImgurUndeleteInterceptor;
 import app.morphe.extension.boost.http.reddit.RedditMediaUndeleteInterceptor;
@@ -48,7 +49,9 @@ public class OkHttpRequestHook extends BaseOkHttpRequestHook {
                 new ImgurUndeleteInterceptor(),
                 new RedditInfoResponsePatch(),
                 new MoreChildrenResponsePatch(),
-                new RAllPatch()
+                new RAllPatch(),
+                // Innermost, so it also sees the per-comment requests the shims above make.
+                new CommentDecoderInterceptor()
         );
     }
 
