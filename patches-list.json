@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "2.0.3",
+  "version": "2.1.0-dev.1",
   "patches": [
     {
       "name": "Add Boost Search bottom navigation",
@@ -18,7 +18,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -45,7 +45,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -72,7 +72,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -99,7 +99,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -126,7 +126,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -153,7 +153,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -180,7 +180,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -207,7 +207,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -234,7 +234,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -261,7 +261,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -288,7 +288,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -494,7 +494,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -521,7 +521,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -656,7 +656,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -683,7 +683,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -710,7 +710,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -737,7 +737,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -764,7 +764,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -836,7 +836,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -1219,7 +1219,7 @@
     {
       "name": "Fix loading more comments",
       "description": "Fixes 403 error when loading child comments.",
-      "default": true,
+      "default": false,
       "category": "Comments & posting",
       "compatiblePackages": [
         {
@@ -1232,7 +1232,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -1525,7 +1525,7 @@
     {
       "name": "Fix profile About scrolling",
       "description": "Fixes the first swipe stopping early on profile About tabs without disabling horizontal scrolling.",
-      "default": true,
+      "default": false,
       "category": "Interface",
       "compatiblePackages": [
         {
@@ -1538,7 +1538,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -1628,7 +1628,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -1655,7 +1655,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -1727,7 +1727,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2033,7 +2033,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2060,7 +2060,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2087,7 +2087,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2114,7 +2114,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2141,7 +2141,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2168,7 +2168,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2195,7 +2195,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2295,7 +2295,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2769,7 +2769,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2796,7 +2796,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2823,7 +2823,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2850,7 +2850,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2877,7 +2877,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2904,7 +2904,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2931,7 +2931,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3021,7 +3021,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.1",
+              "version": "1.14.2",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
