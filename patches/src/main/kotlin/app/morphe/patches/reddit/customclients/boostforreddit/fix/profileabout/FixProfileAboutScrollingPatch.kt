@@ -11,12 +11,12 @@ import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import org.w3c.dom.Element
 
-// TODO: Remove this patch once https://github.com/rubenmayayo/boost-for-reddit/issues/16 is closed.
+// Fixed natively in Boost 1.14.2.
 @Suppress("unused")
 val fixProfileAboutScrollingPatch = resourcePatch(
     name = "Fix profile About scrolling",
     description = "Fixes the first swipe stopping early on profile About tabs without disabling horizontal scrolling.",
-    default = true,
+    default = false,
 ) {
     category(PatchCategory.INTERFACE)
     compatibleWith(*AppCompatibility.Boost)

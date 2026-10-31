@@ -1,5 +1,5 @@
-# Reconstructed PARTIAL library mapping for the official Boost 1.14.1 APK.
-# APK SHA-256: 4a518f17485916193233a62e54516128068f47385dd2ff4e30efebf1136e37c6
+# Reconstructed PARTIAL library mapping for the official Boost 1.14.2 APK.
+# APK SHA-256: 13a67728d0b6ed272ceeb28cef67d282d58242692f976904ca0135aa01082b05
 # Copyright 2026 wchill. See NOTICE for GPLv3 section 7 terms.
 # Original Java names are on the left; actual APK declarations are on the right.
 # Library names use the 1.14.0 reference study; observed symbols were transferred

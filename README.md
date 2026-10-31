@@ -17,8 +17,7 @@ In addition, patches for some apps contain additional features that were not pre
     * Custom patch options override these defaults. In Boost 1.14.0 and up, saved values in the native API settings override the patch-provided defaults.
 
 ### Boost for Reddit
-* All Boost patches are selected by default. Individual patches can be deselected before patching and also disabled in the app settings. Patch-selection defaults do not change saved settings or runtime preference defaults.
-* **Fix profile About scrolling** prevents the first swipe from stopping early while the profile header is expanded. Nested scrolling is disabled only for the About tab's inner lists; their horizontal scrolling and other profile tabs are unchanged.
+* Boost patches are selected by default, except fixes already included in Boost 1.14.2: **Fix loading more comments** and **Fix profile About scrolling** are retained but disabled by default. Individual patches can be deselected before patching and also disabled in the app settings. Patch-selection defaults do not change saved settings or runtime preference defaults.
 * **Log exceptions** records errors reported through Boost's existing exception handler to a private file instead of showing error toasts. It also depends on Morphe's upstream fatal-crash logger. **Settings > Morphe > Exception log** lists non-fatal reports, with **Fatal crash logs** alongside it in Diagnostics.
     * Logs are excluded from Android app backups. Common credential-bearing lines are redacted from non-fatal logs (crash logs have no filtering), but other personal or request data can remain, so review saved copies before sharing.
     * If app initialization or private storage is unavailable, logging failures are reported to Logcat without showing a toast.

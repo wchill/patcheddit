@@ -17,10 +17,11 @@ import app.morphe.util.returnEarly
 fun fixMoreCommentsPatch(
     extensionPatch: Patch<*>,
     compatible: Array<Compatibility>,
+    default: Boolean = true,
 ) = bytecodePatch(
     name = "Fix loading more comments",
     description = "Fixes 403 error when loading child comments.",
-    default = true,
+    default = default,
 ) {
     category(PatchCategory.COMMENTS)
     compatibleWith(*compatible)
