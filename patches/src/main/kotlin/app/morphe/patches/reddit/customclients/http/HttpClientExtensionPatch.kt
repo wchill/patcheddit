@@ -20,6 +20,8 @@ import app.morphe.patches.reddit.customclients.misc.extension.mapping.forEachRef
 import com.android.tools.smali.dexlib2.dexbacked.DexBackedDexFile
 import com.android.tools.smali.dexlib2.iface.ClassDef
 import com.android.tools.smali.dexlib2.iface.reference.TypeReference
+import com.android.tools.smali.dexlib2.iface.value.ArrayEncodedValue
+import com.android.tools.smali.dexlib2.iface.value.StringEncodedValue
 import com.android.tools.smali.dexlib2.util.FieldUtil
 import com.android.tools.smali.dexlib2.util.MethodUtil
 import com.android.tools.smali.dexlib2.writer.io.MemoryDataStore
@@ -40,6 +42,18 @@ private val httpLibraryResourcesPatch = resourcePatch(default = false) {
         }
     }
 }
+
+private const val SIGNATURE_ANNOTATION = "Ldalvik/annotation/Signature;"
+private val signatureClassName = Regex("L[^;<>.]+(?=[;<])")
+
+private fun ClassDef.genericSignatureTypes(): Sequence<String> =
+    (sequenceOf(annotations) + fields.asSequence().map { it.annotations } + methods.asSequence().map { it.annotations })
+        .flatten()
+        .filter { it.type == SIGNATURE_ANNOTATION }
+        .flatMap { it.elements }
+        .mapNotNull { it.value as? ArrayEncodedValue }
+        .map { fragments -> fragments.value.joinToString("") { (it as? StringEncodedValue)?.value.orEmpty() } }
+        .flatMap { signature -> signatureClassName.findAll(signature).map { "${it.value};" } }
 
 internal fun httpClientExtensionPatch(
     client: String,
@@ -126,7 +140,10 @@ internal fun httpClientExtensionPatch(
                         affected = true
                     }
                 }
-                affected
+                // Retrofit reads return and parameter types from generic signatures by reflection, so an
+                // interface whose only OkHttp mention is e.g. Observable<Response<ResponseBody>> must still
+                // be rewritten, or Retrofit resolves the app's own ResponseBody and skips its built-in converter.
+                affected || cls.genericSignatureTypes().any { redirected.type(it) != it }
             }
             for (rewritten in rewriter.rewrite(callers)) {
                 val target = mutableClassDefBy(rewritten.type)
