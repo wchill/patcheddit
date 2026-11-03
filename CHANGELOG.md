@@ -1,3 +1,10 @@
+# [2.1.0-dev.2](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.1...v2.1.0-dev.2) (2026-11-03)
+
+
+### Bug Fixes
+
+* **fix-generic-signature-rewrite:** rewrite classes whose only OkHttp references are in generic signatures ([c933ec6](https://github.com/wchill/patcheddit/commit/c933ec694feebc57a349eba40394051fcdb8f888))
+
 # [2.1.0-dev.1](https://github.com/wchill/patcheddit/compare/v2.0.3...v2.1.0-dev.1) (2026-10-31)
 
 
