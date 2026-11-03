@@ -2,5 +2,5 @@ package reddit.news;
 
 import android.app.Activity;
 
-public class WebAndComments extends Activity {
+public class LicensesActivity extends Activity {
 }
