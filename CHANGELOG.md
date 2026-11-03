@@ -1,3 +1,16 @@
+# [2.1.0-dev.3](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.2...v2.1.0-dev.3) (2026-11-03)
+
+
+### Bug Fixes
+
+* **relay-inapp-slinks:** hook the post and comment view's own link handler ([0e9665d](https://github.com/wchill/patcheddit/commit/0e9665d25f2297e707cd9efad7085bc71a0b5a01))
+* **relay-inapp-slinks:** open /s/ bypass fallback in Relay's real WebView ([02341ba](https://github.com/wchill/patcheddit/commit/02341ba8c8fe8e64d26e11a9d4a0dffe5d379c9a))
+
+
+### Features
+
+* **relay-inapp-slinks:** hook Relay's in-app link handler for /s/ links ([9c36290](https://github.com/wchill/patcheddit/commit/9c36290987cbc94732466c6954139c697421d342))
+
 # [2.1.0-dev.2](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.1...v2.1.0-dev.2) (2026-11-03)
 
 
