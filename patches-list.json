@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "2.1.0-dev.3",
+  "version": "2.1.0-dev.4",
   "patches": [
     {
       "name": "Add Boost Search bottom navigation",
@@ -18,7 +18,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -45,7 +45,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -72,7 +72,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -99,7 +99,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -126,7 +126,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -153,7 +153,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -180,7 +180,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -207,7 +207,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -234,7 +234,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -261,7 +261,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -288,7 +288,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -494,7 +494,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -521,7 +521,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -656,7 +656,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -683,7 +683,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -710,7 +710,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -737,7 +737,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -764,7 +764,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -836,7 +836,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -1232,7 +1232,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -1538,7 +1538,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -1628,7 +1628,52 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Log exceptions",
+      "description": "Saves reported errors and fatal crashes. Morphe settings integration is not available yet.",
+      "default": true,
+      "category": "Advanced",
+      "compatiblePackages": [
+        {
+          "packageName": "com.onelouder.baconreader",
+          "name": "BaconReader",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "6.1.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.onelouder.baconreader.premium",
+          "name": "BaconReader Premium",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "6.1.4",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -1655,7 +1700,313 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Log exceptions",
+      "description": "Saves reported errors and fatal crashes. Morphe settings integration is not available yet.",
+      "default": true,
+      "category": "Advanced",
+      "compatiblePackages": [
+        {
+          "packageName": "ml.docilealligator.infinityforreddit.plus",
+          "name": "Infinity for Reddit+",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "ml.docilealligator.infinityforreddit.plus2",
+          "name": "Infinity for Reddit++",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "ml.docilealligator.infinityforreddit.patreon",
+          "name": "Infinity for Reddit (Patreon)",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Log exceptions",
+      "description": "Saves reported errors and fatal crashes. Morphe settings integration is not available yet.",
+      "default": true,
+      "category": "Advanced",
+      "compatiblePackages": [
+        {
+          "packageName": "o.o.joey",
+          "name": "Joey for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "o.o.joey.pro",
+          "name": "Joey for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "o.o.joey.dev",
+          "name": "Joey for Reddit Dev",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Log exceptions",
+      "description": "Saves reported errors and fatal crashes. Morphe settings integration is not available yet.",
+      "default": true,
+      "category": "Advanced",
+      "compatiblePackages": [
+        {
+          "packageName": "com.andrewshu.android.reddit",
+          "name": "rif is fun",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.andrewshu.android.redditdonation",
+          "name": "rif is fun golden platinum",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Log exceptions",
+      "description": "Saves reported errors and fatal crashes. Morphe settings integration is not available yet.",
+      "default": true,
+      "category": "Advanced",
+      "compatiblePackages": [
+        {
+          "packageName": "free.reddit.news",
+          "name": "Relay for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "reddit.news",
+          "name": "Relay for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Log exceptions",
+      "description": "Saves reported errors and fatal crashes. Morphe settings integration is not available yet.",
+      "default": true,
+      "category": "Advanced",
+      "compatiblePackages": [
+        {
+          "packageName": "io.syncapps.lemmy_sync",
+          "name": "Sync for Lemmy",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Log exceptions",
+      "description": "Saves reported errors and fatal crashes. Morphe settings integration is not available yet.",
+      "default": true,
+      "category": "Advanced",
+      "compatiblePackages": [
+        {
+          "packageName": "com.laurencedawson.reddit_sync",
+          "name": "Sync for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "v23.06.30-13:39",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.laurencedawson.reddit_sync.pro",
+          "name": "Sync for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.laurencedawson.reddit_sync.dev",
+          "name": "Sync for Reddit Dev",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -1727,7 +2078,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2033,7 +2384,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2060,7 +2411,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2087,7 +2438,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2114,7 +2465,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2141,7 +2492,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2168,7 +2519,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2195,7 +2546,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2295,7 +2646,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2769,7 +3120,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2796,7 +3147,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2823,7 +3174,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2850,7 +3201,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2877,7 +3228,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2904,7 +3255,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2931,7 +3282,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3021,7 +3372,7 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.2",
+              "version": "1.14.3",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,

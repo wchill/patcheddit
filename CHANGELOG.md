@@ -1,3 +1,15 @@
+# [2.1.0-dev.4](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.3...v2.1.0-dev.4) (2026-11-06)
+
+
+### Bug Fixes
+
+* Remove redundant patches for Boost 1.14.2 ([8444cff](https://github.com/wchill/patcheddit/commit/8444cff4dd768aa0e36aa605d99c908caa2cceaf))
+
+
+### Features
+
+* Update Boost support to 1.14.3 ([20797d6](https://github.com/wchill/patcheddit/commit/20797d6c66f0830e5781d8d5009693719ee61d54))
+
 # [2.1.0-dev.3](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.2...v2.1.0-dev.3) (2026-11-03)
 
 
