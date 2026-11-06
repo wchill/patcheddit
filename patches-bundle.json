@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-11-06T10:03:21",
-  "description": "# [2.1.0-dev.4](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.3...v2.1.0-dev.4) (2026-11-06)\n\n\n### Bug Fixes\n\n* Remove redundant patches for Boost 1.14.2 ([8444cff](https://github.com/wchill/patcheddit/commit/8444cff4dd768aa0e36aa605d99c908caa2cceaf))\n\n\n### Features\n\n* Update Boost support to 1.14.3 ([20797d6](https://github.com/wchill/patcheddit/commit/20797d6c66f0830e5781d8d5009693719ee61d54))",
-  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.1.0-dev.4/patches-2.1.0-dev.4.mpp",
-  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.1.0-dev.4/patches-2.1.0-dev.4.mpp.asc",
-  "version": "2.1.0-dev.4"
+  "created_at": "2026-11-06T21:13:26",
+  "description": "# [2.1.0-dev.5](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.4...v2.1.0-dev.5) (2026-11-06)\n\n\n### Features\n\n* Add Morphe settings menu to all supported apps ([16a7e4c](https://github.com/wchill/patcheddit/commit/16a7e4c6b5e808578cbcd4694e85fea1b9cfd1a8))",
+  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.1.0-dev.5/patches-2.1.0-dev.5.mpp",
+  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.1.0-dev.5/patches-2.1.0-dev.5.mpp.asc",
+  "version": "2.1.0-dev.5"
 }

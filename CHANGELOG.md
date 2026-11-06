@@ -1,3 +1,10 @@
+# [2.1.0-dev.5](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.4...v2.1.0-dev.5) (2026-11-06)
+
+
+### Features
+
+* Add Morphe settings menu to all supported apps ([16a7e4c](https://github.com/wchill/patcheddit/commit/16a7e4c6b5e808578cbcd4694e85fea1b9cfd1a8))
+
 # [2.1.0-dev.4](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.3...v2.1.0-dev.4) (2026-11-06)
 
 
