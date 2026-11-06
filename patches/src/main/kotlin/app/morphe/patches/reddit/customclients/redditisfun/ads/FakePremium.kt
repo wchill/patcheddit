@@ -9,7 +9,7 @@ package app.morphe.patches.reddit.customclients.redditisfun.ads
 
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
-import app.morphe.util.returnEarly
+import app.morphe.patcher.util.returnEarly
 
 // Based on: https://github.com/ReVanced/revanced-patches/issues/661#issuecomment-2549674017
 val fakePremiumPatch = bytecodePatch(

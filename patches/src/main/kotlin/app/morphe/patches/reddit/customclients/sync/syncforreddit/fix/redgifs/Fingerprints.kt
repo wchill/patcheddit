@@ -10,7 +10,7 @@ package app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.redgifs
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.instructions
 import app.morphe.util.indexOfFirstInstruction
-import app.morphe.util.writeRegister
+import app.morphe.patcher.util.writeRegister
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.formats.Instruction11n

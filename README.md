@@ -15,11 +15,15 @@ In addition, patches for some apps contain additional features that were not pre
 * Client ID, redirect URI and user agent are all patchable.
     * By default, `Spoof client` uses RedReader 1.27's client ID, redirect URI and user agent. Leave the OAuth client ID option empty to use its default.
     * Custom patch options override these defaults. In Boost 1.14.0 and up, saved values in the native API settings override the patch-provided defaults.
+* **Log exceptions** saves fatal crashes for every supported client, including Sync for Lemmy, using morphe-patches-library's shared crash logger. BaconReader and Boost hook their native error-reporting handlers; other clients capture exceptions reported through Android error/warning logging, stack traces, and Crashlytics when present, without removing the original logging.
+    * Fatal reports are saved in **Documents/Morphe**, falling back to the app-specific external Documents folder if public storage is unavailable. Non-fatal reports use private `no_backup/morphe-exceptions` storage, rotating at 4 MiB per file with one previous file retained and excluded from Android app backups.
+    * Common credential-bearing lines are redacted from non-fatal logs; fatal reports are not filtered. Other personal or request data can remain, so review exported copies before sharing.
+    * Boost exposes both logs in Morphe settings. Settings integration for other clients is intentionally stubbed: logging works, but there is no in-app viewer yet.
 
 ### Boost for Reddit
 * Boost patches are selected by default, except fixes already included in Boost 1.14.2: **Fix loading more comments** and **Fix profile About scrolling** are retained but disabled by default. Individual patches can be deselected before patching and also disabled in the app settings. Patch-selection defaults do not change saved settings or runtime preference defaults.
-* **Log exceptions** records errors reported through Boost's existing exception handler to a private file instead of showing error toasts. It also depends on Morphe's upstream fatal-crash logger. **Settings > Morphe > Exception log** lists non-fatal reports, with **Fatal crash logs** alongside it in Diagnostics.
-    * Logs are excluded from Android app backups. Common credential-bearing lines are redacted from non-fatal logs (crash logs have no filtering), but other personal or request data can remain, so review saved copies before sharing.
+* **Log exceptions** records errors reported through Boost's existing exception handler. **Settings > Morphe > Exception log** lists non-fatal reports, with **Fatal crash logs** alongside it in Diagnostics.
+    * Fatal reports can be previewed in the app and exported in full using **Save a copy**. Reports in public or app-specific Documents folders are listed when accessible.
     * If app initialization or private storage is unavailable, logging failures are reported to Logcat without showing a toast.
 * **Import and export OAuth tokens** adds an editable JSON field and a **Save** button under **Settings > Morphe > OAuth tokens**. It displays the selected account's tokens for copying. Replace or edit the JSON to sign in or add an account without the browser login flow. There are no file import/export controls.
     * **Save** checks the access-token owner with Reddit, validates the refresh token using Boost's configured OAuth client, and obtains fresh tokens before adding or updating the verified account. An expired access token can be restored with a valid refresh token. Boost then restarts with that account selected.
@@ -134,6 +138,8 @@ and updating the version of Patcheddit. It is triggered by pushing to the `dev` 
 The workflow uses the `publish` task to publish the release of Patcheddit
 - The `buildAndroid` task is used to build Patcheddit so that it can be used on Android.
 The `publish` task depends on the `buildAndroid` task, so it will be run automatically when publishing a release.
+
+Builds use the published morphe-patches-library version pinned in `gradle/libs.versions.toml`. To explicitly use a matching local `../morphe-patches-library` checkout as a composite build, pass `-PuseLocalMorphePatchesLibrary=true` to Gradle.
 
 ### Updating Boost bindings
 

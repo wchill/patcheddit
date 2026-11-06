@@ -10,7 +10,7 @@ package app.morphe.patches.reddit.customclients.joey.ads
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.joey.detection.piracy.disablePiracyDetectionPatch
-import app.morphe.util.returnEarly
+import app.morphe.patcher.util.returnEarly
 
 @Suppress("unused")
 val disableAdsPatch = bytecodePatch(

@@ -14,7 +14,7 @@ import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.boostforreddit.wrapHook
 import app.morphe.patches.all.misc.PatchCategory
-import app.morphe.util.registersUsed
+import app.morphe.patcher.util.registersUsed
 
 private const val SYSTEM_SURFACE_EXTENSION_DESCRIPTOR =
     "Lapp/morphe/extension/boost/utils/BoostSearchBottomNavigation;"

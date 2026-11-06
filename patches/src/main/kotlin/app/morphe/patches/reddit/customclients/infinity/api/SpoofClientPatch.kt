@@ -14,7 +14,7 @@ import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.spoofClientPatch
 import app.morphe.util.replaceStringMatchesWithFunc
-import app.morphe.util.returnEarly
+import app.morphe.patcher.util.returnEarly
 import java.net.URI
 import org.w3c.dom.Element
 

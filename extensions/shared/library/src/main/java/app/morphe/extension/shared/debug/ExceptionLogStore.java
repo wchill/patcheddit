@@ -4,7 +4,7 @@
  * See the included NOTICE file for GPLv3 section 7 terms.
  */
 
-package app.morphe.extension.boost.debug;
+package app.morphe.extension.shared.debug;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -64,7 +64,7 @@ public final class ExceptionLogStore {
         writer.println(CLASS_PREFIX + (error == null ? NO_THROWABLE : error.getClass().getName()));
         writer.println("Thread: " + Thread.currentThread().getName());
         writer.println("Context: " + context);
-        if (error == null) writer.println("Boost reported an error without a throwable.");
+        if (error == null) writer.println("The app reported an error without a throwable.");
         else error.printStackTrace(writer);
         writer.flush();
         String text = CREDENTIAL_LINE.matcher(output.text).replaceAll("$1[redacted]");
@@ -158,7 +158,8 @@ public final class ExceptionLogStore {
         int contextEnd = lineEnd(text, contextStart, end);
         int traceStart = Math.min(contextEnd + 1, end);
         String line = text.substring(traceStart, lineEnd(text, traceStart, end)).trim();
-        if ("Boost reported an error without a throwable.".equals(line)) return "No throwable supplied";
+        if ("Boost reported an error without a throwable.".equals(line)
+                || "The app reported an error without a throwable.".equals(line)) return "No throwable supplied";
         int colon = line.indexOf(':');
         String name = colon < 0 ? line : line.substring(0, colon);
         return CLASS_NAME.matcher(name).matches() ? name : "Exception type unavailable";

@@ -32,8 +32,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-import app.morphe.extension.boost.debug.ExceptionHook;
-import app.morphe.extension.boost.debug.ExceptionLogStore;
+import app.morphe.extension.shared.debug.ExceptionHook;
+import app.morphe.extension.shared.debug.ExceptionLogStore;
 
 public final class ExceptionLogFragment extends MorpheSettingsFragment {
     private static final String TAG = "MorpheExceptionLog";

@@ -4,7 +4,7 @@
  * See the included NOTICE file for GPLv3 section 7 terms.
  */
 
-package app.morphe.extension.boost.debug;
+package app.morphe.extension.shared.debug;
 
 import org.junit.Test;
 
