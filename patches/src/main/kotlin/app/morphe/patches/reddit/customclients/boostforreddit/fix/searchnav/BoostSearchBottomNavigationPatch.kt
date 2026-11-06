@@ -7,8 +7,6 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.fix.searchnav
 
-import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
-
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.patch.resourcePatch
@@ -18,7 +16,6 @@ import app.morphe.patcher.util.getReference
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import org.w3c.dom.Element
 import app.morphe.patches.all.misc.PatchCategory
-import app.morphe.patches.reddit.customclients.boostforreddit.wrapHook
 
 private const val MATERIAL_BOTTOM_NAVIGATION =
     "com.google.android.material.bottomnavigation.BottomNavigationView"
@@ -133,17 +130,6 @@ val boostSearchBottomNavigationPatch = bytecodePatch(
                 """.trimIndent(),
             )
         }
-
-        searchAbstractSubredditsErrorCallbackFingerprint.wrapHook(
-            before = """
-                iget-object v0, p0, ${BoostApi.SearchAbstractActivitySubredditErrorCallback.activity}
-                invoke-virtual {v0}, Landroid/app/Activity;->isFinishing()Z
-                move-result v0
-                if-eqz v0, :morphe_search_subreddits_error_live
-                return-void
-                :morphe_search_subreddits_error_live
-            """,
-        )
 
     }
 }

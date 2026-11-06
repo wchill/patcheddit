@@ -9,10 +9,6 @@ package app.morphe.patches.reddit.customclients.boostforreddit.fix.insets
 
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 
-internal val mediaImageActivityOnCreateFingerprint = BoostApi.MediaImageActivity.onCreate.fingerprint()
-
-internal val mediaVideoActivityOnCreateFingerprint = BoostApi.MediaVideoActivity.onCreate.fingerprint()
-
 internal val mainActivityOnResumeFingerprint = BoostApi.MainActivity.onResume.fingerprint()
 
 internal val myApplicationOnCreateFingerprint = BoostApi.MyApplication.onCreate.fingerprint()

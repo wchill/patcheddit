@@ -602,6 +602,10 @@ public final class BoostSystemBarInsetsFix {
         });
     }
 
+    static int navigationBottomInset(View view) {
+        return getEffectiveNavigationBottomInset(view, getBestCurrentInsets(view));
+    }
+
     private static int getEffectiveNavigationBottomInset(View view, WindowInsets insets) {
         int bottomInset = getNavigationBottomInset(insets);
         if (bottomInset <= 0) {

@@ -13,8 +13,6 @@ internal val formattingBarSetEditTextFingerprint = BoostApi.FormattingBar.setEdi
 
 internal val remoteConfigStringFingerprint = BoostApi.RemoteConfigHelper.remoteConfigString.fingerprint()
 
-internal val remoteConfigBooleanFingerprint = BoostApi.RemoteConfigHelper.isEnabled.fingerprint()
-
 internal val mediaUploaderFactoryFingerprint = BoostApi.MediaUploadFactory.create.fingerprint(
     strings = listOf(
         "imgur_free",

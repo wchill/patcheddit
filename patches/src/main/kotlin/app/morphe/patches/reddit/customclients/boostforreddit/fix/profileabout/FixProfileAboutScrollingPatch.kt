@@ -11,7 +11,7 @@ import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import org.w3c.dom.Element
 
-// Fixed natively in Boost 1.14.2.
+// Boost 1.14.2 applies these attributes natively; keep the patch opt-in.
 @Suppress("unused")
 val fixProfileAboutScrollingPatch = resourcePatch(
     name = "Fix profile About scrolling",

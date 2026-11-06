@@ -48,20 +48,5 @@ val redditImageUploadsPatch = bytecodePatch(
                 ExternalLabel("morphe_native_remote_string", getInstruction(0)),
             )
         }
-
-        remoteConfigBooleanFingerprint.method.apply {
-            addInstructionsWithLabels(
-                0,
-                """
-                    const-string v0, "submit_reddit_as_image_kind"
-                    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-                    move-result v0
-                    if-eqz v0, :morphe_native_remote_boolean
-                    const/4 v0, 0x1
-                    return v0
-                """,
-                ExternalLabel("morphe_native_remote_boolean", getInstruction(0)),
-            )
-        }
     }
 }

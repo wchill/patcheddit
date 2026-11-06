@@ -15,10 +15,8 @@ private const val FAB_CLEARANCE_EXTENSION_DESCRIPTOR =
     "Lapp/morphe/extension/boost/utils/BoostFabClearance;"
 
 /**
- * Boost's FAB menu and bottom-navigation FAB behaviors write translationY from only the
- * dependency that changed, so dismissing a Snackbar resets the FAB behind the
- * visible bottom navigation (issue #179). Route both callbacks through one
- * extension that clears every visible dependency.
+ * Preserve Boost's system-inset and dependency clearance while also following
+ * Snackbars hosted outside the FAB's coordinator by the navigation patches.
  *
  * Applied through [fixBoostHomeFloatingActionMenuOverlapPatch], which removes
  * the static FAB margin and therefore relies on this translation.
@@ -46,7 +44,6 @@ internal val fixFabDependencyClearancePatch = bytecodePatch {
             fabBottomNavigationDependentViewRemovedFingerprint,
         ).forEach { fingerprint ->
             fingerprint.method.apply {
-                // R8 removed the no-op super callback in 1.14.0.
                 addInstructions(
                     0,
                     """

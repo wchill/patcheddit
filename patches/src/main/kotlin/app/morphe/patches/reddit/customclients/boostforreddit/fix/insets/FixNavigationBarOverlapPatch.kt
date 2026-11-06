@@ -46,15 +46,6 @@ val fixNavigationBarOverlapPatch = bytecodePatch(
             )
         }
 
-        arrayOf(
-            mediaImageActivityOnCreateFingerprint,
-            mediaVideoActivityOnCreateFingerprint,
-        ).forEach { fingerprint ->
-            fingerprint.wrapHook(
-                after = "invoke-static {p0}, $EXTENSION_CLASS_DESCRIPTOR->applyMediaInsets(Landroid/app/Activity;)V",
-            )
-        }
-
         mainActivityOnResumeFingerprint.wrapHook(
             after = "invoke-static {p0}, $EXTENSION_CLASS_DESCRIPTOR->applyMainInsets(Landroid/app/Activity;)V",
         )

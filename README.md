@@ -21,7 +21,9 @@ In addition, patches for some apps contain additional features that were not pre
     * Boost exposes both logs in Morphe settings. Settings integration for other clients is intentionally stubbed: logging works, but there is no in-app viewer yet.
 
 ### Boost for Reddit
-* Boost patches are selected by default, except fixes already included in Boost 1.14.2: **Fix loading more comments** and **Fix profile About scrolling** are retained but disabled by default. Individual patches can be deselected before patching and also disabled in the app settings. Patch-selection defaults do not change saved settings or runtime preference defaults.
+* Boost patches target the official [Boost 1.14.3 APK](https://github.com/rubenmayayo/boost-for-reddit/releases/tag/v1.14.3).
+* Boost patches are selected by default except **Fix loading more comments** and **Fix profile About scrolling**, which are retained but disabled because Boost 1.14.2 fixed both natively. Individual patches can be deselected before patching; features with settings can also be disabled in the app. Patch-selection defaults do not change saved settings or runtime preference defaults.
+* Boost 1.14.3 also handles the image-post submission kind, search callback lifecycle checks and media-viewer insets natively, so those overrides are no longer injected. The remaining navigation patches still support Patcheddit's custom navigation hosts and layout behavior.
 * **Log exceptions** records errors reported through Boost's existing exception handler. **Settings > Morphe > Exception log** lists non-fatal reports, with **Fatal crash logs** alongside it in Diagnostics.
     * Fatal reports can be previewed in the app and exported in full using **Save a copy**. Reports in public or app-specific Documents folders are listed when accessible.
     * If app initialization or private storage is unavailable, logging failures are reported to Logcat without showing a toast.
@@ -31,7 +33,7 @@ In addition, patches for some apps contain additional features that were not pre
     * The JSON contains **unencrypted account credentials**. Copy it only into trusted apps and clear clipboard copies after use. The screen uses Android's secure-window flag to block screenshots and screen recording. The editor disables autofill, content capture and Android view-state saving, and asks keyboards not to learn its contents.
     * The JSON requires string fields `access_token` and `refresh_token`. The selected account's JSON also includes `version: 1`, `username` and `client_id`; these metadata fields are optional when replacing tokens.
 * Image-upload features are separate patches:
-    * **Use Reddit for image uploads** selects Reddit hosting for image posts and galleries, without changing editor attachments.
+    * **Use Reddit for image uploads** selects Reddit hosting for image posts and galleries, without changing editor attachments. This is still needed to override Boost's remote-configurable hosting provider; Boost now chooses the image submission kind itself.
     * **Configure editor image hosting** adds an editor-hosting setting for Imgur Free or ImgBB. It does not change post or gallery hosting.
     * **Preview images in the editor** adds previews of supported image URLs without changing upload providers.
 * The content of deleted Reddit posts and comments can be loaded from [Project Arctic Shift](https://github.com/ArthurHeitmann/arctic_shift).
@@ -160,6 +162,8 @@ val fingerprint = BoostApi.DrawerActivity.setupBottomNavigation.fingerprint()
 Only the extension payload is rebound; the app is not deobfuscated, and placeholder stubs are never packaged. Native callbacks are renamed through the same bindings. Reflective field access uses `BoostFieldNames`, whose non-constant values are resolved during binding, so callers do not embed obfuscated names or precompute hashes for renamed strings.
 
 Extension preparation does not prune classes by reachability. It retains all payload classes except duplicate copies supplied by Boost itself. The final verifier also checks native app references to extension classes so a missing helper stops patching instead of causing a runtime class-loading failure.
+
+Run the release-fixture checks with `BOOST_APK=/path/to/boost-for-reddit-1.14.3.apk ./gradlew :patches:test --tests '*BoostReleaseTest'`. They verify the APK checksum, every partial-library mapping declaration, and all adapter targets, prototypes, dispatch kinds and receivers. Without `BOOST_APK`, the APK-dependent test is skipped; version consistency and redundant-patch defaults are still checked. Apply the built bundle with Morphe CLI's `--bytecode-mode=FULL --validate` to check every selected patch against the APK.
 
 ## 📚 Everything else
 

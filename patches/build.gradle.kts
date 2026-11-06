@@ -53,6 +53,13 @@ sourceSets.main {
 tasks {
     test {
         useJUnit()
+        val boostApk = providers.environmentVariable("BOOST_APK").orNull
+        inputs.property("boostApk", boostApk.orEmpty())
+        if (boostApk != null) {
+            val apk = rootProject.file(boostApk)
+            inputs.file(apk).withPropertyName("boostApkFixture")
+            environment("BOOST_APK", apk.absolutePath)
+        }
     }
 
     register<JavaExec>("checkStringResources") {
