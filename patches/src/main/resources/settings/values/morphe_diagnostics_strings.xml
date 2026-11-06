@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="morphe_settings_title">Morphe</string>
+    <string name="morphe_settings_summary">Features added by Morphe patches</string>
+    <string name="morphe_diagnostics_title">Diagnostics</string>
+    <string name="morphe_exception_log_title">Exception log</string>
+    <string name="morphe_exception_log_summary">View non-fatal errors saved by Morphe.</string>
+    <string name="morphe_exception_log_about_title">About non-fatal exceptions</string>
+    <string name="morphe_exception_log_about_summary">These are errors handled without crashing. Reports stay in private app storage (up to 8 MiB) and may contain personal information. Review before sharing.</string>
+    <string name="morphe_exception_log_save_title">Export full exception log</string>
+    <string name="morphe_exception_log_save_summary">Save all retained reports, including entries in the rotated log.</string>
+    <string name="morphe_exception_log_reports_title">Exception reports (newest first)</string>
+    <string name="morphe_crash_logs_title">Fatal crash logs</string>
+    <string name="morphe_crash_logs_summary">View and export fatal crash reports.</string>
+    <string name="morphe_crash_logs_about_title">About crash reports</string>
+    <string name="morphe_crash_logs_about_summary">Morphe saves crash reports in Documents/Morphe, or the app-specific Documents folder if public storage is unavailable. Reports include device details and recent Morphe logs and are not redacted. Select a report to preview it or save a full copy. Review before sharing.</string>
+    <string name="morphe_crash_logs_open_title">Open a saved crash report</string>
+    <string name="morphe_crash_logs_open_summary">Use the document picker if a report is not listed or storage access is restricted.</string>
+    <string name="morphe_crash_logs_reports_title">Crash reports (newest first)</string>
+</resources>

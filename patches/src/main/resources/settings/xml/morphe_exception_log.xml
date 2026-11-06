@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/morphe_exception_log_about_title">
+        <Preference
+            android:summary="@string/morphe_exception_log_about_summary"
+            android:selectable="false" />
+    </PreferenceCategory>
+    <Preference
+        android:key="morphe_exception_log_save"
+        android:title="@string/morphe_exception_log_save_title"
+        android:summary="@string/morphe_exception_log_save_summary"
+        android:persistent="false" />
+    <PreferenceCategory
+        android:key="morphe_exception_log_reports"
+        android:title="@string/morphe_exception_log_reports_title" />
+</PreferenceScreen>

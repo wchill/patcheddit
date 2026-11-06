@@ -10,14 +10,21 @@ import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.Patch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableClass
 import app.morphe.patches.reddit.customclients.baconreader.debug.hookExceptionHandler as baconReaderPatch
+import app.morphe.patches.reddit.customclients.baconreader.misc.settings.baconReaderMorpheSettingsPatch
 import app.morphe.patches.reddit.customclients.boostforreddit.debug.hookExceptionHandler as boostPatch
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.settings.boostMorpheSettingsPatch
 import app.morphe.patches.reddit.customclients.infinity.debug.hookExceptionHandler as infinityPatch
+import app.morphe.patches.reddit.customclients.infinity.misc.settings.infinityMorpheSettingsPatch
 import app.morphe.patches.reddit.customclients.joey.debug.hookExceptionHandler as joeyPatch
+import app.morphe.patches.reddit.customclients.joey.misc.settings.joeyMorpheSettingsPatch
 import app.morphe.patches.reddit.customclients.redditisfun.debug.hookExceptionHandler as redditIsFunPatch
+import app.morphe.patches.reddit.customclients.redditisfun.misc.settings.rifMorpheSettingsPatch
 import app.morphe.patches.reddit.customclients.relay.debug.hookExceptionHandler as relayPatch
+import app.morphe.patches.reddit.customclients.relay.misc.settings.relayMorpheSettingsPatch
 import app.morphe.patches.reddit.customclients.sync.syncforlemmy.debug.hookExceptionHandler as lemmyPatch
+import app.morphe.patches.reddit.customclients.sync.syncforlemmy.misc.settings.syncMorpheSettingsPatch as lemmySettings
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.debug.hookExceptionHandler as syncPatch
+import app.morphe.patches.reddit.customclients.sync.syncforreddit.misc.settings.syncMorpheSettingsPatch as syncSettings
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
@@ -44,31 +51,28 @@ import kotlin.test.assertTrue
 
 class CrashLogPatchTest {
     @Test
-    fun coversEverySupportedPackageWithOnlyBoostSettingsEnabled() {
+    fun coversEverySupportedPackageWithMorpheSettingsEnabled() {
         val clients = listOf(
-            baconReaderPatch to AppCompatibility.BaconReader,
-            boostPatch to AppCompatibility.Boost,
-            infinityPatch to AppCompatibility.Infinity,
-            joeyPatch to AppCompatibility.JoeyForReddit,
-            redditIsFunPatch to AppCompatibility.RedditIsFun,
-            relayPatch to AppCompatibility.Relay,
-            syncPatch to AppCompatibility.SyncForReddit,
-            lemmyPatch to arrayOf(AppCompatibility.SyncForLemmy),
+            Triple(baconReaderPatch, AppCompatibility.BaconReader, baconReaderMorpheSettingsPatch),
+            Triple(boostPatch, AppCompatibility.Boost, boostMorpheSettingsPatch),
+            Triple(infinityPatch, AppCompatibility.Infinity, infinityMorpheSettingsPatch),
+            Triple(joeyPatch, AppCompatibility.JoeyForReddit, joeyMorpheSettingsPatch),
+            Triple(redditIsFunPatch, AppCompatibility.RedditIsFun, rifMorpheSettingsPatch),
+            Triple(relayPatch, AppCompatibility.Relay, relayMorpheSettingsPatch),
+            Triple(syncPatch, AppCompatibility.SyncForReddit, syncSettings),
+            Triple(lemmyPatch, arrayOf(AppCompatibility.SyncForLemmy), lemmySettings),
         )
         val packages = mutableSetOf<String>()
-        for ((patch, compatible) in clients) {
+        for ((patch, compatible, settings) in clients) {
             assertEquals("Log exceptions", patch.name)
             assertTrue(patch.default)
             assertEquals(compatible.toList(), patch.compatibility)
             for (app in compatible) assertTrue(packages.add(assertNotNull(app.packageName)))
-            val settingsIncluded = boostMorpheSettingsPatch in dependencies(patch)
-            assertEquals(patch === boostPatch, settingsIncluded)
+            assertTrue(settings in dependencies(patch))
             assertTrue(dependencies(patch).any {
                 it.description == "Writes a crash log file to the Documents folder when the app crashes."
             })
-            if (patch !== boostPatch) {
-                assertTrue(assertNotNull(patch.description).contains("not available yet"))
-            }
+            assertEquals("Logs reported errors and fatal crashes, viewable in Morphe settings.", patch.description)
         }
         assertEquals(17, packages.size)
         assertFalse(ExtensionPatches.Sync in dependencies(lemmyPatch))

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/morphe_crash_logs_about_title">
+        <Preference
+            android:summary="@string/morphe_crash_logs_about_summary"
+            android:selectable="false" />
+    </PreferenceCategory>
+    <Preference
+        android:key="morphe_crash_logs_open"
+        android:title="@string/morphe_crash_logs_open_title"
+        android:summary="@string/morphe_crash_logs_open_summary"
+        android:persistent="false" />
+    <PreferenceCategory
+        android:key="morphe_crash_logs_reports"
+        android:title="@string/morphe_crash_logs_reports_title" />
+</PreferenceScreen>

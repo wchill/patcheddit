@@ -11,10 +11,12 @@ import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.crashLogPatch
 import app.morphe.patches.reddit.customclients.crashlyticsExceptionFingerprint
+import app.morphe.patches.reddit.customclients.baconreader.misc.settings.baconReaderMorpheSettingsPatch
 
 @Suppress("unused")
 val hookExceptionHandler = crashLogPatch(
     extensionPatch = ExtensionPatches.BaconReader,
     compatible = AppCompatibility.BaconReader,
     exceptionHandler = crashlyticsExceptionFingerprint(),
+    settingsPatch = baconReaderMorpheSettingsPatch,
 )

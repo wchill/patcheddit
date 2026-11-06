@@ -18,7 +18,7 @@ In addition, patches for some apps contain additional features that were not pre
 * **Log exceptions** saves fatal crashes for every supported client, including Sync for Lemmy, using morphe-patches-library's shared crash logger. BaconReader and Boost hook their native error-reporting handlers; other clients capture exceptions reported through Android error/warning logging, stack traces, and Crashlytics when present, without removing the original logging.
     * Fatal reports are saved in **Documents/Morphe**, falling back to the app-specific external Documents folder if public storage is unavailable. Non-fatal reports use private `no_backup/morphe-exceptions` storage, rotating at 4 MiB per file with one previous file retained and excluded from Android app backups.
     * Common credential-bearing lines are redacted from non-fatal logs; fatal reports are not filtered. Other personal or request data can remain, so review exported copies before sharing.
-    * Boost exposes both logs in Morphe settings. Settings integration for other clients is intentionally stubbed: logging works, but there is no in-app viewer yet.
+    * Every supported client exposes a Morphe-specific settings menu. Not all patches are configurable yet via this menu; this will be added in future releases. 
 
 ### Boost for Reddit
 * Boost patches target the official [Boost 1.14.3 APK](https://github.com/rubenmayayo/boost-for-reddit/releases/tag/v1.14.3).
@@ -145,7 +145,7 @@ Builds use the published morphe-patches-library version pinned in `gradle/libs.v
 
 ### Updating Boost bindings
 
-Boost settings XML and layouts are stored under `patches/src/main/resources/boost/`, in `xml/` and `layout/`. Each feature includes its files through the internal `AddResources` patch. Settings entries are imported from these XML resources only when their feature patch is selected; UI XML is not generated in Kotlin.
+Boost settings XML and layouts are stored under `patches/src/main/resources/boost/`, in `xml/` and `layout/`. Each feature includes its files through the internal `AddResources` patch. It registers individual target paths with the resource context so on-demand decoding tracks new values and view IDs. Settings entries are imported from these XML resources only when their feature patch is selected; UI XML is not generated in Kotlin.
 
 The extension uses Jackson for all JSON processing, bundled and shadowed under `app.morphe.extension.boost.libraries`, with its APIs preserved during shrinking. It does not depend on Boost's R8-reduced JSON libraries or bundle Gson. Native JRAW JSON objects remain behind the `NativeJsonModel` / `NativeJsonNode` adapters; they are not cast to the private Jackson tree types. Boost's own JSON libraries and callers, and the patcher's build-time Gson dependency, are left unchanged.
 

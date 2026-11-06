@@ -2,3 +2,5 @@ output/
 .cache/
 
 config.json
+*.keystore
+*.jks

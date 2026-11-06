@@ -58,9 +58,8 @@ fun crashLogPatch(
     mainActivity: Fingerprint? = null,
     exceptionHandler: Fingerprint? = null,
     exceptionHookDescriptor: String = EXCEPTION_HOOK_CLASS_DESCRIPTOR,
-    // Settings integration is intentionally stubbed until each client has a Morphe menu.
     settingsPatch: Patch<*>? = null,
-    description: String = "Saves reported errors and fatal crashes. Morphe settings integration is not available yet.",
+    description: String = "Logs reported errors and fatal crashes, viewable in Morphe settings.",
 ) = bytecodePatch(
     name = "Log exceptions",
     description = description,
