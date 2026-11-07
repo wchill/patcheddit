@@ -15,7 +15,8 @@ internal val ScoresAppCompatible = arrayOf(
     scoresApp("College Football", "com.sports.schedules.football.ncaa", "13.5.8"),
     scoresApp("Pro Football", "com.scores.schedule.stats.football.nfl", "13.5.8"),
     scoresApp("Baseball", "com.sports.schedules.scores.baseball.mlb", "13.5.8"),
-    scoresApp("College Basketball", "com.sports.schedules.college.basketball.ncaa", "13.5.9"),
+    scoresApp("Pro Basketball", "com.sports.schedules.basketball.nba", "13.5.9"),
+    scoresApp("College Basketball","com.sports.schedules.college.basketball.ncaa", "13.5.9"),
     scoresApp("Women's College Basketball", "com.sports.schedules.ncaaw.college.basketball.women", "13.5.9"),
     scoresApp("Women's Pro Basketball", "com.sports.schedules.scores.basketball.women.wnba", "13.5.9"),
 )
