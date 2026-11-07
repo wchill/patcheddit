@@ -43,3 +43,13 @@ internal object GetOriginalUserAgentFingerprint : Fingerprint(
     parameters = listOf(),
     custom = { _, classDef -> classDef.sourceFile == "AccountSingleton.java" }
 )
+
+// LinkHandler.getGfycatId(url), which supplies the id for /v2/gifs/{id}. Matched by source file and
+// strings because the obfuscated class differs between Sync (y7/a) and Sync Pro (j7/a).
+internal object GetGfycatIdFingerprint : Fingerprint(
+    accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC),
+    returnType = "Ljava/lang/String;",
+    parameters = listOf("Ljava/lang/String;"),
+    strings = listOf("-size_restricted", "-max-1mb-poster"),
+    custom = { _, classDef -> classDef.sourceFile == "LinkHandler.java" }
+)
