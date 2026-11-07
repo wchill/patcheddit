@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-11-06T21:13:26",
-  "description": "# [2.1.0-dev.5](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.4...v2.1.0-dev.5) (2026-11-06)\n\n\n### Features\n\n* Add Morphe settings menu to all supported apps ([16a7e4c](https://github.com/wchill/patcheddit/commit/16a7e4c6b5e808578cbcd4694e85fea1b9cfd1a8))",
-  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.1.0-dev.5/patches-2.1.0-dev.5.mpp",
-  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.1.0-dev.5/patches-2.1.0-dev.5.mpp.asc",
-  "version": "2.1.0-dev.5"
+  "created_at": "2026-11-07T14:34:02",
+  "description": "# [2.1.0-dev.6](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.5...v2.1.0-dev.6) (2026-11-07)\n\n\n### Features\n\n* Add patch settings toggles for every app in Morphe settings ([a0b8243](https://github.com/wchill/patcheddit/commit/a0b82432653dde38050c7277f99d7bf6e9f47074))",
+  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.1.0-dev.6/patches-2.1.0-dev.6.mpp",
+  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.1.0-dev.6/patches-2.1.0-dev.6.mpp.asc",
+  "version": "2.1.0-dev.6"
 }

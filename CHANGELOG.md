@@ -1,3 +1,10 @@
+# [2.1.0-dev.6](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.5...v2.1.0-dev.6) (2026-11-07)
+
+
+### Features
+
+* Add patch settings toggles for every app in Morphe settings ([a0b8243](https://github.com/wchill/patcheddit/commit/a0b82432653dde38050c7277f99d7bf6e9f47074))
+
 # [2.1.0-dev.5](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.4...v2.1.0-dev.5) (2026-11-06)
 
 

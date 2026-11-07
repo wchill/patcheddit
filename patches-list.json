@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "2.1.0-dev.5",
+  "version": "2.1.0-dev.6",
   "patches": [
     {
       "name": "Add Boost Search bottom navigation",
@@ -193,7 +193,7 @@
     },
     {
       "name": "BaconReader Morphe settings",
-      "description": "Adds a Morphe settings menu with exception and fatal crash log viewers.",
+      "description": "Adds a Morphe settings menu for included patches, with exception and fatal crash log viewers.",
       "default": true,
       "category": "Interface",
       "compatiblePackages": [
@@ -1686,7 +1686,7 @@
     },
     {
       "name": "Infinity Morphe settings",
-      "description": "Adds a Morphe settings menu with exception and fatal crash log viewers.",
+      "description": "Adds a Morphe settings menu for included patches, with exception and fatal crash log viewers.",
       "default": true,
       "category": "Interface",
       "compatiblePackages": [
@@ -1749,7 +1749,7 @@
     },
     {
       "name": "Joey Morphe settings",
-      "description": "Adds a Morphe settings menu with exception and fatal crash log viewers.",
+      "description": "Adds a Morphe settings menu for included patches, with exception and fatal crash log viewers.",
       "default": true,
       "category": "Interface",
       "compatiblePackages": [
@@ -2595,7 +2595,7 @@
     },
     {
       "name": "RIF Morphe settings",
-      "description": "Adds a Morphe settings menu with exception and fatal crash log viewers.",
+      "description": "Adds a Morphe settings menu for included patches, with exception and fatal crash log viewers.",
       "default": true,
       "category": "Interface",
       "compatiblePackages": [
@@ -2667,7 +2667,7 @@
     },
     {
       "name": "Relay Morphe settings",
-      "description": "Adds a Morphe settings menu with exception and fatal crash log viewers.",
+      "description": "Adds a Morphe settings menu for included patches, with exception and fatal crash log viewers.",
       "default": true,
       "category": "Interface",
       "compatiblePackages": [
@@ -3529,7 +3529,7 @@
     },
     {
       "name": "Sync Morphe settings",
-      "description": "Adds a Morphe settings menu with exception and fatal crash log viewers.",
+      "description": "Adds a Morphe settings menu for included patches, with exception and fatal crash log viewers.",
       "default": true,
       "category": "Interface",
       "compatiblePackages": [
@@ -3592,7 +3592,7 @@
     },
     {
       "name": "Sync for Lemmy Morphe settings",
-      "description": "Adds a Morphe settings menu with exception and fatal crash log viewers.",
+      "description": "Adds a Morphe settings menu for included patches, with exception and fatal crash log viewers.",
       "default": true,
       "category": "Interface",
       "compatiblePackages": [
