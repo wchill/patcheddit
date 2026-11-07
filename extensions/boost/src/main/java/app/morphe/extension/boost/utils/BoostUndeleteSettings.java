@@ -8,8 +8,7 @@
 package app.morphe.extension.boost.utils;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import app.morphe.extension.shared.Utils;
+import app.morphe.extension.shared.settings.PatchSettings;
 
 /**
  * Runtime feature flags for Boost undelete behavior.
@@ -35,8 +34,8 @@ public final class BoostUndeleteSettings {
     }
 
     /**
-     * Whether the patch behind a toggle was applied. Each undelete patch adds a string resource;
-     * the settings skeleton lists both toggles regardless. Unknown keys count as applied.
+     * Legacy inclusion markers for native integrations. Selected patches now register their
+     * own menu entries. Unknown keys count as applied.
      */
     public static boolean isTogglePatchApplied(Context context, String key) {
         String marker;
@@ -55,20 +54,6 @@ public final class BoostUndeleteSettings {
     }
 
     private static boolean getBoolean(String key, boolean fallback) {
-        try {
-            Context context = Utils.getContext();
-            if (context == null) {
-                return fallback;
-            }
-
-            SharedPreferences preferences = context.getSharedPreferences(
-                    context.getPackageName() + "_preferences",
-                    Context.MODE_PRIVATE
-            );
-
-            return preferences.getBoolean(key, fallback);
-        } catch (Throwable ignored) {
-            return fallback;
-        }
+        return PatchSettings.isEnabled(key, fallback);
     }
 }

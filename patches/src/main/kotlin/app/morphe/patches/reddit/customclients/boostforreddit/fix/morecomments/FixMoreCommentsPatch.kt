@@ -14,4 +14,6 @@ import app.morphe.patches.reddit.customclients.fixMoreCommentsPatch
 val fixMoreComments = fixMoreCommentsPatch(
     extensionPatch = interceptHttpRequests,
     compatible = AppCompatibility.Boost,
+    // Fixed natively in Boost 1.14.2.
+    default = false,
 )

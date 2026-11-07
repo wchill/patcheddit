@@ -1,15 +1,23 @@
 package app.morphe.patches.reddit.customclients.sync.ads
 
 import app.morphe.patcher.patch.BytecodePatchBuilder
-import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.util.returnEarly
+import app.morphe.patcher.patch.Patch
+import app.morphe.patcher.util.returnEarly
+import app.morphe.patches.reddit.customclients.ExtensionPatches
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 
-fun disableAdsPatch(block: BytecodePatchBuilder.() -> Unit = {}) = bytecodePatch(
+fun disableAdsPatch(block: BytecodePatchBuilder.() -> Unit = {}) = disableAdsPatch(ExtensionPatches.Sync, block)
+
+fun disableAdsPatch(
+    extensionPatch: Patch<*>,
+    block: BytecodePatchBuilder.() -> Unit = {},
+) = morpheBytecodePatch(
     name = "Disable ads",
-    default = true
-) {
+    default = true,
+    extensionPatch = extensionPatch,
+) { setting ->
     execute {
-        IsAdsEnabledFingerprint.method.returnEarly(false)
+        setting.patchMethod(IsAdsEnabledFingerprint) { returnEarly(false) }
     }
 
     block()

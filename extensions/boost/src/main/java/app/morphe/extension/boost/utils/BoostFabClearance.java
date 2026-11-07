@@ -23,11 +23,9 @@ import java.util.WeakHashMap;
  * Owns the vertical clearance of Boost's scroll-aware FAB menu and
  * bottom-navigation FABs.
  *
- * Boost's native behaviors depend on both the Snackbar and the bottom
- * navigation, but each callback writes translationY from only the view that
- * changed. Removing a Snackbar therefore resets the FAB to translationY=0 and
- * drops it behind the visible navigation (issue #179). Recompute from every
- * visible dependency instead so the highest one always wins.
+ * Boost 1.14.3 clears dependencies in the FAB's own CoordinatorLayout.
+ * Patcheddit's navigation can anchor a Snackbar in a different host, so also
+ * track those obstructions while preserving the native system-bar clearance.
  */
 @SuppressWarnings("unused")
 public final class BoostFabClearance {
@@ -165,7 +163,11 @@ public final class BoostFabClearance {
 
         weakSet(CLEARED_CHILDREN, coordinator).add(child);
 
-        float translation = 0.0f;
+        int[] coordinatorLocation = new int[2];
+        coordinator.getLocationInWindow(coordinatorLocation);
+        int safeBottom = coordinator.getRootView().getHeight()
+                - BoostSystemBarInsetsFix.navigationBottomInset(coordinator);
+        float translation = Math.min(0.0f, safeBottom - coordinatorLocation[1] - anchorBottom);
 
         for (int i = 0, count = coordinator.getChildCount(); i < count; i++) {
             View dependency = coordinator.getChildAt(i);
@@ -193,9 +195,7 @@ public final class BoostFabClearance {
         Set<View> foreign = FOREIGN_OBSTRUCTIONS.get(coordinator);
 
         if (foreign != null && !foreign.isEmpty()) {
-            int[] coordinatorLocation = new int[2];
             int[] obstructionLocation = new int[2];
-            coordinator.getLocationInWindow(coordinatorLocation);
 
             for (View obstruction : foreign) {
                 if (obstruction == excluded || !obstruction.isShown()) {

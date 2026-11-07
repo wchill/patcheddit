@@ -1,3 +1,56 @@
+# [2.1.0-dev.6](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.5...v2.1.0-dev.6) (2026-11-07)
+
+
+### Features
+
+* Add patch settings toggles for every app in Morphe settings ([a0b8243](https://github.com/wchill/patcheddit/commit/a0b82432653dde38050c7277f99d7bf6e9f47074))
+
+# [2.1.0-dev.5](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.4...v2.1.0-dev.5) (2026-11-06)
+
+
+### Features
+
+* Add Morphe settings menu to all supported apps ([16a7e4c](https://github.com/wchill/patcheddit/commit/16a7e4c6b5e808578cbcd4694e85fea1b9cfd1a8))
+
+# [2.1.0-dev.4](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.3...v2.1.0-dev.4) (2026-11-06)
+
+
+### Bug Fixes
+
+* Remove redundant patches for Boost 1.14.2 ([8444cff](https://github.com/wchill/patcheddit/commit/8444cff4dd768aa0e36aa605d99c908caa2cceaf))
+
+
+### Features
+
+* Update Boost support to 1.14.3 ([20797d6](https://github.com/wchill/patcheddit/commit/20797d6c66f0830e5781d8d5009693719ee61d54))
+
+# [2.1.0-dev.3](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.2...v2.1.0-dev.3) (2026-11-03)
+
+
+### Bug Fixes
+
+* **relay-inapp-slinks:** hook the post and comment view's own link handler ([0e9665d](https://github.com/wchill/patcheddit/commit/0e9665d25f2297e707cd9efad7085bc71a0b5a01))
+* **relay-inapp-slinks:** open /s/ bypass fallback in Relay's real WebView ([02341ba](https://github.com/wchill/patcheddit/commit/02341ba8c8fe8e64d26e11a9d4a0dffe5d379c9a))
+
+
+### Features
+
+* **relay-inapp-slinks:** hook Relay's in-app link handler for /s/ links ([9c36290](https://github.com/wchill/patcheddit/commit/9c36290987cbc94732466c6954139c697421d342))
+
+# [2.1.0-dev.2](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.1...v2.1.0-dev.2) (2026-11-03)
+
+
+### Bug Fixes
+
+* **fix-generic-signature-rewrite:** rewrite classes whose only OkHttp references are in generic signatures ([c933ec6](https://github.com/wchill/patcheddit/commit/c933ec694feebc57a349eba40394051fcdb8f888))
+
+# [2.1.0-dev.1](https://github.com/wchill/patcheddit/compare/v2.0.3...v2.1.0-dev.1) (2026-10-31)
+
+
+### Features
+
+* Boost 1.14.2 support ([fdc340f](https://github.com/wchill/patcheddit/commit/fdc340f21748d5372f665067c5db54a24f324cb5))
+
 ## [2.0.3](https://github.com/wchill/patcheddit/compare/v2.0.2...v2.0.3) (2026-10-30)
 
 

@@ -9,7 +9,7 @@ package app.morphe.patches.reddit.customclients.boostforreddit.fix.media
 
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.boostforreddit.wrapHook
@@ -30,13 +30,16 @@ private val legacyImageActivity2OnCreateFingerprint = BoostApi.ImageActivity2.on
 private val imageModelFragmentOnCreateViewFingerprint = BoostApi.ImageModelFragment.onCreateView.fingerprint()
 
 @Suppress("unused")
-val imageDismissTuningPatch = bytecodePatch(
+val imageDismissTuningPatch = morpheBytecodePatch(
     name = "Tune Boost image dismissal",
     description =
         "Lets you close the image viewer with a quick flick, without changing GIF, video or other gestures.",
     default = true,
-) {
-    category(PatchCategory.MEDIA)
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.MEDIA,
+    optionsResource = "morphe_boost_image_dismiss_options",
+    resourceDirectory = "boost",
+) { setting ->
     dependsOn(ExtensionPatches.Boost)
     compatibleWith(*AppCompatibility.Boost)
 
@@ -49,11 +52,13 @@ val imageDismissTuningPatch = bytecodePatch(
             legacyImageActivity2OnCreateFingerprint,
         ).forEach { fingerprint ->
             fingerprint.wrapHook(
+                setting = setting,
                 after = "invoke-static {p0}, $EXTENSION_CLASS_DESCRIPTOR->apply(Ljava/lang/Object;)V",
             )
         }
 
         imageModelFragmentOnCreateViewFingerprint.wrapHook(
+            setting = setting,
             after = "invoke-static {p0}, $EXTENSION_CLASS_DESCRIPTOR->apply(Ljava/lang/Object;)V",
         )
     }

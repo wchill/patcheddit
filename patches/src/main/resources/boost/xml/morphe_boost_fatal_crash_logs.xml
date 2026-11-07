@@ -2,9 +2,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory android:title="About crash reports">
         <Preference
-            android:summary="Morphe saves crash reports in Documents/Morphe, or Boost's app-specific Documents folder if public storage is unavailable. These reports include device details and recent Morphe logs, are not redacted, and are separate from the rotating private log. Review before sharing."
+            android:summary="Morphe saves crash reports in Documents/Morphe, or Boost's app-specific Documents folder if public storage is unavailable. Select a report to preview it or save a full copy. These reports include device details and recent Morphe logs, are not redacted, and are separate from the rotating private exception log. Review before sharing."
             android:selectable="false" />
-    </PreferenceCategory>\
+    </PreferenceCategory>
     <PreferenceCategory
         android:key="morphe_boost_crash_logs_reports"
         android:title="Crash reports (newest first)" />

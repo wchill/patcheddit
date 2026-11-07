@@ -8,20 +8,15 @@
 package app.morphe.patches.reddit.customclients.sync.syncforreddit.api
 
 import app.morphe.patcher.StringComparisonType
-import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
-import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patches.all.misc.string.replaceStringPatch
 import app.morphe.patches.reddit.customclients.spoofClientPatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.sync.detection.piracy.disablePiracyDetectionPatch
-import app.morphe.util.returnEarly
-import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
-import com.android.tools.smali.dexlib2.iface.instruction.ReferenceInstruction
-import com.android.tools.smali.dexlib2.iface.reference.StringReference
-import java.util.Base64
+import app.morphe.patches.reddit.customclients.overrideOAuthReturn
+import app.morphe.patches.reddit.customclients.overrideOAuthStrings
 
-val spoofClientPatch = spoofClientPatch { clientId, redirectUri, userAgent ->
+val spoofClientPatch = spoofClientPatch(ExtensionPatches.Sync) { _, _, _ ->
     dependsOn(
         ExtensionPatches.Sync,
         disablePiracyDetectionPatch,
@@ -34,48 +29,21 @@ val spoofClientPatch = spoofClientPatch { clientId, redirectUri, userAgent ->
 
     execute {
         // region Patch client id.
-        GetBearerTokenFingerprint.method.apply {
-            val auth = Base64.getEncoder().encodeToString("$clientId:".toByteArray(Charsets.UTF_8))
-            returnEarly("Basic $auth")
-
-            val occurrenceIndex =
-                GetAuthorizationStringFingerprint.stringMatches.first().index
-
-            GetAuthorizationStringFingerprint.method.apply {
-                val authorizationStringInstruction = getInstruction<ReferenceInstruction>(occurrenceIndex)
-                val targetRegister = (authorizationStringInstruction as OneRegisterInstruction).registerA
-                val reference = authorizationStringInstruction.reference as StringReference
-
-                val newAuthorizationUrl = reference.string.replace(
-                    "client_id=.*?&".toRegex(),
-                    "client_id=$clientId&",
-                )
-
-                replaceInstruction(
-                    occurrenceIndex,
-                    "const-string v$targetRegister, \"$newAuthorizationUrl\"",
-                )
-            }
-        }
+        GetBearerTokenFingerprint.overrideOAuthReturn("getBasicAuthorization")
+        GetAuthorizationStringFingerprint.match().overrideOAuthStrings("getAuthorizationUrl")
         // endregion
 
         // region Patch redirect URI.
-        GetRedirectUriFingerprint.method.returnEarly(redirectUri.value!!)
+        GetRedirectUriFingerprint.overrideOAuthReturn("getRedirectUri")
         // endregion
 
         // region Patch user agent.
-        GetUserAgentFingerprint.method.returnEarly(userAgent.value!!)
+        GetUserAgentFingerprint.overrideOAuthReturn("getUserAgent")
         // endregion
 
         // region Patch Imgur API URL.
 
-        ImgurImageAPIFingerprint.let {
-            val apiUrlIndex = it.stringMatches.first().index
-            it.method.replaceInstruction(
-                apiUrlIndex,
-                "const-string v1, \"https://api.imgur.com/3/image\"",
-            )
-        }
+        ImgurImageAPIFingerprint.match().overrideOAuthStrings("getImgurImageApi")
 
         // endregion
     }

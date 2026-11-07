@@ -14,46 +14,29 @@ import app.morphe.patcher.patch.PatchException
 import app.morphe.patches.reddit.customclients.spoofClientPatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
-import app.morphe.util.returnEarly
+import app.morphe.patches.reddit.customclients.OAUTH_SETTINGS_DESCRIPTOR
+import app.morphe.patches.reddit.customclients.overrideOAuthStrings
+import app.morphe.patches.reddit.customclients.spoofClientSetting
+import app.morphe.patcher.util.returnEarly
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction10t
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction21t
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 
-val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, userAgentOption ->
+val spoofClientPatch = spoofClientPatch(ExtensionPatches.Relay) { _, _, _ ->
     dependsOn(ExtensionPatches.Relay)
     compatibleWith(*AppCompatibility.Relay)
-
-    val clientId by clientIdOption
-    val redirectUri by redirectUriOption
-    val userAgent by userAgentOption
 
     execute {
         // region Patch redirect URI.
         RedirectUriFingerprint.matchAll().forEach { match ->
-            val redirectUriIndex = match.stringMatches.last().index
-            match.method.apply {
-                val redirectUriRegister = getInstruction<OneRegisterInstruction>(redirectUriIndex).registerA
-
-                match.method.replaceInstruction(
-                    redirectUriIndex,
-                    "const-string v$redirectUriRegister, \"$redirectUri\"",
-                )
-            }
+            match.overrideOAuthStrings("getRedirectUri")
         }
         // endregion
 
         // region Patch client id.
         ClientIdFingerprint.matchAll().forEach { match ->
-            val clientIdIndex = match.stringMatches.first().index
-            match.method.apply {
-                val clientIdRegister = getInstruction<OneRegisterInstruction>(clientIdIndex).registerA
-
-                match.method.replaceInstruction(
-                    clientIdIndex,
-                    "const-string v$clientIdRegister, \"$clientId\"",
-                )
-            }
+            match.overrideOAuthStrings("getClientId")
         }
         // endregion
 
@@ -67,7 +50,9 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
             }
 
             method.addInstructions(invokeDirectIndex, """
-                const-string v$invokeDirectRegister, "$userAgent"
+                sget-object v$invokeDirectRegister, ${userAgentField.definingClass}->${userAgentField.name}:Ljava/lang/String;
+                invoke-static/range {v$invokeDirectRegister .. v$invokeDirectRegister}, $OAUTH_SETTINGS_DESCRIPTOR->getUserAgent(Ljava/lang/String;)Ljava/lang/String;
+                move-result-object v$invokeDirectRegister
                 sput-object v$invokeDirectRegister, ${userAgentField.definingClass}->${userAgentField.name}:Ljava/lang/String;
             """)
         }
@@ -76,12 +61,12 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
         // region Patch miscellaneous.
 
         // Do not load remote config which disables OAuth login remotely.
-        SetRemoteConfigFingerprint.method.returnEarly()
+        spoofClientSetting.patchMethod(SetRemoteConfigFingerprint) { returnEarly() }
 
         // Prevent OAuth login being disabled remotely.
         val checkIsOAuthRequestIndex = RedditCheckDisableAPIFingerprint.instructionMatches.first().index
 
-        RedditCheckDisableAPIFingerprint.method.apply {
+        spoofClientSetting.patchMethod(RedditCheckDisableAPIFingerprint) {
             val returnNextChain = getInstruction<BuilderInstruction21t>(checkIsOAuthRequestIndex).target
             replaceInstruction(checkIsOAuthRequestIndex, BuilderInstruction10t(Opcode.GOTO, returnNextChain))
         }

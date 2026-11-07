@@ -12,11 +12,11 @@ object ExtensionPatches {
         httpClientExtensionPatch(extensionName, *hookedClasses)
 
     internal val BaconReader = httpHook("baconreader", "Lcom/onelouder/baconreader/BaconReader;")
-
     internal val Boost = boostExtensionPatch
     internal val Infinity = hook("infinity", "Lml/docilealligator/infinityforreddit/Infinity;")
     internal val Joey = httpHook("joey", "Lo/o/joey/MyApplication;")
     internal val RIF = httpHook("redditisfun", "Lcom/andrewshu/android/reddit/RedditIsFunApplication;")
     internal val Relay = httpHook("relay", "Lreddit/news/RelayApplication;")
     internal val Sync = httpHook("syncforreddit", "Lcom/laurencedawson/reddit_sync/RedditApplication;")
+    internal val SyncForLemmy = clientExtensionPatch(null, emptyArray())
 }

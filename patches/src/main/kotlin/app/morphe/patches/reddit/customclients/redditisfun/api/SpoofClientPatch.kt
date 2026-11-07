@@ -13,19 +13,17 @@ import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.spoofClientPatch
-import app.morphe.util.getReference
+import app.morphe.patcher.util.getReference
 import app.morphe.util.indexOfFirstInstructionOrThrow
-import app.morphe.util.returnEarly
+import app.morphe.patches.reddit.customclients.overrideOAuthReturn
+import app.morphe.patches.reddit.customclients.overrideOAuthStrings
+import app.morphe.patches.reddit.customclients.overrideOAuthValue
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.StringReference
 
-val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, userAgentOption ->
+val spoofClientPatch = spoofClientPatch(ExtensionPatches.RIF) { _, _, _ ->
     dependsOn(ExtensionPatches.RIF)
     compatibleWith(*AppCompatibility.RedditIsFun)
-
-    val clientId by clientIdOption
-    val redirectUri by redirectUriOption
-    val userAgent by userAgentOption
 
     execute {
         // region Patch client id.
@@ -38,37 +36,30 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
          * using the [Match.StringMatch] list from the [Match].
          */
         fun List<Match>.replaceWith(
-            string: String,
+            getter: String,
             getReplacementIndex: List<Match.StringMatch>.() -> Int,
         ) = forEach { match ->
             match.method.apply {
                 val replacementIndex = match.stringMatches.getReplacementIndex()
-                val clientIdRegister = getInstruction<OneRegisterInstruction>(replacementIndex).registerA
-
-                replaceInstruction(replacementIndex, "const-string v$clientIdRegister, \"$string\"")
+                overrideOAuthValue(replacementIndex, getter)
             }
         }
 
         // Patch OAuth authorization.
-         BuildAuthorizationStringFingerprint.matchAll().replaceWith(clientId!!) { first().index + 4 }
+         BuildAuthorizationStringFingerprint.matchAll().replaceWith("getClientId") { first().index + 4 }
 
          // Path basic authorization.
-         BasicAuthorizationFingerprint.matchAll().replaceWith("$clientId:") { last().index + 7 }
+         BasicAuthorizationFingerprint.matchAll().replaceWith("getBasicAuthClientId") { last().index + 7 }
         // endregion
 
          // region Patch redirect URI.
          RedirectUriFingerprint.matchAll().forEach { match ->
-             match.method.let {
-                 match.stringMatches.forEach { stringMatch ->
-                     val register = it.getInstruction<OneRegisterInstruction>(stringMatch.index).registerA
-                     it.replaceInstruction(stringMatch.index, "const-string v$register, \"$redirectUri\"")
-                 }
-             }
+             match.overrideOAuthStrings("getRedirectUri")
          }
          // endregion
 
          // region Patch user agent.
-         GetUserAgentFingerprint.method.returnEarly(userAgent!!)
+         GetUserAgentFingerprint.overrideOAuthReturn("getUserAgent")
          // endregion
 
          // region Patch miscellaneous.

@@ -10,23 +10,27 @@ package app.morphe.patches.reddit.customclients.boostforreddit.fix.search
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.boostforreddit.wrapHook
 import app.morphe.patches.all.misc.PatchCategory
 
 @Suppress("unused")
-val boostSearchDefaultDiscoveryPatch = bytecodePatch(
+val boostSearchDefaultDiscoveryPatch = morpheBytecodePatch(
     name = "Boost search default discovery",
     description = "Opens Search right away on a list of active subreddits.",
     default = true,
-) {
-    category(PatchCategory.FEED)
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.FEED,
+    optionsResource = "morphe_boost_search_discovery_options",
+    resourceDirectory = "boost",
+) { setting ->
     dependsOn(ExtensionPatches.Boost)
     compatibleWith(*AppCompatibility.Boost)
 
     execute {
+        setting.guardHook("Lapp/morphe/extension/boost/search/SearchExploreRows;", "appendOrRefresh")
         /*
          * Normal Boost search opens SearchGenericActivity.
          * s1() builds the empty-state "Go to..." section and already adds Random.
@@ -52,6 +56,7 @@ val boostSearchDefaultDiscoveryPatch = bytecodePatch(
          * the landing content. Tapping the search field still focuses normally.
          */
         searchGenericActivityOnCreateFingerprint.wrapHook(
+            setting = setting,
             after = """
                 invoke-virtual {p0}, Landroid/app/Activity;->getWindow()Landroid/view/Window;
                 move-result-object v0

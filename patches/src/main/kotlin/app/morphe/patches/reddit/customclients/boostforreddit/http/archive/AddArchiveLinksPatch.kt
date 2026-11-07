@@ -13,12 +13,12 @@ import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.patches.reddit.customclients.boostforreddit.wrapHook
-import app.morphe.util.getReference
+import app.morphe.patcher.util.getReference
 import app.morphe.util.indexOfFirstInstructionOrThrow
 import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
@@ -26,15 +26,17 @@ import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 internal val SETTINGS_UTILS_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boost/utils/SettingsUtils;"
 
 @Suppress("unused")
-val addArchiveLinks = bytecodePatch(
+val addArchiveLinks = morpheBytecodePatch(
     name = "Add archive links to context menu",
     description = "Adds 'Open with Wayback Machine' and 'Open with Archive.is' to the link context menu.",
-    default = true
-) {
-    category(PatchCategory.LINKS)
+    default = true,
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.LINKS,
+) { setting ->
     dependsOn(ExtensionPatches.Boost)
     compatibleWith(*AppCompatibility.Boost)
     execute {
+        setting.guardHook(SETTINGS_UTILS_EXTENSION_CLASS_DESCRIPTOR, "addMenuOptions")
         LinkBuildContextMenuFingerprint.method.apply {
             val index = indexOfFirstInstructionOrThrow {
                 getReference<MethodReference>()?.toString() ==
@@ -51,6 +53,7 @@ val addArchiveLinks = bytecodePatch(
         }
 
         OnClickContextMenuFingerprint.wrapHook(
+            setting = setting,
             before = """
                 iget v0, p1, ${BoostApi.MenuOption.id}
                 const/16 v1, 101

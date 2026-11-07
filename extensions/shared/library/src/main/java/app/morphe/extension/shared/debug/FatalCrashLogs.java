@@ -4,7 +4,7 @@
  * See the included NOTICE file for GPLv3 section 7 terms.
  */
 
-package app.morphe.extension.boost.debug;
+package app.morphe.extension.shared.debug;
 
 import android.Manifest;
 import android.content.ContentUris;
@@ -31,7 +31,7 @@ import java.util.List;
 
 public final class FatalCrashLogs {
     private static final String TAG = "MorpheCrashLogs";
-    // Naming and locations used by Morphe's shared CrashLogPatch.
+    // Naming and locations used by morphe-patches-library's CrashLogPatch.
     private static final String FOLDER = "Morphe";
 
     private FatalCrashLogs() {}
@@ -134,7 +134,7 @@ public final class FatalCrashLogs {
             boolean appFile = appDocuments != null && appDocuments.getCanonicalFile().equals(parent);
             if ((!appFile && !publicFolder().getCanonicalFile().equals(parent))
                     || !isCrashLogName(file.getName(), context.getPackageName())) {
-                throw new IOException("The selected file is not a Boost crash report.");
+                throw new IOException("The selected file is not a crash report for this app.");
             }
             return new FileInputStream(file);
         }

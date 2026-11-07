@@ -43,15 +43,14 @@ settings {
 
 include(":patches:stub")
 
-// Include morphe-patches-library as composite build if it exists locally.
-// It is a multi-module project, so each artifact maps to a specific subproject.
-file("../morphe-patches-library").let { libDir ->
-    if (libDir.exists()) {
-        includeBuild(libDir) {
-            dependencySubstitution {
-                substitute(module("app.morphe:morphe-patches-library")).using(project(":patch-library"))
-                substitute(module("app.morphe:morphe-extensions-library")).using(project(":extension-library"))
-            }
+// Use the published library unless a local composite build is explicitly requested.
+if (providers.gradleProperty("useLocalMorphePatchesLibrary").orNull == "true") {
+    val libDir = file("../morphe-patches-library")
+    require(libDir.isDirectory) { "Local morphe-patches-library checkout was not found." }
+    includeBuild(libDir) {
+        dependencySubstitution {
+            substitute(module("app.morphe:morphe-patches-library")).using(project(":patch-library"))
+            substitute(module("app.morphe:morphe-extensions-library")).using(project(":extension-library"))
         }
     }
 }

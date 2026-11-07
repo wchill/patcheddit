@@ -15,10 +15,9 @@ import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.methodCall
 import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.Patch
-import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
-import app.morphe.util.p0Register
-import app.morphe.util.registersUsed
+import app.morphe.patcher.util.p0Register
+import app.morphe.patcher.util.registersUsed
 import app.morphe.patches.all.misc.PatchCategory
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.builder.MutableMethodImplementation
@@ -28,12 +27,13 @@ import com.android.tools.smali.dexlib2.immutable.ImmutableMethodParameter
 fun modifyWebViewPatch(
     extensionPatch: Patch<*>,
     compatible: Array<Compatibility>
-) = bytecodePatch(
+) = morpheBytecodePatch(
     name = "Modify login WebView",
     description = "Adjusts the Reddit login page to prevent sign-in problems.",
-    default = true
+    default = true,
+    extensionPatch = extensionPatch,
+    category = PatchCategory.LOGIN,
 ) {
-    category(PatchCategory.LOGIN)
     compatibleWith(*compatible)
 
     dependsOn(

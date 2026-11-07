@@ -13,7 +13,7 @@ import app.morphe.patcher.methodCall
 import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.Patch
 import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.util.registersUsed
+import app.morphe.patcher.util.registersUsed
 
 @Suppress("unused")
 internal fun interceptHttpRequestsPatch(

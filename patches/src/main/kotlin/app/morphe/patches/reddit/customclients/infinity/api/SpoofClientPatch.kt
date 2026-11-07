@@ -7,16 +7,20 @@
 
 package app.morphe.patches.reddit.customclients.infinity.api
 
-import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.spoofClientPatch
-import app.morphe.util.replaceStringMatchesWithFunc
-import app.morphe.util.returnEarly
+import app.morphe.patches.reddit.customclients.overrideOAuthStrings
+import app.morphe.patches.reddit.customclients.overrideOAuthReturn
+import app.morphe.patcher.util.returnEarly
 import java.net.URI
 import org.w3c.dom.Element
+import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.util.getReference
+import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 
 internal const val EXTENSION_CLASS_NAME = "Lapp/morphe/extension/infinity/APIUtils;"
 internal const val GET_CLIENT_ID_METHOD = "$EXTENSION_CLASS_NAME->getClientId"
@@ -33,7 +37,7 @@ private val disableBillingPatch = bytecodePatch(default = false) {
     }
 }
 
-val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, userAgentOption ->
+val spoofClientPatch = spoofClientPatch(ExtensionPatches.Infinity) { clientIdOption, redirectUriOption, userAgentOption ->
     val clientId by clientIdOption
     val redirectUri by redirectUriOption
     val userAgent by userAgentOption
@@ -58,7 +62,10 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
                     require(callbacks.size == 1) {
                         "Expected one Infinity OAuth callback intent filter, found ${callbacks.size}"
                     }
-                    callbacks.single().apply {
+                    val callback = callbacks.single()
+                    val intentFilter = callback.parentNode as Element
+                    intentFilter.parentNode.appendChild(intentFilter.cloneNode(true))
+                    callback.apply {
                         setAttribute("android:scheme", uri.scheme)
                         if (host == null) removeAttribute("android:host")
                         else setAttribute("android:host", host)
@@ -75,21 +82,36 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
         GetDefaultRedirectUriFingerprint.method.returnEarly(redirectUri!!)
         GetDefaultUserAgentFingerprint.method.returnEarly(userAgent!!)
 
-        ClientIdFingerprint.matchAll().forEach { match ->
-            match.method.replaceInstruction(
-                match.instructionMatches.single().index,
-                "invoke-static {}, $GET_CLIENT_ID_METHOD()Ljava/lang/String;"
-            )
+        val clientCalls = ClientIdFingerprint.matchAll()
+        val clientGetters = clientCalls.map { match ->
+            checkNotNull(match.instructionMatches.single().instruction.getReference<MethodReference>()) {
+                "Infinity's client ID call has no method reference."
+            }
+        }.distinctBy { it.toString() }.associate { reference ->
+            reference.toString() to Fingerprint(
+                definingClass = reference.definingClass,
+                name = reference.name,
+                parameters = reference.parameterTypes.map(CharSequence::toString),
+                returnType = reference.returnType,
+            ).overrideOAuthReturn("getClientId")
+        }
+        for (match in clientCalls) {
+            val instruction = match.instructionMatches.single()
+            val reference = checkNotNull(instruction.instruction.getReference<MethodReference>())
+            val getter = clientGetters.getValue(reference.toString())
+            if (getter.name != reference.name) {
+                match.method.replaceInstruction(instruction.index, "invoke-static {}, $getter")
+            }
         }
 
         for (prefix in listOf("android:", "")) {
             userAgentFingerprint(packageMetadata.versionName, prefix).matchAll().forEach { match ->
-                match.replaceStringMatchesWithFunc(GET_USER_AGENT_METHOD)
+                match.overrideOAuthStrings("getUserAgent")
             }
         }
 
         RedirectUriFingerprint.matchAll().forEach { match ->
-            match.replaceStringMatchesWithFunc(GET_REDIRECT_URI_METHOD)
+            match.overrideOAuthStrings("getRedirectUri")
         }
     }
 }

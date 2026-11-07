@@ -33,7 +33,7 @@ import com.google.android.material.shape.MaterialShapeDrawable
 import app.morphe.extension.boost.api.RedditJraw
 import app.morphe.extension.boost.api.DrawerActivity
 
-/** Typed bindings to the official Boost 1.14.1 UI, not upstream library headers. */
+/** Typed bindings to the official Boost UI, not upstream library headers. */
 object BoostNativeNavigation {
     interface SelectionCallback {
         fun onSelected(item: MenuItem): Boolean

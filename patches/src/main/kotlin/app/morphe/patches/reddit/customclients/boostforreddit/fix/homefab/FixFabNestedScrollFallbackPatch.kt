@@ -12,9 +12,10 @@ import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
 import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.builder.MutableMethodImplementation
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethod
@@ -47,13 +48,14 @@ private data class ScrollAwareTarget(
 )
 
 @Suppress("unused")
-val fixFabNestedScrollFallbackPatch = bytecodePatch(
+val fixFabNestedScrollFallbackPatch = morpheBytecodePatch(
     name = "Fix Boost FAB nested scroll",
     description =
         "Hides and shows the floating action button in step with scrolling, also on pages with a collapsing header.",
     default = true,
-) {
-    category(PatchCategory.NAVIGATION)
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.NAVIGATION,
+) { setting ->
     compatibleWith(*AppCompatibility.Boost)
 
     execute {
@@ -82,7 +84,7 @@ val fixFabNestedScrollFallbackPatch = bytecodePatch(
         )
 
         scrollAwareTargets.forEach { target ->
-            target.fingerprint.method.apply {
+            setting.patchMethod(target.fingerprint) {
                 // All three native Boost implementations only react to
                 // dyConsumed (p5). At a scroll edge, the return delta may be
                 // reported as dyUnconsumed (p7), so use it only when p5 is 0.
@@ -130,11 +132,13 @@ val fixFabNestedScrollFallbackPatch = bytecodePatch(
                         0,
                         """
                             invoke-super/range {p0 .. p7}, $preScroll
+                            ${setting.checkEnabled("p6", "morphe_native_pre_scroll")}
                             check-cast p2, ${target.childType}
                             const/4 p6, 0x0
                             const/4 p7, 0x0
                             invoke-virtual/range {p0 .. p7}, $nestedScroll
                             const-string p3, "${target.preScrollMarker}"
+                            :morphe_native_pre_scroll
                             return-void
                         """,
                     )

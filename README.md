@@ -15,12 +15,21 @@ In addition, patches for some apps contain additional features that were not pre
 * Client ID, redirect URI and user agent are all patchable.
     * By default, `Spoof client` uses RedReader 1.27's client ID, redirect URI and user agent. Leave the OAuth client ID option empty to use its default.
     * Custom patch options override these defaults. In Boost 1.14.0 and up, saved values in the native API settings override the patch-provided defaults.
+* **Log exceptions** saves fatal crashes for every supported client, including Sync for Lemmy, using morphe-patches-library's shared crash logger. BaconReader and Boost hook their native error-reporting handlers; other clients capture exceptions reported through Android error/warning logging, stack traces, and Crashlytics when present, without removing the original logging.
+    * Fatal reports are saved in **Documents/Morphe**, falling back to the app-specific external Documents folder if public storage is unavailable. Non-fatal reports use private `no_backup/morphe-exceptions` storage, rotating at 4 MiB per file with one previous file retained and excluded from Android app backups.
+    * Common credential-bearing lines are redacted from non-fatal logs; fatal reports are not filtered. Other personal or request data can remain, so review exported copies before sharing.
+* Every supported client exposes a **Morphe** settings menu. Included feature patches register their own controls; deselected patches do not leave behind inactive options.
+    * Feature switches default to the patch's existing runtime behavior.
+    * `Spoof client` exposes client ID, redirect URI and user-agent overrides. Empty overrides use the values configured when patching. Boost shares these controls with its native API settings. Existing Joey and Infinity overrides are migrated without replacing newer values.
+    * Infinity's patched callback URI is read-only because it is declared in the APK manifest. The original callback remains available when spoofing is disabled. Manifest/layout-only changes, including Android debugging, are also shown as read-only; repatch the app to change them.
+    * Changing OAuth credentials requires restarting and signing in again. Disabling API/login fixes can restore the original client's broken behavior.
 
 ### Boost for Reddit
-* All Boost patches are selected by default. Individual patches can be deselected before patching and also disabled in the app settings. Patch-selection defaults do not change saved settings or runtime preference defaults.
-* **Fix profile About scrolling** prevents the first swipe from stopping early while the profile header is expanded. Nested scrolling is disabled only for the About tab's inner lists; their horizontal scrolling and other profile tabs are unchanged.
-* **Log exceptions** records errors reported through Boost's existing exception handler to a private file instead of showing error toasts. It also depends on Morphe's upstream fatal-crash logger. **Settings > Morphe > Exception log** lists non-fatal reports, with **Fatal crash logs** alongside it in Diagnostics.
-    * Logs are excluded from Android app backups. Common credential-bearing lines are redacted from non-fatal logs (crash logs have no filtering), but other personal or request data can remain, so review saved copies before sharing.
+* Boost patches target the official [Boost 1.14.3 APK](https://github.com/rubenmayayo/boost-for-reddit/releases/tag/v1.14.3).
+* Boost patches are selected by default except **Fix loading more comments** and **Fix profile About scrolling**, which are retained but disabled because Boost 1.14.2 fixed both natively. Individual patches can be deselected before patching; features with settings can also be disabled in the app. Patch-selection defaults do not change saved settings or runtime preference defaults.
+* Boost 1.14.3 also handles the image-post submission kind, search callback lifecycle checks and media-viewer insets natively, so those overrides are no longer injected. The remaining navigation patches still support Patcheddit's custom navigation hosts and layout behavior.
+* **Log exceptions** records errors reported through Boost's existing exception handler. **Settings > Morphe > Exception log** lists non-fatal reports, with **Fatal crash logs** alongside it in Diagnostics.
+    * Fatal reports can be previewed in the app and exported in full using **Save a copy**. Reports in public or app-specific Documents folders are listed when accessible.
     * If app initialization or private storage is unavailable, logging failures are reported to Logcat without showing a toast.
 * **Import and export OAuth tokens** adds an editable JSON field and a **Save** button under **Settings > Morphe > OAuth tokens**. It displays the selected account's tokens for copying. Replace or edit the JSON to sign in or add an account without the browser login flow. There are no file import/export controls.
     * **Save** checks the access-token owner with Reddit, validates the refresh token using Boost's configured OAuth client, and obtains fresh tokens before adding or updating the verified account. An expired access token can be restored with a valid refresh token. Boost then restarts with that account selected.
@@ -28,7 +37,7 @@ In addition, patches for some apps contain additional features that were not pre
     * The JSON contains **unencrypted account credentials**. Copy it only into trusted apps and clear clipboard copies after use. The screen uses Android's secure-window flag to block screenshots and screen recording. The editor disables autofill, content capture and Android view-state saving, and asks keyboards not to learn its contents.
     * The JSON requires string fields `access_token` and `refresh_token`. The selected account's JSON also includes `version: 1`, `username` and `client_id`; these metadata fields are optional when replacing tokens.
 * Image-upload features are separate patches:
-    * **Use Reddit for image uploads** selects Reddit hosting for image posts and galleries, without changing editor attachments.
+    * **Use Reddit for image uploads** selects Reddit hosting for image posts and galleries, without changing editor attachments. This is still needed to override Boost's remote-configurable hosting provider; Boost now chooses the image submission kind itself.
     * **Configure editor image hosting** adds an editor-hosting setting for Imgur Free or ImgBB. It does not change post or gallery hosting.
     * **Preview images in the editor** adds previews of supported image URLs without changing upload providers.
 * The content of deleted Reddit posts and comments can be loaded from [Project Arctic Shift](https://github.com/ArthurHeitmann/arctic_shift).
@@ -136,9 +145,35 @@ The workflow uses the `publish` task to publish the release of Patcheddit
 - The `buildAndroid` task is used to build Patcheddit so that it can be used on Android.
 The `publish` task depends on the `buildAndroid` task, so it will be run automatically when publishing a release.
 
+Builds use the published morphe-patches-library version pinned in `gradle/libs.versions.toml`. To explicitly use a matching local `../morphe-patches-library` checkout as a composite build, pass `-PuseLocalMorphePatchesLibrary=true` to Gradle.
+
 ### Updating Boost bindings
 
-Boost settings XML and layouts are stored under `patches/src/main/resources/boost/`, in `xml/` and `layout/`. Each feature includes its files through the internal `AddResources` patch. Settings entries are imported from these XML resources only when their feature patch is selected; UI XML is not generated in Kotlin.
+Boost settings XML and layouts are stored under `patches/src/main/resources/boost/`, in `xml/` and `layout/`. Each feature includes its files through the internal `AddResources` patch. It registers individual target paths with the resource context so on-demand decoding tracks new values and view IDs. Settings entries are imported only when their feature patch is selected. Shared XML templates define menu categories, switches and read-only entries; registration fills their patch metadata without generating widget/layout XML.
+
+Use `morpheBytecodePatch` to register a feature automatically in the correct client's menu, including its extension, settings entry and independent settings-context bootstrap:
+
+```kotlin
+val examplePatch = morpheBytecodePatch(
+    name = "Example feature",
+    description = "Adds an optional feature.",
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.MEDIA,
+) { setting ->
+    compatibleWith(*AppCompatibility.Boost)
+    execute {
+        setting.guardHook("Lapp/morphe/extension/boost/feature/Feature;", "apply")
+    }
+}
+```
+
+`optionsResource` accepts a bundled `PreferenceCategory`; set `resourceDirectory = "boost"` for Boost XML. Existing preference keys and runtime defaults can be retained with `preferenceKey` and `defaultEnabled`, independently of patch-selection `default`. `addMorpheSettings` is available to patches using the original builders.
+
+Client discovery follows composite extension dependencies, including Boost's HTTP interceptor patch. App-agnostic uses of the existing public factories retain their always-on behavior; an unregistered extension produces a patcher warning instead of requiring a client-specific menu.
+
+Gate void/boolean extension hooks with `guardHook`; identity transforms can use `identity = true` to return the original input when disabled. Use `patchMethod` for reversible method-local bytecode changes and `replaceString` for constructor strings. For hooks sharing a native method, use `wrapHook(setting = setting)` so disabling one feature does not skip another feature's hooks. `morpheResourcePatch` defaults to a read-only menu entry for APK-only changes; menu-only features can use `readOnly = false` and a dependent options entry.
+
+Infinity's JNI client-ID getter is kept intact. Managed call sites use a gated bridge so disabling spoofing still calls the original native method without changing its JNI symbol.
 
 The extension uses Jackson for all JSON processing, bundled and shadowed under `app.morphe.extension.boost.libraries`, with its APIs preserved during shrinking. It does not depend on Boost's R8-reduced JSON libraries or bundle Gson. Native JRAW JSON objects remain behind the `NativeJsonModel` / `NativeJsonNode` adapters; they are not cast to the private Jackson tree types. Boost's own JSON libraries and callers, and the patcher's build-time Gson dependency, are left unchanged.
 
@@ -155,6 +190,8 @@ val fingerprint = BoostApi.DrawerActivity.setupBottomNavigation.fingerprint()
 Only the extension payload is rebound; the app is not deobfuscated, and placeholder stubs are never packaged. Native callbacks are renamed through the same bindings. Reflective field access uses `BoostFieldNames`, whose non-constant values are resolved during binding, so callers do not embed obfuscated names or precompute hashes for renamed strings.
 
 Extension preparation does not prune classes by reachability. It retains all payload classes except duplicate copies supplied by Boost itself. The final verifier also checks native app references to extension classes so a missing helper stops patching instead of causing a runtime class-loading failure.
+
+Run the release-fixture checks with `BOOST_APK=/path/to/boost-for-reddit-1.14.3.apk ./gradlew :patches:test --tests '*BoostReleaseTest'`. They verify the APK checksum, every partial-library mapping declaration, and all adapter targets, prototypes, dispatch kinds and receivers. Without `BOOST_APK`, the APK-dependent test is skipped; version consistency and redundant-patch defaults are still checked. Apply the built bundle with Morphe CLI's `--bytecode-mode=FULL --validate` to check every selected patch against the APK.
 
 ## 📚 Everything else
 

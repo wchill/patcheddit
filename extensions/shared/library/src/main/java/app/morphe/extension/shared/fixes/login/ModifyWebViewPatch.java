@@ -13,11 +13,13 @@ import android.webkit.WebView;
 
 import java.util.Map;
 
+import app.morphe.extension.shared.settings.PatchSettings;
+
 @SuppressWarnings("unused")
 public class ModifyWebViewPatch {
     @SuppressLint("SetJavaScriptEnabled")
     public static void loadUrl(WebView webView, String url, Map<String, String> additionalHeaders) {
-        if (url.contains("reddit.com/login") || url.contains("reddit.com/api/v1/authorize")) {
+        if (isEnabled() && (url.contains("reddit.com/login") || url.contains("reddit.com/api/v1/authorize"))) {
             WebSettings webSettings = webView.getSettings();
             webSettings.setUserAgentString(
                     "Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) " +
@@ -29,11 +31,15 @@ public class ModifyWebViewPatch {
     }
 
     public static void loadUrl(WebView webView, String url) {
-        loadUrl(webView, url, Map.of());
+        if (isEnabled()) {
+            loadUrl(webView, url, Map.of());
+        } else {
+            webView.loadUrl(url);
+        }
     }
 
     public static void onPageFinished(WebView webView, String url) {
-        if (!url.contains("reddit.com/login") && !url.contains("reddit.com/api/v1/authorize")) {
+        if (!isEnabled() || !url.contains("reddit.com/login") && !url.contains("reddit.com/api/v1/authorize")) {
             return;
         }
 
@@ -57,5 +63,9 @@ public class ModifyWebViewPatch {
             "})();",
             null
         );
+    }
+
+    private static boolean isEnabled() {
+        return PatchSettings.isEnabled("morphe_patch_modify_login_webview", true);
     }
 }

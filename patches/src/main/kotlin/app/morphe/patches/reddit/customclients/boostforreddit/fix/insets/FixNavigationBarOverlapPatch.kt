@@ -8,10 +8,10 @@
 package app.morphe.patches.reddit.customclients.boostforreddit.fix.insets
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
-import app.morphe.util.getReference
+import app.morphe.patcher.util.getReference
 import app.morphe.util.indexOfFirstInstructionOrThrow
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
@@ -22,16 +22,18 @@ private const val EXTENSION_CLASS_DESCRIPTOR =
     "Lapp/morphe/extension/boost/utils/BoostSystemBarInsetsFix;"
 
 @Suppress("unused")
-val fixNavigationBarOverlapPatch = bytecodePatch(
+val fixNavigationBarOverlapPatch = morpheBytecodePatch(
     name = "Fix Boost navigation bar overlap",
     description = "Keeps Boost's bottom controls and drawer clear of the system navigation bar on Android 15 and newer.",
-    default = true
-) {
-    category(PatchCategory.NAVIGATION)
+    default = true,
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.NAVIGATION,
+) { setting ->
     dependsOn(ExtensionPatches.Boost)
     compatibleWith(*AppCompatibility.Boost)
 
     execute {
+        setting.guardHook(EXTENSION_CLASS_DESCRIPTOR, "install")
         myApplicationOnCreateFingerprint.method.apply {
             val superOnCreateIndex = indexOfFirstInstructionOrThrow {
                 opcode == Opcode.INVOKE_SUPER &&
@@ -46,16 +48,8 @@ val fixNavigationBarOverlapPatch = bytecodePatch(
             )
         }
 
-        arrayOf(
-            mediaImageActivityOnCreateFingerprint,
-            mediaVideoActivityOnCreateFingerprint,
-        ).forEach { fingerprint ->
-            fingerprint.wrapHook(
-                after = "invoke-static {p0}, $EXTENSION_CLASS_DESCRIPTOR->applyMediaInsets(Landroid/app/Activity;)V",
-            )
-        }
-
         mainActivityOnResumeFingerprint.wrapHook(
+            setting = setting,
             after = "invoke-static {p0}, $EXTENSION_CLASS_DESCRIPTOR->applyMainInsets(Landroid/app/Activity;)V",
         )
     }

@@ -12,6 +12,8 @@ import app.morphe.patcher.patch.resourcePatch
 import app.morphe.patches.all.misc.resources.addResourcesPatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
+import app.morphe.patches.reddit.customclients.addMorpheApkSettings
+import app.morphe.patches.reddit.customclients.morpheSettingsContextPatch
 import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.util.ResourceGroup
 import org.w3c.dom.Element
@@ -52,6 +54,11 @@ internal val boostMorpheSettingsResourcesPatch = resourcePatch(
                 root.insertBefore(target.importNode(source.documentElement, true), root.firstChild)
             }
         }
+
+    }
+
+    finalize {
+        addMorpheApkSettings()
     }
 }
 
@@ -62,6 +69,6 @@ val boostMorpheSettingsPatch = resourcePatch(
     default = true,
 ) {
     category(PatchCategory.INTERFACE)
-    dependsOn(ExtensionPatches.Boost, boostMorpheSettingsResourcesPatch)
+    dependsOn(ExtensionPatches.Boost, boostMorpheSettingsResourcesPatch, morpheSettingsContextPatch)
     compatibleWith(*AppCompatibility.Boost)
 }

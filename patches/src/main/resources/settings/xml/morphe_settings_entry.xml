@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Preference xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="morphe_settings_entry"
+    android:title="@string/morphe_settings_title"
+    android:summary="@string/morphe_settings_summary"
+    android:persistent="false">
+    <intent android:targetClass="app.morphe.extension.shared.settings.MorpheSettingsActivity" />
+</Preference>

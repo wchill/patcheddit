@@ -11,14 +11,18 @@ package app.morphe.patches.reddit.customclients
 
 import app.morphe.patcher.patch.BytecodePatchBuilder
 import app.morphe.patcher.patch.Option
+import app.morphe.patcher.patch.Patch
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.patch.stringOption
+import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.util.returnEarly
 import app.morphe.patches.all.misc.PatchCategory
 import java.util.Base64
 
 private const val REDREADER_CLIENT_ID_BASE64 = "eUgwYVRuSkV0NnFVZ0duODM1QjR2Zw=="
 private const val REDREADER_REDIRECT_URI = "redreader://rr_oauth_redir"
 private const val REDREADER_USER_AGENT = "org.quantumbadger.redreader/1.27"
+internal val spoofClientSetting = MorphePatchSetting("morphe_patch_spoof_client")
 
 internal fun applyDefaultClientId(option: Option<String>) {
     if (option.value.isNullOrBlank()) {
@@ -34,6 +38,7 @@ internal fun applyDefaultClientId(option: Option<String>) {
 fun spoofClientPatch(
     name: String,
     description: String,
+    extensionPatch: Patch<*>?,
     block: BytecodePatchBuilder.(
         clientIdOption: Option<String>,
         redirectUriOption: Option<String>,
@@ -45,6 +50,13 @@ fun spoofClientPatch(
     default = true
 ) {
     category(PatchCategory.LOGIN)
+    extensionPatch?.let {
+        addMorpheSettings(
+            it, name, description, PatchCategory.LOGIN,
+            preferenceKey = spoofClientSetting.key,
+            optionsResource = "morphe_reddit_api",
+        )
+    }
     val clientIdOption = stringOption(
         "client-id",
         null,
@@ -78,8 +90,18 @@ fun spoofClientPatch(
 
     // Resolve before client-specific dependencies without exposing the ID in option metadata.
     dependsOn(bytecodePatch(default = false) {
+        extensionPatch?.let { dependsOn(it) }
         execute {
             applyDefaultClientId(clientIdOption)
+            if (extensionPatch != null) {
+                for ((method, value) in mapOf(
+                    "getDefaultClientId" to clientIdOption.value!!,
+                    "getDefaultRedirectUri" to redirectUriOption.value!!,
+                    "getDefaultUserAgent" to userAgentOption.value!!,
+                )) {
+                    Fingerprint(definingClass = OAUTH_SETTINGS_DESCRIPTOR, name = method).method.returnEarly(value)
+                }
+            }
         }
     })
 
@@ -87,6 +109,16 @@ fun spoofClientPatch(
         clientIdOption, redirectUriOption, userAgentOption
     )
 }
+
+fun spoofClientPatch(
+    name: String,
+    description: String,
+    block: BytecodePatchBuilder.(
+        clientIdOption: Option<String>,
+        redirectUriOption: Option<String>,
+        userAgentOption: Option<String>,
+    ) -> Unit,
+) = spoofClientPatch(name, description, null, block)
 
 fun spoofClientPatch(
     block: BytecodePatchBuilder.(
@@ -97,5 +129,19 @@ fun spoofClientPatch(
 ) = spoofClientPatch(
     name = "Spoof client",
     description = "Restores functionality of the app by using custom client ID.",
+    block = block,
+)
+
+fun spoofClientPatch(
+    extensionPatch: Patch<*>,
+    block: BytecodePatchBuilder.(
+        clientIdOption: Option<String>,
+        redirectUriOption: Option<String>,
+        userAgentOption: Option<String>,
+    ) -> Unit,
+) = spoofClientPatch(
+    name = "Spoof client",
+    description = "Restores functionality of the app by using custom client ID.",
+    extensionPatch = extensionPatch,
     block = block,
 )

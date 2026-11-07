@@ -9,16 +9,14 @@ package app.morphe.patches.reddit.customclients.baconreader.api
 
 import app.morphe.patcher.Match
 import app.morphe.patcher.StringComparisonType
-import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
-import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.spoofClientPatch
 import app.morphe.patches.all.misc.string.replaceStringPatch
-import app.morphe.util.returnEarly
-import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
+import app.morphe.patches.reddit.customclients.overrideOAuthReturn
+import app.morphe.patches.reddit.customclients.overrideOAuthValue
 
-val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, userAgentOption ->
+val spoofClientPatch = spoofClientPatch(ExtensionPatches.BaconReader) { _, _, _ ->
     dependsOn(
         ExtensionPatches.BaconReader,
         // Redirects from SSL to WWW domain are bugged causing auth problems.
@@ -28,37 +26,26 @@ val spoofClientPatch = spoofClientPatch { clientIdOption, redirectUriOption, use
 
     compatibleWith(*AppCompatibility.BaconReader)
 
-    val clientId by clientIdOption
-    val redirectUri by redirectUriOption
-    val userAgent by userAgentOption
-
     execute {
-        fun Match.patch(replacementString: String) {
+        fun Match.patch(getter: String) {
             val clientIdIndex = stringMatches.first().index
-
-            method.apply {
-                val clientIdRegister = getInstruction<OneRegisterInstruction>(clientIdIndex).registerA
-                replaceInstruction(
-                    clientIdIndex,
-                    "const-string v$clientIdRegister, \"$replacementString\"",
-                )
-            }
+            method.overrideOAuthValue(clientIdIndex, getter)
         }
 
         // Patch client id in authorization url.
-        GetAuthorizationUrlFingerprint.match().patch("client_id=$clientId")
+        GetAuthorizationUrlFingerprint.match().patch("getClientIdParameter")
 
         // Patch client id for access token request.
-        RequestTokenFingerprint.match().patch(clientId!!)
+        RequestTokenFingerprint.match().patch("getClientId")
 
         // Patch redirect uri in authorization url. Unlike other clients, the app bakes the
         // query parameter name into the string, so it has to be kept.
-        GetAuthorizeUrlFingerprint.match().patch("redirect_uri=$redirectUri")
+        GetAuthorizeUrlFingerprint.match().patch("getRedirectUriParameter")
 
         // Patch the bare redirect uri, used to recognize the callback and to request the token.
-        AuthUrlFingerprint.matchAll().forEach { match -> match.patch(redirectUri!!) }
+        AuthUrlFingerprint.matchAll().forEach { match -> match.patch("getRedirectUri") }
 
-        GetRestClientUserAgentFingerprint.method.returnEarly(userAgent!!)
-        GetRedditUserAgentFingerprint.method.returnEarly(userAgent!!)
+        GetRestClientUserAgentFingerprint.overrideOAuthReturn("getUserAgent")
+        GetRedditUserAgentFingerprint.overrideOAuthReturn("getUserAgent")
     }
 }

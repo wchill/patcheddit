@@ -35,6 +35,4 @@ internal val subredditActivityOnCreateFingerprint = BoostApi.SubredditActivity.o
 internal val drawerBottomNavigationVisibilityFingerprint = BoostApi.DrawerActivity.setBottomNavigationVisible.fingerprint()
 internal val inboxCountUpdateFingerprint = BoostApi.DrawerActivity.updateInboxCount.fingerprint()
 
-internal val searchAbstractSubredditsErrorCallbackFingerprint = BoostApi.SearchAbstractActivitySubredditErrorCallback.onError.fingerprint()
-
 internal val emptyRecyclerViewBottomNavigationPaddingFingerprint = BoostApi.EmptyRecyclerView.emptyRecyclerViewBottomNavigationPadding.fingerprint()

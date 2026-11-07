@@ -11,9 +11,10 @@ import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
-import app.morphe.util.getReference
+import app.morphe.patches.reddit.customclients.ExtensionPatches
+import app.morphe.patcher.util.getReference
 import app.morphe.util.indexOfFirstInstructionOrThrow
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
@@ -27,16 +28,17 @@ private val BOOST_PENDING_INTENT_FLAGS_REFERENCE =
     BoostApi.Utils.imageWidgetThumbnailSize.toString()
 
 @Suppress("unused")
-val fixImageWidgetClickTargetPatch = bytecodePatch(
+val fixImageWidgetClickTargetPatch = morpheBytecodePatch(
     name = "Fix Boost image widget click target",
     description = "Makes the image widget open the post it shows instead of an older one.",
     default = true,
-) {
-    category(PatchCategory.INTERFACE)
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.INTERFACE,
+) { setting ->
     compatibleWith(*AppCompatibility.Boost)
 
     execute {
-        imageWidgetProviderUpdateWithSubmissionFingerprint.method.apply {
+        setting.patchMethod(imageWidgetProviderUpdateWithSubmissionFingerprint) {
             val getActivityIndex = indexOfFirstInstructionOrThrow {
                 opcode == Opcode.INVOKE_STATIC &&
                     getReference<MethodReference>()?.toString() == PENDING_INTENT_GET_ACTIVITY_REFERENCE

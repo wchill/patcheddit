@@ -10,49 +10,52 @@ package app.morphe.patches.reddit.customclients.boostforreddit.fix.gifsearch
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.patches.reddit.customclients.boostforreddit.wrapHook
-import app.morphe.util.getReference
+import app.morphe.patcher.util.getReference
 import app.morphe.util.indexOfFirstInstructionOrThrow
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.iface.reference.TypeReference
 
 @Suppress("unused")
-val restoreGifUrlInsertionPatch = bytecodePatch(
+val restoreGifUrlInsertionPatch = morpheBytecodePatch(
     name = "Restore GIF URL insertion",
     description = "Adds an option to the image menu to insert a GIF from its URL.",
-    default = true
-) {
-    category(PatchCategory.COMMENTS)
+    default = true,
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.COMMENTS,
+) { setting ->
     dependsOn(ExtensionPatches.Boost)
     compatibleWith(*AppCompatibility.Boost)
 
     execute {
-        val imageMenuMethod = formattingBarImageMenuOptionsFingerprint.method
-        val menuViewIndex = imageMenuMethod.indexOfFirstInstructionOrThrow {
-            opcode == Opcode.NEW_INSTANCE &&
-                getReference<TypeReference>()?.type == BoostApi.BoostMenuView.type
+        setting.patchMethod(formattingBarImageMenuOptionsFingerprint) {
+            val menuViewIndex = indexOfFirstInstructionOrThrow {
+                opcode == Opcode.NEW_INSTANCE &&
+                    getReference<TypeReference>()?.type == BoostApi.BoostMenuView.type
+            }
+
+            addInstructions(
+                menuViewIndex,
+                """
+                    new-instance v1, ${BoostApi.MenuOption.type}
+                    invoke-direct {v1}, ${BoostApi.MenuOption.construct}
+                    const v2, 0x7f0a0273
+                    iput v2, v1, ${BoostApi.MenuOption.id}
+                    const v2, 0x7f1306de
+                    iput v2, v1, ${BoostApi.MenuOption.titleResource}
+                    const v2, 0x7f0801e8
+                    iput v2, v1, ${BoostApi.MenuOption.iconResource}
+                    invoke-interface {v0, v1}, Ljava/util/List;->add(Ljava/lang/Object;)Z
+                """,
+            )
         }
 
-        imageMenuMethod.addInstructions(
-            menuViewIndex,
-            """
-                new-instance v1, ${BoostApi.MenuOption.type}
-                invoke-direct {v1}, ${BoostApi.MenuOption.construct}
-                const v2, 0x7f0a0273
-                iput v2, v1, ${BoostApi.MenuOption.id}
-                const v2, 0x7f1306de
-                iput v2, v1, ${BoostApi.MenuOption.titleResource}
-                const v2, 0x7f0801e8
-                iput v2, v1, ${BoostApi.MenuOption.iconResource}
-                invoke-interface {v0, v1}, Ljava/util/List;->add(Ljava/lang/Object;)Z
-            """
-        )
-
         formattingBarHandleImageMenuOptionFingerprint.wrapHook(
+            setting = setting,
             before = """
                 iget v0, p1, ${BoostApi.MenuOption.id}
                 const v1, 0x7f0a0273

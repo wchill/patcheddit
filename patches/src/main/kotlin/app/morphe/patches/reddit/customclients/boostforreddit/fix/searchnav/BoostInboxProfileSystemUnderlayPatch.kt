@@ -8,7 +8,7 @@
 package app.morphe.patches.reddit.customclients.boostforreddit.fix.searchnav
 
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.boostforreddit.wrapHook
@@ -28,12 +28,13 @@ private val messagesActivityUnderlayLifecycleFingerprint = BoostApi.MessagesActi
 private val userActivityUnderlayLifecycleFingerprint = BoostApi.UserActivity.onCreate.fingerprint()
 
 @Suppress("unused")
-val boostInboxProfileSystemUnderlayPatch = bytecodePatch(
+val boostInboxProfileSystemUnderlayPatch = morpheBytecodePatch(
     name = "Standardize Boost Inbox and Profile bottom navigation",
     description = "Shows the same five-tab bottom navigation in Inbox and Profile.",
     default = true,
-) {
-    category(PatchCategory.NAVIGATION)
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.NAVIGATION,
+) { setting ->
     compatibleWith(*AppCompatibility.Boost)
     dependsOn(ExtensionPatches.Boost)
 
@@ -50,9 +51,11 @@ val boostInboxProfileSystemUnderlayPatch = bytecodePatch(
         )
 
         messagesActivityUnderlayLifecycleFingerprint.wrapHook(
+            setting = setting,
             after = "invoke-static {p0}, $INBOX_PROFILE_EXTENSION_DESCRIPTOR->standardizeInbox(Landroid/app/Activity;)V",
         )
         userActivityUnderlayLifecycleFingerprint.wrapHook(
+            setting = setting,
             after = "invoke-static {p0}, $INBOX_PROFILE_EXTENSION_DESCRIPTOR->standardizeProfile(Landroid/app/Activity;)V",
         )
     }

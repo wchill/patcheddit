@@ -10,27 +10,28 @@ package app.morphe.patches.reddit.customclients
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.Patch
-import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patches.all.misc.PatchCategory
-import app.morphe.util.returnEarly
 
+@JvmOverloads
 fun fixMoreCommentsPatch(
     extensionPatch: Patch<*>,
     compatible: Array<Compatibility>,
-) = bytecodePatch(
+    default: Boolean = true,
+) = morpheBytecodePatch(
     name = "Fix loading more comments",
     description = "Fixes 403 error when loading child comments.",
-    default = true,
-) {
-    category(PatchCategory.COMMENTS)
+    default = default,
+    extensionPatch = extensionPatch,
+    category = PatchCategory.COMMENTS,
+) { setting ->
     compatibleWith(*compatible)
     dependsOn(extensionPatch)
 
     execute {
-        Fingerprint(
+        setting.returnEnabled(Fingerprint(
             definingClass =
                 "Lapp/morphe/extension/shared/fixes/comments/MoreChildrenResponsePatch;",
             name = "isPatchIncluded",
-        ).method.returnEarly(true)
+        ).method)
     }
 }

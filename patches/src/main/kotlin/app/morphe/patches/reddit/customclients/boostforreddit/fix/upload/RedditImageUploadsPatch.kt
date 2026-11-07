@@ -9,7 +9,7 @@ package app.morphe.patches.reddit.customclients.boostforreddit.fix.upload
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
@@ -18,13 +18,14 @@ import app.morphe.patches.all.misc.PatchCategory
 private const val REDDIT_UPLOAD_PROVIDER = "reddit"
 
 @Suppress("unused")
-val redditImageUploadsPatch = bytecodePatch(
+val redditImageUploadsPatch = morpheBytecodePatch(
     name = "Use Reddit for image uploads",
     description =
         "Uses Boost's native Reddit uploader for image posts and galleries.",
-    default = true
-) {
-    category(PatchCategory.COMMENTS)
+    default = true,
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.COMMENTS,
+) { setting ->
     dependsOn(ExtensionPatches.Boost)
     compatibleWith(*AppCompatibility.Boost)
 
@@ -33,6 +34,7 @@ val redditImageUploadsPatch = bytecodePatch(
             addInstructionsWithLabels(
                 0,
                 """
+                    ${setting.checkEnabled("v0", "morphe_native_remote_string")}
                     const-string v0, "uploader_submit"
                     invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
                     move-result v0
@@ -46,21 +48,6 @@ val redditImageUploadsPatch = bytecodePatch(
                     return-object v0
                 """,
                 ExternalLabel("morphe_native_remote_string", getInstruction(0)),
-            )
-        }
-
-        remoteConfigBooleanFingerprint.method.apply {
-            addInstructionsWithLabels(
-                0,
-                """
-                    const-string v0, "submit_reddit_as_image_kind"
-                    invoke-virtual {v0, p0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-                    move-result v0
-                    if-eqz v0, :morphe_native_remote_boolean
-                    const/4 v0, 0x1
-                    return v0
-                """,
-                ExternalLabel("morphe_native_remote_boolean", getInstruction(0)),
             )
         }
     }

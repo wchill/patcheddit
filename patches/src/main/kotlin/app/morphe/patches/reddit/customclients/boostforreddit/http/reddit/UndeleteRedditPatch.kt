@@ -16,7 +16,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.instructions
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableField.Companion.toMutable
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
 import app.morphe.patcher.util.smali.ExternalLabel
@@ -26,7 +26,7 @@ import app.morphe.patches.reddit.customclients.boostforreddit.http.interceptHttp
 import app.morphe.patches.reddit.customclients.boostforreddit.http.REDDIT_UNDELETE_APPLIED_RESOURCE
 import app.morphe.patches.reddit.customclients.boostforreddit.http.undeleteAppliedMarkerPatch
 import app.morphe.patches.reddit.customclients.boostforreddit.wrapHook
-import app.morphe.util.getReference
+import app.morphe.patcher.util.getReference
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.MutableMethodImplementation
@@ -79,12 +79,17 @@ private fun extraEmojiInstructions(
 }
 
 @Suppress("unused")
-val undeleteRedditPatch = bytecodePatch(
+val undeleteRedditPatch = morpheBytecodePatch(
     name = "Automatically undelete Reddit content",
     description = "Restores deleted and removed posts and comments from Arctic Shift, and their media from the Wayback Machine.",
-    default = true
-) {
-    category(PatchCategory.UNDELETE)
+    default = true,
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.UNDELETE,
+    preferenceKey = "morphe_boost_reddit_undelete_enabled",
+    defaultEnabled = false,
+    settingsSummary = "Restore removed Reddit posts and comments from Arctic Shift and the Wayback Machine. " +
+        "When a thread has removed content, its post and comment IDs are sent to these third-party archives. Off by default.",
+) { setting ->
     dependsOn(ExtensionPatches.Boost, interceptHttpRequests, undeleteAppliedMarkerPatch(REDDIT_UNDELETE_APPLIED_RESOURCE))
     compatibleWith(*AppCompatibility.Boost)
 
@@ -194,6 +199,7 @@ val undeleteRedditPatch = bytecodePatch(
         // region Modify SubmissionModel/CommentModel deserialization.
         arrayOf(SubmissionModelDeserializeFingerprint, CommentModelDeserializeFingerprint).forEach { fingerprint ->
             fingerprint.wrapHook(
+                setting = setting,
                 after = """
                     if-eqz v0, :morphe_extra_emoji_deserialized
                     const-string        v1, "extraEmoji"
@@ -208,11 +214,13 @@ val undeleteRedditPatch = bytecodePatch(
 
         // region Extend emojis used for BabushkaText.
         SetCommentBabushkaTextFingerprint.wrapHook(
+            setting = setting,
             after = extraEmojiInstructions(
                 BoostApi.CommentViewHolder.distinguishedTv,
             ),
         )
         SetSubmissionBabushkaTextFingerprint.wrapHook(
+            setting = setting,
             after = extraEmojiInstructions(
                 BoostApi.SubmissionViewHolder.infoTop,
                 BoostApi.SubmissionViewHolder.infoSeparator,
@@ -222,7 +230,7 @@ val undeleteRedditPatch = bytecodePatch(
         // endregion
 
         // region Fix the deletion reason detection
-        StateSubmissionViewSetStateFingerprint.method.apply {
+        setting.patchMethod(StateSubmissionViewSetStateFingerprint) {
             addInstructionsWithLabels(
                 0,
                 """

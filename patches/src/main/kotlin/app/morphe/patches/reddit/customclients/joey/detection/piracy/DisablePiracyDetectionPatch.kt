@@ -8,7 +8,7 @@
 package app.morphe.patches.reddit.customclients.joey.detection.piracy
 
 import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.util.returnEarly
+import app.morphe.patcher.util.returnEarly
 
 val disablePiracyDetectionPatch = bytecodePatch(
     default = false,

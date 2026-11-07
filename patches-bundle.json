@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-10-30T22:21:29",
-  "description": "## [2.0.3](https://github.com/wchill/patcheddit/compare/v2.0.2...v2.0.3) (2026-10-30)\n\n\n### Bug Fixes\n\n* Comment loading and gallery loading for all reddit apps ([48cb357](https://github.com/wchill/patcheddit/commit/48cb357ca0bdcaaf7aa9f8a694db479e95a7c0ae))",
-  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.0.3/patches-2.0.3.mpp",
-  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.0.3/patches-2.0.3.mpp.asc",
-  "version": "2.0.3"
+  "created_at": "2026-11-07T14:34:02",
+  "description": "# [2.1.0-dev.6](https://github.com/wchill/patcheddit/compare/v2.1.0-dev.5...v2.1.0-dev.6) (2026-11-07)\n\n\n### Features\n\n* Add patch settings toggles for every app in Morphe settings ([a0b8243](https://github.com/wchill/patcheddit/commit/a0b82432653dde38050c7277f99d7bf6e9f47074))",
+  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.1.0-dev.6/patches-2.1.0-dev.6.mpp",
+  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.1.0-dev.6/patches-2.1.0-dev.6.mpp.asc",
+  "version": "2.1.0-dev.6"
 }

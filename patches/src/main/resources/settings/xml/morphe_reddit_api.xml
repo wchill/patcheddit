@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceCategory xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference
+        android:key="morphe_client_id_pref_key"
+        android:title="OAuth client ID"
+        android:dialogTitle="OAuth client ID override"
+        android:summary="Leave empty to use the client ID configured when patching."
+        android:defaultValue=""
+        android:singleLine="true" />
+    <EditTextPreference
+        android:key="morphe_redirect_uri_pref_key"
+        android:title="Redirect URI"
+        android:dialogTitle="Redirect URI override"
+        android:summary="Leave empty to use the redirect URI configured when patching."
+        android:defaultValue=""
+        android:singleLine="true" />
+    <EditTextPreference
+        android:key="morphe_user_agent_pref_key"
+        android:title="User agent"
+        android:dialogTitle="User agent override"
+        android:summary="Leave empty to use the user agent configured when patching."
+        android:defaultValue=""
+        android:singleLine="true" />
+</PreferenceCategory>

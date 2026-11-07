@@ -14,13 +14,13 @@ import app.morphe.patches.all.misc.extension.activityOnCreateExtensionHook
 import com.android.tools.smali.dexlib2.dexbacked.DexBackedDexFile
 import com.android.tools.smali.dexlib2.writer.io.MemoryDataStore
 import com.android.tools.smali.dexlib2.writer.pool.DexPool
-import app.morphe.util.returnEarly
+import app.morphe.patcher.util.returnEarly
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 import java.net.JarURLConnection
 
 internal fun clientExtensionPatch(
-    extensionName: String,
+    extensionName: String?,
     hookedClasses: Array<out String>,
     prepareShared: (InputStream) -> InputStream = ::withoutHttpLibraries,
 ) = bytecodePatch(default = false) {
@@ -30,7 +30,7 @@ internal fun clientExtensionPatch(
         }
         prepareShared(input)
     }
-    extendWith("extensions/$extensionName.mpe")
+    if (extensionName != null) extendWith("extensions/$extensionName.mpe")
     execute {
         classDefBy(SHARED_UTILS_EXTENSION_CLASS)
     }

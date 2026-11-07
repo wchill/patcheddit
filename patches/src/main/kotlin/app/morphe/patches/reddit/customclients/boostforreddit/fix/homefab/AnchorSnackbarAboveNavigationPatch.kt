@@ -11,7 +11,7 @@ import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
@@ -33,18 +33,19 @@ private val snackbarShowFingerprint = BoostApi.Snackbar.snackbarShow.fingerprint
 private val legacyNavigationSnackbarMarginFingerprint = BoostApi.AHBottomNavigationBehavior.legacyNavigationSnackbarMargin.fingerprint()
 
 @Suppress("unused")
-val anchorSnackbarAboveNavigationPatch = bytecodePatch(
+val anchorSnackbarAboveNavigationPatch = morpheBytecodePatch(
     name = "Anchor Boost Snackbars above bottom navigation",
     description =
         "Shows Boost Snackbars above the visible bottom navigation instead of covering it.",
     default = true,
-) {
-    category(PatchCategory.NAVIGATION)
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.NAVIGATION,
+) { setting ->
     dependsOn(ExtensionPatches.Boost)
     compatibleWith(*AppCompatibility.Boost)
 
     execute {
-        legacyNavigationSnackbarMarginFingerprint.method.apply {
+        setting.patchMethod(legacyNavigationSnackbarMarginFingerprint) {
             addInstructionsWithLabels(
                 0,
                 """
@@ -57,7 +58,7 @@ val anchorSnackbarAboveNavigationPatch = bytecodePatch(
             )
         }
 
-        snackbarShowFingerprint.method.apply {
+        setting.patchMethod(snackbarShowFingerprint) {
             addInstructionsWithLabels(
                 0,
                 """

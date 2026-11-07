@@ -11,10 +11,11 @@ import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.patches.reddit.customclients.AppCompatibility
-import app.morphe.util.getReference
+import app.morphe.patches.reddit.customclients.ExtensionPatches
+import app.morphe.patcher.util.getReference
 import app.morphe.util.indexOfFirstInstructionOrThrow
 import app.morphe.util.indexOfFirstInstructionReversedOrThrow
 import com.android.tools.smali.dexlib2.Opcode
@@ -23,18 +24,19 @@ import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import app.morphe.patches.all.misc.PatchCategory
 
 @Suppress("unused")
-val fixHideInvalidIndexPatch = bytecodePatch(
+val fixHideInvalidIndexPatch = morpheBytecodePatch(
     name = "Fix Hide crash",
     description = "Fixes crashes and jumps in the feed when hiding read posts.",
-    default = true
-) {
-    category(PatchCategory.FEED)
+    default = true,
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.FEED,
+) { setting ->
     compatibleWith(*AppCompatibility.Boost)
 
     execute {
         // Preserve the backend operation, but bound-check the resolved list
         // position immediately before the activity mutates its own feed.
-        subredditBaseHideToggleFingerprint.method.apply {
+        setting.patchMethod(subredditBaseHideToggleFingerprint) {
             val removeIndex = indexOfFirstInstructionOrThrow {
                 opcode == Opcode.INVOKE_INTERFACE &&
                     getReference<MethodReference>()?.toString() ==
@@ -55,7 +57,7 @@ val fixHideInvalidIndexPatch = bytecodePatch(
 
         // The presenter callback can change the backing list. Resolve the
         // submission again after it returns instead of removing a stale index.
-        hideFragmentFingerprint.method.apply {
+        setting.patchMethod(hideFragmentFingerprint) {
             val callbackIndex = indexOfFirstInstructionOrThrow {
                 opcode == Opcode.INVOKE_INTERFACE &&
                     getReference<MethodReference>()?.toString() ==
@@ -86,7 +88,7 @@ val fixHideInvalidIndexPatch = bytecodePatch(
 
         // 1.14.0 no longer has the per-layout ad wrappers/O2 conversion.
         // The read-post action consumes the backing-list index directly.
-        feedActionS1InvalidIndexFingerprint.method.apply {
+        setting.patchMethod(feedActionS1InvalidIndexFingerprint) {
             val returnIndex = indexOfFirstInstructionReversedOrThrow {
                 opcode == Opcode.RETURN_VOID
             }

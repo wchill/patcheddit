@@ -23,7 +23,7 @@ public final class MorpheBoostNativeStatics {
     public static void Navigation_addAccount(android.app.Activity p0) { app.morphe.extension.boost.api.Navigation.addAccount(p0); }
     public static android.content.Intent Navigation_imageIntent(android.content.Context p0, com.rubenmayayo.reddit.models.reddit.SubmissionModel p1, boolean p2) { return app.morphe.extension.boost.api.Navigation.imageIntent(p0, p1, p2); }
     public static void Navigation_openAnimatedMedia(android.content.Context p0, com.rubenmayayo.reddit.models.reddit.SubmissionModel p1, boolean p2) { app.morphe.extension.boost.api.Navigation.openAnimatedMedia(p0, p1, p2); }
-    public static void Navigation_openCommunity(android.app.Activity p0, java.lang.String p1) { app.morphe.extension.boost.api.Navigation.openCommunity(p0, p1); }
+    public static void Navigation_openCommunity(android.app.Activity p0, java.lang.String p1) { app.morphe.extension.boost.api.Navigation.openCommunity(p0, new com.rubenmayayo.reddit.models.reddit.SubscriptionViewModel(p1)); }
     public static void Navigation_openImage(android.content.Context p0, com.rubenmayayo.reddit.models.reddit.SubmissionModel p1, boolean p2) { app.morphe.extension.boost.api.Navigation.openImage(p0, p1, p2); }
     public static void Navigation_openSupport(android.content.Context p0) { app.morphe.extension.boost.api.Navigation.openSupport(p0); }
     public static void Navigation_openUser(android.content.Context p0, java.lang.String p1) { app.morphe.extension.boost.api.Navigation.openUser(p0, p1); }
