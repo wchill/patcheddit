@@ -10,7 +10,7 @@ package app.morphe.patches.reddit.customclients.boostforreddit.fix.gallery
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.boostforreddit.wrapHook
@@ -20,16 +20,20 @@ private const val GALLERY_PREVIEW_EXTENSION_DESCRIPTOR =
     "Lapp/morphe/extension/boost/gallery/GalleryAnimatedPreview;"
 
 @Suppress("unused")
-val galleryAnimatedPreviewPatch = bytecodePatch(
+val galleryAnimatedPreviewPatch = morpheBytecodePatch(
     name = "Animate media in Boost gallery previews",
     description = "Plays GIFs and videos in Reddit gallery previews, following Boost's data saving settings. Tapping still opens the full-screen viewer.",
     default = true,
-) {
-    category(PatchCategory.MEDIA)
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.MEDIA,
+) { setting ->
     dependsOn(ExtensionPatches.Boost)
     compatibleWith(*AppCompatibility.Boost)
 
     execute {
+        for (name in listOf("selectPage", "setPagerState")) {
+            setting.guardHook(GALLERY_PREVIEW_EXTENSION_DESCRIPTOR, name)
+        }
         /*
          * GalleryActivity keeps two pages on either side alive. Its legacy
          * FragmentStatePagerAdapter therefore cannot be used as a reliable
@@ -58,6 +62,7 @@ val galleryAnimatedPreviewPatch = bytecodePatch(
         )
 
         galleryPageFactoryFingerprint.wrapHook(
+            setting = setting,
             before = """
                 iget-object v1, p0, ${BoostApi.GalleryActivityImagePagerAdapter.activity}
                 invoke-static {v1, p1}, Lapp/morphe/extension/boost/gallery/GalleryAnimatedPreview;->beginPage(Ljava/lang/Object;I)V
@@ -69,6 +74,7 @@ val galleryAnimatedPreviewPatch = bytecodePatch(
         )
 
         imageModelFragmentOnCreateViewFingerprint.wrapHook(
+            setting = setting,
             after = """
                 invoke-static {p0, v0}, $GALLERY_PREVIEW_EXTENSION_DESCRIPTOR->bindPage(Ljava/lang/Object;Landroid/view/View;)V
             """,

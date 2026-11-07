@@ -14,6 +14,7 @@ import app.morphe.patches.reddit.customclients.INSTALL_NEW_CLIENT_METHOD
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.fixRedgifsApiPatch
+import app.morphe.patches.reddit.customclients.redgifsSetting
 import app.morphe.patcher.util.getReference
 import app.morphe.util.indexOfFirstInstructionOrThrow
 import com.android.tools.smali.dexlib2.iface.instruction.FiveRegisterInstruction
@@ -30,7 +31,7 @@ val fixRedgifsApi = fixRedgifsApiPatch(
     execute {
         // region Patch Redgifs OkHttp3 client.
 
-        CreateOkHttpClientFingerprint.method.apply {
+        redgifsSetting.patchMethod(CreateOkHttpClientFingerprint) {
             val index = indexOfFirstInstructionOrThrow {
                 val reference = getReference<MethodReference>()
                 reference?.name == "build" && reference.definingClass == "Lokhttp3/OkHttpClient\$Builder;"

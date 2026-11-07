@@ -10,7 +10,7 @@ package app.morphe.patches.reddit.customclients.boostforreddit.fix.refresh
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.settings.boostMorpheSettingsPatch
@@ -26,12 +26,14 @@ private const val ADAPTIVE_REFRESH_RATE_EXTENSION_DESCRIPTOR =
 private val boostApplicationOnCreateFingerprint = BoostApi.MyApplication.onCreate.fingerprint()
 
 @Suppress("unused")
-val preferHighRefreshRatePatch = bytecodePatch(
+val preferHighRefreshRatePatch = morpheBytecodePatch(
     name = "Prefer high refresh rate",
     description = "Requests a high display refresh rate for Boost on adaptive-refresh devices.",
     default = true,
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.INTERFACE,
+    preferenceKey = "morphe_boost_prefer_high_refresh_rate",
 ) {
-    category(PatchCategory.INTERFACE)
     dependsOn(ExtensionPatches.Boost, boostMorpheSettingsPatch)
     compatibleWith(*AppCompatibility.Boost)
 

@@ -9,7 +9,7 @@ package app.morphe.patches.reddit.customclients.boostforreddit.fix.feed
 
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.util.addInstructionsAtControlFlowLabel
@@ -29,18 +29,20 @@ private const val FILTERED_PAGE_EXTENSION_DESCRIPTOR =
 private val filteredNextPageSnackbarFingerprint = BoostApi.ThingFragment.filteredNextPageSnackbar.fingerprint()
 
 @Suppress("unused")
-val autoLoadFilteredPagePatch = bytecodePatch(
+val autoLoadFilteredPagePatch = morpheBytecodePatch(
     name = "Auto-load next page after filtered results",
     description =
         "Loads the next page automatically when content filters hide every post on a page, " +
             "instead of leaving the feed stuck behind a \"Results were filtered\" Snackbar.",
     default = true,
-) {
-    category(PatchCategory.FEED)
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.FEED,
+) { setting ->
     dependsOn(ExtensionPatches.Boost)
     compatibleWith(*AppCompatibility.Boost)
 
     execute {
+        setting.guardHook(FILTERED_PAGE_EXTENSION_DESCRIPTOR, "onPageFiltered")
         filteredNextPageSnackbarFingerprint.method.apply {
             // q1 also shows "Review filter". Only replace its Load next branch.
             val nextPageIndex = indexOfFirstInstructionOrThrow {

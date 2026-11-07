@@ -11,7 +11,7 @@ import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patcher.util.getReference
@@ -26,17 +26,19 @@ private const val FLAIR_CONTRAST_EXTENSION_DESCRIPTOR =
 private val flairColorsFingerprint = BoostApi.RichFlairView.flairColors.fingerprint()
 
 @Suppress("unused")
-val readableFlairLabelsPatch = bytecodePatch(
+val readableFlairLabelsPatch = morpheBytecodePatch(
     name = "Readable Boost flair labels",
     description =
         "Uses black or white flair text when Reddit's flair text color is unreadable on its background.",
     default = true,
-) {
-    category(PatchCategory.FEED)
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.FEED,
+) { setting ->
     dependsOn(ExtensionPatches.Boost)
     compatibleWith(*AppCompatibility.Boost)
 
     execute {
+        setting.guardHook(FLAIR_CONTRAST_EXTENSION_DESCRIPTOR, "readableTextColor", identity = true)
         flairColorsFingerprint.method.apply {
             val backgroundIndex = indexOfFirstInstructionOrThrow {
                 getReference<MethodReference>()?.toString() ==

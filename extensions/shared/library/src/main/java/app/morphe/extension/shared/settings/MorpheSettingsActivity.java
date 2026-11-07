@@ -18,6 +18,9 @@ import android.os.Looper;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
+import android.preference.PreferenceGroup;
+import android.preference.EditTextPreference;
+import android.preference.CheckBoxPreference;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.WindowManager;
@@ -69,8 +72,11 @@ public final class MorpheSettingsActivity extends PreferenceActivity {
         ActionBar bar = getActionBar();
         if (bar != null) bar.setDisplayHomeAsUpEnabled(true);
         if (screen == null) {
+            OAuthSettings.migrateLegacyPreferences(this);
             addPreferencesFromResource(resource("xml", "morphe_settings"));
             setTitle(resource("string", "morphe_settings_title"));
+            bindPatchPreferences(getPreferenceScreen());
+            bindOAuthPreferences();
             preference(EXCEPTIONS).setOnPreferenceClickListener(ignored -> openScreen(EXCEPTIONS));
             preference("morphe_crash_logs").setOnPreferenceClickListener(ignored -> openScreen(CRASHES));
             return;
@@ -101,6 +107,48 @@ public final class MorpheSettingsActivity extends PreferenceActivity {
         });
         String source = state == null ? null : state.getString(SOURCE);
         pendingSource = source == null ? null : Uri.parse(source);
+    }
+
+    private void bindPatchPreferences(PreferenceGroup group) {
+        for (int index = 0; index < group.getPreferenceCount(); index++) {
+            Preference entry = group.getPreference(index);
+            if (entry instanceof PreferenceGroup) bindPatchPreferences((PreferenceGroup) entry);
+            String key = entry.getKey();
+            if (entry instanceof CheckBoxPreference && key != null && key.startsWith("morphe_patch_")) {
+                entry.setOnPreferenceChangeListener((preference, value) -> {
+                    Toast.makeText(this, "Restart the app to apply the patch change.", Toast.LENGTH_LONG).show();
+                    return true;
+                });
+            }
+        }
+    }
+
+    private void bindOAuthPreferences() {
+        String[] keys = OAuthSettings.preferenceKeys(this);
+        if (findPreference(keys[0]) == null) return;
+        for (String key : keys) {
+            Preference entry = preference(key);
+            if (!(entry instanceof EditTextPreference)) {
+                entry.setSummary(OAuthSettings.defaultValue(key)
+                        + "\nFixed in this APK. Repatch the app to change the callback URI.");
+                continue;
+            }
+            EditTextPreference editor = (EditTextPreference) entry;
+            editor.setSummary(OAuthSettings.summary(key, editor.getText()));
+            editor.setOnPreferenceChangeListener((preference, value) -> {
+                String text = (String) value;
+                String error = OAuthSettings.validationError(key, text);
+                if (error != null) {
+                    Log.w(TAG, "Rejected an invalid OAuth setting.");
+                    Toast.makeText(this, error, Toast.LENGTH_LONG).show();
+                    return false;
+                }
+                preference.setSummary(OAuthSettings.summary(key, text));
+                Toast.makeText(this, "Restart the app and sign in again after changing OAuth values.",
+                        Toast.LENGTH_LONG).show();
+                return true;
+            });
+        }
     }
 
     private boolean openScreen(String name) {

@@ -2,46 +2,4 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory android:title="Image viewer">
-        <androidx.preference.SeekBarPreference
-            android:key="morphe_boost_image_dismiss_sensitivity"
-            android:title="Swipe image away faster"
-            android:summary="Default 100 enables quick flicks and a moderate 10% drag threshold. 50 keeps Boost&#39;s 15% threshold with quick flicks; 12 restores original Boost behavior."
-            android:defaultValue="100"
-            android:min="12"
-            android:max="100"
-            app:min="12"
-            app:showSeekBarValue="true" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="Search">
-        <CheckBoxPreference
-            android:key="morphe_boost_search_open_keyboard_on_entry"
-            android:title="Open keyboard when entering Search"
-            android:summary="Focus the search field and show the keyboard immediately. When disabled, tap Search again to start typing."
-            android:defaultValue="false" />
-        <CheckBoxPreference
-            android:key="morphe_boost_search_show_active_subreddits"
-            android:title="Show active subreddits"
-            android:summary="List currently active subreddits when Search opens."
-            android:defaultValue="true" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="Display &amp; performance">
-        <CheckBoxPreference
-            android:key="morphe_boost_prefer_high_refresh_rate"
-            android:title="Prefer high refresh rate"
-            android:summary="Ask Android to use a high refresh rate for Boost windows on adaptive-refresh displays."
-            android:defaultValue="true" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="Recovery &amp; archives">
-        <CheckBoxPreference
-            android:key="morphe_boost_reddit_undelete_enabled"
-            android:title="Automatically undelete Reddit content"
-            android:summary="Restore removed Reddit posts and comments from Arctic Shift and the Wayback Machine. When a thread has removed content, its post and comment IDs are sent to these third-party archives. Off by default."
-            android:defaultValue="false" />
-        <CheckBoxPreference
-            android:key="morphe_boost_imgur_undelete_enabled"
-            android:title="Automatically undelete Imgur images"
-            android:summary="Restore missing Imgur images and albums from the Wayback Machine. Links to missing Imgur media you open are sent to this third-party archive. Off by default."
-            android:defaultValue="false" />
-    </PreferenceCategory>
 </PreferenceScreen>

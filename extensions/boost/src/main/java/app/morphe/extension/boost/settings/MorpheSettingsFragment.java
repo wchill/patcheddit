@@ -10,8 +10,16 @@ package app.morphe.extension.boost.settings;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
+import androidx.preference.EditTextPreference;
+import androidx.preference.CheckBoxPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceGroup;
+
+import app.morphe.extension.shared.settings.OAuthSettings;
 
 public class MorpheSettingsFragment extends PreferenceFragmentCompat {
     public static final String CONTRACT_MARKER =
@@ -27,6 +35,52 @@ public class MorpheSettingsFragment extends PreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(resourceId("xml", resourceName()), rootKey);
+        bindPatchPreferences(getPreferenceScreen());
+        bindOAuthPreferences();
+    }
+
+    private void bindPatchPreferences(PreferenceGroup group) {
+        for (int index = 0; index < group.getPreferenceCount(); index++) {
+            Preference entry = group.getPreference(index);
+            if (entry instanceof PreferenceGroup) bindPatchPreferences((PreferenceGroup) entry);
+            String key = entry.getKey();
+            if (entry instanceof CheckBoxPreference && key != null && (key.startsWith("morphe_patch_")
+                    || key.equals("morphe_boost_prefer_high_refresh_rate")
+                    || key.equals("morphe_boost_reddit_undelete_enabled")
+                    || key.equals("morphe_boost_imgur_undelete_enabled"))) {
+                entry.setOnPreferenceChangeListener((preference, value) -> {
+                    Toast.makeText(requireContext(), "Restart the app to apply the patch change.",
+                            Toast.LENGTH_LONG).show();
+                    return true;
+                });
+            }
+        }
+    }
+
+    private void bindOAuthPreferences() {
+        String[] keys = OAuthSettings.preferenceKeys(requireContext());
+        if (findPreference(keys[0]) == null) return;
+        for (String key : keys) {
+            Preference entry = findPreference(key);
+            if (!(entry instanceof EditTextPreference)) {
+                throw new IllegalStateException("Missing Morphe OAuth editor: " + key);
+            }
+            EditTextPreference editor = (EditTextPreference) entry;
+            editor.setSummary(OAuthSettings.summary(key, editor.getText()));
+            editor.setOnPreferenceChangeListener((preference, value) -> {
+                String text = (String) value;
+                String error = OAuthSettings.validationError(key, text);
+                if (error != null) {
+                    Log.w("MorpheSettings", "Rejected an invalid OAuth setting.");
+                    Toast.makeText(requireContext(), error, Toast.LENGTH_LONG).show();
+                    return false;
+                }
+                preference.setSummary(OAuthSettings.summary(key, text));
+                Toast.makeText(requireContext(), "Restart the app and sign in again after changing OAuth values.",
+                        Toast.LENGTH_LONG).show();
+                return true;
+            });
+        }
     }
 
     protected final int resourceId(String type, String name) {

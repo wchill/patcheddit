@@ -17,6 +17,7 @@ import app.morphe.patches.reddit.customclients.MORPHE_SETTINGS_DESCRIPTION
 import app.morphe.patches.reddit.customclients.MORPHE_SETTINGS_HOOK
 import app.morphe.patches.reddit.customclients.addMorpheLayoutEntry
 import app.morphe.patches.reddit.customclients.morpheSettingsResourcesPatch
+import app.morphe.patches.reddit.customclients.morpheSettingsContextPatch
 import app.morphe.patches.reddit.customclients.settingsResourcePaths
 import com.android.tools.smali.dexlib2.Opcode
 
@@ -37,7 +38,7 @@ val joeyMorpheSettingsPatch = bytecodePatch(
 ) {
     category(PatchCategory.INTERFACE)
     compatibleWith(*AppCompatibility.JoeyForReddit)
-    dependsOn(ExtensionPatches.Joey, joeySettingsResourcesPatch)
+    dependsOn(ExtensionPatches.Joey, joeySettingsResourcesPatch, morpheSettingsContextPatch)
 
     execute {
         Fingerprint(

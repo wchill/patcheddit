@@ -30,7 +30,30 @@ internal const val MORPHE_SETTINGS_ACTIVITY = "app.morphe.extension.shared.setti
 internal const val MORPHE_SETTINGS_HOOK = "Lapp/morphe/extension/shared/settings/MorpheSettings;"
 internal const val MORPHE_SETTINGS_ENTRY = "morphe_settings_entry"
 internal const val MORPHE_SETTINGS_DESCRIPTION =
-    "Adds a Morphe settings menu with exception and fatal crash log viewers."
+    "Adds a Morphe settings menu for included patches, with exception and fatal crash log viewers."
+
+internal val morpheSettingsContextPatch = bytecodePatch(default = false) {
+    lateinit var applicationType: String
+    dependsOn(resourcePatch(default = false) {
+        execute {
+            document("AndroidManifest.xml").use { manifest ->
+                val application = checkNotNull(manifest.getElementsByTagName("application").item(0) as? Element) {
+                    "AndroidManifest.xml has no application element."
+                }
+                applicationType = applicationDescriptor(
+                    manifest.documentElement.getAttribute("package"),
+                    application.getAttribute("android:name"),
+                )
+            }
+        }
+    })
+    finalize {
+        onCreateMethod(mutableClassDefBy(applicationType)).addInstruction(
+            0,
+            "invoke-static/range {p0 .. p0}, $PATCH_SETTINGS_DESCRIPTOR->initialize(Landroid/app/Application;)V",
+        )
+    }
+}
 
 internal val morpheSettingsResourcesPatch = resourcePatch(default = false) {
     dependsOn(addResourcesPatch(
@@ -50,6 +73,10 @@ internal val morpheSettingsResourcesPatch = resourcePatch(default = false) {
             }
         }
         document("AndroidManifest.xml").use(::registerMorpheSettingsActivity)
+    }
+
+    finalize {
+        addMorpheApkSettings()
     }
 }
 
@@ -95,7 +122,7 @@ internal fun morphePreferencesPatch(
 ) {
     category(PatchCategory.INTERFACE)
     compatibleWith(*compatible)
-    dependsOn(extensionPatch, morpheSettingsResourcesPatch)
+    dependsOn(extensionPatch, morpheSettingsResourcesPatch, morpheSettingsContextPatch)
 
     execute {
         val packageName = document("AndroidManifest.xml").use {
@@ -123,7 +150,7 @@ internal fun morpheListSettingsPatch(
 ) {
     category(PatchCategory.INTERFACE)
     compatibleWith(*compatible)
-    dependsOn(extensionPatch, morpheSettingsResourcesPatch)
+    dependsOn(extensionPatch, morpheSettingsResourcesPatch, morpheSettingsContextPatch)
 
     execute {
         addMorpheListEntry(menu.method)

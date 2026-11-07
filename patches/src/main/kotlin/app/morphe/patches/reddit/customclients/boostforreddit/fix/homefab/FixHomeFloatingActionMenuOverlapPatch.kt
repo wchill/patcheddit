@@ -7,8 +7,9 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.fix.homefab
 
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patches.reddit.customclients.morpheResourcePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import app.morphe.patches.all.misc.PatchCategory
@@ -166,13 +167,14 @@ private fun Document.raiseDirectFabs(
 }
 
 @Suppress("unused")
-val fixBoostHomeFloatingActionMenuOverlapPatch = resourcePatch(
+val fixBoostHomeFloatingActionMenuOverlapPatch = morpheResourcePatch(
     name = "Standardize Boost bottom-navigation FAB clearance",
     description =
         "Keeps the floating action buttons on Home, subreddits, Random, Inbox and Profile clear of the bottom navigation.",
     default = true,
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.NAVIGATION,
 ) {
-    category(PatchCategory.NAVIGATION)
     compatibleWith(*AppCompatibility.Boost)
 
     dependsOn(fixFabDependencyClearancePatch)

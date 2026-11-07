@@ -18,7 +18,11 @@ In addition, patches for some apps contain additional features that were not pre
 * **Log exceptions** saves fatal crashes for every supported client, including Sync for Lemmy, using morphe-patches-library's shared crash logger. BaconReader and Boost hook their native error-reporting handlers; other clients capture exceptions reported through Android error/warning logging, stack traces, and Crashlytics when present, without removing the original logging.
     * Fatal reports are saved in **Documents/Morphe**, falling back to the app-specific external Documents folder if public storage is unavailable. Non-fatal reports use private `no_backup/morphe-exceptions` storage, rotating at 4 MiB per file with one previous file retained and excluded from Android app backups.
     * Common credential-bearing lines are redacted from non-fatal logs; fatal reports are not filtered. Other personal or request data can remain, so review exported copies before sharing.
-    * Every supported client exposes a Morphe-specific settings menu. Not all patches are configurable yet via this menu; this will be added in future releases. 
+* Every supported client exposes a **Morphe** settings menu. Included feature patches register their own controls; deselected patches do not leave behind inactive options.
+    * Feature switches default to the patch's existing runtime behavior.
+    * `Spoof client` exposes client ID, redirect URI and user-agent overrides. Empty overrides use the values configured when patching. Boost shares these controls with its native API settings. Existing Joey and Infinity overrides are migrated without replacing newer values.
+    * Infinity's patched callback URI is read-only because it is declared in the APK manifest. The original callback remains available when spoofing is disabled. Manifest/layout-only changes, including Android debugging, are also shown as read-only; repatch the app to change them.
+    * Changing OAuth credentials requires restarting and signing in again. Disabling API/login fixes can restore the original client's broken behavior.
 
 ### Boost for Reddit
 * Boost patches target the official [Boost 1.14.3 APK](https://github.com/rubenmayayo/boost-for-reddit/releases/tag/v1.14.3).
@@ -145,7 +149,31 @@ Builds use the published morphe-patches-library version pinned in `gradle/libs.v
 
 ### Updating Boost bindings
 
-Boost settings XML and layouts are stored under `patches/src/main/resources/boost/`, in `xml/` and `layout/`. Each feature includes its files through the internal `AddResources` patch. It registers individual target paths with the resource context so on-demand decoding tracks new values and view IDs. Settings entries are imported from these XML resources only when their feature patch is selected; UI XML is not generated in Kotlin.
+Boost settings XML and layouts are stored under `patches/src/main/resources/boost/`, in `xml/` and `layout/`. Each feature includes its files through the internal `AddResources` patch. It registers individual target paths with the resource context so on-demand decoding tracks new values and view IDs. Settings entries are imported only when their feature patch is selected. Shared XML templates define menu categories, switches and read-only entries; registration fills their patch metadata without generating widget/layout XML.
+
+Use `morpheBytecodePatch` to register a feature automatically in the correct client's menu, including its extension, settings entry and independent settings-context bootstrap:
+
+```kotlin
+val examplePatch = morpheBytecodePatch(
+    name = "Example feature",
+    description = "Adds an optional feature.",
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.MEDIA,
+) { setting ->
+    compatibleWith(*AppCompatibility.Boost)
+    execute {
+        setting.guardHook("Lapp/morphe/extension/boost/feature/Feature;", "apply")
+    }
+}
+```
+
+`optionsResource` accepts a bundled `PreferenceCategory`; set `resourceDirectory = "boost"` for Boost XML. Existing preference keys and runtime defaults can be retained with `preferenceKey` and `defaultEnabled`, independently of patch-selection `default`. `addMorpheSettings` is available to patches using the original builders.
+
+Client discovery follows composite extension dependencies, including Boost's HTTP interceptor patch. App-agnostic uses of the existing public factories retain their always-on behavior; an unregistered extension produces a patcher warning instead of requiring a client-specific menu.
+
+Gate void/boolean extension hooks with `guardHook`; identity transforms can use `identity = true` to return the original input when disabled. Use `patchMethod` for reversible method-local bytecode changes and `replaceString` for constructor strings. For hooks sharing a native method, use `wrapHook(setting = setting)` so disabling one feature does not skip another feature's hooks. `morpheResourcePatch` defaults to a read-only menu entry for APK-only changes; menu-only features can use `readOnly = false` and a dependent options entry.
+
+Infinity's JNI client-ID getter is kept intact. Managed call sites use a gated bridge so disabling spoofing still calls the original native method without changing its JNI symbol.
 
 The extension uses Jackson for all JSON processing, bundled and shadowed under `app.morphe.extension.boost.libraries`, with its APIs preserved during shrinking. It does not depend on Boost's R8-reduced JSON libraries or bundle Gson. Native JRAW JSON objects remain behind the `NativeJsonModel` / `NativeJsonNode` adapters; they are not cast to the private Jackson tree types. Boost's own JSON libraries and callers, and the patcher's build-time Gson dependency, are left unchanged.
 

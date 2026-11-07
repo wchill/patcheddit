@@ -11,7 +11,6 @@ import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.Patch
-import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.patch.resourcePatch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableClass
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
@@ -60,12 +59,13 @@ fun crashLogPatch(
     exceptionHookDescriptor: String = EXCEPTION_HOOK_CLASS_DESCRIPTOR,
     settingsPatch: Patch<*>? = null,
     description: String = "Logs reported errors and fatal crashes, viewable in Morphe settings.",
-) = bytecodePatch(
+) = morpheBytecodePatch(
     name = "Log exceptions",
     description = description,
     default = true,
-) {
-    category(PatchCategory.ADVANCED)
+    extensionPatch = extensionPatch,
+    category = PatchCategory.ADVANCED,
+) { setting ->
     compatibleWith(*compatible)
     dependsOn(extensionPatch)
     settingsPatch?.let { dependsOn(it) }
@@ -95,6 +95,7 @@ fun crashLogPatch(
     })
 
     execute {
+        setting.guardHook("Lapp/morphe/extension/shared/patches/CrashLogPatch;", "setUncaughtExceptionHandler")
         val classes = buildList { classDefForEach(::add) }.associateBy { it.type }
         val throwableTypes = mutableMapOf<String, Boolean>()
         for (classDef in classes.values) {

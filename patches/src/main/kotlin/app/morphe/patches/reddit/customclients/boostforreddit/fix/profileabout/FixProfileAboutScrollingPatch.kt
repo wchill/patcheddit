@@ -6,19 +6,21 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.fix.profileabout
 
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patches.reddit.customclients.morpheResourcePatch
 import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import org.w3c.dom.Element
 
 // Boost 1.14.2 applies these attributes natively; keep the patch opt-in.
 @Suppress("unused")
-val fixProfileAboutScrollingPatch = resourcePatch(
+val fixProfileAboutScrollingPatch = morpheResourcePatch(
     name = "Fix profile About scrolling",
     description = "Fixes the first swipe stopping early on profile About tabs without disabling horizontal scrolling.",
     default = false,
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.INTERFACE,
 ) {
-    category(PatchCategory.INTERFACE)
     compatibleWith(*AppCompatibility.Boost)
 
     execute {

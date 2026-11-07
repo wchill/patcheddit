@@ -14,6 +14,7 @@ import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.boostforreddit.wrapHook
 import app.morphe.patches.reddit.customclients.spoofClientPatch
+import app.morphe.patches.reddit.customclients.spoofClientSetting
 import com.android.tools.smali.dexlib2.formatter.DexFormatter
 
 const val JRAW_NEW_URL_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boost/http/HttpUtils;"
@@ -21,6 +22,7 @@ const val JRAW_NEW_URL_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boost
 val spoofClientPatch = spoofClientPatch(
     name = "Spoof client",
     description = "Sets default Reddit API credentials that can be overridden in Boost's API settings.",
+    extensionPatch = ExtensionPatches.Boost,
 ) { clientIdOption, redirectUriOption, userAgentOption ->
     dependsOn(ExtensionPatches.Boost)
     compatibleWith(*AppCompatibility.Boost)
@@ -37,6 +39,7 @@ val spoofClientPatch = spoofClientPatch(
         )
         // Keep native normalization and saved values shared by API setup, login and token refresh.
         GetApiPreferenceFingerprint.wrapHook(
+            setting = spoofClientSetting,
             after = buildString {
                 appendLine("if-nez v0, :morphe_api_preference_return")
                 defaults.entries.forEachIndexed { index, (key, value) ->

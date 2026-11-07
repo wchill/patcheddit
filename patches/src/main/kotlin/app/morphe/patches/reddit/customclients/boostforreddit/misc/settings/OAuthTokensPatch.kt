@@ -6,30 +6,31 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.misc.settings
 
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patches.reddit.customclients.morpheResourcePatch
 import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.patches.all.misc.resources.addResourcesPatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.util.ResourceGroup
 
 @Suppress("unused")
-val oauthTokensPatch = resourcePatch(
+val oauthTokensPatch = morpheResourcePatch(
     name = "Import and export OAuth tokens",
     description = "Adds an editable JSON field in Morphe settings to view or replace Reddit account tokens.",
     default = true,
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.LOGIN,
+    readOnly = false,
+    optionsResource = "morphe_boost_oauth_entry",
+    resourceDirectory = "boost",
 ) {
-    category(PatchCategory.LOGIN)
     dependsOn(
         boostMorpheSettingsPatch,
         addResourcesPatch(
             "boost",
-            ResourceGroup("xml", "morphe_boost_oauth_tokens.xml", "morphe_boost_oauth_entry.xml"),
+            ResourceGroup("xml", "morphe_boost_oauth_tokens.xml"),
             ResourceGroup("layout", "morphe_boost_oauth_editor.xml"),
         ),
     )
     compatibleWith(*AppCompatibility.Boost)
-
-    execute {
-        addBoostSettings("morphe_boost_oauth_entry")
-    }
 }

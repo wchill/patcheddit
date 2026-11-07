@@ -9,7 +9,6 @@ import okhttp3.Response;
 
 public abstract class PatchedditInterceptor implements Interceptor {
     public boolean isEnabled() {
-        // TODO: Make this toggleable via settings instead of just using isPatchIncluded.
         return isPatchIncluded();
     }
     public abstract boolean isPatchIncluded();

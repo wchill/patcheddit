@@ -10,9 +10,10 @@ package app.morphe.patches.reddit.customclients.boostforreddit.fix.crashlytics
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 
 import app.morphe.patcher.extensions.InstructionExtensions.removeInstructions
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patcher.patch.resourcePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patcher.util.getReference
 import app.morphe.util.indexOfFirstInstructionOrThrow
 import com.android.tools.smali.dexlib2.Opcode
@@ -54,12 +55,14 @@ private val removeBoostCrashlyticsRegistrarPatch = resourcePatch(
 }
 
 @Suppress("unused")
-val disableBoostCrashlyticsPatch = bytecodePatch(
+val disableBoostCrashlyticsPatch = morpheBytecodePatch(
     name = "Disable Boost Crashlytics startup network calls",
     description = "Stops Boost's crash reporting (Crashlytics) from connecting at startup. Other Firebase services keep working.",
-    default = true
+    default = true,
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.ADS,
+    readOnly = true,
 ) {
-    category(PatchCategory.ADS)
     dependsOn(removeBoostCrashlyticsRegistrarPatch)
     compatibleWith(*AppCompatibility.Boost)
 

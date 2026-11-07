@@ -8,10 +8,8 @@
 package app.morphe.extension.joey;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import app.morphe.extension.shared.Utils;
+import app.morphe.extension.shared.settings.OAuthSettings;
 
 /**
  * @noinspection unused
@@ -28,17 +26,14 @@ public class APIUtils {
     }
 
     public static String getClientId() {
-        SharedPreferences sharedPreferences = getSharedPreferences();
-        return sharedPreferences.getString(CLIENT_ID_PREF_KEY, getDefaultClientId());
+        return OAuthSettings.getClientId(getDefaultClientId());
     }
     public static String getUserAgent() {
-        SharedPreferences sharedPreferences = getSharedPreferences();
-        return sharedPreferences.getString(USER_AGENT_PREF_KEY, getDefaultUserAgent());
+        return OAuthSettings.getUserAgent(getDefaultUserAgent());
     }
 
     public static String getRedirectUri() {
-        SharedPreferences sharedPreferences = getSharedPreferences();
-        return sharedPreferences.getString(REDIRECT_URI_PREF_KEY, getDefaultRedirectUri());
+        return OAuthSettings.getRedirectUri(getDefaultRedirectUri());
     }
 
     public static String getDefaultUserAgent() {
@@ -54,7 +49,4 @@ public class APIUtils {
         return "";
     }
 
-    private static SharedPreferences getSharedPreferences() {
-        return Utils.getContext().getSharedPreferences(DEFAULT_PREFERENCES_FILE, Context.MODE_PRIVATE);
-    }
 }

@@ -10,19 +10,20 @@ package app.morphe.patches.reddit.customclients.boostforreddit.fix.sidebartrendi
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.boostforreddit.wrapHook
 import app.morphe.patches.all.misc.PatchCategory
 
 @Suppress("unused")
-val boostSidebarTrendingTodayPatch = bytecodePatch(
+val boostSidebarTrendingTodayPatch = morpheBytecodePatch(
     name = "Restore Boost sidebar Trending today",
     description = "Restores the sidebar's Trending today section, falling back to hot posts, and fixes its community limit setting.",
     default = true,
-) {
-    category(PatchCategory.FEED)
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.FEED,
+) { setting ->
     dependsOn(ExtensionPatches.Boost)
     compatibleWith(*AppCompatibility.Boost)
 
@@ -33,14 +34,16 @@ val boostSidebarTrendingTodayPatch = bytecodePatch(
          * native-first loader that falls back only when the legacy endpoint
          * returns no rows containing submissions.
          */
-        trendingTodayAsyncLoaderFingerprint.method.addInstructions(
-            0,
-            """
-                invoke-static {}, Lapp/morphe/extension/boost/sidebar/SidebarTrendingPosts;->load()Ljava/util/List;
-                move-result-object p1
-                return-object p1
-            """.trimIndent(),
-        )
+        setting.patchMethod(trendingTodayAsyncLoaderFingerprint) {
+            addInstructions(
+                0,
+                """
+                    invoke-static {}, Lapp/morphe/extension/boost/sidebar/SidebarTrendingPosts;->load()Ljava/util/List;
+                    move-result-object p1
+                    return-object p1
+                """,
+            )
+        }
 
         /*
          * The sidebar is global on Home/All/Popular, where "Limit to Community"
@@ -48,6 +51,7 @@ val boostSidebarTrendingTodayPatch = bytecodePatch(
          * subreddit, retain it as "Limit to r/<name>" with the value preloaded.
          */
         trendingTodayFragmentOnViewCreatedFingerprint.wrapHook(
+            setting = setting,
             before = "invoke-static {p0, p1}, Lapp/morphe/extension/boost/sidebar/SidebarTrendingPosts;->configureSearchOptions(Ljava/lang/Object;Landroid/view/View;)V",
             after = "invoke-static {p0}, Lapp/morphe/extension/boost/sidebar/SidebarTrendingPosts;->triggerLoad(Ljava/lang/Object;)V",
         )
@@ -57,6 +61,7 @@ val boostSidebarTrendingTodayPatch = bytecodePatch(
          * obtain the actual row before the native method reuses its arguments.
          */
         trendingTodayViewHolderBindFingerprint.wrapHook(
+            setting = setting,
             before = """
                 iget-object v0, p0, ${BoostApi.TrendingTodayAdapter.rows}
                 invoke-interface {v0, p2}, Ljava/util/List;->get(I)Ljava/lang/Object;

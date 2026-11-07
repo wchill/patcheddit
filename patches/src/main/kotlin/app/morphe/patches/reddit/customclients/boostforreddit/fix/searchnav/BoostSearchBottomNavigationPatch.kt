@@ -8,7 +8,7 @@
 package app.morphe.patches.reddit.customclients.boostforreddit.fix.searchnav
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patcher.patch.resourcePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
@@ -89,16 +89,20 @@ private val addSearchBottomNavigationHostPatch = resourcePatch(
 }
 
 @Suppress("unused")
-val boostSearchBottomNavigationPatch = bytecodePatch(
+val boostSearchBottomNavigationPatch = morpheBytecodePatch(
     name = "Add Boost Search bottom navigation",
     description = "Shows Boost's native Home, Search, Subscriptions, Inbox and Profile menu in Search and Go To.",
     default = true,
-) {
-    category(PatchCategory.NAVIGATION)
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.NAVIGATION,
+    optionsResource = "morphe_boost_search_navigation_options",
+    resourceDirectory = "boost",
+) { setting ->
     compatibleWith(*AppCompatibility.Boost)
     dependsOn(addSearchBottomNavigationHostPatch, ExtensionPatches.Boost)
 
     execute {
+        setting.guardHook(EXTENSION_CLASS_DESCRIPTOR, "install")
         searchAbstractActivityOnCreateFingerprint.method.apply {
             val setContentViewIndices =
                 implementation!!.instructions

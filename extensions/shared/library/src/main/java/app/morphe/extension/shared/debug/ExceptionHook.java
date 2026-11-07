@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 
 import app.morphe.extension.shared.Utils;
+import app.morphe.extension.shared.settings.PatchSettings;
 
 public final class ExceptionHook {
     private static final String TAG = "MorpheExceptionLog";
@@ -29,6 +30,7 @@ public final class ExceptionHook {
     }
 
     public static void handleException(Throwable error, String context) {
+        if (!PatchSettings.isEnabled("morphe_patch_log_exceptions", true)) return;
         if (Boolean.TRUE.equals(RECORDING.get())) {
             Log.e(TAG, "Recursive exception logging was suppressed.");
             return;

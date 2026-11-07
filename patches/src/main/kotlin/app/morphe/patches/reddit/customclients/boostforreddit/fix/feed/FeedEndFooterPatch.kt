@@ -10,7 +10,7 @@ package app.morphe.patches.reddit.customclients.boostforreddit.fix.feed
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.all.misc.PatchCategory
@@ -31,19 +31,21 @@ private val appendSubmissionsFingerprint = BoostApi.SubmissionRecyclerViewFragme
 private val setSubmissionsFingerprint = BoostApi.SubmissionRecyclerViewFragment.setSubmissions.fingerprint()
 
 @Suppress("unused")
-val feedEndFooterPatch = bytecodePatch(
+val feedEndFooterPatch = morpheBytecodePatch(
     name = "Show end of feed",
     description =
         "Shows an \"End of feed\" row with a Refresh button below the last post when a feed has " +
             "no more posts, instead of silently stopping. Home sorted by Best ends after a few " +
             "hundred posts.",
     default = true,
-) {
-    category(PatchCategory.FEED)
+    extensionPatch = ExtensionPatches.Boost,
+    category = PatchCategory.FEED,
+) { setting ->
     dependsOn(ExtensionPatches.Boost)
     compatibleWith(*AppCompatibility.Boost)
 
     execute {
+        for (name in listOf("onLoadPage", "onAppendPage")) setting.guardHook(FEED_END_EXTENSION_DESCRIPTOR, name)
         loadSubmissionsFingerprint.method.addInstructions(
             0,
             "invoke-static {p1}, Lapp/morphe/extension/boost/utils/BoostFeedEndFooter;->onLoadPage(${BoostApi.Paginator.type})V",

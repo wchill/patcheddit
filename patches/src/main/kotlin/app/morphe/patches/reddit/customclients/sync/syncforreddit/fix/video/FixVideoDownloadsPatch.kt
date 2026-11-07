@@ -2,9 +2,9 @@ package app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.video
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
-import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import com.android.tools.smali.dexlib2.iface.instruction.formats.Instruction35c
 
 private const val EXTENSION_CLASS_DESCRIPTOR =
@@ -12,11 +12,12 @@ private const val EXTENSION_CLASS_DESCRIPTOR =
 private const val GET_LINKS_METHOD = "getLinks([B)[Ljava/lang/String;"
 
 @Suppress("unused")
-val fixVideoDownloadsPatch = bytecodePatch(
+val fixVideoDownloadsPatch = morpheBytecodePatch(
     name = "Fix video downloads",
     description = "Fixes a bug in Sync's MPD parser resulting in only the audio-track being saved.",
-    default = true
-) {
+    default = true,
+    extensionPatch = ExtensionPatches.Sync,
+) { setting ->
     dependsOn(ExtensionPatches.Sync)
 
     compatibleWith(*AppCompatibility.SyncForReddit)
@@ -29,26 +30,21 @@ val fixVideoDownloadsPatch = bytecodePatch(
         val buildResponseInstruction =
             ParseRedditVideoNetworkResponseFingerprint.method.getInstruction<Instruction35c>(invokeDirectIndex)
 
-        ParseRedditVideoNetworkResponseFingerprint.method.addInstructions(
-            newInstanceIndex + 1,
-            """
-                # Get byte array from response.
-                iget-object v2, p1, Lcom/android/volley/NetworkResponse;->data:[B
-                    
-                # Parse the videoUrl and audioUrl from the byte array.
-                invoke-static { v2 }, $EXTENSION_CLASS_DESCRIPTOR->$GET_LINKS_METHOD
-                move-result-object v2
-        
-                # Get videoUrl (Index 0).
-                const/4 v5, 0x0
-                aget-object v${buildResponseInstruction.registerE}, v2, v5
-        
-                # Get audioUrl (Index 1).
-                const/4 v6, 0x1
-                aget-object v${buildResponseInstruction.registerF}, v2, v6
+        setting.patchMethod(ParseRedditVideoNetworkResponseFingerprint) {
+            addInstructions(
+                newInstanceIndex + 1,
+                """
+                    iget-object v2, p1, Lcom/android/volley/NetworkResponse;->data:[B
+                    invoke-static {v2}, $EXTENSION_CLASS_DESCRIPTOR->$GET_LINKS_METHOD
+                    move-result-object v2
 
-                # Register E and F are used to build the response.
-            """,
-        )
+                    const/4 v5, 0x0
+                    aget-object v${buildResponseInstruction.registerE}, v2, v5
+
+                    const/4 v6, 0x1
+                    aget-object v${buildResponseInstruction.registerF}, v2, v6
+                """,
+            )
+        }
     }
 }
