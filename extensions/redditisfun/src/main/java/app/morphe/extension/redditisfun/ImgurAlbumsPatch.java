@@ -17,14 +17,11 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.IOException;
-import java.io.InterruptedIOException;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.regex.Pattern;
 
-import okhttp3.Call;
 import okhttp3.Headers;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
@@ -32,11 +29,6 @@ import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-import okio.AsyncTimeout;
-import okio.Buffer;
-import okio.BufferedSource;
-import okio.ForwardingSource;
-import okio.Okio;
 
 public class ImgurAlbumsPatch implements Interceptor {
     static final long MAX_METADATA_BYTES = 2L * 1024 * 1024;
@@ -124,7 +116,8 @@ public class ImgurAlbumsPatch implements Interceptor {
                     .header("Accept-Encoding", "identity").build();
         }
 
-        MetadataLoad load = new MetadataLoad(chain.call(), LOADS, timeoutMillis);
+        MediaMetadata.Load load = new MediaMetadata.Load(
+                chain.call(), LOADS, timeoutMillis, MAX_METADATA_BYTES, "Imgur album");
         boolean handedOff = false;
         try {
             Chain bounded = chain
@@ -213,7 +206,7 @@ public class ImgurAlbumsPatch implements Interceptor {
     }
 
     static String repairCover(String text) throws IOException {
-        checkJsonDepth(text);
+        MediaMetadata.checkJsonDepth(text, MAX_JSON_DEPTH, "Imgur");
         try {
             JSONTokener tokener = new JSONTokener(text);
             Object value = tokener.nextValue();
@@ -259,26 +252,6 @@ public class ImgurAlbumsPatch implements Interceptor {
                 && link.pathSegments().get(0).matches(Pattern.quote(id) + "\\.(?:jpe?g|png|gif|webp|bmp|mp4)");
     }
 
-    private static void checkJsonDepth(String text) throws IOException {
-        int depth = 0;
-        boolean quoted = false;
-        boolean escaped = false;
-        for (int i = 0; i < text.length(); i++) {
-            char character = text.charAt(i);
-            if (quoted) {
-                if (escaped) escaped = false;
-                else if (character == '\\') escaped = true;
-                else if (character == '"') quoted = false;
-            } else if (character == '"') {
-                quoted = true;
-            } else if (character == '{' || character == '[') {
-                if (++depth > MAX_JSON_DEPTH) throw new IOException("Imgur metadata nesting exceeds the limit");
-            } else if (character == '}' || character == ']') {
-                depth--;
-            }
-        }
-    }
-
     private static final class AlbumRoute {
         final int idIndex;
         final boolean gallery;
@@ -310,80 +283,4 @@ public class ImgurAlbumsPatch implements Interceptor {
         }
     }
 
-    static final class MetadataLoad {
-        private final Call call;
-        private final Semaphore slots;
-        private final AtomicBoolean finished = new AtomicBoolean();
-        private final AsyncTimeout timeout;
-        private volatile boolean expired;
-
-        MetadataLoad(Call call, Semaphore slots, int timeoutMillis) throws IOException {
-            if (!slots.tryAcquire()) throw new IOException("Too many Imgur album loads; try again");
-            this.call = call;
-            this.slots = slots;
-            timeout = new AsyncTimeout() {
-                @Override
-                protected void timedOut() {
-                    expired = true;
-                    MetadataLoad.this.call.cancel();
-                    finish();
-                }
-            };
-            timeout.timeout(timeoutMillis, TimeUnit.MILLISECONDS);
-            timeout.enter();
-        }
-
-        void finish() {
-            if (finished.compareAndSet(false, true)) {
-                timeout.exit();
-                slots.release();
-            }
-        }
-
-        IOException failure(IOException cause) {
-            if (!expired) return cause;
-            InterruptedIOException failure = new InterruptedIOException("Imgur album load timed out");
-            failure.initCause(cause);
-            return failure;
-        }
-
-        ResponseBody bound(ResponseBody body) {
-            BufferedSource source = Okio.buffer(new ForwardingSource(body.source()) {
-                private long bytesRead;
-
-                @Override
-                public long read(@NonNull Buffer sink, long byteCount) throws IOException {
-                    try {
-                        if (expired || call.isCanceled()) throw new IOException("Imgur album load was canceled");
-                        long count = super.read(sink, Math.min(byteCount, MAX_METADATA_BYTES + 1 - bytesRead));
-                        if (expired) throw new IOException("Imgur album load timed out");
-                        if (count == -1) finish();
-                        else if ((bytesRead += count) > MAX_METADATA_BYTES) {
-                            call.cancel();
-                            throw new IOException("Imgur album metadata exceeds the size limit");
-                        }
-                        return count;
-                    } catch (IOException exception) {
-                        call.cancel();
-                        finish();
-                        throw failure(exception);
-                    }
-                }
-
-                @Override
-                public void close() throws IOException {
-                    try {
-                        super.close();
-                    } finally {
-                        finish();
-                    }
-                }
-            });
-            return new ResponseBody() {
-                @Override public MediaType contentType() { return body.contentType(); }
-                @Override public long contentLength() { return body.contentLength(); }
-                @NonNull @Override public BufferedSource source() { return source; }
-            };
-        }
-    }
 }
