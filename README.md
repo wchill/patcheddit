@@ -60,6 +60,7 @@ In addition, patches for some apps contain additional features that were not pre
 
 ### reddit is fun
 * Restores Imgur album and gallery loading in the built-in viewer, album thumbnails, and links that include a title.
+* Restores native Redgifs playback and returns safely when a video is unavailable.
 * Enables pro features without ads.
 
 ### Infinity for Reddit

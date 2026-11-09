@@ -62,12 +62,14 @@ internal fun resolveImgurTargets(classes: Iterable<ClassDef>): ImgurNativeTarget
     fun Method.strings() = implementation?.instructions?.mapNotNull {
         ((it as? ReferenceInstruction)?.reference as? StringReference)?.string
     }.orEmpty().toSet()
+    // Identify the full-album URI builder, not the independent thumbnail fetch paths.
     val builders = methods.filter {
         AccessFlags.PRIVATE.isSet(it.accessFlags) && AccessFlags.STATIC.isSet(it.accessFlags)
                 && it.returnType == "Landroid/net/Uri;"
                 && it.parameterTypes.map(CharSequence::toString) == listOf("Ljava/lang/String;", "Z")
                 && it.strings().containsAll(imgurUriStrings)
     }
+    // Album and gallery thumbnails have separate loaders, both already carrying Imgur authorization.
     val thumbnails = methods.filter {
         it.returnType == "Ljava/lang/String;"
                 && it.parameterTypes.map(CharSequence::toString) == listOf("Landroid/net/Uri;")
@@ -80,6 +82,7 @@ internal fun resolveImgurTargets(classes: Iterable<ClassDef>): ImgurNativeTarget
     require(builders.size == 1 && thumbnails.size == 2
             && thumbnails.map { it.definingClass }.distinct().size == 1
             && thumbnails.count { "gallery" in it.strings() } == 1) { error }
+    // Borrow the input APK's client authorization only if both thumbnail loaders agree.
     val authorizations = thumbnails.map {
         it.strings().filter { value -> value.startsWith("Client-ID ") }.singleOrNull()
     }

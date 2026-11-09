@@ -9,10 +9,8 @@ package app.morphe.patches.reddit.customclients.redditisfun.api
 
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
-import app.morphe.patches.reddit.customclients.addMorpheSettings
 import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import com.android.tools.smali.dexlib2.formatter.DexFormatter
 
@@ -23,23 +21,11 @@ val imgurAlbumsPatch = morpheBytecodePatch(
     description = "Fixes Imgur album and gallery loading, thumbnails, and links with titles.",
     default = true,
     extensionPatch = ExtensionPatches.RIF,
-    settingsSummary = "Loads Imgur albums and galleries using the public Imgur API.",
 ) { setting ->
     compatibleWith(*AppCompatibility.RedditIsFun)
-    val thumbnails = addMorpheSettings(
-        extensionPatch = ExtensionPatches.RIF,
-        title = "Fix Imgur album thumbnails",
-        description = "Restores album and gallery thumbnails, including albums without a cover.",
-        category = PatchCategory.MEDIA,
-    )
-    val titles = addMorpheSettings(
-        extensionPatch = ExtensionPatches.RIF,
-        title = "Fix Imgur links with titles",
-        description = "Opens title-bearing Imgur album and gallery links like their plain-ID links.",
-        category = PatchCategory.MEDIA,
-    )
 
     execute {
+        // Reuse native Imgur authorization instead of embedding a client ID in the patch.
         val targets = resolveImgurTargets(buildList { classDefForEach(::add) })
         Fingerprint(
             definingClass = EXTENSION_CLASS_DESCRIPTOR,
@@ -48,19 +34,16 @@ val imgurAlbumsPatch = morpheBytecodePatch(
             const-string v0, ${DexFormatter.INSTANCE.getQuotedString(targets.authorization)}
             return-object v0
         """)
-        setting.returnEnabled(Fingerprint(
-            definingClass = EXTENSION_CLASS_DESCRIPTOR,
-            name = "usePublicApi",
-        ).method)
-        thumbnails.returnEnabled(Fingerprint(
-            definingClass = EXTENSION_CLASS_DESCRIPTOR,
-            name = "recoverThumbnails",
-        ).method)
-        titles.returnEnabled(Fingerprint(
-            definingClass = EXTENSION_CLASS_DESCRIPTOR,
-            name = "normalizeAlbumLinks",
-        ).method)
+        // All HTTP repairs follow the existing Imgur switch and its saved value.
+        for (hook in listOf("usePublicApi", "recoverThumbnails", "normalizeAlbumLinks")) {
+            setting.returnEnabled(Fingerprint(
+                definingClass = EXTENSION_CLASS_DESCRIPTOR,
+                name = hook,
+            ).method)
+        }
+        // The interceptor repairs thumbnails/title IDs; this hook redirects full-album requests.
         setting.patchMethod(ImgurApiFingerprint) {
+            // p0/p1 are the album ID/gallery flag; return the new URI without replacing native parsing.
             addInstructions(
                 0,
                 """

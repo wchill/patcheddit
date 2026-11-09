@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 import app.morphe.extension.redditisfun.ImgurAlbumsPatch;
+import app.morphe.extension.redditisfun.RedgifsApiPatch;
 import app.morphe.extension.shared.fixes.api.RedditInfoResponsePatch;
 import app.morphe.extension.shared.fixes.comments.MoreChildrenResponsePatch;
 import app.morphe.extension.shared.requests.BaseOkHttpRequestHook;
@@ -25,7 +26,8 @@ public final class OkHttpRequestHook extends BaseOkHttpRequestHook {
 
     @Override
     protected List<Interceptor> getInterceptors() {
-        return Arrays.asList(new RedditInfoResponsePatch(), new MoreChildrenResponsePatch(), new ImgurAlbumsPatch());
+        return Arrays.asList(new RedditInfoResponsePatch(), new MoreChildrenResponsePatch(),
+                new ImgurAlbumsPatch(), new RedgifsApiPatch());
     }
 
     @Override
