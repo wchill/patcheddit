@@ -1,13 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceCategory xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.preference.SeekBarPreference
+<PreferenceCategory xmlns:android="http://schemas.android.com/apk/res/android">
+    <SeekBarPreference
         android:key="morphe_boost_image_dismiss_sensitivity"
         android:title="Swipe image away faster"
         android:summary="Default 100 enables quick flicks and a moderate 10% drag threshold. 50 keeps Boost&#39;s 15% threshold with quick flicks; 12 restores original Boost behavior."
         android:defaultValue="100"
         android:min="12"
         android:max="100"
-        app:min="12"
-        app:showSeekBarValue="true" />
+        android:showSeekBarValue="true" />
 </PreferenceCategory>

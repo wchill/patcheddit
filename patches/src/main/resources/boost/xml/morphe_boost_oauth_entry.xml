@@ -5,5 +5,11 @@
         android:key="morphe_boost_oauth_tokens"
         android:title="OAuth tokens"
         android:summary="View/edit OAuth tokens"
-        android:fragment="app.morphe.extension.boost.settings.OAuthTokensFragment" />
+        android:persistent="false">
+        <intent
+            android:targetPackage="com.rubenmayayo.reddit"
+            android:targetClass="app.morphe.extension.boost.settings.BoostSettingsActivity">
+            <extra android:name="morphe_screen" android:value="oauth_tokens" />
+        </intent>
+    </Preference>
 </PreferenceCategory>

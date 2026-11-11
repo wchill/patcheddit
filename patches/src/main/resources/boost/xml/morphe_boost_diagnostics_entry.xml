@@ -2,13 +2,13 @@
 <PreferenceCategory xmlns:android="http://schemas.android.com/apk/res/android"
     android:title="Diagnostics">
     <Preference
-        android:key="morphe_boost_exception_log"
+        android:key="morphe_exception_log"
         android:title="Exception log"
         android:summary="View individual non-fatal reports or export the full exception log"
-        android:fragment="app.morphe.extension.boost.settings.ExceptionLogFragment" />
+        android:persistent="false" />
     <Preference
-        android:key="morphe_boost_crash_log_view"
+        android:key="morphe_crash_logs"
         android:title="Fatal crash logs"
         android:summary="View saved fatal-crash reports"
-        android:fragment="app.morphe.extension.boost.settings.FatalCrashLogsFragment" />
+        android:persistent="false" />
 </PreferenceCategory>

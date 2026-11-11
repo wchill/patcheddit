@@ -4,4 +4,6 @@
     android:key="morphe_boost_settings_entry"
     android:title="Morphe"
     android:summary="Features added by Morphe patches"
-    android:fragment="app.morphe.extension.boost.settings.MorpheSettingsFragment" />
+    android:persistent="false">
+    <intent android:targetClass="app.morphe.extension.shared.settings.MorpheSettingsActivity" />
+</Preference>
