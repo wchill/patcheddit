@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/wchill/patcheddit/compare/v2.1.0...v2.1.1) (2026-11-13)
+
+
+### Bug Fixes
+
+* Crash in Boost settings menu ([4457af9](https://github.com/wchill/patcheddit/commit/4457af93dcfb13c8a78cb2d8500524596f523f8b))
+
 ## [2.1.1-dev.1](https://github.com/wchill/patcheddit/compare/v2.1.0...v2.1.1-dev.1) (2026-11-11)
 
 
