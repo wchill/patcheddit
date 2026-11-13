@@ -59,7 +59,8 @@ In addition, patches for some apps contain additional features that were not pre
 * The context menu for posts now contains additional options for opening a site in the Wayback Machine or archive.is. This is useful for if the undeleting functionality has issues or you want to bypass a content paywall.
 
 ### reddit is fun
-* Imgur album URLs are rewritten to use the newer format.
+* Restores Imgur album and gallery loading in the built-in viewer, album thumbnails, and links that include a title.
+* Restores native Redgifs playback and returns safely when a video is unavailable.
 * Enables pro features without ads.
 
 ### Infinity for Reddit
