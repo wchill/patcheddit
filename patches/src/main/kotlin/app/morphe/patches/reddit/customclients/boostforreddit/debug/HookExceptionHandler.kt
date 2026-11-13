@@ -28,13 +28,7 @@ private val exceptionLogResourcesPatch = resourcePatch(default = false) {
         boostMorpheSettingsResourcesPatch,
         addResourcesPatch(
             "boost",
-            ResourceGroup(
-                "xml",
-                "morphe_boost_exception_log.xml",
-                "morphe_boost_diagnostics_entry.xml",
-                "morphe_boost_fatal_crash_logs.xml",
-            ),
-            ResourceGroup("layout", "morphe_boost_log_text.xml", "morphe_boost_log_divider.xml"),
+            ResourceGroup("xml", "morphe_boost_diagnostics_entry.xml"),
         ),
     )
 

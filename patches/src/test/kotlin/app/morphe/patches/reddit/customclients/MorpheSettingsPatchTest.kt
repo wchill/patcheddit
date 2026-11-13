@@ -101,6 +101,46 @@ class MorpheSettingsPatchTest {
     }
 
     @Test
+    fun boostUsesTheSharedActivityAndOnlyKeepsDedicatedFeatureScreens() {
+        val entry = resource("boost/xml/morphe_boost_settings_entry.xml").documentElement
+        assertEquals("", entry.getAttribute("android:fragment"))
+        val intent = entry.getElementsByTagName("intent").item(0) as Element
+        assertEquals(MORPHE_SETTINGS_ACTIVITY, intent.getAttribute("android:targetClass"))
+
+        for (path in listOf(
+            "boost/xml/morphe_boost_diagnostics_entry.xml",
+        )) {
+            val document = resource(path)
+            val preferences = document.getElementsByTagName("Preference")
+            for (index in 0 until preferences.length) {
+                assertEquals("", (preferences.item(index) as Element).getAttribute("android:fragment"))
+            }
+            for ((path, screen) in mapOf(
+                "boost/xml/morphe_boost_oauth_entry.xml" to "oauth_tokens",
+                "boost/xml/morphe_boost_editor_image_hosting_entry.xml" to "image_hosting",
+            )) {
+                val preference = resource(path).getElementsByTagName("Preference").item(0) as Element
+                assertEquals("", preference.getAttribute("android:fragment"))
+                val featureIntent = preference.getElementsByTagName("intent").item(0) as Element
+                assertEquals("com.rubenmayayo.reddit", featureIntent.getAttribute("android:targetPackage"))
+                assertEquals("app.morphe.extension.boost.settings.BoostSettingsActivity",
+                    featureIntent.getAttribute("android:targetClass"))
+                val extra = featureIntent.getElementsByTagName("extra").item(0) as Element
+                assertEquals("morphe_screen", extra.getAttribute("android:name"))
+                assertEquals(screen, extra.getAttribute("android:value"))
+            }
+        }
+
+        val diagnostics = resource("boost/xml/morphe_boost_diagnostics_entry.xml")
+        val keys = diagnostics.getElementsByTagName("Preference").let { preferences ->
+            (0 until preferences.length).map {
+                (preferences.item(it) as Element).getAttribute("android:key")
+            }.toSet()
+        }
+        assertEquals(setOf("morphe_exception_log", "morphe_crash_logs"), keys)
+    }
+
+    @Test
     fun addsAnExplicitIntentToPlainAndQualifiedPreferenceScreensForEveryPackageVariant() {
         val packages = AppCompatibility.RedditIsFun + AppCompatibility.Infinity + AppCompatibility.SyncForReddit +
                 arrayOf(AppCompatibility.SyncForLemmy)

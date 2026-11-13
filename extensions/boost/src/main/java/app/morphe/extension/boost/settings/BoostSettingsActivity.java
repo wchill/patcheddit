@@ -14,6 +14,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.Preference;
+import android.preference.PreferenceActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -22,9 +24,6 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
-
-import androidx.preference.Preference;
-import androidx.preference.PreferenceViewHolder;
 
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
@@ -36,41 +35,60 @@ import app.morphe.extension.boost.oauth.OAuthTokenException;
 import app.morphe.extension.boost.oauth.OAuthTokenPayload;
 import app.morphe.extension.boost.oauth.OAuthTokenValidator;
 
-public final class OAuthTokensFragment extends MorpheSettingsFragment {
+@SuppressWarnings("deprecation")
+public final class BoostSettingsActivity extends PreferenceActivity {
     private static final String TAG = "MorpheOAuthTokens";
+    private static final String SCREEN = "morphe_screen";
     private static final String STATUS = "morphe_boost_oauth_account";
     private static final Handler MAIN = new Handler(Looper.getMainLooper());
 
     private final ExecutorService worker = Executors.newSingleThreadExecutor();
     private volatile boolean destroyed;
+    private boolean oauthTokens;
     private boolean busy;
     private String busySummary;
     private String tokenJson = "{\n  \"access_token\": \"\",\n  \"refresh_token\": \"\"\n}";
     private EditText input;
     private Button saveButton;
-    private Window securedWindow;
     private AlertDialog visibleDialog;
 
     @Override
-    protected String resourceName() {
-        return "morphe_boost_oauth_tokens";
-    }
+    protected void onCreate(Bundle state) {
+        boolean dark = (getResources().getConfiguration().uiMode
+                & android.content.res.Configuration.UI_MODE_NIGHT_MASK)
+                == android.content.res.Configuration.UI_MODE_NIGHT_YES;
+        setTheme(dark ? android.R.style.Theme_Material : android.R.style.Theme_Material_Light);
+        super.onCreate(state);
 
-    @Override
-    public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        super.onCreatePreferences(savedInstanceState, rootKey);
-        Preference editor = new Preference(requireContext(), null) {
+        String screen = getIntent().getStringExtra(SCREEN);
+        if ("image_hosting".equals(screen)) {
+            setTitle("Editor image hosting");
+            addPreferencesFromResource(resource("xml", "morphe_boost_editor_image_hosting"));
+            return;
+        }
+        if (!"oauth_tokens".equals(screen)) {
+            Log.e(TAG, "Unknown Boost Morphe settings screen: " + screen);
+            finish();
+            return;
+        }
+
+        oauthTokens = true;
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+        setTitle("OAuth tokens");
+        addPreferencesFromResource(resource("xml", "morphe_boost_oauth_tokens"));
+        Preference editor = new Preference(this) {
             @Override
-            public void onBindViewHolder(PreferenceViewHolder holder) {
-                super.onBindViewHolder(holder);
-                bindEditor(holder);
+            protected void onBindView(View view) {
+                super.onBindView(view);
+                bindEditor(view);
             }
         };
         editor.setKey("morphe_boost_oauth_editor");
         editor.setPersistent(false);
         editor.setSelectable(false);
-        editor.setLayoutResource(resourceId("layout", "morphe_boost_oauth_editor"));
+        editor.setLayoutResource(resource("layout", "morphe_boost_oauth_editor"));
         getPreferenceScreen().addPreference(editor);
+
         String username = OAuthTokenAccounts.currentUsername();
         if (username != null) {
             runTask("Loading tokens...",
@@ -83,23 +101,15 @@ public final class OAuthTokensFragment extends MorpheSettingsFragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle state) {
-        Window window = requireActivity().getWindow();
-        if ((window.getAttributes().flags & WindowManager.LayoutParams.FLAG_SECURE) == 0) {
-            window.addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-            securedWindow = window;
-        }
-        super.onViewCreated(view, state);
-    }
-
-    @Override
-    public void onResume() {
+    protected void onResume() {
         super.onResume();
-        updateState();
+        if (oauthTokens) updateState();
     }
 
     @Override
-    public void onDestroyView() {
+    protected void onDestroy() {
+        destroyed = true;
+        worker.shutdownNow();
         if (input != null) {
             tokenJson = input.getText().toString();
             input.setText("");
@@ -113,23 +123,12 @@ public final class OAuthTokensFragment extends MorpheSettingsFragment {
             visibleDialog.dismiss();
             visibleDialog = null;
         }
-        super.onDestroyView();
-        if (securedWindow != null) {
-            securedWindow.clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
-            securedWindow = null;
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        destroyed = true;
-        worker.shutdownNow();
         tokenJson = "";
         super.onDestroy();
     }
 
-    private void bindEditor(PreferenceViewHolder holder) {
-        EditText editor = (EditText) holder.findViewById(android.R.id.edit);
+    private void bindEditor(View view) {
+        EditText editor = view.findViewById(android.R.id.edit);
         if (input != editor) {
             if (input != null) tokenJson = input.getText().toString();
             input = editor;
@@ -145,8 +144,8 @@ public final class OAuthTokensFragment extends MorpheSettingsFragment {
             }
             input.setText(tokenJson);
         }
-        saveButton = (Button) holder.findViewById(android.R.id.button1);
-        saveButton.setOnClickListener(view -> saveTokens());
+        saveButton = view.findViewById(android.R.id.button1);
+        saveButton.setOnClickListener(ignored -> saveTokens());
         input.setEnabled(!busy);
         saveButton.setEnabled(!busy);
     }
@@ -172,16 +171,15 @@ public final class OAuthTokensFragment extends MorpheSettingsFragment {
 
     private AlertDialog show(AlertDialog.Builder builder) {
         visibleDialog = builder.create();
-        if (visibleDialog.getWindow() != null) {
-            visibleDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-        }
+        Window window = visibleDialog.getWindow();
+        if (window != null) window.addFlags(WindowManager.LayoutParams.FLAG_SECURE);
         visibleDialog.show();
         return visibleDialog;
     }
 
     private void error(String message) {
-        if (destroyed || !isAdded()) return;
-        show(new AlertDialog.Builder(requireContext())
+        if (destroyed) return;
+        show(new AlertDialog.Builder(this)
                 .setTitle("OAuth tokens")
                 .setMessage(message)
                 .setPositiveButton(android.R.string.ok, null));
@@ -196,8 +194,7 @@ public final class OAuthTokensFragment extends MorpheSettingsFragment {
     }
 
     private Intent homeIntent() throws OAuthTokenException {
-        Intent intent = requireContext().getPackageManager()
-                .getLaunchIntentForPackage(requireContext().getPackageName());
+        Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
         if (intent == null) throw new OAuthTokenException("Boost's launcher activity could not be found.");
         return intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
     }
@@ -227,7 +224,7 @@ public final class OAuthTokensFragment extends MorpheSettingsFragment {
             try {
                 T result = task.run();
                 MAIN.post(() -> {
-                    if (destroyed || !isAdded()) return;
+                    if (destroyed) return;
                     busy = false;
                     updateState();
                     success.accept(result);
@@ -250,10 +247,17 @@ public final class OAuthTokensFragment extends MorpheSettingsFragment {
     private void failed(String message) {
         Log.w(TAG, "OAuth token transfer failed.");
         MAIN.post(() -> {
-            if (destroyed || !isAdded()) return;
+            if (destroyed) return;
             busy = false;
             updateState();
             error(message);
         });
+    }
+
+    private int resource(String type, String name) {
+        int id = getResources().getIdentifier(name, type, getPackageName());
+        if (id == 0) throw new IllegalStateException(
+                "Missing Morphe settings resource: " + type + "/" + name);
+        return id;
     }
 }

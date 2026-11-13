@@ -9,7 +9,7 @@ package app.morphe.extension.boost.upload;
 import android.content.Context;
 import android.util.AttributeSet;
 
-import androidx.preference.ListPreference;
+import android.preference.ListPreference;
 
 public final class EditorImageHostPreference extends ListPreference {
     public EditorImageHostPreference(Context context, AttributeSet attrs) {

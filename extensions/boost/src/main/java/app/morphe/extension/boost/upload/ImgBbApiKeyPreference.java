@@ -10,7 +10,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 
-import androidx.preference.EditTextPreference;
+import android.preference.EditTextPreference;
 
 public final class ImgBbApiKeyPreference extends EditTextPreference {
     public ImgBbApiKeyPreference(Context context, AttributeSet attrs) {

@@ -47,6 +47,7 @@ public final class MorpheSettingsActivity extends PreferenceActivity {
     private static final String EXCEPTIONS = "morphe_exception_log";
     private static final String CRASHES = "morphe_fatal_crash_logs";
     private static final String SOURCE = "morphe_crash_log_source";
+    private static final String BOOST_PACKAGE = "com.rubenmayayo.reddit";
     private static final int SAVE_EXCEPTIONS = 7403;
     private static final int SAVE_CRASH = 7404;
     private static final int OPEN_CRASH = 7405;
@@ -73,12 +74,13 @@ public final class MorpheSettingsActivity extends PreferenceActivity {
         if (bar != null) bar.setDisplayHomeAsUpEnabled(true);
         if (screen == null) {
             OAuthSettings.migrateLegacyPreferences(this);
-            addPreferencesFromResource(resource("xml", "morphe_settings"));
+            addPreferencesFromResource(resource("xml", BOOST_PACKAGE.equals(getPackageName())
+                    ? "morphe_boost_settings_skeleton" : "morphe_settings"));
             setTitle(resource("string", "morphe_settings_title"));
             bindPatchPreferences(getPreferenceScreen());
             bindOAuthPreferences();
-            preference(EXCEPTIONS).setOnPreferenceClickListener(ignored -> openScreen(EXCEPTIONS));
-            preference("morphe_crash_logs").setOnPreferenceClickListener(ignored -> openScreen(CRASHES));
+            bindScreen(EXCEPTIONS);
+            bindScreen(CRASHES);
             return;
         }
         if (!EXCEPTIONS.equals(screen) && !CRASHES.equals(screen)) {
@@ -114,7 +116,10 @@ public final class MorpheSettingsActivity extends PreferenceActivity {
             Preference entry = group.getPreference(index);
             if (entry instanceof PreferenceGroup) bindPatchPreferences((PreferenceGroup) entry);
             String key = entry.getKey();
-            if (entry instanceof CheckBoxPreference && key != null && key.startsWith("morphe_patch_")) {
+            if (entry instanceof CheckBoxPreference && key != null && (key.startsWith("morphe_patch_")
+                    || key.equals("morphe_boost_prefer_high_refresh_rate")
+                    || key.equals("morphe_boost_reddit_undelete_enabled")
+                    || key.equals("morphe_boost_imgur_undelete_enabled"))) {
                 entry.setOnPreferenceChangeListener((preference, value) -> {
                     Toast.makeText(this, "Restart the app to apply the patch change.", Toast.LENGTH_LONG).show();
                     return true;
@@ -154,6 +159,11 @@ public final class MorpheSettingsActivity extends PreferenceActivity {
     private boolean openScreen(String name) {
         startActivity(new Intent(this, MorpheSettingsActivity.class).putExtra(SCREEN, name));
         return true;
+    }
+
+    private void bindScreen(String name) {
+        Preference entry = findPreference(name);
+        if (entry != null) entry.setOnPreferenceClickListener(ignored -> openScreen(name));
     }
 
     private int resource(String type, String name) {

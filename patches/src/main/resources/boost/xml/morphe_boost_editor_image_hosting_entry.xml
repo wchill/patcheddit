@@ -6,5 +6,11 @@
         android:key="morphe_boost_image_hosting_settings"
         android:title="Editor image hosting"
         android:summary="Images added to text: Imgur - default"
-        android:fragment="app.morphe.extension.boost.settings.EditorImageHostingFragment" />
+        android:persistent="false">
+        <intent
+            android:targetPackage="com.rubenmayayo.reddit"
+            android:targetClass="app.morphe.extension.boost.settings.BoostSettingsActivity">
+            <extra android:name="morphe_screen" android:value="image_hosting" />
+        </intent>
+    </Preference>
 </PreferenceCategory>

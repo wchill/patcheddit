@@ -14,6 +14,7 @@ import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.addMorpheApkSettings
 import app.morphe.patches.reddit.customclients.morpheSettingsContextPatch
+import app.morphe.patches.reddit.customclients.morpheSettingsResourcesPatch
 import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.util.ResourceGroup
 import org.w3c.dom.Element
@@ -35,6 +36,7 @@ internal val boostMorpheSettingsResourcesPatch = resourcePatch(
     default = false
 ) {
     dependsOn(
+        morpheSettingsResourcesPatch,
         addResourcesPatch(
             "boost",
             ResourceGroup("xml", "morphe_boost_settings_skeleton.xml", "morphe_boost_settings_entry.xml"),
@@ -51,10 +53,27 @@ internal val boostMorpheSettingsResourcesPatch = resourcePatch(
                 (preferences.item(it) as Element).getAttribute("android:key") == "morphe_boost_settings_entry"
             }) { "Boost settings already contain a Morphe entry" }
             document("res/xml/morphe_boost_settings_entry.xml").use { source ->
-                root.insertBefore(target.importNode(source.documentElement, true), root.firstChild)
+                val entry = target.importNode(source.documentElement, true) as Element
+                entry.getElementsByTagName("intent").item(0).let { it as Element }
+                    .setAttribute("android:targetPackage", "com.rubenmayayo.reddit")
+                root.insertBefore(entry, root.firstChild)
             }
         }
 
+        document("AndroidManifest.xml").use { manifest ->
+            val application = checkNotNull(manifest.getElementsByTagName("application").item(0) as? Element) {
+                "AndroidManifest.xml has no application element."
+            }
+            val activity = "app.morphe.extension.boost.settings.BoostSettingsActivity"
+            val activities = application.getElementsByTagName("activity")
+            require((0 until activities.length).none {
+                (activities.item(it) as Element).getAttribute("android:name") == activity
+            }) { "Boost Morphe settings activity is already declared." }
+            application.appendChild(manifest.createElement("activity").apply {
+                setAttribute("android:name", activity)
+                setAttribute("android:exported", "false")
+            })
+        }
     }
 
     finalize {
