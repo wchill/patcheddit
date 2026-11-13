@@ -73,15 +73,7 @@ internal fun httpClientExtensionPatch(
         dependsOn(packageMetadata)
         execute {
             nativeClasses = buildList { classDefForEach(::add) }
-            val resourceNamespace = if (client == "redditisfun") {
-                when (packageName) {
-                    "com.andrewshu.android.reddit" -> "redditisfun/free"
-                    "com.andrewshu.android.redditdonation" -> "redditisfun/donation"
-                    else -> error("Unsupported RIF HTTP library profile: $packageName")
-                }
-            } else {
-                client
-            }
+            val resourceNamespace = httpLibraryResourceNamespace(client, packageName)
             val input = checkNotNull(object {}.javaClass.classLoader.getResourceAsStream("$resourceNamespace/mapping.txt")) {
                 "HTTP library mapping for $resourceNamespace was not found"
             }

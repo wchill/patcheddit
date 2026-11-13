@@ -104,18 +104,6 @@ object AppCompatibility {
         targets = listOf(AppTarget(version = null))
     )
 
-    internal val SyncForReddit = arrayOf(
-        SyncForRedditFree,
-        Compatibility(
-            name = "Sync for Reddit Pro",
-            packageName = "com.laurencedawson.reddit_sync.pro",
-            targets = listOf(AppTarget(version = null))
-        ),
-        Compatibility(
-            name = "Sync for Reddit Dev",
-            packageName = "com.laurencedawson.reddit_sync.dev",
-            targets = listOf(AppTarget(version = null))
-        )
-    )
+    internal val SyncForReddit = arrayOf(SyncForRedditFree)
 
 }

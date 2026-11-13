@@ -1,11 +1,11 @@
-# Reconstructed fixture-bound HTTP library reference mapping.
+# Reconstructed fixture-bound HTTP library reference mapping for Relay Pro.
 # Copyright 2026 wchill. See NOTICE for GPLv3 section 7 terms.
 # Canonical Java API names are LEFT; actual APK declarations are RIGHT.
 # Consumer direction is observed -> canonical, not canonical -> observed.
 # This is not the original R8 map and contains no source-line information.
-# APK file: free.reddit.news_10.2.40-641_minAPI23(arm64-v8a,armeabi-v7a,x86,x86_64)(nodpi)_apkmirror.com.apk
-# APK SHA-256: bab6f726d1932ef8ffccf43ff741a5b34dff505ea16d15d5474bd9855f588df1
-# Package: free.reddit.news
+# APK file: RelayPro-10.2.40.apk
+# APK SHA-256: 7b8b88a1e2bcfafd71e35618a02b161e1687f2862740aa911f6ee9c712cf96d2
+# Package: reddit.news
 # Version: 10.2.40 (641)
 # Observed OkHttp: okhttp/4.11.0
 # Okio reference baseline: okio-jvm-3.2.0
@@ -20,7 +20,7 @@
 # streams; resolved member references; literal flags and control-flow tests.
 # Equivalent deprecated/current getters may canonicalize to the same API.
 # Constructors retain <init>/<clinit>; no optimized prototype is guessed.
-# Covered fixture surface: 41 classes, 186 methods, 2 fields.
+# Covered fixture surface: 40 classes, 184 methods, 2 fields.
 # Scope includes incoming non-library instruction/declaration/override
 # references and the classes in their signatures. Original core library
 # implementations stay inert; this is not a map of their private internals.
@@ -33,8 +33,8 @@
 # caller-class: Lokhttp3/JavaNetAuthenticator;
 # Add-on artifact classes above must remain callers unless their own complete
 # artifact is supplied. Rewrite their core references, not their class names.
-# native-helper: Lx1/a;
-# native-helper: Lx1/b;
+# native-helper: Lt1/a;
+# native-helper: Lt1/b;
 # The native-helper closures have no incoming references from non-native
 # fixture classes. Keep them inert with their originating core library;
 # their R8-private static accessors are deliberately NOT canonical APIs.
@@ -45,9 +45,9 @@ okhttp3.Authenticator -> okhttp3.Authenticator:
     okhttp3.Request authenticate(okhttp3.Route,okhttp3.Response) -> a
 
 okhttp3.Cache -> okhttp3.Cache:
-    int writeAbortCount() -> q
-    int writeSuccessCount() -> r
-    java.util.Iterator urls() -> o
+    int writeAbortCount() -> Z
+    int writeSuccessCount() -> b0
+    java.util.Iterator urls() -> W
     void <init>(java.io.File,long) -> <init>
     void close() -> close
 
@@ -63,18 +63,18 @@ okhttp3.CacheControl -> okhttp3.CacheControl:
     java.lang.String toString() -> toString
 
 okhttp3.Call$Factory -> okhttp3.Call$Factory:
-    okhttp3.Call newCall(okhttp3.Request) -> b
+    okhttp3.Call newCall(okhttp3.Request) -> a
 
 okhttp3.Call -> okhttp3.Call:
-    boolean isCanceled() -> f
-    okhttp3.Request request() -> d
+    boolean isCanceled() -> i
+    okhttp3.Request request() -> g
     okhttp3.Response execute() -> execute
     void cancel() -> cancel
-    void enqueue(okhttp3.Callback) -> t
+    void enqueue(okhttp3.Callback) -> p
 
 okhttp3.Callback -> okhttp3.Callback:
-    void onFailure(okhttp3.Call,java.io.IOException) -> c
-    void onResponse(okhttp3.Call,okhttp3.Response) -> d
+    void onFailure(okhttp3.Call,java.io.IOException) -> d
+    void onResponse(okhttp3.Call,okhttp3.Response) -> c
 
 okhttp3.Cookie$Builder -> okhttp3.Cookie$Builder:
     okhttp3.Cookie build() -> a
@@ -101,8 +101,8 @@ okhttp3.Cookie -> okhttp3.Cookie:
     long expiresAt() -> f
 
 okhttp3.CookieJar -> okhttp3.CookieJar:
-    java.util.List loadForRequest(okhttp3.HttpUrl) -> a
-    void saveFromResponse(okhttp3.HttpUrl,java.util.List) -> b
+    java.util.List loadForRequest(okhttp3.HttpUrl) -> b
+    void saveFromResponse(okhttp3.HttpUrl,java.util.List) -> a
 
 okhttp3.Credentials -> okhttp3.Credentials:
     java.lang.String basic(java.lang.String,java.lang.String) -> a
@@ -124,11 +124,10 @@ okhttp3.Headers$Builder -> okhttp3.Headers$Builder:
     void <init>() -> <init>
 
 okhttp3.Headers -> okhttp3.Headers:
-    java.lang.String get(java.lang.String) -> a
-    java.util.Map toMultimap() -> i
-    okhttp3.Headers of(java.lang.String[]) -> f
-    okhttp3.Headers of(java.util.Map) -> e
-    okhttp3.Headers$Builder newBuilder() -> d
+    java.lang.String get(java.lang.String) -> g
+    java.util.Map toMultimap() -> p
+    okhttp3.Headers of(java.lang.String[]) -> m
+    okhttp3.Headers$Builder newBuilder() -> k
 
 okhttp3.HttpUrl$Builder -> okhttp3.HttpUrl$Builder:
     okhttp3.HttpUrl build() -> d
@@ -154,7 +153,7 @@ okhttp3.HttpUrl -> okhttp3.HttpUrl:
     okhttp3.HttpUrl$Builder newBuilder(java.lang.String) -> l
 
 okhttp3.Interceptor$Chain -> okhttp3.Interceptor$Chain:
-    okhttp3.Request request() -> d
+    okhttp3.Request request() -> g
     okhttp3.Response proceed(okhttp3.Request) -> a
 
 okhttp3.Interceptor -> okhttp3.Interceptor:
@@ -192,8 +191,8 @@ okhttp3.OkHttpClient$Builder -> okhttp3.OkHttpClient$Builder:
     void <init>(okhttp3.OkHttpClient) -> <init>
 
 okhttp3.OkHttpClient -> okhttp3.OkHttpClient:
-    okhttp3.Cache cache() -> l
-    okhttp3.Call newCall(okhttp3.Request) -> b
+    okhttp3.Cache cache() -> h
+    okhttp3.Call newCall(okhttp3.Request) -> a
     okhttp3.OkHttpClient$Builder newBuilder() -> E
     void <init>() -> <init>
     void <init>(okhttp3.OkHttpClient$Builder) -> <init>
@@ -240,64 +239,61 @@ okhttp3.Response$Builder -> okhttp3.Response$Builder:
     okhttp3.Response$Builder request(okhttp3.Request) -> t
 
 okhttp3.Response -> okhttp3.Response:
-    boolean isSuccessful() -> o
-    int code() -> g
-    java.lang.String header(java.lang.String) -> j
-    java.lang.String header(java.lang.String,java.lang.String) -> k
-    java.lang.String message() -> q
+    boolean isSuccessful() -> W
+    int code() -> p
+    java.lang.String header(java.lang.String) -> C
+    java.lang.String header(java.lang.String,java.lang.String) -> G
+    java.lang.String message() -> Z
     java.lang.String toString() -> toString
-    java.util.List headers(java.lang.String) -> m
-    okhttp3.Headers headers() -> n
-    okhttp3.Request request() -> w
-    okhttp3.Response cacheResponse() -> d
-    okhttp3.Response$Builder newBuilder() -> s
+    java.util.List headers(java.lang.String) -> I
+    okhttp3.Headers headers() -> U
+    okhttp3.Request request() -> g0
+    okhttp3.Response cacheResponse() -> g
+    okhttp3.Response$Builder newBuilder() -> c0
     okhttp3.ResponseBody body() -> a
     void close() -> close
 
 okhttp3.ResponseBody -> okhttp3.ResponseBody:
     java.io.InputStream byteStream() -> a
     java.io.Reader charStream() -> c
-    java.lang.String string() -> j
-    long contentLength() -> f
-    okhttp3.MediaType contentType() -> g
-    okhttp3.ResponseBody create(okhttp3.MediaType,long,okio.BufferedSource) -> h
-    okio.BufferedSource source() -> i
+    java.lang.String string() -> C
+    long contentLength() -> i
+    okhttp3.MediaType contentType() -> p
+    okhttp3.ResponseBody create(okhttp3.MediaType,long,okio.BufferedSource) -> s
+    okio.BufferedSource source() -> x
     void <init>() -> <init>
     void close() -> close
 
 okhttp3.Route -> okhttp3.Route:
 
 okio.Buffer -> okio.Buffer:
-    boolean exhausted() -> e0
+    boolean exhausted() -> q
     byte readByte() -> readByte
-    java.io.OutputStream outputStream() -> v
-    java.lang.String readUtf8() -> o0
-    okio.Buffer writeByte(int) -> w0
-    okio.Buffer writeUtf8(java.lang.String,int,int) -> I0
-    okio.Buffer writeUtf8CodePoint(int) -> J0
-    okio.ByteString readByteString() -> x
+    java.io.OutputStream outputStream() -> h0
+    java.lang.String readUtf8() -> K
+    okio.Buffer writeByte(int) -> x0
+    okio.Buffer writeUtf8(java.lang.String,int,int) -> E0
+    okio.Buffer writeUtf8CodePoint(int) -> F0
+    okio.ByteString readByteString() -> j0
     void <init>() -> <init>
 
 okio.BufferedSink -> okio.BufferedSink:
 
 okio.BufferedSource -> okio.BufferedSource:
-    boolean exhausted() -> e0
-    boolean rangeEquals(long,okio.ByteString) -> K
-    byte[] readByteArray() -> d0
-    java.io.InputStream inputStream() -> A0
-    java.lang.String readUtf8() -> o0
-    java.lang.String readUtf8Line() -> G
-    long readAll(okio.Sink) -> v0
+    boolean exhausted() -> q
+    boolean rangeEquals(long,okio.ByteString) -> A
+    byte[] readByteArray() -> n
+    java.io.InputStream inputStream() -> Y
+    java.lang.String readUtf8() -> K
+    java.lang.String readUtf8Line() -> u
+    long readAll(okio.Sink) -> Q
 
 okio.ByteString -> okio.ByteString:
-    okio.ByteString decodeBase64(java.lang.String) -> g
+    okio.ByteString decodeBase64(java.lang.String) -> e
 
 okio.ForwardingSource -> okio.ForwardingSource:
-    long read(okio.Buffer,long) -> u0
+    long read(okio.Buffer,long) -> P
     void <init>(okio.Source) -> <init>
-
-okio.GzipSink -> okio.GzipSink:
-    void <init>(okio.Sink) -> <init>
 
 okio.Okio -> okio.Okio:
     okio.BufferedSink buffer(okio.Sink) -> c
@@ -308,5 +304,5 @@ okio.Okio -> okio.Okio:
 okio.Sink -> okio.Sink:
 
 okio.Source -> okio.Source:
-    long read(okio.Buffer,long) -> u0
+    long read(okio.Buffer,long) -> P
     void close() -> close

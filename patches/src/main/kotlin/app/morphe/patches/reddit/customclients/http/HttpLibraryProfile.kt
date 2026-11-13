@@ -10,6 +10,24 @@ import app.morphe.patches.reddit.customclients.misc.extension.mapping.ProguardMa
 import java.io.Reader
 import java.io.StringReader
 
+internal fun httpLibraryResourceNamespace(client: String, packageName: String): String = when (client) {
+    "redditisfun" -> when (packageName) {
+        "com.andrewshu.android.reddit" -> "redditisfun/free"
+        "com.andrewshu.android.redditdonation" -> "redditisfun/donation"
+        else -> error("Unsupported RIF HTTP library profile: $packageName")
+    }
+    "relay" -> when (packageName) {
+        "free.reddit.news" -> "relay/free"
+        "reddit.news" -> "relay/pro"
+        else -> error("Unsupported Relay HTTP library profile: $packageName")
+    }
+    "syncforreddit" -> when (packageName) {
+        "com.laurencedawson.reddit_sync" -> "syncforreddit"
+        else -> error("Unsupported Sync HTTP library profile: $packageName")
+    }
+    else -> client
+}
+
 internal class HttpLibraryProfile private constructor(
     val mapping: ProguardMapping,
     private val nativePrefixes: List<String>,

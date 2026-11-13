@@ -56,7 +56,7 @@ class MorpheSettingsPatchTest {
     }
 
     @Test
-    fun coversAllSixteenPackagesWithoutReplacingBoostSettings() {
+    fun coversAllFourteenPackagesWithoutReplacingBoostSettings() {
         val clients = listOf(
             baconReaderMorpheSettingsPatch to AppCompatibility.BaconReader,
             infinityMorpheSettingsPatch to AppCompatibility.Infinity,
@@ -73,7 +73,7 @@ class MorpheSettingsPatchTest {
             assertEquals(compatible.toList(), patch.compatibility)
             for (app in compatible) assertTrue(packages.add(assertNotNull(app.packageName)))
         }
-        assertEquals(16, packages.size)
+        assertEquals(14, packages.size)
         assertFalse(packages.contains("com.rubenmayayo.reddit"))
         assertFalse(ExtensionPatches.Sync in lemmySettings.dependencies)
     }

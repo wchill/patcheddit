@@ -65,7 +65,7 @@ class MorphePatchSettingsTest {
         val clients = AppCompatibility.BaconReader + AppCompatibility.Boost + AppCompatibility.Infinity +
             AppCompatibility.JoeyForReddit + AppCompatibility.RedditIsFun + AppCompatibility.Relay +
             AppCompatibility.SyncForReddit + arrayOf(AppCompatibility.SyncForLemmy)
-        assertEquals(17, clients.size)
+        assertEquals(15, clients.size)
         for (client in clients) {
             val packageName = assertNotNull(client.packageName)
             assertEquals(
