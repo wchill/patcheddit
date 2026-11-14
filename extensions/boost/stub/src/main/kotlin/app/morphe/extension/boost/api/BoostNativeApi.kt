@@ -236,6 +236,14 @@ abstract class PostHistoryUtils protected constructor(stub: Unit) {
     }
 }
 
+class ProfileAvatarDrawable(p0: android.graphics.Bitmap) : android.graphics.drawable.Drawable() {
+    @JvmField val bitmap: android.graphics.Bitmap = boostApiStub()
+    override fun draw(canvas: android.graphics.Canvas): Unit = boostApiStub()
+    override fun setAlpha(alpha: Int): Unit = boostApiStub()
+    override fun setColorFilter(colorFilter: android.graphics.ColorFilter?): Unit = boostApiStub()
+    override fun getOpacity(): Int = boostApiStub()
+}
+
 abstract class ProgressRequestBody protected constructor(stub: Unit) : okhttp3.RequestBody() {
     interface ProgressListener {
         fun onProgress(p0: Int): Unit

@@ -25,9 +25,10 @@ In addition, patches for some apps contain additional features that were not pre
     * Changing OAuth credentials requires restarting and signing in again. Disabling API/login fixes can restore the original client's broken behavior.
 
 ### Boost for Reddit
-* Boost patches target the official [Boost 1.14.3 APK](https://github.com/rubenmayayo/boost-for-reddit/releases/tag/v1.14.3).
-* Boost patches are selected by default except **Fix loading more comments** and **Fix profile About scrolling**, which are retained but disabled because Boost 1.14.2 fixed both natively. Individual patches can be deselected before patching; features with settings can also be disabled in the app. Patch-selection defaults do not change saved settings or runtime preference defaults.
+* Boost patches target the official [Boost 1.14.4 APK](https://github.com/rubenmayayo/boost-for-reddit/releases/tag/v1.14.4).
+* Boost patches are selected by default except **Fix loading more comments** and **Fix profile About scrolling**, which are retained but disabled because Boost fixed them natively. Individual patches can be deselected before patching; features with settings can also be disabled in the app. Patch-selection defaults do not change saved settings or runtime preference defaults.
 * Boost 1.14.3 also handles the image-post submission kind, search callback lifecycle checks and media-viewer insets natively, so those overrides are no longer injected. The remaining navigation patches still support Patcheddit's custom navigation hosts and layout behavior.
+* Boost handles cached Redgifs playback without a separate fix.
 * **Log exceptions** records errors reported through Boost's existing exception handler. **Settings > Morphe > Exception log** lists non-fatal reports, with **Fatal crash logs** alongside it in Diagnostics.
     * Fatal reports can be previewed in the app and exported in full using **Save a copy**. Reports in public or app-specific Documents folders are listed when accessible.
     * If app initialization or private storage is unavailable, logging failures are reported to Logcat without showing a toast.
@@ -192,7 +193,7 @@ Only the extension payload is rebound; the app is not deobfuscated, and placehol
 
 Extension preparation does not prune classes by reachability. It retains all payload classes except duplicate copies supplied by Boost itself. The final verifier also checks native app references to extension classes so a missing helper stops patching instead of causing a runtime class-loading failure.
 
-Run the release-fixture checks with `BOOST_APK=/path/to/boost-for-reddit-1.14.3.apk ./gradlew :patches:test --tests '*BoostReleaseTest'`. They verify the APK checksum, every partial-library mapping declaration, and all adapter targets, prototypes, dispatch kinds and receivers. Without `BOOST_APK`, the APK-dependent test is skipped; version consistency and redundant-patch defaults are still checked. Apply the built bundle with Morphe CLI's `--bytecode-mode=FULL --validate` to check every selected patch against the APK.
+Run the release-fixture checks with `BOOST_APK=/path/to/boost-for-reddit-1.14.4.apk ./gradlew :patches:test --tests '*BoostReleaseTest'`. They verify the APK checksum, every partial-library mapping declaration, and all adapter targets, prototypes, dispatch kinds and receivers. Without `BOOST_APK`, the APK-dependent test is skipped; version consistency and redundant-patch defaults are still checked. Apply the built bundle with Morphe CLI's `--bytecode-mode=FULL --validate` to check every selected patch against the APK.
 
 ## 📚 Everything else
 

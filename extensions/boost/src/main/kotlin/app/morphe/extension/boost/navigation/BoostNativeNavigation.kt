@@ -65,7 +65,7 @@ object BoostNativeNavigation {
     }
 
     @JvmStatic
-    fun setItemIconTint(view: View, tint: ColorStateList) {
+    fun setItemIconTint(view: View, tint: ColorStateList?) {
         (view as NavigationBarItemView).setIconTintList(tint)
     }
 
@@ -216,6 +216,11 @@ object BoostNativeNavigation {
 
     @JvmStatic
     fun isLoggedIn(): Boolean = RedditJraw.instance.user != null
+
+    @JvmStatic
+    fun showProfileAvatar(): Boolean =
+        MorpheBoostNativeStatics.BoostPreferences_getInstance().preferences
+            .getBoolean("pref_bottom_navigation_show_avatar", true)
 
     @JvmStatic
     fun currentUsername(): String? = RedditJraw.instance.username()

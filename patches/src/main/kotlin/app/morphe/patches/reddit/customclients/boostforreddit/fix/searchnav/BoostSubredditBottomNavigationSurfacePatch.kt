@@ -25,7 +25,7 @@ val boostSubredditBottomNavigationSurfacePatch = morpheBytecodePatch(
     category = PatchCategory.NAVIGATION,
 ) { setting ->
     compatibleWith(*AppCompatibility.Boost)
-    dependsOn(ExtensionPatches.Boost)
+    dependsOn(ExtensionPatches.Boost, boostProfileAvatarPatch)
 
     execute {
         subredditActivityOnCreateFingerprint.wrapHook(

@@ -8,6 +8,7 @@
 package app.morphe.extension.boost.utils;
 
 import app.morphe.extension.boost.api.BoostFieldNames;
+import app.morphe.extension.boost.api.ProfileAvatarDrawable;
 
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -15,6 +16,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -37,6 +39,7 @@ import android.util.Log;
 import app.morphe.extension.boost.navigation.BoostNativeNavigation;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.WeakHashMap;
 
 /**
@@ -98,6 +101,8 @@ public final class BoostSearchBottomNavigation {
     private static final java.util.WeakHashMap<View, Boolean>
             OWNED_MENU_INSTALLED =
                     new java.util.WeakHashMap<>();
+    private static Bitmap sharedProfileAvatar;
+    private static String sharedProfileAvatarUsername;
     /**
      * Item views that already carry our long-press listener. Every configure
      * (each onResume and feed switch) schedules the attach again; a rebuilt
@@ -2317,6 +2322,11 @@ public final class BoostSearchBottomNavigation {
                     4
             );
 
+            Drawable avatar = currentProfileAvatar();
+            if (avatar != null) {
+                menu.findItem(resourceId(activity, "item_profile", "id")).setIcon(avatar);
+            }
+
             menu.setGroupCheckable(
                     0,
                     true,
@@ -2380,6 +2390,51 @@ public final class BoostSearchBottomNavigation {
                         + " listeners="
                         + listeners
         );
+    }
+
+    private static Drawable currentProfileAvatar() {
+        if (sharedProfileAvatar == null
+                || !BoostNativeNavigation.isLoggedIn()
+                || !BoostNativeNavigation.showProfileAvatar()
+                || sharedProfileAvatarUsername == null
+                || !sharedProfileAvatarUsername.equals(BoostNativeNavigation.currentUsername())) {
+            return null;
+        }
+        return new ProfileAvatarDrawable(sharedProfileAvatar);
+    }
+
+    public static void syncProfileAvatar(Activity activity, Drawable avatar) {
+        if (avatar != null && !(avatar instanceof ProfileAvatarDrawable)) {
+            throw new IllegalStateException("Unexpected Boost profile avatar drawable");
+        }
+
+        sharedProfileAvatar = avatar == null ? null : ((ProfileAvatarDrawable) avatar).bitmap;
+        sharedProfileAvatarUsername = avatar == null ? null : BoostNativeNavigation.currentUsername();
+
+        ArrayList<View> navigations;
+        synchronized (OWNED_MENU_INSTALLED) {
+            navigations = new ArrayList<>(OWNED_MENU_INSTALLED.keySet());
+        }
+        if (navigations.isEmpty()) return;
+
+        int profileId = resourceId(activity, "item_profile", "id");
+        int defaultIconId = resourceId(activity, "ic_person_24dp", "drawable");
+        if (profileId == 0 || defaultIconId == 0) {
+            throw new IllegalStateException("Boost profile navigation resources are missing");
+        }
+
+        for (View navigation : navigations) {
+            MenuItem profile = BoostNativeNavigation.menu(navigation).findItem(profileId);
+            if (profile == null) continue;
+
+            Drawable current = currentProfileAvatar();
+            if (current == null) {
+                profile.setIcon(defaultIconId);
+            } else {
+                profile.setIcon(current);
+            }
+            applyCanonicalTint(navigation);
+        }
     }
 
     private static void addOwnedMenuItem(
@@ -2758,7 +2813,10 @@ public final class BoostSearchBottomNavigation {
 
             itemView.setAlpha(1.0f);
 
-            BoostNativeNavigation.setItemIconTint(itemView, contrastTint);
+            BoostNativeNavigation.setItemIconTint(
+                    itemView,
+                    item.getIcon() instanceof ProfileAvatarDrawable ? null : contrastTint
+            );
 
             renderedIconCount +=
                     applyRenderedImagesRecursively(
@@ -2786,12 +2844,19 @@ public final class BoostSearchBottomNavigation {
                     (android.widget.ImageView) root;
 
             imageView.setAlpha(1.0f);
-            imageView.setImageTintList(contrastTint);
 
             android.graphics.drawable.Drawable drawable =
                     imageView.getDrawable();
 
-            if (drawable != null) {
+            if (drawable instanceof ProfileAvatarDrawable) {
+                imageView.setImageTintList(null);
+                imageView.clearColorFilter();
+                drawable.clearColorFilter();
+            } else {
+                imageView.setImageTintList(contrastTint);
+            }
+
+            if (drawable != null && !(drawable instanceof ProfileAvatarDrawable)) {
                 android.graphics.drawable.Drawable mutable =
                         drawable.mutate();
 

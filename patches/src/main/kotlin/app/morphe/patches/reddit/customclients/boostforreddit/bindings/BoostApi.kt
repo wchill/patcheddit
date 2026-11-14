@@ -67,8 +67,13 @@ internal object BoostApi {
     }
     object DrawerActivity : BoostTypeBinding("Lapp/morphe/extension/boost/api/DrawerActivity;") {
         val setBottomNavigationVisible get() = method("setBottomNavigationVisible(Z)V")
+        val setProfileAvatar get() = method("setProfileAvatar(Lapp/morphe/extension/boost/api/ProfileAvatarDrawable;)V")
         val setupBottomNavigation get() = method("setupBottomNavigation(I)V")
         val updateInboxCount get() = method("updateInboxCount(I)V")
+    }
+    object ProfileAvatarDrawable : BoostTypeBinding("Lapp/morphe/extension/boost/api/ProfileAvatarDrawable;") {
+        val construct get() = method("<init>(Landroid/graphics/Bitmap;)V")
+        val bitmap get() = field("bitmap:Landroid/graphics/Bitmap;")
     }
     object EmptyRecyclerView : BoostTypeBinding("Lcom/rubenmayayo/reddit/ui/customviews/EmptyRecyclerView;") {
         val emptyRecyclerViewBottomNavigationPadding get() = method("emptyRecyclerViewBottomNavigationPadding()V")

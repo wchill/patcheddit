@@ -30,7 +30,7 @@ val boostBottomNavigationSystemSurfacePatch = morpheBytecodePatch(
     category = PatchCategory.NAVIGATION,
 ) { setting ->
     compatibleWith(*AppCompatibility.Boost)
-    dependsOn(ExtensionPatches.Boost)
+    dependsOn(ExtensionPatches.Boost, boostProfileAvatarPatch)
 
     execute {
         // Native setup must select the tab without dispatching a user navigation callback.

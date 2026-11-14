@@ -99,7 +99,7 @@ val boostSearchBottomNavigationPatch = morpheBytecodePatch(
     resourceDirectory = "boost",
 ) { setting ->
     compatibleWith(*AppCompatibility.Boost)
-    dependsOn(addSearchBottomNavigationHostPatch, ExtensionPatches.Boost)
+    dependsOn(addSearchBottomNavigationHostPatch, ExtensionPatches.Boost, boostProfileAvatarPatch)
 
     execute {
         setting.guardHook(EXTENSION_CLASS_DESCRIPTOR, "install")
