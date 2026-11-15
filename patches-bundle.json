@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-11-15T05:52:54",
-  "description": "# [2.2.0](https://github.com/wchill/patcheddit/compare/v2.1.1...v2.2.0) (2026-11-15)\n\n\n### Bug Fixes\n\n* **relay:** Relay Pro crashing on startup ([1c94b7e](https://github.com/wchill/patcheddit/commit/1c94b7ec72073e9a439c3f4cd86f8c675943aeff))\n* **rif:** Imgur albums now properly load in the built-in viewer and thumbnails work ([f219ebe](https://github.com/wchill/patcheddit/commit/f219ebe17b7485e3c3d8bde3d758d53556031666))\n* **rif:** Redgifs native playback ([0ef22e8](https://github.com/wchill/patcheddit/commit/0ef22e8ac7a1001a5b5009e4ae2fee0020e9ea5c))\n\n\n### Features\n\n* **boost:** Boost 1.14.4 support ([5538c39](https://github.com/wchill/patcheddit/commit/5538c39d2b32b92bf6dfb44430d6c3e03ac52dcb))",
-  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.2.0/patches-2.2.0.mpp",
-  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.2.0/patches-2.2.0.mpp.asc",
-  "version": "2.2.0"
+  "created_at": "2026-11-15T19:51:16",
+  "description": "# [2.3.0-dev.1](https://github.com/wchill/patcheddit/compare/v2.2.0...v2.3.0-dev.1) (2026-11-15)\n\n\n### Bug Fixes\n\n* **rif:** Imgur album loading for albums with 5 character IDs ([d50d802](https://github.com/wchill/patcheddit/commit/d50d8028f841bf7e8638bf8b0eed306953f2c562))\n\n\n### Features\n\n* Fix missing gallary images in all apps ([a125874](https://github.com/wchill/patcheddit/commit/a125874c017826a1db88b5c538a6a3b3a259af5d))",
+  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.3.0-dev.1/patches-2.3.0-dev.1.mpp",
+  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.3.0-dev.1/patches-2.3.0-dev.1.mpp.asc",
+  "version": "2.3.0-dev.1"
 }

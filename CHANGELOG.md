@@ -1,3 +1,15 @@
+# [2.3.0-dev.1](https://github.com/wchill/patcheddit/compare/v2.2.0...v2.3.0-dev.1) (2026-11-15)
+
+
+### Bug Fixes
+
+* **rif:** Imgur album loading for albums with 5 character IDs ([d50d802](https://github.com/wchill/patcheddit/commit/d50d8028f841bf7e8638bf8b0eed306953f2c562))
+
+
+### Features
+
+* Fix missing gallary images in all apps ([a125874](https://github.com/wchill/patcheddit/commit/a125874c017826a1db88b5c538a6a3b3a259af5d))
+
 # [2.2.0](https://github.com/wchill/patcheddit/compare/v2.1.1...v2.2.0) (2026-11-15)
 
 
