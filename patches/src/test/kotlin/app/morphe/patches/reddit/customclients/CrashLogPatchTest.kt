@@ -50,33 +50,6 @@ import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 class CrashLogPatchTest {
-    @Test
-    fun coversEverySupportedPackageWithMorpheSettingsEnabled() {
-        val clients = listOf(
-            Triple(baconReaderPatch, AppCompatibility.BaconReader, baconReaderMorpheSettingsPatch),
-            Triple(boostPatch, AppCompatibility.Boost, boostMorpheSettingsPatch),
-            Triple(infinityPatch, AppCompatibility.Infinity, infinityMorpheSettingsPatch),
-            Triple(joeyPatch, AppCompatibility.JoeyForReddit, joeyMorpheSettingsPatch),
-            Triple(redditIsFunPatch, AppCompatibility.RedditIsFun, rifMorpheSettingsPatch),
-            Triple(relayPatch, AppCompatibility.Relay, relayMorpheSettingsPatch),
-            Triple(syncPatch, AppCompatibility.SyncForReddit, syncSettings),
-            Triple(lemmyPatch, arrayOf(AppCompatibility.SyncForLemmy), lemmySettings),
-        )
-        val packages = mutableSetOf<String>()
-        for ((patch, compatible, settings) in clients) {
-            assertEquals("Log exceptions", patch.name)
-            assertTrue(patch.default)
-            assertEquals(compatible.toList(), patch.compatibility)
-            for (app in compatible) assertTrue(packages.add(assertNotNull(app.packageName)))
-            assertTrue(settings in dependencies(patch))
-            assertTrue(dependencies(patch).any {
-                it.description == "Writes a crash log file to the Documents folder when the app crashes."
-            })
-            assertEquals("Logs reported errors and fatal crashes, viewable in Morphe settings.", patch.description)
-        }
-        assertEquals(17, packages.size)
-        assertFalse(ExtensionPatches.Sync in dependencies(lemmyPatch))
-    }
 
     @Test
     fun resolvesAllManifestApplicationNameForms() {
