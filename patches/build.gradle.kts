@@ -50,6 +50,30 @@ sourceSets.main {
     resources.srcDir(prepareHttpLibraryResources)
 }
 
+val compileBoostFingerprintDump by tasks.registering(JavaCompile::class) {
+    source(rootProject.file("scripts/BoostDexFingerprintDump.java"))
+    classpath = configurations["runtimeClasspath"]
+    destinationDirectory.set(layout.buildDirectory.dir("tools/boost-fingerprints"))
+    options.release.set(17)
+    options.encoding = "UTF-8"
+}
+
+tasks.register<JavaExec>("dumpBoostDexFingerprints") {
+    description = "Exports stock APK bytecode for scripts/update_boost_mapping.py"
+    dependsOn(compileBoostFingerprintDump)
+    classpath = files(compileBoostFingerprintDump.flatMap { it.destinationDirectory }) +
+        configurations["runtimeClasspath"]
+    mainClass.set("BoostDexFingerprintDump")
+    maxHeapSize = "512m"
+    doFirst {
+        args(
+            providers.gradleProperty("boostFingerprintApk").get(),
+            providers.gradleProperty("boostFingerprintOutput").get(),
+            providers.gradleProperty("boostFingerprintMetadata").get(),
+        )
+    }
+}
+
 tasks {
     test {
         useJUnit()
