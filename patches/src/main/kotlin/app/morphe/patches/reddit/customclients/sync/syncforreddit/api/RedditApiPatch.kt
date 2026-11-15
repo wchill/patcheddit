@@ -7,6 +7,7 @@
 package app.morphe.patches.reddit.customclients.sync.syncforreddit.api
 
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.apilookups.fixRedditApiLookups
+import app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.gallery.fixFailedGalleryImagesPatch
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.login.modifyLoginWebView
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.morecomments.fixMoreComments
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.slink.fixSLinksPatch
@@ -18,6 +19,7 @@ val redditApiPatch = redditApiPatch(
     spoofClientPatch,
     modifyLoginWebView,
     fixRedditApiLookups,
+    fixFailedGalleryImagesPatch,
     fixMoreComments,
     fixSLinksPatch,
     useUserEndpointPatch,

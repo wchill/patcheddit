@@ -16,12 +16,14 @@ import kotlin.test.assertTrue
 import app.morphe.patches.reddit.customclients.baconreader.api.redditApiPatch as baconReaderApi
 import app.morphe.patches.reddit.customclients.baconreader.api.spoofClientPatch as baconReaderSpoof
 import app.morphe.patches.reddit.customclients.baconreader.fix.apilookups.fixRedditApiLookups as baconReaderLookups
+import app.morphe.patches.reddit.customclients.baconreader.fix.gallery.fixFailedGalleryImagesPatch as baconReaderGallery
 import app.morphe.patches.reddit.customclients.baconreader.fix.login.modifyLoginWebView as baconReaderLogin
 import app.morphe.patches.reddit.customclients.baconreader.fix.morecomments.fixMoreComments as baconReaderComments
 import app.morphe.patches.reddit.customclients.boostforreddit.api.redditApiPatch as boostApi
 import app.morphe.patches.reddit.customclients.boostforreddit.api.spoofClientPatch as boostSpoof
 import app.morphe.patches.reddit.customclients.boostforreddit.fix.apilookups.fixRedditApiLookups as boostLookups
 import app.morphe.patches.reddit.customclients.boostforreddit.fix.feed.fixRAll as boostRAll
+import app.morphe.patches.reddit.customclients.boostforreddit.fix.gallery.fixFailedGalleryImagesPatch as boostGallery
 import app.morphe.patches.reddit.customclients.boostforreddit.fix.login.modifyLoginWebView as boostLogin
 import app.morphe.patches.reddit.customclients.boostforreddit.fix.slink.fixSlinksPatch as boostLinks
 import app.morphe.patches.reddit.customclients.infinity.api.redditApiPatch as infinityApi
@@ -30,22 +32,26 @@ import app.morphe.patches.reddit.customclients.infinity.fix.login.modifyLoginWeb
 import app.morphe.patches.reddit.customclients.joey.api.redditApiPatch as joeyApi
 import app.morphe.patches.reddit.customclients.joey.api.spoofClientPatch as joeySpoof
 import app.morphe.patches.reddit.customclients.joey.fix.apilookups.fixRedditApiLookups as joeyLookups
+import app.morphe.patches.reddit.customclients.joey.fix.gallery.fixFailedGalleryImagesPatch as joeyGallery
 import app.morphe.patches.reddit.customclients.joey.fix.login.modifyLoginWebView as joeyLogin
 import app.morphe.patches.reddit.customclients.joey.fix.morecomments.fixMoreComments as joeyComments
 import app.morphe.patches.reddit.customclients.redditisfun.api.redditApiPatch as rifApi
 import app.morphe.patches.reddit.customclients.redditisfun.api.spoofClientPatch as rifSpoof
 import app.morphe.patches.reddit.customclients.redditisfun.fix.apilookups.fixRedditApiLookups as rifLookups
+import app.morphe.patches.reddit.customclients.redditisfun.fix.gallery.fixFailedGalleryImagesPatch as rifGallery
 import app.morphe.patches.reddit.customclients.redditisfun.fix.login.modifyLoginWebView as rifLogin
 import app.morphe.patches.reddit.customclients.redditisfun.fix.morecomments.fixMoreComments as rifComments
 import app.morphe.patches.reddit.customclients.relay.api.redditApiPatch as relayApi
 import app.morphe.patches.reddit.customclients.relay.api.spoofClientPatch as relaySpoof
 import app.morphe.patches.reddit.customclients.relay.fix.apilookups.fixRedditApiLookups as relayLookups
+import app.morphe.patches.reddit.customclients.relay.fix.gallery.fixFailedGalleryImagesPatch as relayGallery
 import app.morphe.patches.reddit.customclients.relay.fix.login.modifyLoginWebView as relayLogin
 import app.morphe.patches.reddit.customclients.relay.fix.morecomments.fixMoreComments as relayComments
 import app.morphe.patches.reddit.customclients.relay.fix.slink.fixSLinksPatch as relayLinks
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.api.redditApiPatch as syncApi
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.api.spoofClientPatch as syncSpoof
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.apilookups.fixRedditApiLookups as syncLookups
+import app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.gallery.fixFailedGalleryImagesPatch as syncGallery
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.login.modifyLoginWebView as syncLogin
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.morecomments.fixMoreComments as syncComments
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.slink.fixSLinksPatch as syncLinks
@@ -63,15 +69,15 @@ class RedditApiPatchTest {
     )
 
     @Test
-    fun bundlesExactlyTheApplicableFixesForEachClientWithoutMediaRepairsOrObsoleteBoostPatches() {
+    fun bundlesExactlyTheApplicableFixesIncludingGalleryRepairsExceptForInfinity() {
         val expected = mapOf(
-            baconReaderApi to setOf(baconReaderSpoof, baconReaderLogin, baconReaderLookups, baconReaderComments),
-            boostApi to setOf(boostSpoof, boostLogin, boostLookups, boostRAll, boostLinks),
+            baconReaderApi to setOf(baconReaderSpoof, baconReaderLogin, baconReaderLookups, baconReaderGallery, baconReaderComments),
+            boostApi to setOf(boostSpoof, boostLogin, boostLookups, boostGallery, boostRAll, boostLinks),
             infinityApi to setOf(infinitySpoof, infinityLogin),
-            joeyApi to setOf(joeySpoof, joeyLogin, joeyLookups, joeyComments),
-            rifApi to setOf(rifSpoof, rifLogin, rifLookups, rifComments),
-            relayApi to setOf(relaySpoof, relayLogin, relayLookups, relayComments, relayLinks),
-            syncApi to setOf(syncSpoof, syncLogin, syncLookups, syncComments, syncLinks, useUserEndpointPatch),
+            joeyApi to setOf(joeySpoof, joeyLogin, joeyLookups, joeyGallery, joeyComments),
+            rifApi to setOf(rifSpoof, rifLogin, rifLookups, rifGallery, rifComments),
+            relayApi to setOf(relaySpoof, relayLogin, relayLookups, relayGallery, relayComments, relayLinks),
+            syncApi to setOf(syncSpoof, syncLogin, syncLookups, syncGallery, syncComments, syncLinks, useUserEndpointPatch),
         )
         for ((meta, spoof) in clients) {
             assertEquals(expected.getValue(meta), meta.dependencies)

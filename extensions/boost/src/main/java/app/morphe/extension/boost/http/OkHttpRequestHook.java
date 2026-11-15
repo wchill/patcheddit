@@ -17,6 +17,7 @@ import app.morphe.extension.boost.http.reddit.RedditMediaUndeleteInterceptor;
 import app.morphe.extension.boost.http.reddit.RedditSubmissionUndeleteInterceptor;
 import app.morphe.extension.boost.http.reddit.RedditSubredditUndeleteInterceptor;
 import app.morphe.extension.boost.http.wayback.WaybackThrottlingInterceptor;
+import app.morphe.extension.shared.fixes.api.FailedGalleryMetadataPatch;
 import app.morphe.extension.shared.fixes.api.RedditInfoResponsePatch;
 import app.morphe.extension.shared.fixes.feed.RAllPatch;
 import app.morphe.extension.shared.requests.BaseOkHttpRequestHook;
@@ -39,6 +40,7 @@ public class OkHttpRequestHook extends BaseOkHttpRequestHook {
     @Override
     protected List<Interceptor> getInterceptors() {
         return List.of(
+                new FailedGalleryMetadataPatch(),
                 new RedditMediaUndeleteInterceptor(),
                 new RedditSubmissionUndeleteInterceptor(),
                 new RedditSubredditUndeleteInterceptor(),
