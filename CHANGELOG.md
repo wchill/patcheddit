@@ -1,3 +1,17 @@
+# [2.2.0](https://github.com/wchill/patcheddit/compare/v2.1.1...v2.2.0) (2026-11-15)
+
+
+### Bug Fixes
+
+* **relay:** Relay Pro crashing on startup ([1c94b7e](https://github.com/wchill/patcheddit/commit/1c94b7ec72073e9a439c3f4cd86f8c675943aeff))
+* **rif:** Imgur albums now properly load in the built-in viewer and thumbnails work ([f219ebe](https://github.com/wchill/patcheddit/commit/f219ebe17b7485e3c3d8bde3d758d53556031666))
+* **rif:** Redgifs native playback ([0ef22e8](https://github.com/wchill/patcheddit/commit/0ef22e8ac7a1001a5b5009e4ae2fee0020e9ea5c))
+
+
+### Features
+
+* **boost:** Boost 1.14.4 support ([5538c39](https://github.com/wchill/patcheddit/commit/5538c39d2b32b92bf6dfb44430d6c3e03ac52dcb))
+
 # [2.2.0-dev.1](https://github.com/wchill/patcheddit/compare/v2.1.1...v2.2.0-dev.1) (2026-11-15)
 
 
