@@ -36,7 +36,7 @@ internal fun applyDefaultClientId(option: Option<String>) {
  * @param block The patch block. It receives client ID, redirect URI and user agent options.
  */
 fun spoofClientPatch(
-    name: String,
+    name: String?,
     description: String,
     extensionPatch: Patch<*>?,
     block: BytecodePatchBuilder.(
@@ -50,9 +50,9 @@ fun spoofClientPatch(
     default = true
 ) {
     category(PatchCategory.LOGIN)
-    extensionPatch?.let {
+    extensionPatch?.takeUnless { it == ExtensionPatches.Boost }?.let {
         addMorpheSettings(
-            it, name, description, PatchCategory.LOGIN,
+            it, name ?: "Spoof client", description, PatchCategory.LOGIN,
             preferenceKey = spoofClientSetting.key,
             optionsResource = "morphe_reddit_api",
         )
@@ -140,7 +140,7 @@ fun spoofClientPatch(
         userAgentOption: Option<String>,
     ) -> Unit,
 ) = spoofClientPatch(
-    name = "Spoof client",
+    name = null,
     description = "Restores functionality of the app by using custom client ID.",
     extensionPatch = extensionPatch,
     block = block,

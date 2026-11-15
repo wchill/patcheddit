@@ -12,18 +12,16 @@ package app.morphe.patches.reddit.customclients
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.Patch
-import app.morphe.patches.all.misc.PatchCategory
+import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.util.returnEarly
 
 fun fixRAllPatch(
     extensionPatch: Patch<*>,
     compatible: Array<Compatibility>
-) = morpheBytecodePatch(
-    name = "Fix /r/all",
+) = bytecodePatch(
     description = "Loads /r/all through Reddit's .json endpoint so the feed shows posts.",
     default = true,
-    extensionPatch = extensionPatch,
-    category = PatchCategory.FEED,
-) { setting ->
+) {
     compatibleWith(*compatible)
 
     dependsOn(
@@ -31,9 +29,9 @@ fun fixRAllPatch(
     )
 
     execute {
-        setting.returnEnabled(Fingerprint(
+        Fingerprint(
             definingClass = "Lapp/morphe/extension/shared/fixes/feed/RAllPatch;",
             name = "isPatchIncluded",
-        ).method)
+        ).method.returnEarly(true)
     }
 }

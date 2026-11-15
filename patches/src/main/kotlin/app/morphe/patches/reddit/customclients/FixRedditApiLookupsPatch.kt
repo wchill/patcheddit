@@ -9,25 +9,23 @@ package app.morphe.patches.reddit.customclients
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.Patch
-import app.morphe.patches.all.misc.PatchCategory
+import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.util.returnEarly
 
 fun fixRedditApiLookupsPatch(
     extensionPatch: Patch<*>,
     compatible: Array<Compatibility>,
-) = morpheBytecodePatch(
-    name = "Fix Reddit API lookups",
+) = bytecodePatch(
     description = "Fixes blocked post, comment, and community info requests.",
     default = true,
-    extensionPatch = extensionPatch,
-    category = PatchCategory.LOGIN,
-) { setting ->
+) {
     compatibleWith(*compatible)
     dependsOn(extensionPatch)
 
     execute {
-        setting.returnEnabled(Fingerprint(
+        Fingerprint(
             definingClass = "Lapp/morphe/extension/shared/fixes/api/RedditInfoResponsePatch;",
             name = "isPatchIncluded",
-        ).method)
+        ).method.returnEarly(true)
     }
 }

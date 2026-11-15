@@ -15,9 +15,7 @@ import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
 import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.settings.boostMorpheSettingsPatch
-import app.morphe.patches.reddit.customclients.boostforreddit.fix.apilookups.fixRedditApiLookups
-import app.morphe.patches.reddit.customclients.boostforreddit.fix.morecomments.fixMoreComments
-import app.morphe.patches.reddit.customclients.boostforreddit.fix.feed.fixRAll
+import app.morphe.patches.reddit.customclients.boostforreddit.http.interceptHttpRequests
 import app.morphe.patches.reddit.customclients.sync.syncforlemmy.misc.settings.syncMorpheSettingsPatch as lemmySettings
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
@@ -123,11 +121,12 @@ class MorphePatchSettingsTest {
 
     @Test
     fun resolvesBoostsCompositeHttpDependenciesToItsNativeMorpheMenu() {
-        for (patch in listOf(fixRedditApiLookups, fixMoreComments, fixRAll)) {
-            assertTrue(boostMorpheSettingsPatch in dependencies(patch))
-            assertFalse(lemmySettings in dependencies(patch))
-        }
-        assertFalse(fixMoreComments.default)
+        val patch = morpheBytecodePatch(
+            name = "Example HTTP feature",
+            extensionPatch = interceptHttpRequests,
+        ) { compatibleWith(*AppCompatibility.Boost) }
+        assertTrue(boostMorpheSettingsPatch in dependencies(patch))
+        assertFalse(lemmySettings in dependencies(patch))
     }
 
     @Test

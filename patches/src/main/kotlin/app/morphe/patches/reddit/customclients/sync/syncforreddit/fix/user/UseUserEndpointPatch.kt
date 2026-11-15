@@ -1,20 +1,21 @@
 package app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.user
 
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
+import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
+import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
-import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patcher.util.getReference
+import com.android.tools.smali.dexlib2.formatter.DexFormatter
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.StringReference
 
 @Suppress("unused")
-val useUserEndpointPatch = morpheBytecodePatch(
-    name = "Use /user/ endpoint",
+val useUserEndpointPatch = bytecodePatch(
     description = "Replaces the deprecated endpoint for viewing user profiles /u with /user, that used to fix a bug.",
     default = true,
-    extensionPatch = ExtensionPatches.Sync,
-) { setting ->
+) {
+    dependsOn(ExtensionPatches.Sync)
     compatibleWith(*AppCompatibility.SyncForReddit)
 
     execute {
@@ -27,7 +28,10 @@ val useUserEndpointPatch = morpheBytecodePatch(
                 val fixedUserPathString = userPathStringInstruction.getReference<StringReference>()!!
                     .string.replace("u/", "user/")
 
-                setting.replaceString(match.method, stringIndex, fixedUserPathString)
+                match.method.replaceInstruction(
+                    stringIndex,
+                    "const-string v${userPathStringInstruction.registerA}, ${DexFormatter.INSTANCE.getQuotedString(fixedUserPathString)}",
+                )
             }
         }
     }
