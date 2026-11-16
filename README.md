@@ -57,7 +57,7 @@ In addition, patches for some apps contain additional features that were not pre
     * This feature makes extra network requests, so posts will load a little slower. In particular, retrieving images from the Wayback Machine is heavily ratelimited.
         * Caching is implemented to try and limit the impact of this.
 * Imgur images and albums are automatically loaded from the Wayback Machine if a 404 is detected.
-* The context menu for posts now contains additional options for opening a site in the Wayback Machine or archive.is. This is useful for if the undeleting functionality has issues or you want to bypass a content paywall.
+* Link context menus include an **Open with** submenu for Wayback Machine, Archive.is, Wallhop, smry.ai, RemovePaywall, Freedium, and Unwall. Each source can be enabled or disabled under **Settings > Morphe > Links**. When all sources are disabled, the menu shows a disabled **All archivers disabled** entry. Query parameters are stripped from archive links by default; this can also be changed in Morphe settings.
 
 ### reddit is fun
 * Restores Imgur album and gallery loading in the built-in viewer, album thumbnails, and links that include a title.

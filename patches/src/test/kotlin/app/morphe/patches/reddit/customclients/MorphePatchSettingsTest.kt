@@ -90,6 +90,21 @@ class MorphePatchSettingsTest {
     }
 
     @Test
+    fun archiveSourcesDefaultEnabledAndDependOnTheirMasterSwitch() {
+        val menu = resource("boost/xml/morphe_boost_settings_skeleton.xml")
+        val key = "morphe_patch_add_archive_links_to_context_menu"
+        val options = resource("boost/xml/morphe_boost_archive_options.xml")
+        addMorphePatchPreference(menu, switch(), spec(key), options)
+        val sources = elements(menu, "CheckBoxPreference").filter {
+            it.getAttribute("android:key").startsWith("morphe_boost_archive_")
+        }
+        assertEquals(8, sources.size)
+        assertEquals(8, sources.map { it.getAttribute("android:key") }.toSet().size)
+        assertTrue(sources.all { it.getAttribute("android:defaultValue") == "true" })
+        assertTrue(sources.all { it.getAttribute("android:dependency") == key })
+    }
+
+    @Test
     fun preservesOptInDefaultsIndependentlyOfPatchSelectionDefaults() {
         val menu = resource("boost/xml/morphe_boost_settings_skeleton.xml")
         addMorphePatchPreference(menu, switch(),

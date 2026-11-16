@@ -28,10 +28,12 @@ internal val SETTINGS_UTILS_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/
 @Suppress("unused")
 val addArchiveLinks = morpheBytecodePatch(
     name = "Add archive links to context menu",
-    description = "Adds 'Open with Wayback Machine' and 'Open with Archive.is' to the link context menu.",
+    description = "Adds archive links to the link context menu, with a setting for each source.",
     default = true,
     extensionPatch = ExtensionPatches.Boost,
     category = PatchCategory.LINKS,
+    optionsResource = "morphe_boost_archive_options",
+    resourceDirectory = "boost",
 ) { setting ->
     dependsOn(ExtensionPatches.Boost)
     compatibleWith(*AppCompatibility.Boost)
@@ -56,16 +58,9 @@ val addArchiveLinks = morpheBytecodePatch(
             setting = setting,
             before = """
                 iget v0, p1, ${BoostApi.MenuOption.id}
-                const/16 v1, 101
-                if-eq v0, v1, :morphe_wayback
-                const/16 v1, 102
-                if-eq v0, v1, :morphe_archive
-                goto :morphe_native_context_menu
-                :morphe_wayback
-                const-string v2, "https://web.archive.org/web/"
-                goto :morphe_open_archive
-                :morphe_archive
-                const-string v2, "https://archive.is/"
+                invoke-static {v0}, $SETTINGS_UTILS_EXTENSION_CLASS_DESCRIPTOR->getArchiveBaseUrl(I)Ljava/lang/String;
+                move-result-object v2
+                if-eqz v2, :morphe_native_context_menu
                 :morphe_open_archive
                 iget-object v0, p0, ${BoostApi.LinkMenuListener.linkMenu}
                 iget-object v1, v0, ${BoostApi.LinkMenu.context}

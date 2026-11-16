@@ -36,9 +36,8 @@ import com.android.tools.smali.dexlib2.immutable.ImmutableField
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethod
 import app.morphe.patches.all.misc.PatchCategory
 
-internal const val OKHTTP_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boost/http/OkHttpRequestHook;"
 private const val GLIDE_REDDIT_MEDIA_WAYBACK_DESCRIPTOR =
-    "Lapp/morphe/extension/boost/http/reddit/GlideRedditMediaWayback;"
+    "Lapp/morphe/extension/boost/http/reddit/GlideRedditMediaWayback;->open(Ljava/net/HttpURLConnection;I)Ljava/io/InputStream;"
 internal const val EXTRA_EMOJI_CONTEXT_KEY = "extraEmoji"
 internal const val EXTRA_EMOJI_GETTER = "getExtraEmoji"
 
@@ -120,7 +119,7 @@ val undeleteRedditPatch = morpheBytecodePatch(
                     iget-object v3, p0, ${BoostApi.HttpUrlFetcher.connection}
                     invoke-static {v3}, ${BoostApi.HttpUrlFetcher.responseCode}
                     move-result v4
-                    invoke-static {v3, v4}, Lapp/morphe/extension/boost/http/reddit/GlideRedditMediaWayback;->open(Ljava/net/HttpURLConnection;I)Ljava/io/InputStream;
+                    invoke-static {v3, v4}, $GLIDE_REDDIT_MEDIA_WAYBACK_DESCRIPTOR
                     move-result-object v3
                     if-eqz v3, :morphe_native_glide_error
                     iput-object v3, p0, ${BoostApi.HttpUrlFetcher.stream}
@@ -132,7 +131,7 @@ val undeleteRedditPatch = morpheBytecodePatch(
                 normalResponseIndex + 2,
                 """
                     iget-object v3, p0, ${BoostApi.HttpUrlFetcher.connection}
-                    invoke-static {v3, v$statusRegister}, Lapp/morphe/extension/boost/http/reddit/GlideRedditMediaWayback;->open(Ljava/net/HttpURLConnection;I)Ljava/io/InputStream;
+                    invoke-static {v3, v$statusRegister}, $GLIDE_REDDIT_MEDIA_WAYBACK_DESCRIPTOR
                     move-result-object v3
                     if-eqz v3, :morphe_native_glide_response
                     iput-object v3, p0, ${BoostApi.HttpUrlFetcher.stream}
