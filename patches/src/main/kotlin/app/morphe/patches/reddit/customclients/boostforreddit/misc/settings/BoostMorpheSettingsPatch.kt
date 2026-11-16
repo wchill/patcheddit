@@ -23,7 +23,7 @@ internal fun ResourcePatchContext.addBoostSettings(resourceName: String, beforeT
     document("res/xml/$resourceName.xml").use { source ->
         document("res/xml/morphe_boost_settings_skeleton.xml").use { target ->
             val before = beforeTitle?.let { title ->
-                val categories = target.getElementsByTagName("PreferenceCategory")
+                val categories = target.getElementsByTagName("PreferenceScreen")
                 (0 until categories.length).map { categories.item(it) as Element }
                     .single { it.getAttribute("android:title") == title }
             }

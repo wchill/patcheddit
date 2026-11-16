@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/morphe_diagnostics_title">
+    <PreferenceScreen
+        android:key="morphe_category_diagnostics"
+        android:title="@string/morphe_diagnostics_title"
+        android:persistent="false">
         <Preference
             android:key="morphe_exception_log"
             android:title="@string/morphe_exception_log_title"
@@ -11,5 +14,5 @@
             android:title="@string/morphe_crash_logs_title"
             android:summary="@string/morphe_crash_logs_summary"
             android:persistent="false" />
-    </PreferenceCategory>
+    </PreferenceScreen>
 </PreferenceScreen>

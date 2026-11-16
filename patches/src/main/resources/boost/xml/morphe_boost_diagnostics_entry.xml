@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceCategory xmlns:android="http://schemas.android.com/apk/res/android"
-    android:title="Diagnostics">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="morphe_category_diagnostics"
+    android:title="Diagnostics"
+    android:persistent="false">
     <Preference
         android:key="morphe_exception_log"
         android:title="Exception log"
@@ -11,4 +13,4 @@
         android:title="Fatal crash logs"
         android:summary="View saved fatal-crash reports"
         android:persistent="false" />
-</PreferenceCategory>
+</PreferenceScreen>

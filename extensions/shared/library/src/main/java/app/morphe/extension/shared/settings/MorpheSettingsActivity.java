@@ -19,6 +19,7 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceGroup;
+import android.preference.PreferenceScreen;
 import android.preference.EditTextPreference;
 import android.preference.CheckBoxPreference;
 import android.util.Log;
@@ -72,7 +73,7 @@ public final class MorpheSettingsActivity extends PreferenceActivity {
         screen = getIntent().getStringExtra(SCREEN);
         ActionBar bar = getActionBar();
         if (bar != null) bar.setDisplayHomeAsUpEnabled(true);
-        if (screen == null) {
+        if (screen == null || screen.startsWith("morphe_category_")) {
             OAuthSettings.migrateLegacyPreferences(this);
             addPreferencesFromResource(resource("xml", BOOST_PACKAGE.equals(getPackageName())
                     ? "morphe_boost_settings_skeleton" : "morphe_settings"));
@@ -81,6 +82,22 @@ public final class MorpheSettingsActivity extends PreferenceActivity {
             bindOAuthPreferences();
             bindScreen(EXCEPTIONS);
             bindScreen(CRASHES);
+            PreferenceScreen root = getPreferenceScreen();
+            for (int index = 0; index < root.getPreferenceCount(); index++) {
+                Preference entry = root.getPreference(index);
+                if (entry instanceof PreferenceScreen) {
+                    entry.setIntent(new Intent(this, MorpheSettingsActivity.class)
+                            .putExtra(SCREEN, entry.getKey()));
+                }
+            }
+            if (screen != null) {
+                Preference entry = findPreference(screen);
+                if (!(entry instanceof PreferenceScreen)) {
+                    throw new IllegalStateException("Missing Morphe settings section: " + screen);
+                }
+                setPreferenceScreen((PreferenceScreen) entry);
+                setTitle(entry.getTitle());
+            }
             return;
         }
         if (!EXCEPTIONS.equals(screen) && !CRASHES.equals(screen)) {

@@ -274,14 +274,14 @@ internal fun addMorphePatchPreference(
             if (key.isNotBlank()) require(keys.add(key)) { "Duplicate Morphe preference key: $key" }
         }
     }
-    val categories = target.getElementsByTagName("PreferenceCategory")
-    val matches = (0 until categories.length).map { categories.item(it) as Element }
+    val matches = target.documentElement.childElements()
         .filter { it.getAttribute("android:key") == categoryKey }
     require(matches.size <= 1) { "Duplicate Morphe category: $categoryKey" }
     val category = matches.singleOrNull()
-        ?: (target.importNode(template.documentElement, false) as Element).apply {
+        ?: target.createElement("PreferenceScreen").apply {
             setAttribute("android:key", categoryKey)
             setAttribute("android:title", spec.category)
+            setAttribute("android:persistent", "false")
             target.documentElement.appendChild(this)
         }
     for (entry in entries) category.appendChild(entry)

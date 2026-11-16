@@ -46,16 +46,33 @@ class MorphePatchSettingsTest {
     @Test
     fun registersOnlySelectedControlsAndReusesCategoriesWithoutReplacingDiagnostics() {
         val menu = resource("settings/xml/morphe_settings.xml")
-        val diagnostics = menu.getElementsByTagName("PreferenceCategory").item(0)
+        val diagnostics = menu.documentElement.childElements().single()
         for (key in listOf("morphe_patch_comments", "morphe_patch_more_comments")) {
             addMorphePatchPreference(menu, switch(), spec(key))
         }
-        assertSame(diagnostics, menu.getElementsByTagName("PreferenceCategory").item(0))
-        assertEquals(2, menu.getElementsByTagName("PreferenceCategory").length)
+        assertSame(diagnostics, menu.documentElement.childElements().first())
+        assertEquals(2, menu.documentElement.childElements().size)
+        assertTrue(menu.documentElement.childElements().all { it.tagName == "PreferenceScreen" })
+        assertEquals(0, menu.getElementsByTagName("PreferenceCategory").length)
         assertEquals(2, menu.getElementsByTagName("Preference").length)
         assertEquals(setOf("morphe_patch_comments", "morphe_patch_more_comments"),
             elements(menu, "CheckBoxPreference").map { it.getAttribute("android:key") }.toSet())
         assertTrue(elements(menu, "CheckBoxPreference").all { it.getAttribute("android:defaultValue") == "true" })
+    }
+
+    @Test
+    fun keepsSectionsSeparateAndPreservesPreferenceKeysAndDependencies() {
+        val menu = resource("settings/xml/morphe_settings.xml")
+        for (category in listOf("Links", "Media")) {
+            addMorphePatchPreference(menu, switch(),
+                spec("morphe_${category.lowercase()}").copy(category = category))
+        }
+        val sections = menu.documentElement.childElements()
+        assertEquals(listOf("morphe_category_diagnostics", "morphe_category_links", "morphe_category_media"),
+            sections.map { it.getAttribute("android:key") })
+        assertTrue(sections.all { it.tagName == "PreferenceScreen" })
+        assertEquals(listOf("morphe_links", "morphe_media"),
+            sections.drop(1).map { it.childElements().single().getAttribute("android:key") })
     }
 
     @Test
