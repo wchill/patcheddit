@@ -40,7 +40,7 @@ public class ImgurAlbumsPatch implements Interceptor {
     private static final Semaphore COVER_DECODES = new Semaphore(MAX_COVER_DECODES);
     private static final Pattern ID = Pattern.compile("[A-Za-z0-9]{1,32}");
     private static final Pattern TITLE_ID = Pattern.compile(
-            "[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*-([A-Za-z0-9]{7})");
+            "[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*-([A-Za-z0-9]{5}|[A-Za-z0-9]{7})");
     private static final Pattern AUTHORIZATION = Pattern.compile("Client-ID [A-Za-z0-9]+");
     private final int timeoutMillis;
 

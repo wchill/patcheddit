@@ -9,20 +9,14 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.http.imgur
 
-import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patches.reddit.customclients.morpheBytecodePatch
+import app.morphe.patcher.util.returnEarly
+import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
-import app.morphe.patches.reddit.customclients.boostforreddit.http.interceptHttpRequests
 import app.morphe.patches.reddit.customclients.boostforreddit.http.IMGUR_UNDELETE_APPLIED_RESOURCE
+import app.morphe.patches.reddit.customclients.boostforreddit.http.interceptHttpRequests
 import app.morphe.patches.reddit.customclients.boostforreddit.http.undeleteAppliedMarkerPatch
-import app.morphe.patcher.util.getReference
-import app.morphe.util.indexOfFirstInstruction
-import app.morphe.patcher.util.returnEarly
-import com.android.tools.smali.dexlib2.iface.reference.MethodReference
-import app.morphe.patches.all.misc.PatchCategory
-
-internal const val OKHTTP_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boost/http/OkHttpRequestHook;"
+import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 
 @Suppress("unused")
 val interceptImgurRequests = morpheBytecodePatch(

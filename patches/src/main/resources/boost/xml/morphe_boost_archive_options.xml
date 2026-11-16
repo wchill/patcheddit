@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceCategory xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="morphe_boost_archive_strip_query_parameters"
+        android:title="Strip query parameters from archive links"
+        android:summary="Remove query and tracking parameters before opening an archive service."
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="morphe_boost_archive_wayback"
+        android:title="Wayback Machine"
+        android:summary="https://web.archive.org/"
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="morphe_boost_archive_archive_is"
+        android:title="Archive.is"
+        android:summary="https://archive.is/"
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="morphe_boost_archive_wallhop"
+        android:title="Wallhop"
+        android:summary="https://wallhop.io/"
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="morphe_boost_archive_smry"
+        android:title="smry.ai"
+        android:summary="https://smry.ai/"
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="morphe_boost_archive_removepaywall"
+        android:title="RemovePaywall"
+        android:summary="https://www.removepaywall.com/"
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="morphe_boost_archive_freedium"
+        android:title="Freedium"
+        android:summary="https://freedium-mirror.cfd/"
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="morphe_boost_archive_unwall"
+        android:title="Unwall"
+        android:summary="https://unwall.app/"
+        android:defaultValue="true" />
+</PreferenceCategory>

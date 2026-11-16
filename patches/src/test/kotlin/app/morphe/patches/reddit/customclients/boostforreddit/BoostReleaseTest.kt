@@ -6,13 +6,9 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit
 
-import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostBindings
-import app.morphe.patches.reddit.customclients.boostforreddit.fix.morecomments.fixMoreComments
-import app.morphe.patches.reddit.customclients.boostforreddit.fix.profileabout.fixProfileAboutScrollingPatch
-import app.morphe.patches.reddit.customclients.fixMoreCommentsPatch
 import app.morphe.patches.reddit.customclients.misc.extension.mapping.FieldId
 import app.morphe.patches.reddit.customclients.misc.extension.mapping.MethodId
 import app.morphe.patches.reddit.customclients.misc.extension.mapping.ProguardMapping
@@ -31,7 +27,6 @@ import java.security.MessageDigest
 import java.util.HexFormat
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class BoostReleaseTest {
@@ -45,13 +40,6 @@ class BoostReleaseTest {
         assertEquals(listOf(version), AppCompatibility.Boost.single().targets.map { it.version })
         assertTrue(mappingText().lineSequence().first().endsWith("Boost $version APK."))
         BoostBindings.table.mapping(ProguardMapping.read(mappingText().reader()).reversed())
-    }
-
-    @Test
-    fun nativeFixesAreOptInWithoutChangingOtherClients() {
-        assertFalse(fixMoreComments.default)
-        assertFalse(fixProfileAboutScrollingPatch.default)
-        assertTrue(fixMoreCommentsPatch(bytecodePatch {}, emptyArray()).default)
     }
 
     @Test

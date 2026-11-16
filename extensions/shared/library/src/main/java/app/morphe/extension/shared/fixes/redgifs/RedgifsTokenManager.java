@@ -1,3 +1,13 @@
+/*
+ * Copyright 2026 wchill.
+ * https://github.com/wchill/patcheddit
+ *
+ * Copyright 2026 trulow.
+ * Adapted from https://github.com/wchill/patcheddit/pull/124.
+ *
+ * See the included NOTICE file for GPLv3 section 7 terms.
+ */
+
 package app.morphe.extension.shared.fixes.redgifs;
 
 import static app.morphe.extension.shared.requests.Route.Method.GET;
@@ -58,16 +68,26 @@ public class RedgifsTokenManager {
         connection.setRequestProperty("Content-Type", "application/json");
         connection.setRequestProperty("Accept", "application/json");
         connection.setUseCaches(false);
-
-        JSONObject responseObject = Requester.parseJSONObject(connection);
-        return responseObject.getString("token");
+        connection.setConnectTimeout(10_000);
+        connection.setReadTimeout(10_000);
+        try {
+            JSONObject responseObject = Requester.parseJSONObject(connection);
+            return responseObject.getString("token");
+        } finally {
+            connection.disconnect();
+        }
     }
 
     public static RedgifsToken refreshToken(String userAgent) throws IOException, JSONException {
+        return refreshToken(userAgent, false);
+    }
+
+    public static RedgifsToken refreshToken(String userAgent, boolean forceRefresh)
+            throws IOException, JSONException {
         synchronized(tokenMap) {
             // Reference: https://github.com/JeffreyCA/Apollo-ImprovedCustomApi/pull/67
             RedgifsToken token = tokenMap.get(userAgent);
-            if (token != null && token.isValid()) {
+            if (!forceRefresh && token != null && token.isValid()) {
                 return token;
             }
 
@@ -85,7 +105,9 @@ public class RedgifsTokenManager {
         // Reference: https://github.com/JeffreyCA/Apollo-ImprovedCustomApi/pull/67
         JSONObject responseObject = new JSONObject();
         responseObject.put("access_token", token.accessToken);
-        responseObject.put("expiry_time", token.getExpiryTimeInSeconds() - (System.currentTimeMillis() / 1000));
+        long remaining = token.getExpiryTimeInSeconds() - System.currentTimeMillis() / 1000;
+        responseObject.put("expiry_time", remaining);
+        responseObject.put("expires_in", remaining);
         responseObject.put("scope", "read");
         responseObject.put("token_type", "Bearer");
         return responseObject.toString();

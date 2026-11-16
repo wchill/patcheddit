@@ -6,23 +6,20 @@
 
 package app.morphe.extension.shared.settings;
 
-import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceGroup;
+import android.preference.PreferenceScreen;
 import android.preference.EditTextPreference;
 import android.preference.CheckBoxPreference;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -41,7 +38,7 @@ import app.morphe.extension.shared.debug.ExceptionLogStore;
 import app.morphe.extension.shared.debug.FatalCrashLogs;
 
 @SuppressWarnings("deprecation")
-public final class MorpheSettingsActivity extends PreferenceActivity {
+public final class MorpheSettingsActivity extends MorphePreferenceActivity {
     private static final String TAG = "MorpheDiagnostics";
     private static final String SCREEN = "morphe_screen";
     private static final String EXCEPTIONS = "morphe_exception_log";
@@ -65,14 +62,9 @@ public final class MorpheSettingsActivity extends PreferenceActivity {
 
     @Override
     protected void onCreate(Bundle state) {
-        boolean dark = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
-                == Configuration.UI_MODE_NIGHT_YES;
-        setTheme(dark ? android.R.style.Theme_Material : android.R.style.Theme_Material_Light);
         super.onCreate(state);
         screen = getIntent().getStringExtra(SCREEN);
-        ActionBar bar = getActionBar();
-        if (bar != null) bar.setDisplayHomeAsUpEnabled(true);
-        if (screen == null) {
+        if (screen == null || screen.startsWith("morphe_category_")) {
             OAuthSettings.migrateLegacyPreferences(this);
             addPreferencesFromResource(resource("xml", BOOST_PACKAGE.equals(getPackageName())
                     ? "morphe_boost_settings_skeleton" : "morphe_settings"));
@@ -81,6 +73,23 @@ public final class MorpheSettingsActivity extends PreferenceActivity {
             bindOAuthPreferences();
             bindScreen(EXCEPTIONS);
             bindScreen(CRASHES);
+            PreferenceScreen root = getPreferenceScreen();
+            MorpheSettingsStyle.addSectionIcons(this, root);
+            for (int index = 0; index < root.getPreferenceCount(); index++) {
+                Preference entry = root.getPreference(index);
+                if (entry instanceof PreferenceScreen) {
+                    entry.setIntent(new Intent(this, MorpheSettingsActivity.class)
+                            .putExtra(SCREEN, entry.getKey()));
+                }
+            }
+            if (screen != null) {
+                Preference entry = findPreference(screen);
+                if (!(entry instanceof PreferenceScreen)) {
+                    throw new IllegalStateException("Missing Morphe settings section: " + screen);
+                }
+                setPreferenceScreen((PreferenceScreen) entry);
+                setTitle(entry.getTitle());
+            }
             return;
         }
         if (!EXCEPTIONS.equals(screen) && !CRASHES.equals(screen)) {
@@ -180,15 +189,6 @@ public final class MorpheSettingsActivity extends PreferenceActivity {
     protected void onResume() {
         super.onResume();
         if (reports != null && pendingTasks == 0) refreshReports();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override

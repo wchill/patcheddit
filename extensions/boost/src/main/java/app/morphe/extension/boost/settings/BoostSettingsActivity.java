@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
@@ -34,9 +33,10 @@ import app.morphe.extension.boost.oauth.OAuthTokenAccounts;
 import app.morphe.extension.boost.oauth.OAuthTokenException;
 import app.morphe.extension.boost.oauth.OAuthTokenPayload;
 import app.morphe.extension.boost.oauth.OAuthTokenValidator;
+import app.morphe.extension.shared.settings.MorphePreferenceActivity;
 
 @SuppressWarnings("deprecation")
-public final class BoostSettingsActivity extends PreferenceActivity {
+public final class BoostSettingsActivity extends MorphePreferenceActivity {
     private static final String TAG = "MorpheOAuthTokens";
     private static final String SCREEN = "morphe_screen";
     private static final String STATUS = "morphe_boost_oauth_account";
@@ -54,10 +54,6 @@ public final class BoostSettingsActivity extends PreferenceActivity {
 
     @Override
     protected void onCreate(Bundle state) {
-        boolean dark = (getResources().getConfiguration().uiMode
-                & android.content.res.Configuration.UI_MODE_NIGHT_MASK)
-                == android.content.res.Configuration.UI_MODE_NIGHT_YES;
-        setTheme(dark ? android.R.style.Theme_Material : android.R.style.Theme_Material_Light);
         super.onCreate(state);
 
         String screen = getIntent().getStringExtra(SCREEN);

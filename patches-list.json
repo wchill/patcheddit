@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "2.2.0",
+  "version": "2.3.0-dev.4",
   "patches": [
     {
       "name": "Add Boost Search bottom navigation",
@@ -31,7 +31,7 @@
     },
     {
       "name": "Add archive links to context menu",
-      "description": "Adds 'Open with Wayback Machine' and 'Open with Archive.is' to the link context menu.",
+      "description": "Adds archive links to the link context menu, with a setting for each source.",
       "default": true,
       "category": "Links",
       "compatiblePackages": [
@@ -367,6 +367,24 @@
               "description": null
             }
           ]
+        },
+        {
+          "packageName": "com.laurencedawson.reddit_sync.pro",
+          "name": "Sync for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "v23.06.30-13:39",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
         }
       ],
       "options": []
@@ -469,132 +487,6 @@
           "targets": [
             {
               "version": "5.6.22",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Fix /r/all",
-      "description": "Loads /r/all through Reddit's .json endpoint so the feed shows posts.",
-      "default": true,
-      "category": "Feed",
-      "compatiblePackages": [
-        {
-          "packageName": "com.rubenmayayo.reddit",
-          "name": "Boost for Reddit",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "1.14.4",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Fix /s/ links",
-      "description": "Opens Reddit share links (/s/) by resolving them to the post they point to.",
-      "default": true,
-      "category": "Links",
-      "compatiblePackages": [
-        {
-          "packageName": "com.rubenmayayo.reddit",
-          "name": "Boost for Reddit",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "1.14.4",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Fix /s/ links",
-      "description": "Opens Reddit share links (/s/) by resolving them to the post they point to.",
-      "default": true,
-      "category": "Links",
-      "compatiblePackages": [
-        {
-          "packageName": "free.reddit.news",
-          "name": "Relay for Reddit",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "10.2.40",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        },
-        {
-          "packageName": "reddit.news",
-          "name": "Relay for Reddit Pro",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "10.2.40",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Fix /s/ links",
-      "description": "Opens Reddit share links (/s/) by resolving them to the post they point to.",
-      "default": true,
-      "category": "Links",
-      "compatiblePackages": [
-        {
-          "packageName": "com.laurencedawson.reddit_sync",
-          "name": "Sync for Reddit",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "v23.06.30-13:39",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -714,10 +606,10 @@
       "options": []
     },
     {
-      "name": "Fix Reddit API lookups",
-      "description": "Fixes blocked post, comment, and community info requests.",
+      "name": "Fix Redgifs API",
+      "description": "Fetches a fresh Redgifs API token so Redgifs videos load.",
       "default": true,
-      "category": "Login & API",
+      "category": "Media",
       "compatiblePackages": [
         {
           "packageName": "com.onelouder.baconreader",
@@ -759,37 +651,10 @@
       "options": []
     },
     {
-      "name": "Fix Reddit API lookups",
-      "description": "Fixes blocked post, comment, and community info requests.",
+      "name": "Fix Redgifs API",
+      "description": "Fetches a fresh Redgifs API token so Redgifs videos load.",
       "default": true,
-      "category": "Login & API",
-      "compatiblePackages": [
-        {
-          "packageName": "com.rubenmayayo.reddit",
-          "name": "Boost for Reddit",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "1.14.4",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Fix Reddit API lookups",
-      "description": "Fixes blocked post, comment, and community info requests.",
-      "default": true,
-      "category": "Login & API",
+      "category": "Media",
       "compatiblePackages": [
         {
           "packageName": "o.o.joey",
@@ -838,168 +703,6 @@
           "targets": [
             {
               "version": null,
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Fix Reddit API lookups",
-      "description": "Fixes blocked post, comment, and community info requests.",
-      "default": true,
-      "category": "Login & API",
-      "compatiblePackages": [
-        {
-          "packageName": "com.andrewshu.android.reddit",
-          "name": "rif is fun",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "5.6.22",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        },
-        {
-          "packageName": "com.andrewshu.android.redditdonation",
-          "name": "rif is fun golden platinum",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "5.6.22",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Fix Reddit API lookups",
-      "description": "Fixes blocked post, comment, and community info requests.",
-      "default": true,
-      "category": "Login & API",
-      "compatiblePackages": [
-        {
-          "packageName": "free.reddit.news",
-          "name": "Relay for Reddit",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "10.2.40",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        },
-        {
-          "packageName": "reddit.news",
-          "name": "Relay for Reddit Pro",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "10.2.40",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Fix Reddit API lookups",
-      "description": "Fixes blocked post, comment, and community info requests.",
-      "default": true,
-      "category": "Login & API",
-      "compatiblePackages": [
-        {
-          "packageName": "com.laurencedawson.reddit_sync",
-          "name": "Sync for Reddit",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "v23.06.30-13:39",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Fix Redgifs API",
-      "description": "Fetches a fresh Redgifs API token so Redgifs videos load.",
-      "default": true,
-      "category": "Media",
-      "compatiblePackages": [
-        {
-          "packageName": "com.onelouder.baconreader",
-          "name": "BaconReader",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "6.1.4",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        },
-        {
-          "packageName": "com.onelouder.baconreader.premium",
-          "name": "BaconReader Premium",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "6.1.4",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -1062,8 +765,71 @@
       "category": "Media",
       "compatiblePackages": [
         {
+          "packageName": "free.reddit.news",
+          "name": "Relay for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "reddit.news",
+          "name": "Relay for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix Redgifs API",
+      "description": "Fetches a fresh Redgifs API token so Redgifs videos load.",
+      "default": true,
+      "category": "Media",
+      "compatiblePackages": [
+        {
           "packageName": "com.laurencedawson.reddit_sync",
           "name": "Sync for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "v23.06.30-13:39",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.laurencedawson.reddit_sync.pro",
+          "name": "Sync for Reddit Pro",
           "description": null,
           "apkFileType": null,
           "appIconColor": null,
@@ -1083,10 +849,10 @@
       "options": []
     },
     {
-      "name": "Fix loading more comments",
-      "description": "Fixes 403 error when loading child comments.",
+      "name": "Fix escaped URLs",
+      "description": "Fixes URLs broken by backslash-escaped punctuation in Reddit posts and comments.",
       "default": true,
-      "category": "Comments & posting",
+      "category": "Links",
       "compatiblePackages": [
         {
           "packageName": "com.onelouder.baconreader",
@@ -1128,10 +894,10 @@
       "options": []
     },
     {
-      "name": "Fix loading more comments",
-      "description": "Fixes 403 error when loading child comments.",
-      "default": false,
-      "category": "Comments & posting",
+      "name": "Fix escaped URLs",
+      "description": "Fixes URLs broken by backslash-escaped punctuation in Reddit posts and comments.",
+      "default": true,
+      "category": "Links",
       "compatiblePackages": [
         {
           "packageName": "com.rubenmayayo.reddit",
@@ -1155,10 +921,73 @@
       "options": []
     },
     {
-      "name": "Fix loading more comments",
-      "description": "Fixes 403 error when loading child comments.",
+      "name": "Fix escaped URLs",
+      "description": "Fixes URLs broken by backslash-escaped punctuation in Reddit posts and comments.",
       "default": true,
-      "category": "Comments & posting",
+      "category": "Links",
+      "compatiblePackages": [
+        {
+          "packageName": "ml.docilealligator.infinityforreddit.plus",
+          "name": "Infinity for Reddit+",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "ml.docilealligator.infinityforreddit.plus2",
+          "name": "Infinity for Reddit++",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "ml.docilealligator.infinityforreddit.patreon",
+          "name": "Infinity for Reddit (Patreon)",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix escaped URLs",
+      "description": "Fixes URLs broken by backslash-escaped punctuation in Reddit posts and comments.",
+      "default": true,
+      "category": "Links",
       "compatiblePackages": [
         {
           "packageName": "o.o.joey",
@@ -1218,10 +1047,10 @@
       "options": []
     },
     {
-      "name": "Fix loading more comments",
-      "description": "Fixes 403 error when loading child comments.",
+      "name": "Fix escaped URLs",
+      "description": "Fixes URLs broken by backslash-escaped punctuation in Reddit posts and comments.",
       "default": true,
-      "category": "Comments & posting",
+      "category": "Links",
       "compatiblePackages": [
         {
           "packageName": "com.andrewshu.android.reddit",
@@ -1263,10 +1092,10 @@
       "options": []
     },
     {
-      "name": "Fix loading more comments",
-      "description": "Fixes 403 error when loading child comments.",
+      "name": "Fix escaped URLs",
+      "description": "Fixes URLs broken by backslash-escaped punctuation in Reddit posts and comments.",
       "default": true,
-      "category": "Comments & posting",
+      "category": "Links",
       "compatiblePackages": [
         {
           "packageName": "free.reddit.news",
@@ -1308,14 +1137,32 @@
       "options": []
     },
     {
-      "name": "Fix loading more comments",
-      "description": "Fixes 403 error when loading child comments.",
+      "name": "Fix escaped URLs",
+      "description": "Fixes URLs broken by backslash-escaped punctuation in Reddit posts and comments.",
       "default": true,
-      "category": "Comments & posting",
+      "category": "Links",
       "compatiblePackages": [
         {
           "packageName": "com.laurencedawson.reddit_sync",
           "name": "Sync for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "v23.06.30-13:39",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.laurencedawson.reddit_sync.pro",
+          "name": "Sync for Reddit Pro",
           "description": null,
           "apkFileType": null,
           "appIconColor": null,
@@ -1357,19 +1204,10 @@
               "description": null
             }
           ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Fix profile About scrolling",
-      "description": "Fixes the first swipe stopping early on profile About tabs without disabling horizontal scrolling.",
-      "default": false,
-      "category": "Interface",
-      "compatiblePackages": [
+        },
         {
-          "packageName": "com.rubenmayayo.reddit",
-          "name": "Boost for Reddit",
+          "packageName": "com.laurencedawson.reddit_sync.pro",
+          "name": "Sync for Reddit Pro",
           "description": null,
           "apkFileType": null,
           "appIconColor": null,
@@ -1377,7 +1215,115 @@
           "formFactor": "MOBILE",
           "targets": [
             {
-              "version": "1.14.4",
+              "version": "v23.06.30-13:39",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix swipe back transparency",
+      "description": "Shows the previous screen while swiping back on newer Android versions.",
+      "default": true,
+      "category": "Interface",
+      "compatiblePackages": [
+        {
+          "packageName": "o.o.joey",
+          "name": "Joey for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "o.o.joey.pro",
+          "name": "Joey for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "o.o.joey.dev",
+          "name": "Joey for Reddit Dev",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix swipe back transparency",
+      "description": "Shows the previous screen while swiping back on newer Android versions.",
+      "default": true,
+      "category": "Interface",
+      "compatiblePackages": [
+        {
+          "packageName": "com.laurencedawson.reddit_sync",
+          "name": "Sync for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "v23.06.30-13:39",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.laurencedawson.reddit_sync.pro",
+          "name": "Sync for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "v23.06.30-13:39",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -1397,6 +1343,24 @@
         {
           "packageName": "com.laurencedawson.reddit_sync",
           "name": "Sync for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "v23.06.30-13:39",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.laurencedawson.reddit_sync.pro",
+          "name": "Sync for Reddit Pro",
           "description": null,
           "apkFileType": null,
           "appIconColor": null,
@@ -1572,7 +1536,7 @@
       "name": "Log exceptions",
       "description": "Logs reported errors and fatal crashes, viewable in Morphe settings.",
       "default": true,
-      "category": "Advanced",
+      "category": "Diagnostics",
       "compatiblePackages": [
         {
           "packageName": "com.onelouder.baconreader",
@@ -1617,7 +1581,7 @@
       "name": "Log exceptions",
       "description": "Logs reported errors and fatal crashes, viewable in Morphe settings.",
       "default": true,
-      "category": "Advanced",
+      "category": "Diagnostics",
       "compatiblePackages": [
         {
           "packageName": "com.rubenmayayo.reddit",
@@ -1644,7 +1608,7 @@
       "name": "Log exceptions",
       "description": "Logs reported errors and fatal crashes, viewable in Morphe settings.",
       "default": true,
-      "category": "Advanced",
+      "category": "Diagnostics",
       "compatiblePackages": [
         {
           "packageName": "ml.docilealligator.infinityforreddit.plus",
@@ -1707,7 +1671,7 @@
       "name": "Log exceptions",
       "description": "Logs reported errors and fatal crashes, viewable in Morphe settings.",
       "default": true,
-      "category": "Advanced",
+      "category": "Diagnostics",
       "compatiblePackages": [
         {
           "packageName": "o.o.joey",
@@ -1770,7 +1734,7 @@
       "name": "Log exceptions",
       "description": "Logs reported errors and fatal crashes, viewable in Morphe settings.",
       "default": true,
-      "category": "Advanced",
+      "category": "Diagnostics",
       "compatiblePackages": [
         {
           "packageName": "com.andrewshu.android.reddit",
@@ -1815,7 +1779,7 @@
       "name": "Log exceptions",
       "description": "Logs reported errors and fatal crashes, viewable in Morphe settings.",
       "default": true,
-      "category": "Advanced",
+      "category": "Diagnostics",
       "compatiblePackages": [
         {
           "packageName": "free.reddit.news",
@@ -1860,7 +1824,7 @@
       "name": "Log exceptions",
       "description": "Logs reported errors and fatal crashes, viewable in Morphe settings.",
       "default": true,
-      "category": "Advanced",
+      "category": "Diagnostics",
       "compatiblePackages": [
         {
           "packageName": "io.syncapps.lemmy_sync",
@@ -1887,7 +1851,7 @@
       "name": "Log exceptions",
       "description": "Logs reported errors and fatal crashes, viewable in Morphe settings.",
       "default": true,
-      "category": "Advanced",
+      "category": "Diagnostics",
       "compatiblePackages": [
         {
           "packageName": "com.laurencedawson.reddit_sync",
@@ -1906,307 +1870,10 @@
               "description": null
             }
           ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Modify login WebView",
-      "description": "Adjusts the Reddit login page to prevent sign-in problems.",
-      "default": true,
-      "category": "Login & API",
-      "compatiblePackages": [
-        {
-          "packageName": "com.onelouder.baconreader",
-          "name": "BaconReader",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "6.1.4",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
         },
         {
-          "packageName": "com.onelouder.baconreader.premium",
-          "name": "BaconReader Premium",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "6.1.4",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Modify login WebView",
-      "description": "Adjusts the Reddit login page to prevent sign-in problems.",
-      "default": true,
-      "category": "Login & API",
-      "compatiblePackages": [
-        {
-          "packageName": "com.rubenmayayo.reddit",
-          "name": "Boost for Reddit",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "1.14.4",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Modify login WebView",
-      "description": "Adjusts the Reddit login page to prevent sign-in problems.",
-      "default": true,
-      "category": "Login & API",
-      "compatiblePackages": [
-        {
-          "packageName": "ml.docilealligator.infinityforreddit.plus",
-          "name": "Infinity for Reddit+",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": null,
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        },
-        {
-          "packageName": "ml.docilealligator.infinityforreddit.plus2",
-          "name": "Infinity for Reddit++",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": null,
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        },
-        {
-          "packageName": "ml.docilealligator.infinityforreddit.patreon",
-          "name": "Infinity for Reddit (Patreon)",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": null,
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Modify login WebView",
-      "description": "Adjusts the Reddit login page to prevent sign-in problems.",
-      "default": true,
-      "category": "Login & API",
-      "compatiblePackages": [
-        {
-          "packageName": "o.o.joey",
-          "name": "Joey for Reddit",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": null,
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        },
-        {
-          "packageName": "o.o.joey.pro",
-          "name": "Joey for Reddit Pro",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": null,
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        },
-        {
-          "packageName": "o.o.joey.dev",
-          "name": "Joey for Reddit Dev",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": null,
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Modify login WebView",
-      "description": "Adjusts the Reddit login page to prevent sign-in problems.",
-      "default": true,
-      "category": "Login & API",
-      "compatiblePackages": [
-        {
-          "packageName": "com.andrewshu.android.reddit",
-          "name": "rif is fun",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "5.6.22",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        },
-        {
-          "packageName": "com.andrewshu.android.redditdonation",
-          "name": "rif is fun golden platinum",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "5.6.22",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Modify login WebView",
-      "description": "Adjusts the Reddit login page to prevent sign-in problems.",
-      "default": true,
-      "category": "Login & API",
-      "compatiblePackages": [
-        {
-          "packageName": "free.reddit.news",
-          "name": "Relay for Reddit",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "10.2.40",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        },
-        {
-          "packageName": "reddit.news",
-          "name": "Relay for Reddit Pro",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "10.2.40",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Modify login WebView",
-      "description": "Adjusts the Reddit login page to prevent sign-in problems.",
-      "default": true,
-      "category": "Login & API",
-      "compatiblePackages": [
-        {
-          "packageName": "com.laurencedawson.reddit_sync",
-          "name": "Sync for Reddit",
+          "packageName": "com.laurencedawson.reddit_sync.pro",
+          "name": "Sync for Reddit Pro",
           "description": null,
           "apkFileType": null,
           "appIconColor": null,
@@ -2352,6 +2019,535 @@
       "options": []
     },
     {
+      "name": "Reddit API fixes",
+      "description": "Restores Reddit API access and login with the fixes required by this app.",
+      "default": true,
+      "category": "Login & API",
+      "compatiblePackages": [
+        {
+          "packageName": "com.onelouder.baconreader",
+          "name": "BaconReader",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "6.1.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.onelouder.baconreader.premium",
+          "name": "BaconReader Premium",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "6.1.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "key": "client-id",
+          "title": "OAuth client ID",
+          "description": "The Reddit OAuth client ID. Leave empty to use the RedReader 1.27 default. Custom values must contain exactly 22 letters, digits, underscores or hyphens.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "redirect-uri",
+          "title": "Redirect URI",
+          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's redirect URI.",
+          "required": true,
+          "type": "kotlin.String",
+          "default": "redreader://rr_oauth_redir",
+          "values": null
+        },
+        {
+          "key": "user-agent",
+          "title": "User agent",
+          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's user agent.",
+          "required": true,
+          "type": "kotlin.String",
+          "default": "org.quantumbadger.redreader/1.27",
+          "values": null
+        }
+      ]
+    },
+    {
+      "name": "Reddit API fixes",
+      "description": "Restores Reddit API access and login with the fixes required by this app.",
+      "default": true,
+      "category": "Login & API",
+      "compatiblePackages": [
+        {
+          "packageName": "com.rubenmayayo.reddit",
+          "name": "Boost for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "1.14.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "key": "client-id",
+          "title": "OAuth client ID",
+          "description": "The Reddit OAuth client ID. Leave empty to use the RedReader 1.27 default. Custom values must contain exactly 22 letters, digits, underscores or hyphens.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "redirect-uri",
+          "title": "Redirect URI",
+          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's redirect URI.",
+          "required": true,
+          "type": "kotlin.String",
+          "default": "redreader://rr_oauth_redir",
+          "values": null
+        },
+        {
+          "key": "user-agent",
+          "title": "User agent",
+          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's user agent.",
+          "required": true,
+          "type": "kotlin.String",
+          "default": "org.quantumbadger.redreader/1.27",
+          "values": null
+        }
+      ]
+    },
+    {
+      "name": "Reddit API fixes",
+      "description": "Restores Reddit API access and login with the fixes required by this app.",
+      "default": true,
+      "category": "Login & API",
+      "compatiblePackages": [
+        {
+          "packageName": "ml.docilealligator.infinityforreddit.plus",
+          "name": "Infinity for Reddit+",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "ml.docilealligator.infinityforreddit.plus2",
+          "name": "Infinity for Reddit++",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "ml.docilealligator.infinityforreddit.patreon",
+          "name": "Infinity for Reddit (Patreon)",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "key": "client-id",
+          "title": "OAuth client ID",
+          "description": "The Reddit OAuth client ID. Leave empty to use the RedReader 1.27 default. Custom values must contain exactly 22 letters, digits, underscores or hyphens.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "redirect-uri",
+          "title": "Redirect URI",
+          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's redirect URI.",
+          "required": true,
+          "type": "kotlin.String",
+          "default": "redreader://rr_oauth_redir",
+          "values": null
+        },
+        {
+          "key": "user-agent",
+          "title": "User agent",
+          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's user agent.",
+          "required": true,
+          "type": "kotlin.String",
+          "default": "org.quantumbadger.redreader/1.27",
+          "values": null
+        }
+      ]
+    },
+    {
+      "name": "Reddit API fixes",
+      "description": "Restores Reddit API access and login with the fixes required by this app.",
+      "default": true,
+      "category": "Login & API",
+      "compatiblePackages": [
+        {
+          "packageName": "o.o.joey",
+          "name": "Joey for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "o.o.joey.pro",
+          "name": "Joey for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "o.o.joey.dev",
+          "name": "Joey for Reddit Dev",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "key": "client-id",
+          "title": "OAuth client ID",
+          "description": "The Reddit OAuth client ID. Leave empty to use the RedReader 1.27 default. Custom values must contain exactly 22 letters, digits, underscores or hyphens.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "redirect-uri",
+          "title": "Redirect URI",
+          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's redirect URI.",
+          "required": true,
+          "type": "kotlin.String",
+          "default": "redreader://rr_oauth_redir",
+          "values": null
+        },
+        {
+          "key": "user-agent",
+          "title": "User agent",
+          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's user agent.",
+          "required": true,
+          "type": "kotlin.String",
+          "default": "org.quantumbadger.redreader/1.27",
+          "values": null
+        }
+      ]
+    },
+    {
+      "name": "Reddit API fixes",
+      "description": "Restores Reddit API access and login with the fixes required by this app.",
+      "default": true,
+      "category": "Login & API",
+      "compatiblePackages": [
+        {
+          "packageName": "com.andrewshu.android.reddit",
+          "name": "rif is fun",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.andrewshu.android.redditdonation",
+          "name": "rif is fun golden platinum",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "key": "client-id",
+          "title": "OAuth client ID",
+          "description": "The Reddit OAuth client ID. Leave empty to use the RedReader 1.27 default. Custom values must contain exactly 22 letters, digits, underscores or hyphens.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "redirect-uri",
+          "title": "Redirect URI",
+          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's redirect URI.",
+          "required": true,
+          "type": "kotlin.String",
+          "default": "redreader://rr_oauth_redir",
+          "values": null
+        },
+        {
+          "key": "user-agent",
+          "title": "User agent",
+          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's user agent.",
+          "required": true,
+          "type": "kotlin.String",
+          "default": "org.quantumbadger.redreader/1.27",
+          "values": null
+        }
+      ]
+    },
+    {
+      "name": "Reddit API fixes",
+      "description": "Restores Reddit API access and login with the fixes required by this app.",
+      "default": true,
+      "category": "Login & API",
+      "compatiblePackages": [
+        {
+          "packageName": "free.reddit.news",
+          "name": "Relay for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "reddit.news",
+          "name": "Relay for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "key": "client-id",
+          "title": "OAuth client ID",
+          "description": "The Reddit OAuth client ID. Leave empty to use the RedReader 1.27 default. Custom values must contain exactly 22 letters, digits, underscores or hyphens.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "redirect-uri",
+          "title": "Redirect URI",
+          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's redirect URI.",
+          "required": true,
+          "type": "kotlin.String",
+          "default": "redreader://rr_oauth_redir",
+          "values": null
+        },
+        {
+          "key": "user-agent",
+          "title": "User agent",
+          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's user agent.",
+          "required": true,
+          "type": "kotlin.String",
+          "default": "org.quantumbadger.redreader/1.27",
+          "values": null
+        }
+      ]
+    },
+    {
+      "name": "Reddit API fixes",
+      "description": "Restores Reddit API access and login with the fixes required by this app.",
+      "default": true,
+      "category": "Login & API",
+      "compatiblePackages": [
+        {
+          "packageName": "com.laurencedawson.reddit_sync",
+          "name": "Sync for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "v23.06.30-13:39",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.laurencedawson.reddit_sync.pro",
+          "name": "Sync for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "v23.06.30-13:39",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": [
+        {
+          "key": "client-id",
+          "title": "OAuth client ID",
+          "description": "The Reddit OAuth client ID. Leave empty to use the RedReader 1.27 default. Custom values must contain exactly 22 letters, digits, underscores or hyphens.",
+          "required": false,
+          "type": "kotlin.String",
+          "default": null,
+          "values": null
+        },
+        {
+          "key": "redirect-uri",
+          "title": "Redirect URI",
+          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's redirect URI.",
+          "required": true,
+          "type": "kotlin.String",
+          "default": "redreader://rr_oauth_redir",
+          "values": null
+        },
+        {
+          "key": "user-agent",
+          "title": "User agent",
+          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's user agent.",
+          "required": true,
+          "type": "kotlin.String",
+          "default": "org.quantumbadger.redreader/1.27",
+          "values": null
+        }
+      ]
+    },
+    {
       "name": "Relay Morphe settings",
       "description": "Adds a Morphe settings menu for included patches, with exception and fatal crash log viewers.",
       "default": true,
@@ -2401,6 +2597,33 @@
       "description": "Removes the legacy Gilded and Friends tabs from Boost profiles.",
       "default": true,
       "category": "Interface",
+      "compatiblePackages": [
+        {
+          "packageName": "com.rubenmayayo.reddit",
+          "name": "Boost for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "1.14.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Repeat Boost thread level colors",
+      "description": "Repeats the thread level color pattern in deep comment chains for colored lines and bars.",
+      "default": true,
+      "category": "Comments & posting",
       "compatiblePackages": [
         {
           "packageName": "com.rubenmayayo.reddit",
@@ -2505,83 +2728,10 @@
       "options": []
     },
     {
-      "name": "Spoof client",
-      "description": "Restores functionality of the app by using custom client ID.",
+      "name": "Show strip query parameters option",
+      "description": "Adds an option to strip query/tracking parameters when sharing/copying links.",
       "default": true,
-      "category": "Login & API",
-      "compatiblePackages": [
-        {
-          "packageName": "com.onelouder.baconreader",
-          "name": "BaconReader",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "6.1.4",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        },
-        {
-          "packageName": "com.onelouder.baconreader.premium",
-          "name": "BaconReader Premium",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "6.1.4",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": [
-        {
-          "key": "client-id",
-          "title": "OAuth client ID",
-          "description": "The Reddit OAuth client ID. Leave empty to use the RedReader 1.27 default. Custom values must contain exactly 22 letters, digits, underscores or hyphens.",
-          "required": false,
-          "type": "kotlin.String",
-          "default": null,
-          "values": null
-        },
-        {
-          "key": "redirect-uri",
-          "title": "Redirect URI",
-          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's redirect URI.",
-          "required": true,
-          "type": "kotlin.String",
-          "default": "redreader://rr_oauth_redir",
-          "values": null
-        },
-        {
-          "key": "user-agent",
-          "title": "User agent",
-          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's user agent.",
-          "required": true,
-          "type": "kotlin.String",
-          "default": "org.quantumbadger.redreader/1.27",
-          "values": null
-        }
-      ]
-    },
-    {
-      "name": "Spoof client",
-      "description": "Sets default Reddit API credentials that can be overridden in Boost's API settings.",
-      "default": true,
-      "category": "Login & API",
+      "category": "Links",
       "compatiblePackages": [
         {
           "packageName": "com.rubenmayayo.reddit",
@@ -2602,418 +2752,7 @@
           ]
         }
       ],
-      "options": [
-        {
-          "key": "client-id",
-          "title": "OAuth client ID",
-          "description": "The Reddit OAuth client ID. Leave empty to use the RedReader 1.27 default. Custom values must contain exactly 22 letters, digits, underscores or hyphens.",
-          "required": false,
-          "type": "kotlin.String",
-          "default": null,
-          "values": null
-        },
-        {
-          "key": "redirect-uri",
-          "title": "Redirect URI",
-          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's redirect URI.",
-          "required": true,
-          "type": "kotlin.String",
-          "default": "redreader://rr_oauth_redir",
-          "values": null
-        },
-        {
-          "key": "user-agent",
-          "title": "User agent",
-          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's user agent.",
-          "required": true,
-          "type": "kotlin.String",
-          "default": "org.quantumbadger.redreader/1.27",
-          "values": null
-        }
-      ]
-    },
-    {
-      "name": "Spoof client",
-      "description": "Restores functionality of the app by using custom client ID.",
-      "default": true,
-      "category": "Login & API",
-      "compatiblePackages": [
-        {
-          "packageName": "ml.docilealligator.infinityforreddit.plus",
-          "name": "Infinity for Reddit+",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": null,
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        },
-        {
-          "packageName": "ml.docilealligator.infinityforreddit.plus2",
-          "name": "Infinity for Reddit++",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": null,
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        },
-        {
-          "packageName": "ml.docilealligator.infinityforreddit.patreon",
-          "name": "Infinity for Reddit (Patreon)",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": null,
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": [
-        {
-          "key": "client-id",
-          "title": "OAuth client ID",
-          "description": "The Reddit OAuth client ID. Leave empty to use the RedReader 1.27 default. Custom values must contain exactly 22 letters, digits, underscores or hyphens.",
-          "required": false,
-          "type": "kotlin.String",
-          "default": null,
-          "values": null
-        },
-        {
-          "key": "redirect-uri",
-          "title": "Redirect URI",
-          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's redirect URI.",
-          "required": true,
-          "type": "kotlin.String",
-          "default": "redreader://rr_oauth_redir",
-          "values": null
-        },
-        {
-          "key": "user-agent",
-          "title": "User agent",
-          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's user agent.",
-          "required": true,
-          "type": "kotlin.String",
-          "default": "org.quantumbadger.redreader/1.27",
-          "values": null
-        }
-      ]
-    },
-    {
-      "name": "Spoof client",
-      "description": "Restores functionality of the app by using custom client ID.",
-      "default": true,
-      "category": "Login & API",
-      "compatiblePackages": [
-        {
-          "packageName": "o.o.joey",
-          "name": "Joey for Reddit",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": null,
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        },
-        {
-          "packageName": "o.o.joey.pro",
-          "name": "Joey for Reddit Pro",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": null,
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        },
-        {
-          "packageName": "o.o.joey.dev",
-          "name": "Joey for Reddit Dev",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": null,
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": [
-        {
-          "key": "client-id",
-          "title": "OAuth client ID",
-          "description": "The Reddit OAuth client ID. Leave empty to use the RedReader 1.27 default. Custom values must contain exactly 22 letters, digits, underscores or hyphens.",
-          "required": false,
-          "type": "kotlin.String",
-          "default": null,
-          "values": null
-        },
-        {
-          "key": "redirect-uri",
-          "title": "Redirect URI",
-          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's redirect URI.",
-          "required": true,
-          "type": "kotlin.String",
-          "default": "redreader://rr_oauth_redir",
-          "values": null
-        },
-        {
-          "key": "user-agent",
-          "title": "User agent",
-          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's user agent.",
-          "required": true,
-          "type": "kotlin.String",
-          "default": "org.quantumbadger.redreader/1.27",
-          "values": null
-        }
-      ]
-    },
-    {
-      "name": "Spoof client",
-      "description": "Restores functionality of the app by using custom client ID.",
-      "default": true,
-      "category": "Login & API",
-      "compatiblePackages": [
-        {
-          "packageName": "com.andrewshu.android.reddit",
-          "name": "rif is fun",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "5.6.22",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        },
-        {
-          "packageName": "com.andrewshu.android.redditdonation",
-          "name": "rif is fun golden platinum",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "5.6.22",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": [
-        {
-          "key": "client-id",
-          "title": "OAuth client ID",
-          "description": "The Reddit OAuth client ID. Leave empty to use the RedReader 1.27 default. Custom values must contain exactly 22 letters, digits, underscores or hyphens.",
-          "required": false,
-          "type": "kotlin.String",
-          "default": null,
-          "values": null
-        },
-        {
-          "key": "redirect-uri",
-          "title": "Redirect URI",
-          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's redirect URI.",
-          "required": true,
-          "type": "kotlin.String",
-          "default": "redreader://rr_oauth_redir",
-          "values": null
-        },
-        {
-          "key": "user-agent",
-          "title": "User agent",
-          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's user agent.",
-          "required": true,
-          "type": "kotlin.String",
-          "default": "org.quantumbadger.redreader/1.27",
-          "values": null
-        }
-      ]
-    },
-    {
-      "name": "Spoof client",
-      "description": "Restores functionality of the app by using custom client ID.",
-      "default": true,
-      "category": "Login & API",
-      "compatiblePackages": [
-        {
-          "packageName": "free.reddit.news",
-          "name": "Relay for Reddit",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "10.2.40",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        },
-        {
-          "packageName": "reddit.news",
-          "name": "Relay for Reddit Pro",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "10.2.40",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": [
-        {
-          "key": "client-id",
-          "title": "OAuth client ID",
-          "description": "The Reddit OAuth client ID. Leave empty to use the RedReader 1.27 default. Custom values must contain exactly 22 letters, digits, underscores or hyphens.",
-          "required": false,
-          "type": "kotlin.String",
-          "default": null,
-          "values": null
-        },
-        {
-          "key": "redirect-uri",
-          "title": "Redirect URI",
-          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's redirect URI.",
-          "required": true,
-          "type": "kotlin.String",
-          "default": "redreader://rr_oauth_redir",
-          "values": null
-        },
-        {
-          "key": "user-agent",
-          "title": "User agent",
-          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's user agent.",
-          "required": true,
-          "type": "kotlin.String",
-          "default": "org.quantumbadger.redreader/1.27",
-          "values": null
-        }
-      ]
-    },
-    {
-      "name": "Spoof client",
-      "description": "Restores functionality of the app by using custom client ID.",
-      "default": true,
-      "category": "Login & API",
-      "compatiblePackages": [
-        {
-          "packageName": "com.laurencedawson.reddit_sync",
-          "name": "Sync for Reddit",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "v23.06.30-13:39",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": [
-        {
-          "key": "client-id",
-          "title": "OAuth client ID",
-          "description": "The Reddit OAuth client ID. Leave empty to use the RedReader 1.27 default. Custom values must contain exactly 22 letters, digits, underscores or hyphens.",
-          "required": false,
-          "type": "kotlin.String",
-          "default": null,
-          "values": null
-        },
-        {
-          "key": "redirect-uri",
-          "title": "Redirect URI",
-          "description": "The Reddit OAuth redirect URI. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's redirect URI.",
-          "required": true,
-          "type": "kotlin.String",
-          "default": "redreader://rr_oauth_redir",
-          "values": null
-        },
-        {
-          "key": "user-agent",
-          "title": "User agent",
-          "description": "The app's user agent. Refer to Patcheddit documentation for more information on what to put here. Default value is RedReader 1.27's user agent.",
-          "required": true,
-          "type": "kotlin.String",
-          "default": "org.quantumbadger.redreader/1.27",
-          "values": null
-        }
-      ]
+      "options": []
     },
     {
       "name": "Stabilize Boost subreddit bottom navigation surface",
@@ -3200,6 +2939,24 @@
               "description": null
             }
           ]
+        },
+        {
+          "packageName": "com.laurencedawson.reddit_sync.pro",
+          "name": "Sync for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "v23.06.30-13:39",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
         }
       ],
       "options": []
@@ -3248,33 +3005,6 @@
           "targets": [
             {
               "version": "1.14.4",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Use /user/ endpoint",
-      "description": "Replaces the deprecated endpoint for viewing user profiles /u with /user, that used to fix a bug.",
-      "default": true,
-      "category": null,
-      "compatiblePackages": [
-        {
-          "packageName": "com.laurencedawson.reddit_sync",
-          "name": "Sync for Reddit",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": "v23.06.30-13:39",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,

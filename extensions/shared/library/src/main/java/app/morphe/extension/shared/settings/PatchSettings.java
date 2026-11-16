@@ -22,6 +22,7 @@ public final class PatchSettings {
 
     public static void initialize(Application application) {
         if (!Utils.isContextSet()) Utils.setContext(application);
+        MorpheSettingsStyle.initialize(application);
     }
 
     public static boolean isEnabled(String key, boolean defaultValue) {

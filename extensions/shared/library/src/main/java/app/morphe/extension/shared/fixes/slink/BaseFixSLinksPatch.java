@@ -18,7 +18,6 @@ import java.util.Objects;
 
 import app.morphe.extension.shared.Logger;
 import app.morphe.extension.shared.Utils;
-import app.morphe.extension.shared.settings.PatchSettings;
 
 
 /**
@@ -100,7 +99,6 @@ public abstract class BaseFixSLinksPatch {
     protected static BaseFixSLinksPatch INSTANCE;
 
     public boolean resolveSLink(String link) {
-        if (!PatchSettings.isEnabled("morphe_patch_fix_s_links", true)) return false;
         switch (resolveLink(link)) {
             case ACCESS_TOKEN_START: {
                 pendingUrl = link;
@@ -179,7 +177,7 @@ public abstract class BaseFixSLinksPatch {
 
         // In case a link was trying to be resolved before access token was set.
         // The link is resolved now, after the access token is set.
-        if (pendingUrl != null && PatchSettings.isEnabled("morphe_patch_fix_s_links", true)) {
+        if (pendingUrl != null) {
             String link = pendingUrl;
             pendingUrl = null;
 
