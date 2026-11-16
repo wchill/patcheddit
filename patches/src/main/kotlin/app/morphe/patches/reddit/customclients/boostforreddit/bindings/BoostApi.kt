@@ -137,6 +137,9 @@ internal object BoostApi {
         val onCreateView get() = method("onCreateView(Landroid/view/LayoutInflater;Landroid/view/ViewGroup;Landroid/os/Bundle;)Landroid/view/View;")
         val onDestroy get() = method("onDestroy()V")
     }
+    object IndentView : BoostTypeBinding("Lcom/rubenmayayo/reddit/ui/customviews/IndentView;") {
+        val onDraw get() = method("onDraw(Landroid/graphics/Canvas;)V")
+    }
     object JrawUtils : BoostTypeBinding("Lnet/dean/jraw/util/JrawUtils;") {
         val newUrl get() = method("newUrl(Ljava/lang/String;)Ljava/net/URL;")
     }
