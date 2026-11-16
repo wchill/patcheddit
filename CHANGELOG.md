@@ -1,3 +1,27 @@
+# [2.3.0](https://github.com/wchill/patcheddit/compare/v2.2.0...v2.3.0) (2026-11-16)
+
+
+### Bug Fixes
+
+* **boost:** Make colored bars/lines repeat for very deep comment chains ([42ea130](https://github.com/wchill/patcheddit/commit/42ea130971056571e79e93c46f2c521003ad12b5))
+* Flatten comment requests for improved performance ([0ad786b](https://github.com/wchill/patcheddit/commit/0ad786b55655095c111c5d53ae80082cabd72c20))
+* **joey:** Restore Redgifs playback through shared HTTP repairs ([de6e413](https://github.com/wchill/patcheddit/commit/de6e4133b849436757c3fc91afec048941dc2cea))
+* **redgifs:** Repair legacy authentication and token refresh ([e58194e](https://github.com/wchill/patcheddit/commit/e58194e025af8d7fd936095391cc74b08a1a16ab))
+* **relay:** Restore native Redgifs playback with audio ([7e674e5](https://github.com/wchill/patcheddit/commit/7e674e5f7f51e715ab0f7e5f88e111b18d628e23))
+* **relay:** Restore sidebars when Reddit omits activity counters ([87a4936](https://github.com/wchill/patcheddit/commit/87a4936263c0f3666edcd485a35c751a5e9028b9))
+* Repair links in comment/post bodies that were escaped by New Reddit ([b105de4](https://github.com/wchill/patcheddit/commit/b105de4a4a786520e653252c6e0c831c07cce3bc))
+* Restore swipe-back transparency in Sync and Joey ([fdfba21](https://github.com/wchill/patcheddit/commit/fdfba2138fecda0616a3fb224ec541b44af8f7cf))
+* **rif:** Imgur album loading for albums with 5 character IDs ([d50d802](https://github.com/wchill/patcheddit/commit/d50d8028f841bf7e8638bf8b0eed306953f2c562))
+* **sync:** Normalize Redgifs URLs before extracting video IDs ([f897af7](https://github.com/wchill/patcheddit/commit/f897af7aa52c4affbedaf8c76c47e2351d1fa39f))
+
+
+### Features
+
+* **boost:** Add ability to strip query parameters when copying/sharing URLs ([4c64292](https://github.com/wchill/patcheddit/commit/4c64292d2ab2e4aebf3cbdd764e82ff6f19c6a8b))
+* **boost:** Add more archiving/paywall bypass services ([c88b0cc](https://github.com/wchill/patcheddit/commit/c88b0cc4576b0418a905565b7899dd2a5a88ae45))
+* Fix missing gallary images in all apps ([a125874](https://github.com/wchill/patcheddit/commit/a125874c017826a1db88b5c538a6a3b3a259af5d))
+* Reorganize all Morphe settings menus to be more user friendly ([4c1e544](https://github.com/wchill/patcheddit/commit/4c1e54470ec81b7196c484955bda4d04f556bb97))
+
 # [2.3.0-dev.4](https://github.com/wchill/patcheddit/compare/v2.3.0-dev.3...v2.3.0-dev.4) (2026-11-16)
 
 
