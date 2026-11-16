@@ -1,3 +1,11 @@
+# [2.3.0-dev.3](https://github.com/wchill/patcheddit/compare/v2.3.0-dev.2...v2.3.0-dev.3) (2026-11-16)
+
+
+### Bug Fixes
+
+* **boost:** Make colored bars/lines repeat for very deep comment chains ([e7bc5ac](https://github.com/wchill/patcheddit/commit/e7bc5ac52f73a1e20dde94b29aa3902e58c5228b))
+* Repair links in comment/post bodies that were escaped by New Reddit ([6696827](https://github.com/wchill/patcheddit/commit/6696827ba60a99a91ec7ddf4f173d3af45623608))
+
 # [2.3.0-dev.2](https://github.com/wchill/patcheddit/compare/v2.3.0-dev.1...v2.3.0-dev.2) (2026-11-16)
 
 

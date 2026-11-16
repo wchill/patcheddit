@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "2.3.0-dev.2",
+  "version": "2.3.0-dev.3",
   "patches": [
     {
       "name": "Add Boost Search bottom navigation",
@@ -790,6 +790,321 @@
       "description": "Fetches a fresh Redgifs API token so Redgifs videos load.",
       "default": true,
       "category": "Media",
+      "compatiblePackages": [
+        {
+          "packageName": "com.laurencedawson.reddit_sync",
+          "name": "Sync for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "v23.06.30-13:39",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix escaped URLs",
+      "description": "Fixes URLs broken by backslash-escaped punctuation in Reddit posts and comments.",
+      "default": true,
+      "category": "Links",
+      "compatiblePackages": [
+        {
+          "packageName": "com.onelouder.baconreader",
+          "name": "BaconReader",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "6.1.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.onelouder.baconreader.premium",
+          "name": "BaconReader Premium",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "6.1.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix escaped URLs",
+      "description": "Fixes URLs broken by backslash-escaped punctuation in Reddit posts and comments.",
+      "default": true,
+      "category": "Links",
+      "compatiblePackages": [
+        {
+          "packageName": "com.rubenmayayo.reddit",
+          "name": "Boost for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "1.14.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix escaped URLs",
+      "description": "Fixes URLs broken by backslash-escaped punctuation in Reddit posts and comments.",
+      "default": true,
+      "category": "Links",
+      "compatiblePackages": [
+        {
+          "packageName": "ml.docilealligator.infinityforreddit.plus",
+          "name": "Infinity for Reddit+",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "ml.docilealligator.infinityforreddit.plus2",
+          "name": "Infinity for Reddit++",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "ml.docilealligator.infinityforreddit.patreon",
+          "name": "Infinity for Reddit (Patreon)",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix escaped URLs",
+      "description": "Fixes URLs broken by backslash-escaped punctuation in Reddit posts and comments.",
+      "default": true,
+      "category": "Links",
+      "compatiblePackages": [
+        {
+          "packageName": "o.o.joey",
+          "name": "Joey for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "o.o.joey.pro",
+          "name": "Joey for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "o.o.joey.dev",
+          "name": "Joey for Reddit Dev",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix escaped URLs",
+      "description": "Fixes URLs broken by backslash-escaped punctuation in Reddit posts and comments.",
+      "default": true,
+      "category": "Links",
+      "compatiblePackages": [
+        {
+          "packageName": "com.andrewshu.android.reddit",
+          "name": "rif is fun",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.andrewshu.android.redditdonation",
+          "name": "rif is fun golden platinum",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix escaped URLs",
+      "description": "Fixes URLs broken by backslash-escaped punctuation in Reddit posts and comments.",
+      "default": true,
+      "category": "Links",
+      "compatiblePackages": [
+        {
+          "packageName": "free.reddit.news",
+          "name": "Relay for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "reddit.news",
+          "name": "Relay for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix escaped URLs",
+      "description": "Fixes URLs broken by backslash-escaped punctuation in Reddit posts and comments.",
+      "default": true,
+      "category": "Links",
       "compatiblePackages": [
         {
           "packageName": "com.laurencedawson.reddit_sync",
@@ -2138,6 +2453,33 @@
       "description": "Removes the legacy Gilded and Friends tabs from Boost profiles.",
       "default": true,
       "category": "Interface",
+      "compatiblePackages": [
+        {
+          "packageName": "com.rubenmayayo.reddit",
+          "name": "Boost for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "1.14.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Repeat Boost thread level colors",
+      "description": "Repeats the thread level color pattern in deep comment chains for colored lines and bars.",
+      "default": true,
+      "category": "Comments & posting",
       "compatiblePackages": [
         {
           "packageName": "com.rubenmayayo.reddit",
