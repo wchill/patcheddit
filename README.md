@@ -58,6 +58,7 @@ In addition, patches for some apps contain additional features that were not pre
         * Caching is implemented to try and limit the impact of this.
 * Imgur images and albums are automatically loaded from the Wayback Machine if a 404 is detected.
 * Link context menus include an **Open with** submenu for Wayback Machine, Archive.is, Wallhop, smry.ai, RemovePaywall, Freedium, and Unwall. Each source can be enabled or disabled under **Settings > Morphe > Links**. When all sources are disabled, the menu shows a disabled **All archivers disabled** entry. Query parameters are stripped from archive links by default; this can also be changed in Morphe settings.
+* Links with query parameters offer an unchecked **Strip query parameters** checkbox for **Share link** and **Copy link**. Hide it using **Show strip query parameters option** in Morphe settings.
 
 ### reddit is fun
 * Restores Imgur album and gallery loading in the built-in viewer, album thumbnails, and links that include a title.

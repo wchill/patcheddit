@@ -159,6 +159,12 @@ abstract class InjectorUtils protected constructor(stub: Unit) {
 abstract class LRUCache protected constructor(stub: Unit) : java.util.LinkedHashMap<Any?, Any?>() {
 }
 
+abstract class LinkMenu protected constructor(stub: Unit) {
+    @JvmField var context: android.content.Context = boostApiStub()
+    @JvmField var dialog: com.afollestad.materialdialogs.MaterialDialog? = boostApiStub()
+    @JvmField var url: String = boostApiStub()
+}
+
 abstract class MediaBaseActivity protected constructor(stub: Unit) : com.rubenmayayo.reddit.ui.activities.BaseActivity(Unit) {
 }
 

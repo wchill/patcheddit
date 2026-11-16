@@ -63,4 +63,15 @@ public class SettingsUtilsTest {
             assertEquals(url, SettingsUtils.stripQueryParameters(url));
         }
     }
+
+    @Test
+    public void offersQueryStrippingOnlyForQueriesBeforeTheFragment() {
+        assertTrue(LinkQueryParameters.hasQueryParameters("https://example.com/?a=1#fragment"));
+        assertTrue(LinkQueryParameters.hasQueryParameters("https://example.com/?a=%3F"));
+        for (String url : List.of("https://example.com/", "https://example.com/?",
+                "https://example.com/?#fragment", "https://example.com/#fragment?query=1",
+                "https://example.com/a%3Fb")) {
+            assertFalse(LinkQueryParameters.hasQueryParameters(url));
+        }
+    }
 }

@@ -83,6 +83,7 @@ public class SettingsUtils {
     }
 
     public static void addMenuOptions(List<MenuOption> options) {
+        if (!isArchiveMenuEnabled()) return;
         Map<Integer, ArchiveService> enabled = enabledArchiveServices(key -> PatchSettings.isEnabled(key, true));
 
         MenuOption divider = new MenuOption();
@@ -106,6 +107,10 @@ public class SettingsUtils {
         submenu.iconResource = drawableId;
         submenu.children = sources;
         options.add(submenu);
+    }
+
+    public static boolean isArchiveMenuEnabled() {
+        return false;
     }
 
     static String stripQueryParameters(String url) {
