@@ -11,6 +11,7 @@ import app.morphe.patches.reddit.customclients.relay.fix.gallery.fixFailedGaller
 import app.morphe.patches.reddit.customclients.relay.fix.login.modifyLoginWebView
 import app.morphe.patches.reddit.customclients.relay.fix.morecomments.fixMoreComments
 import app.morphe.patches.reddit.customclients.relay.fix.slink.fixSLinksPatch
+import app.morphe.patches.reddit.customclients.relay.fix.sidebar.fixSidebarPatch
 import app.morphe.patches.reddit.customclients.redditApiPatch
 
 @Suppress("unused")
@@ -21,4 +22,5 @@ val redditApiPatch = redditApiPatch(
     fixFailedGalleryImagesPatch,
     fixMoreComments,
     fixSLinksPatch,
+    fixSidebarPatch,
 )

@@ -48,6 +48,7 @@ import app.morphe.patches.reddit.customclients.relay.fix.gallery.fixFailedGaller
 import app.morphe.patches.reddit.customclients.relay.fix.login.modifyLoginWebView as relayLogin
 import app.morphe.patches.reddit.customclients.relay.fix.morecomments.fixMoreComments as relayComments
 import app.morphe.patches.reddit.customclients.relay.fix.slink.fixSLinksPatch as relayLinks
+import app.morphe.patches.reddit.customclients.relay.fix.sidebar.fixSidebarPatch as relaySidebar
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.api.redditApiPatch as syncApi
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.api.spoofClientPatch as syncSpoof
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.apilookups.fixRedditApiLookups as syncLookups
@@ -76,7 +77,7 @@ class RedditApiPatchTest {
             infinityApi to setOf(infinitySpoof, infinityLogin),
             joeyApi to setOf(joeySpoof, joeyLogin, joeyLookups, joeyGallery, joeyComments),
             rifApi to setOf(rifSpoof, rifLogin, rifLookups, rifGallery, rifComments),
-            relayApi to setOf(relaySpoof, relayLogin, relayLookups, relayGallery, relayComments, relayLinks),
+            relayApi to setOf(relaySpoof, relayLogin, relayLookups, relayGallery, relayComments, relayLinks, relaySidebar),
             syncApi to setOf(syncSpoof, syncLogin, syncLookups, syncGallery, syncComments, syncLinks, useUserEndpointPatch),
         )
         for ((meta, spoof) in clients) {
