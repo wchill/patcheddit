@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import app.morphe.extension.relay.FixRedgifsApiPatch;
 import app.morphe.extension.shared.fixes.api.FailedGalleryMetadataPatch;
 import app.morphe.extension.shared.fixes.api.RedditInfoResponsePatch;
 import app.morphe.extension.shared.fixes.comments.MoreChildrenResponsePatch;
@@ -27,7 +28,7 @@ public final class OkHttpRequestHook extends BaseOkHttpRequestHook {
     protected List<Interceptor> getInterceptors() {
         // Relay's GIF viewer requires an MP4 source that failed metadata cannot provide.
         return Arrays.asList(new FailedGalleryMetadataPatch(false), new RedditInfoResponsePatch(),
-                new MoreChildrenResponsePatch());
+                new MoreChildrenResponsePatch(), new FixRedgifsApiPatch());
     }
 
     @Override

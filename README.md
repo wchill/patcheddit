@@ -13,7 +13,7 @@ In addition, patches for some apps contain additional features that were not pre
 ### All clients
 * **Reddit API fixes** combines the applicable Reddit API and login repairs into one patch for BaconReader, Boost, Infinity, Joey, Relay (including Pro), RIF (free and paid), and Sync (free version only). These repairs are always active when included.
     * Includes missing gallery image repairs when opening posts in BaconReader, Boost, Joey, Relay, RIF, and Sync. Relay's repair is limited to still images. If a previously opened gallery still fails after patching, clear the app's cache (not its storage).
-* **Fix Redgifs API** restores playback in BaconReader, Joey, RIF, and Sync.
+* **Fix Redgifs API** restores playback in BaconReader, Joey, Relay, RIF, and Sync. Relay uses native media with sound instead of silent Reddit previews.
 * **Log exceptions** saves fatal crashes for every supported client, including Sync for Lemmy, using morphe-patches-library's shared crash logger. BaconReader and Boost hook their native error-reporting handlers; other clients capture exceptions reported through Android error/warning logging, stack traces, and Crashlytics when present, without removing the original logging.
     * Fatal reports are saved in `Documents/Morphe`, falling back to the app-specific external Documents folder if public storage is unavailable. Non-fatal reports use private `no_backup/morphe-exceptions` storage, rotating at 4 MiB per file with one previous file retained and excluded from Android app backups.
     * Common credential-bearing lines are redacted from non-fatal logs; fatal reports are not filtered. Other personal or request data can remain, so review exported copies before sharing.
