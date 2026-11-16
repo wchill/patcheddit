@@ -125,4 +125,14 @@ public class BaseFixRedgifsApiPatchTest {
         assertEquals(4, requests.get());
     }
 
+    @Test
+    public void normalizesRedgifsUrlsBeforeNativeIdExtraction() {
+        assertEquals("https://www.redgifs.com/watch/Example",
+                BaseFixRedgifsApiPatch.normalizeVideoUrl("https://www.redgifs.com/watch/Example/?92/#fragment"));
+        assertEquals("https://thumbs.redgifs.com/Example-mobile.mp4",
+                BaseFixRedgifsApiPatch.normalizeVideoUrl("https://thumbs.redgifs.com/Example-mobile.mp4?x=1"));
+        String other = "https://example.com/watch/Example/?92/";
+        assertEquals(other, BaseFixRedgifsApiPatch.normalizeVideoUrl(other));
+        assertNull(BaseFixRedgifsApiPatch.normalizeVideoUrl(null));
+    }
 }

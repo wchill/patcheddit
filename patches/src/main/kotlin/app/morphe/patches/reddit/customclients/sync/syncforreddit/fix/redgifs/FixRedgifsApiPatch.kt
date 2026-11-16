@@ -29,6 +29,12 @@ val fixRedgifsApi = fixRedgifsApiPatch(
     compatibleWith(*AppCompatibility.SyncForReddit)
 
     execute {
+        redgifsSetting.patchMethod(GetGfycatIdFingerprint) {
+            addInstructions(0, """
+                invoke-static {p0}, Lapp/morphe/extension/shared/fixes/redgifs/BaseFixRedgifsApiPatch;->normalizeVideoUrl(Ljava/lang/String;)Ljava/lang/String;
+                move-result-object p0
+            """.trimIndent())
+        }
         // region Patch Redgifs OkHttp3 client.
 
         redgifsSetting.patchMethod(CreateOkHttpClientFingerprint) {

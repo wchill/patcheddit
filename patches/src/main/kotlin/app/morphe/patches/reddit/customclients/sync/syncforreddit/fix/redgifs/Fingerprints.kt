@@ -2,6 +2,8 @@
  * Copyright 2026 wchill.
  * https://github.com/wchill/patcheddit
  *
+ * Copyright 2026 trulow.
+ *
  * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
  */
 
@@ -42,4 +44,12 @@ internal object GetOriginalUserAgentFingerprint : Fingerprint(
     returnType = "Ljava/lang/String;",
     parameters = listOf(),
     custom = { _, classDef -> classDef.sourceFile == "AccountSingleton.java" }
+)
+
+internal object GetGfycatIdFingerprint : Fingerprint(
+    accessFlags = listOf(AccessFlags.PUBLIC, AccessFlags.STATIC),
+    returnType = "Ljava/lang/String;",
+    parameters = listOf("Ljava/lang/String;"),
+    strings = listOf("-size_restricted", "-max-1mb-poster"),
+    custom = { _, classDef -> classDef.sourceFile == "LinkHandler.java" },
 )

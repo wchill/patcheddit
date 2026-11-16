@@ -19,6 +19,7 @@ import java.net.HttpURLConnection;
 
 import app.morphe.extension.shared.Logger;
 import app.morphe.extension.shared.requests.PatchedditInterceptor;
+import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.Protocol;
 import okhttp3.Request;
@@ -109,4 +110,15 @@ public abstract class BaseFixRedgifsApiPatch extends PatchedditInterceptor {
                 .body(ResponseBody.create(body, MediaType.get("application/json"))).build();
     }
 
+    /** Normalize before native ID extraction discards the original URL. */
+    public static String normalizeVideoUrl(String value) {
+        if (value == null) return null;
+        HttpUrl url = HttpUrl.parse(value);
+        if (url == null || !(url.host().equals("redgifs.com") || url.host().endsWith(".redgifs.com"))) {
+            return value;
+        }
+        String path = url.encodedPath().replaceAll("/+$", "");
+        return url.newBuilder().encodedPath(path.isEmpty() ? "/" : path).query(null).fragment(null)
+                .build().toString();
+    }
 }
