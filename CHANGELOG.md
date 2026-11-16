@@ -1,3 +1,22 @@
+# [2.3.0-dev.2](https://github.com/wchill/patcheddit/compare/v2.3.0-dev.1...v2.3.0-dev.2) (2026-11-16)
+
+
+### Bug Fixes
+
+* **joey:** Restore Redgifs playback through shared HTTP repairs ([668cf55](https://github.com/wchill/patcheddit/commit/668cf550943385dcbab8e6a5ad998a2505039e47))
+* **redgifs:** Repair legacy authentication and token refresh ([cf47b46](https://github.com/wchill/patcheddit/commit/cf47b46d3c495a85e01e9a6add9d1da810da15bd))
+* **relay:** Restore native Redgifs playback with audio ([e2fdce5](https://github.com/wchill/patcheddit/commit/e2fdce5b0f17e2a6e7404e44005672bf37378df5))
+* **relay:** Restore sidebars when Reddit omits activity counters ([bbd5e26](https://github.com/wchill/patcheddit/commit/bbd5e26ee7d0a773f67087ddc6769ed4953828f1))
+* Restore swipe-back transparency in Sync and Joey ([0fc793d](https://github.com/wchill/patcheddit/commit/0fc793d3b63381e585b1a6ac216e51194b462065))
+* **sync:** Normalize Redgifs URLs before extracting video IDs ([975b100](https://github.com/wchill/patcheddit/commit/975b100c0722b9f9d3830c2789f71dcbc2b87a36))
+
+
+### Features
+
+* **boost:** Add ability to strip query parameters when copying/sharing URLs ([73c8a5d](https://github.com/wchill/patcheddit/commit/73c8a5d604df03d089661bc3c70ba7965cd5494f))
+* **boost:** Add more archiving/paywall bypass services ([2948eeb](https://github.com/wchill/patcheddit/commit/2948eeb96dd96ad709c686da0a90c0a6bc883faf))
+* Reorganize all Morphe settings menus to be more user friendly ([f4faed4](https://github.com/wchill/patcheddit/commit/f4faed430a2540f87fa337ceaf7d5481e4203a8c))
+
 # [2.3.0-dev.1](https://github.com/wchill/patcheddit/compare/v2.2.0...v2.3.0-dev.1) (2026-11-15)
 
 

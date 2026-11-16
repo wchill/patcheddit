@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "2.3.0-dev.1",
+  "version": "2.3.0-dev.2",
   "patches": [
     {
       "name": "Add Boost Search bottom navigation",
@@ -31,7 +31,7 @@
     },
     {
       "name": "Add archive links to context menu",
-      "description": "Adds 'Open with Wayback Machine' and 'Open with Archive.is' to the link context menu.",
+      "description": "Adds archive links to the link context menu, with a setting for each source.",
       "default": true,
       "category": "Links",
       "compatiblePackages": [
@@ -634,6 +634,69 @@
     },
     {
       "name": "Fix Redgifs API",
+      "description": "Fetches a fresh Redgifs API token so Redgifs videos load.",
+      "default": true,
+      "category": "Media",
+      "compatiblePackages": [
+        {
+          "packageName": "o.o.joey",
+          "name": "Joey for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "o.o.joey.pro",
+          "name": "Joey for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "o.o.joey.dev",
+          "name": "Joey for Reddit Dev",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix Redgifs API",
       "description": "Restores native Redgifs playback and handles unavailable videos.",
       "default": true,
       "category": "Media",
@@ -684,6 +747,51 @@
       "category": "Media",
       "compatiblePackages": [
         {
+          "packageName": "free.reddit.news",
+          "name": "Relay for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "reddit.news",
+          "name": "Relay for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix Redgifs API",
+      "description": "Fetches a fresh Redgifs API token so Redgifs videos load.",
+      "default": true,
+      "category": "Media",
+      "compatiblePackages": [
+        {
           "packageName": "com.laurencedawson.reddit_sync",
           "name": "Sync for Reddit",
           "description": null,
@@ -709,6 +817,96 @@
       "description": "Fixes loading post thumbnails by correcting their URLs.",
       "default": true,
       "category": null,
+      "compatiblePackages": [
+        {
+          "packageName": "com.laurencedawson.reddit_sync",
+          "name": "Sync for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "v23.06.30-13:39",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix swipe back transparency",
+      "description": "Shows the previous screen while swiping back on newer Android versions.",
+      "default": true,
+      "category": "Interface",
+      "compatiblePackages": [
+        {
+          "packageName": "o.o.joey",
+          "name": "Joey for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "o.o.joey.pro",
+          "name": "Joey for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "o.o.joey.dev",
+          "name": "Joey for Reddit Dev",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix swipe back transparency",
+      "description": "Shows the previous screen while swiping back on newer Android versions.",
+      "default": true,
+      "category": "Interface",
       "compatiblePackages": [
         {
           "packageName": "com.laurencedawson.reddit_sync",
@@ -915,7 +1113,7 @@
       "name": "Log exceptions",
       "description": "Logs reported errors and fatal crashes, viewable in Morphe settings.",
       "default": true,
-      "category": "Advanced",
+      "category": "Diagnostics",
       "compatiblePackages": [
         {
           "packageName": "com.onelouder.baconreader",
@@ -960,7 +1158,7 @@
       "name": "Log exceptions",
       "description": "Logs reported errors and fatal crashes, viewable in Morphe settings.",
       "default": true,
-      "category": "Advanced",
+      "category": "Diagnostics",
       "compatiblePackages": [
         {
           "packageName": "com.rubenmayayo.reddit",
@@ -987,7 +1185,7 @@
       "name": "Log exceptions",
       "description": "Logs reported errors and fatal crashes, viewable in Morphe settings.",
       "default": true,
-      "category": "Advanced",
+      "category": "Diagnostics",
       "compatiblePackages": [
         {
           "packageName": "ml.docilealligator.infinityforreddit.plus",
@@ -1050,7 +1248,7 @@
       "name": "Log exceptions",
       "description": "Logs reported errors and fatal crashes, viewable in Morphe settings.",
       "default": true,
-      "category": "Advanced",
+      "category": "Diagnostics",
       "compatiblePackages": [
         {
           "packageName": "o.o.joey",
@@ -1113,7 +1311,7 @@
       "name": "Log exceptions",
       "description": "Logs reported errors and fatal crashes, viewable in Morphe settings.",
       "default": true,
-      "category": "Advanced",
+      "category": "Diagnostics",
       "compatiblePackages": [
         {
           "packageName": "com.andrewshu.android.reddit",
@@ -1158,7 +1356,7 @@
       "name": "Log exceptions",
       "description": "Logs reported errors and fatal crashes, viewable in Morphe settings.",
       "default": true,
-      "category": "Advanced",
+      "category": "Diagnostics",
       "compatiblePackages": [
         {
           "packageName": "free.reddit.news",
@@ -1203,7 +1401,7 @@
       "name": "Log exceptions",
       "description": "Logs reported errors and fatal crashes, viewable in Morphe settings.",
       "default": true,
-      "category": "Advanced",
+      "category": "Diagnostics",
       "compatiblePackages": [
         {
           "packageName": "io.syncapps.lemmy_sync",
@@ -1230,7 +1428,7 @@
       "name": "Log exceptions",
       "description": "Logs reported errors and fatal crashes, viewable in Morphe settings.",
       "default": true,
-      "category": "Advanced",
+      "category": "Diagnostics",
       "compatiblePackages": [
         {
           "packageName": "com.laurencedawson.reddit_sync",
@@ -2021,6 +2219,33 @@
       "description": "Shows an \"End of feed\" row with a Refresh button below the last post when a feed has no more posts, instead of silently stopping. Home sorted by Best ends after a few hundred posts.",
       "default": true,
       "category": "Feed",
+      "compatiblePackages": [
+        {
+          "packageName": "com.rubenmayayo.reddit",
+          "name": "Boost for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "1.14.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Show strip query parameters option",
+      "description": "Adds an option to strip query/tracking parameters when sharing/copying links.",
+      "default": true,
+      "category": "Links",
       "compatiblePackages": [
         {
           "packageName": "com.rubenmayayo.reddit",
