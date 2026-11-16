@@ -23,6 +23,7 @@ internal fun httpLibraryResourceNamespace(client: String, packageName: String): 
     }
     "syncforreddit" -> when (packageName) {
         "com.laurencedawson.reddit_sync" -> "syncforreddit"
+        "com.laurencedawson.reddit_sync.pro" -> "syncforreddit/pro"
         else -> error("Unsupported Sync HTTP library profile: $packageName")
     }
     else -> client

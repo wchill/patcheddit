@@ -11,7 +11,7 @@ In addition, patches for some apps contain additional features that were not pre
 ## Differences from official patch set
 
 ### All clients
-* **Reddit API fixes** combines the applicable Reddit API and login repairs into one patch for BaconReader, Boost, Infinity, Joey, Relay (including Pro), RIF (free and paid), and Sync (free version only). These repairs are always active when included.
+* **Reddit API fixes** combines the applicable Reddit API and login repairs into one patch for BaconReader, Boost, Infinity, Joey, Relay (including Pro), RIF (free and paid), and Sync (including Pro). These repairs are always active when included.
     * Includes missing gallery image repairs when opening posts in BaconReader, Boost, Joey, Relay, RIF, and Sync. Relay's repair is limited to still images. If a previously opened gallery still fails after patching, clear the app's cache (not its storage).
     * Relay's subreddit sidebars remain usable when Reddit omits activity counters.
 * **Fix Redgifs API** restores playback in BaconReader, Joey, Relay, RIF, and Sync. Relay uses native media with sound instead of silent Reddit previews.
@@ -76,7 +76,7 @@ In addition, patches for some apps contain additional features that were not pre
 1. Install [Morphe Manager](https://morphe.software/) and switch it to advanced/expert mode.
 2. Click [this link](https://morphe.software/add-source?github=wchill/patcheddit) to add this patch source to Morphe Manager.
 3. In Morphe Manager, find the app you want to patch.
-   * The supported apps are Boost, RIF, Sync (free version only), Relay, BaconReader, Joey, Infinity+, Infinity++, and Infinity (Patreon).
+   * The supported apps are Boost, RIF, Sync, Relay, BaconReader, Joey, Infinity+, Infinity++, and Infinity (Patreon).
 4. Get the APK for your preferred, supported 3rd party reddit app. If you don't have it, you can download it from in the app. APKM bundles (aka split APKs) will also work.
    * You should get the last available version for your reddit app, unless you are patching Relay. Relay v10.2.40 should be used instead of the latest.
 5. Select desired patches, then patch.

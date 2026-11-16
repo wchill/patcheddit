@@ -44,7 +44,7 @@ class HttpLibraryProfileTest {
     fun loadsFixtureProfilesForEachVariant() {
         for (name in listOf(
             "baconreader", "joey", "relay/free", "relay/pro",
-            "syncforreddit", "redditisfun/free", "redditisfun/donation",
+            "syncforreddit", "syncforreddit/pro", "redditisfun/free", "redditisfun/donation",
         )) {
             assertTrue(profile(name).mapping.classes.isNotEmpty(), name)
         }
@@ -56,6 +56,7 @@ class HttpLibraryProfileTest {
             Triple("relay", "free.reddit.news", "relay/free"),
             Triple("relay", "reddit.news", "relay/pro"),
             Triple("syncforreddit", "com.laurencedawson.reddit_sync", "syncforreddit"),
+            Triple("syncforreddit", "com.laurencedawson.reddit_sync.pro", "syncforreddit/pro"),
             Triple("redditisfun", "com.andrewshu.android.reddit", "redditisfun/free"),
             Triple("redditisfun", "com.andrewshu.android.redditdonation", "redditisfun/donation"),
         )) {
@@ -63,7 +64,7 @@ class HttpLibraryProfileTest {
         }
         assertFailsWith<IllegalStateException> { httpLibraryResourceNamespace("relay", "unknown") }
         for (packageName in listOf(
-            "unknown", "com.laurencedawson.reddit_sync.pro", "com.laurencedawson.reddit_sync.dev",
+            "unknown", "com.laurencedawson.reddit_sync.dev",
         )) {
             assertFailsWith<IllegalStateException> { httpLibraryResourceNamespace("syncforreddit", packageName) }
         }
@@ -81,5 +82,15 @@ class HttpLibraryProfileTest {
             "cacheResponse",
             pro.mapping.methods[MethodId("Lokhttp3/Response;", "g", emptyList(), "Lokhttp3/Response;")],
         )
+    }
+
+    @Test
+    fun usesSyncProSymbolsWithoutTreatingAppClassesAsNative() {
+        val pro = profile("syncforreddit/pro")
+        assertEquals("Lokio/Buffer;", pro.mapping.type("Lld/b;"))
+        assertTrue(pro.isNative("Lld/b;"))
+        assertTrue(pro.isNative("Lkd/a;"))
+        assertFalse(pro.isNative("Lbe/b;"))
+        assertFalse(pro.isNative("Lzd/b;"))
     }
 }
