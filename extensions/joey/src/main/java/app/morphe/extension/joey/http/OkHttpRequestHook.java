@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import app.morphe.extension.joey.FixRedgifsApiPatch;
 import app.morphe.extension.shared.fixes.api.FailedGalleryMetadataPatch;
 import app.morphe.extension.shared.fixes.api.RedditInfoResponsePatch;
 import app.morphe.extension.shared.fixes.comments.MoreChildrenResponsePatch;
@@ -26,7 +27,7 @@ public final class OkHttpRequestHook extends BaseOkHttpRequestHook {
     @Override
     protected List<Interceptor> getInterceptors() {
         return Arrays.asList(new FailedGalleryMetadataPatch(), new RedditInfoResponsePatch(),
-                new MoreChildrenResponsePatch());
+                new MoreChildrenResponsePatch(), new FixRedgifsApiPatch());
     }
 
     @Override
