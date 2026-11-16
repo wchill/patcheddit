@@ -64,7 +64,7 @@ fun crashLogPatch(
     description = description,
     default = true,
     extensionPatch = extensionPatch,
-    category = PatchCategory.ADVANCED,
+    category = PatchCategory.DIAGNOSTICS,
 ) { setting ->
     compatibleWith(*compatible)
     dependsOn(extensionPatch)

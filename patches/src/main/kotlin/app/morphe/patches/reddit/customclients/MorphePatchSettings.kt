@@ -240,11 +240,21 @@ internal fun addMorphePatchPreference(
     require(template.documentElement.tagName == "PreferenceCategory") { "Unexpected Morphe preference template." }
     val categoryKey = "morphe_category_${settingsKey(spec.category)}"
     require(spec.key != categoryKey) { "A Morphe preference cannot reuse its category's key." }
-    val entries = mutableListOf(target.importNode(template.documentElement.childElements().single(), true) as Element)
+    options?.let {
+        require(it.documentElement.tagName == "PreferenceCategory") { "Morphe options must be a PreferenceCategory." }
+    }
+    val action = options?.documentElement?.childElements()?.singleOrNull()?.takeIf {
+        spec.readOnly && it.tagName == "Preference" && it.childElements().any { child -> child.tagName == "intent" }
+    }
+    val entries = mutableListOf(target.importNode(
+        action ?: template.documentElement.childElements().single(), true,
+    ) as Element)
     entries.first().apply {
         setAttribute("android:key", spec.key)
         setAttribute("android:title", spec.title)
-        val note = if (spec.readOnly) {
+        val note = if (action != null) {
+            ""
+        } else if (spec.readOnly) {
             "Included in this APK. Repatch the app to change this setting."
         } else {
             "Restart the app after changing this switch."
@@ -252,8 +262,7 @@ internal fun addMorphePatchPreference(
         setAttribute("android:summary", listOf(spec.summary, note).filter(String::isNotBlank).joinToString("\n"))
         if (!spec.readOnly) setAttribute("android:defaultValue", spec.defaultEnabled.toString())
     }
-    options?.let {
-        require(it.documentElement.tagName == "PreferenceCategory") { "Morphe options must be a PreferenceCategory." }
+    options?.takeIf { action == null }?.let {
         entries += it.documentElement.childElements().map { entry ->
             (target.importNode(entry, true) as Element).apply {
                 if (!spec.readOnly && optionsDependOnSwitch && getAttribute("android:selectable") != "false") {

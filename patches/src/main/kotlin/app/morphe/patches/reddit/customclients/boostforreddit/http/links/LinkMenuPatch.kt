@@ -71,9 +71,11 @@ internal val boostLinkMenuPatch = bytecodePatch {
 @Suppress("unused")
 val showStripQueryParameters = morpheBytecodePatch(
     name = "Show strip query parameters option",
-    description = "Adds an unchecked query-stripping checkbox to Share link and Copy link menus.",
+    description = "Adds an option to strip query/tracking parameters when sharing/copying links.",
     extensionPatch = ExtensionPatches.Boost,
     category = PatchCategory.LINKS,
+    optionsResource = "morphe_boost_link_options",
+    resourceDirectory = "boost",
 ) { setting ->
     dependsOn(boostLinkMenuPatch)
     compatibleWith(*AppCompatibility.Boost)

@@ -15,6 +15,8 @@ import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
 import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.settings.boostMorpheSettingsPatch
+import app.morphe.patches.reddit.customclients.boostforreddit.misc.settings.addBoostSettings
+import app.morphe.patches.reddit.customclients.boostforreddit.misc.settings.groupBoostLinkSettings
 import app.morphe.patches.reddit.customclients.boostforreddit.http.interceptHttpRequests
 import app.morphe.patches.reddit.customclients.sync.syncforlemmy.misc.settings.syncMorpheSettingsPatch as lemmySettings
 import com.android.tools.smali.dexlib2.AccessFlags
@@ -76,6 +78,29 @@ class MorphePatchSettingsTest {
     }
 
     @Test
+    fun loggingSharesDiagnosticsWithItsViewersInBothBoostResourceOrders() {
+        for ((boost, viewersFirst) in listOf(false to true, true to true, true to false)) {
+            val menu = resource(if (boost) "boost/xml/morphe_boost_settings_skeleton.xml"
+                else "settings/xml/morphe_settings.xml")
+            val patch = crashLogPatch(
+                if (boost) ExtensionPatches.Boost else ExtensionPatches.RIF,
+                if (boost) AppCompatibility.Boost else AppCompatibility.RedditIsFun,
+            )
+            val viewers = resource("boost/xml/morphe_boost_diagnostics_entry.xml")
+            if (boost && viewersFirst) addBoostSettings(menu, viewers)
+            addMorphePatchPreference(menu, switch(), spec("morphe_patch_log_exceptions")
+                .copy(category = assertNotNull(patch.category)))
+            if (boost && !viewersFirst) addBoostSettings(menu, viewers)
+
+            val section = menu.documentElement.childElements().single()
+            assertEquals("morphe_category_diagnostics", section.getAttribute("android:key"))
+            assertEquals(setOf("morphe_patch_log_exceptions", "morphe_exception_log", "morphe_crash_logs"),
+                section.childElements().map { it.getAttribute("android:key") }.toSet())
+            assertEquals(3, section.childElements().size)
+        }
+    }
+
+    @Test
     fun usesTheCorrespondingMenuForEverySupportedPackage() {
         val clients = AppCompatibility.BaconReader + AppCompatibility.Boost + AppCompatibility.Infinity +
             AppCompatibility.JoeyForReddit + AppCompatibility.RedditIsFun + AppCompatibility.Relay +
@@ -119,6 +144,54 @@ class MorphePatchSettingsTest {
         assertEquals(8, sources.map { it.getAttribute("android:key") }.toSet().size)
         assertTrue(sources.all { it.getAttribute("android:defaultValue") == "true" })
         assertTrue(sources.all { it.getAttribute("android:dependency") == key })
+    }
+
+    @Test
+    fun boostLinksUseThreeOrderedSectionsWithoutChangingControlsOrDependencies() {
+        val menu = resource("boost/xml/morphe_boost_settings_skeleton.xml")
+        val archives = "morphe_patch_add_archive_links_to_context_menu"
+        val visibility = "morphe_patch_show_strip_query_parameters_option"
+        addMorphePatchPreference(menu, switch(), spec(archives).copy(category = "Links"),
+            resource("boost/xml/morphe_boost_archive_options.xml"))
+        addMorphePatchPreference(menu, switch(), spec(visibility).copy(category = "Links"),
+            resource("boost/xml/morphe_boost_link_options.xml"))
+        val controls = elements(menu, "CheckBoxPreference").associateBy { it.getAttribute("android:key") }
+
+        groupBoostLinkSettings(menu)
+
+        val sections = menu.documentElement.childElements().single().childElements()
+        assertEquals(listOf("General", "Archive links", "Enabled archive services"),
+            sections.map { it.getAttribute("android:title") })
+        assertTrue(sections.all { it.tagName == "PreferenceCategory" })
+        assertEquals(listOf(visibility, "morphe_boost_strip_query_parameters_default"),
+            sections[0].childElements().map { it.getAttribute("android:key") })
+        assertEquals(listOf(archives, "morphe_boost_archive_strip_query_parameters"),
+            sections[1].childElements().map { it.getAttribute("android:key") })
+        val services = sections[2].childElements()
+        assertEquals(7, services.size)
+        assertTrue(services.all {
+            it.getAttribute("android:dependency") == archives &&
+                java.net.URI(it.getAttribute("android:summary")).let { uri ->
+                    uri.scheme == "https" && !uri.host.isNullOrBlank()
+                }
+        })
+        for (entry in elements(menu, "CheckBoxPreference")) {
+            assertSame(controls.getValue(entry.getAttribute("android:key")), entry)
+        }
+        val default = controls.getValue("morphe_boost_strip_query_parameters_default")
+        assertEquals("false", default.getAttribute("android:defaultValue"))
+        assertEquals(visibility, default.getAttribute("android:dependency"))
+    }
+
+    @Test
+    fun boostLinkSectionsOmitControlsFromPatchesThatWereNotIncluded() {
+        val menu = resource("boost/xml/morphe_boost_settings_skeleton.xml")
+        addMorphePatchPreference(menu, switch(),
+            spec("morphe_patch_show_strip_query_parameters_option").copy(category = "Links"),
+            resource("boost/xml/morphe_boost_link_options.xml"))
+        groupBoostLinkSettings(menu)
+        val sections = menu.documentElement.childElements().single().childElements()
+        assertEquals(listOf("General"), sections.map { it.getAttribute("android:title") })
     }
 
     @Test
@@ -224,6 +297,30 @@ class MorphePatchSettingsTest {
         assertFalse(entry.hasAttribute("android:defaultValue"))
         assertTrue(entry.getAttribute("android:summary").contains("Repatch"))
         assertFailsWith<IllegalStateException> { MorphePatchSetting("morphe_patch_layout", false).enabledCall }
+    }
+
+    @Test
+    fun rendersSingleScreenActionsDirectlyWithoutToggleOrDuplicateEntryForEveryMenu() {
+        for (path in listOf("settings/xml/morphe_settings.xml", "boost/xml/morphe_boost_settings_skeleton.xml")) {
+            val menu = resource(path)
+            val key = "morphe_patch_import_and_export_oauth_tokens"
+            val options = resource("boost/xml/morphe_boost_oauth_entry.xml")
+            addMorphePatchPreference(menu, resource("settings/xml/morphe_patch_read_only.xml"),
+                spec(key).copy(title = "Import and export OAuth tokens", category = "Login & API", readOnly = true),
+                options)
+            val entry = elements(menu, "Preference").single { it.getAttribute("android:key") == key }
+            assertEquals("Import and export OAuth tokens", entry.getAttribute("android:title"))
+            assertEquals("false", entry.getAttribute("android:persistent"))
+            assertFalse(entry.getAttribute("android:selectable") == "false")
+            assertFalse(entry.hasAttribute("android:dependency"))
+            assertEquals(0, elements(menu, "CheckBoxPreference").size)
+            assertFalse(keys(menu).contains("morphe_boost_oauth_tokens"))
+            val intent = entry.getElementsByTagName("intent").item(0) as Element
+            assertEquals("app.morphe.extension.boost.settings.BoostSettingsActivity",
+                intent.getAttribute("android:targetClass"))
+            assertEquals("oauth_tokens", (intent.getElementsByTagName("extra").item(0) as Element)
+                .getAttribute("android:value"))
+        }
     }
 
     @Test

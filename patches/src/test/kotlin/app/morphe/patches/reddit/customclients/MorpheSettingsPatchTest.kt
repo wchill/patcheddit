@@ -44,7 +44,7 @@ class MorpheSettingsPatchTest {
         val target = parse("<resources><string name=\"native_title\">Native title</string></resources>")
         val original = target.getElementsByTagName("string").item(0)
         val source = resource("settings/values/morphe_diagnostics_strings.xml")
-        addMorpheStrings(target, source)
+        mergeMorpheResources(target, source, "string")
         assertSame(original, target.getElementsByTagName("string").item(0))
         assertEquals("Native title", original.textContent)
         val strings = target.getElementsByTagName("string")
@@ -52,7 +52,19 @@ class MorpheSettingsPatchTest {
         val title = (0 until strings.length).map { strings.item(it) as Element }
             .single { it.getAttribute("name") == "morphe_settings_title" }
         assertEquals("Morphe", title.textContent)
-        assertFailsWith<IllegalArgumentException> { addMorpheStrings(target, source) }
+        assertFailsWith<IllegalArgumentException> { mergeMorpheResources(target, source, "string") }
+    }
+
+    @Test
+    fun mergesTheFrameworkOverlayWithoutChangingNativeStyles() {
+        val target = parse("<resources><style name=\"NativeTheme\" parent=\"NativeParent\" /></resources>")
+        val original = target.getElementsByTagName("style").item(0)
+        val overlay = resource("settings/values/morphe_settings_style.xml")
+        mergeMorpheResources(target, overlay, "style")
+        assertSame(original, target.getElementsByTagName("style").item(0))
+        assertEquals(2, target.getElementsByTagName("style").length)
+        assertEquals(3, target.getElementsByTagName("item").length)
+        assertFailsWith<IllegalArgumentException> { mergeMorpheResources(target, overlay, "style") }
     }
 
     @Test

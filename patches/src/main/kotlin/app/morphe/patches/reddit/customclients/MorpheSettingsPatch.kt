@@ -64,12 +64,17 @@ internal val morpheSettingsResourcesPatch = resourcePatch(default = false) {
     ))
 
     execute {
-        val strings = checkNotNull(inputStreamFromBundledResource("settings", "values/morphe_diagnostics_strings.xml")) {
-            "Morphe diagnostics strings were not bundled."
-        }
-        strings.use { input ->
-            document(input).use { source ->
-                document("res/values/strings.xml").use { target -> addMorpheStrings(target, source) }
+        for ((file, type) in listOf("morphe_diagnostics_strings.xml" to "string",
+            "morphe_settings_style.xml" to "style")) {
+            val input = checkNotNull(inputStreamFromBundledResource("settings", "values/$file")) {
+                "Morphe resource was not bundled: $file"
+            }
+            input.use {
+                document(it).use { source ->
+                    document("res/values/${type}s.xml").use { target ->
+                        mergeMorpheResources(target, source, type)
+                    }
+                }
             }
         }
         document("AndroidManifest.xml").use(::registerMorpheSettingsActivity)
@@ -80,19 +85,19 @@ internal val morpheSettingsResourcesPatch = resourcePatch(default = false) {
     }
 }
 
-internal fun addMorpheStrings(target: Document, source: Document) {
+internal fun mergeMorpheResources(target: Document, source: Document, type: String) {
     require(target.documentElement.tagName == "resources" && source.documentElement.tagName == "resources") {
-        "Unexpected diagnostics strings resource root."
+        "Unexpected Morphe resource root."
     }
-    val strings = source.documentElement.childElements()
-    val existing = target.getElementsByTagName("string")
+    val entries = source.documentElement.childElements()
+    val existing = target.getElementsByTagName(type)
     val names = (0 until existing.length).map { (existing.item(it) as Element).getAttribute("name") }.toMutableSet()
-    for (string in strings) {
-        require(string.tagName == "string" && names.add(string.getAttribute("name"))) {
-            "Duplicate or invalid diagnostics string: ${string.getAttribute("name")}"
+    for (entry in entries) {
+        require(entry.tagName == type && names.add(entry.getAttribute("name"))) {
+            "Duplicate or invalid Morphe $type: ${entry.getAttribute("name")}"
         }
     }
-    for (string in strings) target.documentElement.appendChild(target.importNode(string, true))
+    for (entry in entries) target.documentElement.appendChild(target.importNode(entry, true))
 }
 
 internal fun registerMorpheSettingsActivity(manifest: Document) {

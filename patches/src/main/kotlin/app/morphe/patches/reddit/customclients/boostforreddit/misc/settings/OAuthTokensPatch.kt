@@ -20,7 +20,6 @@ val oauthTokensPatch = morpheResourcePatch(
     default = true,
     extensionPatch = ExtensionPatches.Boost,
     category = PatchCategory.LOGIN,
-    readOnly = false,
     optionsResource = "morphe_boost_oauth_entry",
     resourceDirectory = "boost",
 ) {

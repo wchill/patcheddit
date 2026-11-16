@@ -15,6 +15,7 @@ object PatchCategory {
     const val ADS = "Ads & tracking"
     const val ADVANCED = "Advanced"
     const val COMMENTS = "Comments & posting"
+    const val DIAGNOSTICS = "Diagnostics"
     const val FEED = "Feed"
     const val INTERFACE = "Interface"
     const val LINKS = "Links"

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="MorpheSettingsFrameworkOverlay">
+        <item name="android:windowActionBar">true</item>
+        <item name="android:windowNoTitle">false</item>
+        <item name="android:windowActionBarOverlay">false</item>
+    </style>
+</resources>

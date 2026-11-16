@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceCategory xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="morphe_boost_strip_query_parameters_default"
+        android:title="Strip query parameters by default"
+        android:summary="Start with the context-menu checkbox checked."
+        android:defaultValue="false" />
+</PreferenceCategory>

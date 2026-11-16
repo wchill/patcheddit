@@ -21,6 +21,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 import app.morphe.extension.boost.api.LinkMenu;
+import app.morphe.extension.shared.settings.PatchSettings;
 
 public final class LinkQueryParameters {
     private static final int COPY_LINK_ID = 3;
@@ -105,6 +106,7 @@ public final class LinkQueryParameters {
             id = 108;
             title = "Strip query parameters";
             iconResource = android.R.drawable.checkbox_off_background;
+            checked = PatchSettings.isEnabled("morphe_boost_strip_query_parameters_default", false);
         }
     }
 
