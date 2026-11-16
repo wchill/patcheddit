@@ -1,3 +1,10 @@
+# [2.3.0-dev.4](https://github.com/wchill/patcheddit/compare/v2.3.0-dev.3...v2.3.0-dev.4) (2026-11-16)
+
+
+### Bug Fixes
+
+* Flatten comment requests for improved performance ([0ad786b](https://github.com/wchill/patcheddit/commit/0ad786b55655095c111c5d53ae80082cabd72c20))
+
 # [2.3.0-dev.3](https://github.com/wchill/patcheddit/compare/v2.3.0-dev.2...v2.3.0-dev.3) (2026-11-16)
 
 

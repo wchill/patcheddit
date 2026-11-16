@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-11-16T19:25:52",
-  "description": "# [2.3.0-dev.3](https://github.com/wchill/patcheddit/compare/v2.3.0-dev.2...v2.3.0-dev.3) (2026-11-16)\n\n\n### Bug Fixes\n\n* **boost:** Make colored bars/lines repeat for very deep comment chains ([e7bc5ac](https://github.com/wchill/patcheddit/commit/e7bc5ac52f73a1e20dde94b29aa3902e58c5228b))\n* Repair links in comment/post bodies that were escaped by New Reddit ([6696827](https://github.com/wchill/patcheddit/commit/6696827ba60a99a91ec7ddf4f173d3af45623608))",
-  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.3.0-dev.3/patches-2.3.0-dev.3.mpp",
-  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.3.0-dev.3/patches-2.3.0-dev.3.mpp.asc",
-  "version": "2.3.0-dev.3"
+  "created_at": "2026-11-16T22:15:14",
+  "description": "# [2.3.0-dev.4](https://github.com/wchill/patcheddit/compare/v2.3.0-dev.3...v2.3.0-dev.4) (2026-11-16)\n\n\n### Bug Fixes\n\n* Flatten comment requests for improved performance ([0ad786b](https://github.com/wchill/patcheddit/commit/0ad786b55655095c111c5d53ae80082cabd72c20))",
+  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.3.0-dev.4/patches-2.3.0-dev.4.mpp",
+  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.3.0-dev.4/patches-2.3.0-dev.4.mpp.asc",
+  "version": "2.3.0-dev.4"
 }
