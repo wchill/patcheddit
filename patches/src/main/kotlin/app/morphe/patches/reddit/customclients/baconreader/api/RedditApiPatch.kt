@@ -11,6 +11,7 @@ import app.morphe.patches.reddit.customclients.baconreader.fix.gallery.fixFailed
 import app.morphe.patches.reddit.customclients.baconreader.fix.login.modifyLoginWebView
 import app.morphe.patches.reddit.customclients.baconreader.fix.morecomments.fixMoreComments
 import app.morphe.patches.reddit.customclients.redditApiPatch
+import app.morphe.patches.reddit.customclients.legacySpoofClientPatch
 
 @Suppress("unused")
 val redditApiPatch = redditApiPatch(
@@ -20,3 +21,6 @@ val redditApiPatch = redditApiPatch(
     fixFailedGalleryImagesPatch,
     fixMoreComments,
 )
+
+@Suppress("unused")
+val legacySpoofClientPatch = legacySpoofClientPatch(redditApiPatch)

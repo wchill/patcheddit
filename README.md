@@ -86,6 +86,8 @@ In addition, patches for some apps contain additional features that were not pre
 5. Select desired patches, then patch.
    * **Reddit API fixes** includes RedReader 1.27 defaults, so you do not need to supply a client ID. See `What if I don't have a client ID?` below.
    * If you use a custom OAuth client ID, make sure its redirect URI matches the one in **Reddit API fixes** options and on https://www.reddit.com/prefs/apps/.
+   * Upgrading from before 2.3.0 with saved **Spoof client** options? Keep that legacy patch enabled for one update, then launch the app once. It includes **Reddit API fixes** and saves the OAuth values in the app's API settings, preserving existing in-app overrides. You can then deselect **Spoof client** without losing the saved values. It is off by default for new installations.
+   * Infinity users must also keep the same redirect URI in **Reddit API fixes** when repatching, because Android's login callback is fixed in the APK manifest.
 6. Once patching is complete, install the app and set it up as usual.
 
 For assistance with patching, please post a thread in [/r/Patcheddit](https://www.reddit.com/r/Patcheddit/) or [/r/MorpheApp](https://www.reddit.com/r/MorpheApp/). Only use the GitHub issue tracker for legitimate bug reports or feature requests.
