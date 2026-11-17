@@ -219,15 +219,15 @@ final class MorpheAboutDialog {
         links.setBackground(shape(0x1A808080, 18, true));
         links.setClipToOutline(true);
         link(links, "morphe_about_github", "morphe_about_github_summary",
-                android.R.drawable.ic_menu_manage, REPOSITORY);
+                "code", REPOSITORY);
         link(links, "morphe_about_releases", "morphe_about_releases_summary",
-                android.R.drawable.stat_sys_download_done, REPOSITORY + "/releases");
+                "download", REPOSITORY + "/releases");
         link(links, "morphe_about_issues", "morphe_about_issues_summary",
-                android.R.drawable.ic_menu_info_details, REPOSITORY + "/issues");
+                "error", REPOSITORY + "/issues");
         link(links, "morphe_about_reddit", "morphe_about_reddit_summary",
-                android.R.drawable.ic_menu_send, "https://www.reddit.com/r/Patcheddit/");
+                "forum", "https://www.reddit.com/r/Patcheddit/");
         row(links, string("morphe_about_credits"), string("morphe_about_credits_summary"),
-                android.R.drawable.ic_menu_myplaces, () -> navigate(Page.CREDITS));
+                "group", () -> navigate(Page.CREDITS));
         content.addView(links);
         return scroll(content);
     }
@@ -249,9 +249,9 @@ final class MorpheAboutDialog {
         entries.addView(state);
         LinearLayout links = group();
         link(links, "morphe_credits_github", "morphe_credits_github_summary",
-                android.R.drawable.ic_menu_view, PatchedditCredits.CONTRIBUTORS);
+                "group", PatchedditCredits.CONTRIBUTORS);
         row(links, string("morphe_about_licenses"), string("morphe_about_licenses_summary"),
-                android.R.drawable.ic_menu_agenda, () -> navigate(Page.LICENSES));
+                "description", () -> navigate(Page.LICENSES));
         addCard(content, links);
         if (contributors != null) {
             displayContributors(entries);
@@ -285,7 +285,7 @@ final class MorpheAboutDialog {
         }
         for (PatchedditCredits.Contributor contributor : contributors) {
             row(entries, contributor.login, string("morphe_credits_count", contributor.contributions),
-                    android.R.drawable.ic_menu_myplaces, () -> open(contributor.profileUrl()));
+                    "group", () -> open(contributor.profileUrl()));
         }
     }
 
@@ -328,7 +328,7 @@ final class MorpheAboutDialog {
     private void displayNotices(LinearLayout entries) {
         entries.removeAllViews();
         for (PatchedditCredits.Notice notice : notices) {
-            row(entries, notice.name, null, android.R.drawable.ic_menu_agenda, () -> {
+            row(entries, notice.name, null, "description", () -> {
                 selectedNotice = notice;
                 navigate(Page.NOTICE);
             });
@@ -386,11 +386,11 @@ final class MorpheAboutDialog {
         }
     }
 
-    private void link(LinearLayout group, String title, String subtitle, int iconId, String url) {
-        row(group, string(title), string(subtitle), iconId, () -> open(url));
+    private void link(LinearLayout group, String title, String subtitle, String iconName, String url) {
+        row(group, string(title), string(subtitle), iconName, () -> open(url));
     }
 
-    private void row(LinearLayout group, String title, String subtitle, int iconId, Runnable action) {
+    private void row(LinearLayout group, String title, String subtitle, String iconName, Runnable action) {
         if (group.getChildCount() != 0) {
             View separator = new View(activity);
             separator.setBackgroundColor(0x33808080);
@@ -406,9 +406,11 @@ final class MorpheAboutDialog {
                 android.content.res.ColorStateList.valueOf(0x33808080), null,
                 new ColorDrawable(Color.WHITE)));
         ImageView icon = new ImageView(activity);
-        icon.setImageResource(iconId);
+        icon.setImageDrawable(MorpheSettingsStyle.icon(activity, iconName));
+        icon.setPadding(0, 0, 0, 0);
+        icon.setScaleType(ImageView.ScaleType.FIT_CENTER);
         icon.setImageTintList(android.content.res.ColorStateList.valueOf(accent));
-        row.addView(icon, new LinearLayout.LayoutParams(dp(22), dp(22)));
+        row.addView(icon, new LinearLayout.LayoutParams(dp(24), dp(24)));
         LinearLayout labels = column();
         labels.setPadding(dp(12), 0, dp(12), 0);
         TextView name = text(title, 15, foreground, true);
@@ -420,11 +422,13 @@ final class MorpheAboutDialog {
             labels.addView(description);
         }
         row.addView(labels, new LinearLayout.LayoutParams(0, -2, 1));
-        TextView chevron = text("\u203a", 26, accent, false);
-        if (activity.getResources().getConfiguration().getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
-            chevron.setScaleX(-1);
-        }
-        row.addView(chevron);
+        ImageView chevron = new ImageView(activity);
+        chevron.setImageDrawable(MorpheSettingsStyle.icon(activity, "chevron"));
+        chevron.setImageTintList(android.content.res.ColorStateList.valueOf(accent));
+        chevron.setAlpha(0.55f);
+        chevron.setPadding(0, 0, 0, 0);
+        chevron.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        row.addView(chevron, new LinearLayout.LayoutParams(dp(24), dp(24)));
         row.setOnClickListener(ignored -> action.run());
         group.addView(row, new LinearLayout.LayoutParams(-1, -2));
     }

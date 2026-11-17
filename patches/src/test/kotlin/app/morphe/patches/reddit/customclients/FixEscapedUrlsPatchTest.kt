@@ -13,6 +13,7 @@ import app.morphe.patches.reddit.customclients.boostforreddit.api.redditApiPatch
 import app.morphe.patches.reddit.customclients.boostforreddit.fix.links.fixEscapedUrlsPatch as boostLinks
 import app.morphe.patches.reddit.customclients.infinity.api.redditApiPatch as infinityApi
 import app.morphe.patches.reddit.customclients.infinity.fix.links.fixEscapedUrlsPatch as infinityLinks
+import app.morphe.patches.reddit.customclients.infinity.fix.links.isNativeResponseBody
 import app.morphe.patches.reddit.customclients.joey.api.redditApiPatch as joeyApi
 import app.morphe.patches.reddit.customclients.joey.fix.links.fixEscapedUrlsPatch as joeyLinks
 import app.morphe.patches.reddit.customclients.redditisfun.api.redditApiPatch as rifApi
@@ -21,12 +22,41 @@ import app.morphe.patches.reddit.customclients.relay.api.redditApiPatch as relay
 import app.morphe.patches.reddit.customclients.relay.fix.links.fixEscapedUrlsPatch as relayLinks
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.api.redditApiPatch as syncApi
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.links.fixEscapedUrlsPatch as syncLinks
+import com.android.tools.smali.dexlib2.AccessFlags
+import com.android.tools.smali.dexlib2.iface.ClassDef
+import com.android.tools.smali.dexlib2.immutable.ImmutableClassDef
+import com.android.tools.smali.dexlib2.immutable.ImmutableMethod
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
 import kotlin.test.assertTrue
 
 class FixEscapedUrlsPatchTest {
+    @Test
+    fun recognizesInfinityResponseBodiesAfterR8InlinesTheirCharsetHelper() {
+        assertTrue(isNativeResponseBody(responseBody("Ljava/io/InputStream;", "J")))
+        assertTrue(isNativeResponseBody(responseBody("Ljava/io/InputStream;", "J", "Ljava/nio/charset/Charset;")))
+    }
+
+    @Test
+    fun rejectsCloseablesMissingTheResponseBodyStreamOrAbstractLength() {
+        assertFalse(isNativeResponseBody(responseBody("Ljava/io/InputStream;")))
+        assertFalse(isNativeResponseBody(responseBody("J")))
+    }
+
+    private fun responseBody(vararg returns: String): ClassDef {
+        val access = AccessFlags.PUBLIC.value or AccessFlags.ABSTRACT.value
+        return ImmutableClassDef(
+            "Lnative/ResponseBody;", access, "Ljava/lang/Object;", listOf("Ljava/io/Closeable;"),
+            null, emptyList(), emptyList(), returns.mapIndexed { index, type ->
+                ImmutableMethod(
+                    "Lnative/ResponseBody;", "method$index", emptyList(), type, access,
+                    emptySet(), emptySet(), null,
+                )
+            },
+        )
+    }
+
     @Test
     fun exposesAnIndependentSettingsEnabledFeatureForEveryRedditClient() {
         for ((feature, api) in listOf(

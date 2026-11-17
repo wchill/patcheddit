@@ -55,13 +55,19 @@ internal val morpheSettingsContextPatch = bytecodePatch(default = false) {
     }
 }
 
+internal val morpheSettingsIconNames = listOf(
+    "palette", "feed", "explore", "link", "comment", "media", "restore", "key", "security",
+    "settings", "code", "bug", "info", "download", "error", "forum", "group", "description", "chevron",
+)
+
 internal val morpheSettingsResourcesPatch = resourcePatch(default = false) {
     dependsOn(addResourcesPatch(
         "settings",
         ResourceGroup("xml", "morphe_settings.xml", "morphe_settings_entry.xml",
             "morphe_exception_log.xml", "morphe_fatal_crash_logs.xml"),
         ResourceGroup("layout", "morphe_settings_entry.xml", "morphe_log_text.xml"),
-        ResourceGroup("drawable", "morphe_settings_icon.xml"),
+        ResourceGroup("drawable", "morphe_settings_icon.xml",
+            *morpheSettingsIconNames.map { "patcheddit_icon_$it.xml" }.toTypedArray()),
         ResourceGroup("raw", "patcheddit_licenses.json"),
     ))
 

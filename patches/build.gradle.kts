@@ -85,6 +85,8 @@ val prepareAboutLicenses by tasks.registering {
                 "Copyright 2025 Morphe. Morphe branding is not licensed under open-source terms.\n" +
                 "https://github.com/MorpheApp/morphe-branding\n\n" +
                 "Patcheddit is a separate project, not the official Morphe patches."),
+            mapOf("name" to "Google Material Design icons", "text" to
+                "https://github.com/google/material-design-icons\n\n$apache"),
         )
         fun embeddedNotices(input: java.io.InputStream, prefix: String = ""): List<String> =
             ZipInputStream(input).use { zip ->

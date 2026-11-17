@@ -93,8 +93,8 @@ public final class MorpheSettingsActivity extends MorphePreferenceActivity {
             setTitle(resource("string", "morphe_settings_title"));
             bindPatchPreferences(getPreferenceScreen());
             bindOAuthPreferences();
-            bindScreen(EXCEPTIONS);
-            bindScreen(CRASHES);
+            bindScreen(EXCEPTIONS, EXCEPTIONS);
+            bindScreen("morphe_crash_logs", CRASHES);
             PreferenceScreen root = getPreferenceScreen();
             if (screen == null) root.addPreference(aboutPreference());
             MorpheSettingsStyle.addSectionIcons(this, root);
@@ -217,9 +217,9 @@ public final class MorpheSettingsActivity extends MorphePreferenceActivity {
         return true;
     }
 
-    private void bindScreen(String name) {
-        Preference entry = findPreference(name);
-        if (entry != null) entry.setOnPreferenceClickListener(ignored -> openScreen(name));
+    private void bindScreen(String key, String screen) {
+        Preference entry = findPreference(key);
+        if (entry != null) entry.setOnPreferenceClickListener(ignored -> openScreen(screen));
     }
 
     private int resource(String type, String name) {

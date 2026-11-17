@@ -40,6 +40,34 @@ import kotlin.test.assertTrue
 
 class MorpheSettingsPatchTest {
     @Test
+    fun bundlesUniformSelfContainedIconsForSettingsAndAbout() {
+        val sources = java.util.Properties().apply {
+            assertNotNull(this@MorpheSettingsPatchTest.javaClass.classLoader
+                .getResourceAsStream("settings/icons.properties")).use(::load)
+        }.stringPropertyNames() - "revision"
+        assertEquals(sources, morpheSettingsIconNames.toSet())
+        assertEquals(sources.size, morpheSettingsIconNames.size)
+        for (name in morpheSettingsIconNames) {
+            val icon = resource("settings/drawable/patcheddit_icon_$name.xml").documentElement
+            assertEquals("vector", icon.tagName, name)
+            assertEquals("24dp", icon.getAttribute("android:width"), name)
+            assertEquals("24dp", icon.getAttribute("android:height"), name)
+            assertEquals("24", icon.getAttribute("android:viewportWidth"), name)
+            assertEquals("24", icon.getAttribute("android:viewportHeight"), name)
+            assertFalse(icon.hasAttribute("android:tint"), name)
+            val paths = icon.getElementsByTagName("path")
+            assertTrue(paths.length > 0, name)
+            for (index in 0 until paths.length) {
+                val path = paths.item(index) as Element
+                assertTrue(path.getAttribute("android:pathData").isNotBlank(), name)
+                assertEquals("#FF000000", path.getAttribute("android:fillColor"), name)
+            }
+        }
+        assertEquals("true", resource("settings/drawable/patcheddit_icon_chevron.xml")
+            .documentElement.getAttribute("android:autoMirrored"))
+    }
+
+    @Test
     fun bundlesCompleteLicenseNoticesForOfflineReading() {
         val input = assertNotNull(javaClass.classLoader.getResourceAsStream("settings/raw/patcheddit_licenses.json"))
         val notices = input.bufferedReader().use { com.google.gson.JsonParser.parseReader(it).asJsonArray }
@@ -49,6 +77,7 @@ class MorpheSettingsPatchTest {
         assertTrue(patcheddit.contains("Patcheddit NOTICE"))
         assertTrue(patcheddit.contains("7c. Project Name Restriction"))
         assertTrue(assertNotNull(notices["Morphe and ReVanced-derived code"]).contains("Morphe NOTICE"))
+        assertTrue(assertNotNull(notices["Google Material Design icons"]).contains("Apache License"))
         assertTrue(assertNotNull(notices["Public Suffix List"]).contains("Mozilla Public License"))
         assertTrue(assertNotNull(notices["OpenJDK desugaring libraries"]).contains("Classpath Exception"))
         assertTrue(notices.keys.any { it.startsWith("com.google.code.gson:gson:") })

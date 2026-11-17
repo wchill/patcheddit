@@ -226,74 +226,46 @@ final class MorpheSettingsStyle {
             Preference entry = group.getPreference(index);
             if (!(entry instanceof PreferenceScreen)
                     && !MorpheSettingsActivity.ABOUT.equals(entry.getKey())) continue;
-            Drawable icon = sectionIcon(activity, entry.getKey());
+            Drawable icon = icon(activity, sectionIconName(entry.getKey()));
             icon.setTintList(tint);
             entry.setIcon(icon);
         }
     }
 
-    private static Drawable sectionIcon(Activity activity, String key) {
-        String[] names;
-        int fallback;
+    static Drawable icon(Activity activity, String name) {
+        return activity.getResources().getDrawable(
+                MorpheSettings.resourceId(activity, "drawable", "patcheddit_icon_" + name),
+                activity.getTheme()).mutate();
+    }
+
+    static String sectionIconName(String key) {
         switch (key == null ? "" : key) {
             case "morphe_category_navigation":
-                names = new String[]{"ic_explore_24dp", "ic_explore_white_24dp", "home_24px", "ic_home_24dp", "ic_compass"};
-                fallback = android.R.drawable.ic_menu_compass;
-                break;
+                return "explore";
             case "morphe_category_links":
-                names = new String[]{"ic_link_24dp", "ic_link_white_24dp", "ic_link"};
-                fallback = android.R.drawable.ic_menu_share;
-                break;
+                return "link";
             case "morphe_category_media":
-                names = new String[]{"ic_image_24dp", "ic_photo_24dp", "ic_image_white_24dp", "ic_image"};
-                fallback = android.R.drawable.ic_menu_gallery;
-                break;
+                return "media";
             case "morphe_category_feed":
-                names = new String[]{"ic_view_stream_24dp", "ic_view_carousel_24dp", "ic_view_list_white_24dp", "ic_list"};
-                fallback = android.R.drawable.ic_menu_sort_by_size;
-                break;
+                return "feed";
             case "morphe_category_comments_posting":
-                names = new String[]{"ic_comment_24dp", "ic_comment_white_24dp", "ic_comment"};
-                fallback = android.R.drawable.ic_menu_edit;
-                break;
+                return "comment";
             case "morphe_category_undelete":
-                names = new String[]{"ic_restore_24dp", "ic_restore_black_24dp", "ic_restore_white_24dp", "ic_restore"};
-                fallback = android.R.drawable.ic_menu_recent_history;
-                break;
+                return "restore";
             case "morphe_category_login_api":
-                names = new String[]{"ic_vpn_key_24dp", "ic_vpn_key_white_24dp", "ic_account_circle_24dp", "account_circle_24px"};
-                fallback = android.R.drawable.ic_lock_lock;
-                break;
+                return "key";
             case "morphe_category_ads_tracking":
-                names = new String[]{"ic_security_24dp", "ic_security_white_24dp", "ic_block"};
-                fallback = android.R.drawable.ic_lock_lock;
-                break;
+                return "security";
             case "morphe_category_diagnostics":
-                names = new String[]{"ic_bug_report_24dp", "ic_info_outline_24dp", "ic_bug_report_white_24dp", "ic_bug_report"};
-                fallback = android.R.drawable.ic_menu_info_details;
-                break;
+                return "bug";
             case MorpheSettingsActivity.ABOUT:
-                names = new String[]{"ic_info_outline_24dp", "ic_info_24dp", "ic_info_outline_white_24dp", "ic_info"};
-                fallback = android.R.drawable.ic_menu_info_details;
-                break;
+                return "info";
             case "morphe_category_interface":
-                names = new String[]{"ic_palette_24dp", "ic_color_lens_24dp", "ic_palette_white_24dp", "ic_palette"};
-                fallback = android.R.drawable.ic_menu_view;
-                break;
+                return "palette";
+            case "morphe_category_advanced":
+                return "code";
             default:
-                names = new String[]{"ic_tune_24dp", "ic_settings_24dp", "ic_settings_white_24dp", "ic_settings"};
-                fallback = android.R.drawable.ic_menu_preferences;
-                break;
+                return "settings";
         }
-        Resources resources = activity.getResources();
-        for (String name : names) {
-            int id = resources.getIdentifier(name, "drawable", activity.getPackageName());
-            if (id == 0) {
-                id = resources.getIdentifier(name.replace("_24dp", "_black_24dp"),
-                        "drawable", activity.getPackageName());
-            }
-            if (id != 0) return resources.getDrawable(id, activity.getTheme()).mutate();
-        }
-        return resources.getDrawable(fallback, activity.getTheme()).mutate();
     }
 }
