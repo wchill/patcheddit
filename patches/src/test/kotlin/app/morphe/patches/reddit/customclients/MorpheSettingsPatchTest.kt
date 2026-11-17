@@ -40,6 +40,25 @@ import kotlin.test.assertTrue
 
 class MorpheSettingsPatchTest {
     @Test
+    fun bundlesCompleteLicenseNoticesForOfflineReading() {
+        val input = assertNotNull(javaClass.classLoader.getResourceAsStream("settings/raw/patcheddit_licenses.json"))
+        val notices = input.bufferedReader().use { com.google.gson.JsonParser.parseReader(it).asJsonArray }
+            .associate { it.asJsonObject["name"].asString to it.asJsonObject["text"].asString }
+        val patcheddit = assertNotNull(notices["Patcheddit"])
+        assertTrue(patcheddit.contains("GNU GENERAL PUBLIC LICENSE"))
+        assertTrue(patcheddit.contains("Patcheddit NOTICE"))
+        assertTrue(patcheddit.contains("7c. Project Name Restriction"))
+        assertTrue(assertNotNull(notices["Morphe and ReVanced-derived code"]).contains("Morphe NOTICE"))
+        assertTrue(assertNotNull(notices["Public Suffix List"]).contains("Mozilla Public License"))
+        assertTrue(assertNotNull(notices["OpenJDK desugaring libraries"]).contains("Classpath Exception"))
+        assertTrue(notices.keys.any { it.startsWith("com.google.code.gson:gson:") })
+        assertTrue(notices.keys.any { it.startsWith("androidx.room:") })
+        assertTrue(notices.keys.any { it.startsWith("com.squareup.okhttp3:") })
+        assertTrue(notices.filterKeys { it.startsWith("com.fasterxml.jackson.core:") }.values
+            .all { it.contains("Apache License") && it.contains("Jackson") })
+    }
+
+    @Test
     fun mergesDiagnosticStringsIntoTheStandardValuesFileWithoutReplacingNativeStrings() {
         val target = parse("<resources><string name=\"native_title\">Native title</string></resources>")
         val original = target.getElementsByTagName("string").item(0)

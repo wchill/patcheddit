@@ -28,7 +28,7 @@ val interceptImgurRequests = morpheBytecodePatch(
     preferenceKey = "morphe_boost_imgur_undelete_enabled",
     defaultEnabled = false,
     settingsSummary = "Restore missing Imgur images and albums from the Wayback Machine. " +
-        "Links to missing Imgur media you open are sent to this third-party archive. Off by default.",
+        "Links to missing Imgur media you open are sent to this third-party archive.",
 ) {
     dependsOn(ExtensionPatches.Boost, interceptHttpRequests, undeleteAppliedMarkerPatch(IMGUR_UNDELETE_APPLIED_RESOURCE))
     compatibleWith(*AppCompatibility.Boost)

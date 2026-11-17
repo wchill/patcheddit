@@ -22,6 +22,8 @@ val oauthTokensPatch = morpheResourcePatch(
     category = PatchCategory.LOGIN,
     optionsResource = "morphe_boost_oauth_entry",
     resourceDirectory = "boost",
+    settingsSummary = "View or replace your Reddit account OAuth tokens. " +
+        "This is an advanced feature for developers and testers."
 ) {
     dependsOn(
         boostMorpheSettingsPatch,

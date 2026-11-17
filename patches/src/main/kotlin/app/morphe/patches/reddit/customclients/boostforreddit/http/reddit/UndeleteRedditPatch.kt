@@ -90,7 +90,7 @@ val undeleteRedditPatch = morpheBytecodePatch(
     optionsResource = "morphe_boost_undelete_options",
     resourceDirectory = "boost",
     settingsSummary = "Restore removed Reddit posts and comments from Arctic Shift and the Wayback Machine. " +
-        "When a thread has removed content, its post and comment IDs are sent to these third-party archives. Off by default.",
+        "When a thread has removed content, its post and comment IDs are sent to these third-party archives.",
 ) { setting ->
     dependsOn(ExtensionPatches.Boost, interceptHttpRequests, undeleteAppliedMarkerPatch(REDDIT_UNDELETE_APPLIED_RESOURCE))
     compatibleWith(*AppCompatibility.Boost)

@@ -184,12 +184,13 @@ fun morpheResourcePatch(
     readOnly: Boolean = true,
     optionsResource: String? = null,
     resourceDirectory: String = "settings",
+    settingsSummary: String? = null,
     block: ResourcePatchBuilder.(MorphePatchSetting) -> Unit,
 ) = resourcePatch(name, description, default) {
     category(category)
     dependsOn(extensionPatch)
     val setting = addMorpheSettings(
-        extensionPatch, name, description, category, readOnly = readOnly,
+        extensionPatch, name, (settingsSummary ?: description), category, readOnly = readOnly,
         optionsResource = optionsResource, resourceDirectory = resourceDirectory,
     )
     block(setting)

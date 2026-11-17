@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -44,7 +46,22 @@ public final class MorpheSettingsActivity extends MorphePreferenceActivity {
     private static final String EXCEPTIONS = "morphe_exception_log";
     private static final String CRASHES = "morphe_fatal_crash_logs";
     private static final String SOURCE = "morphe_crash_log_source";
+    static final String ABOUT = "morphe_about";
     private static final String BOOST_PACKAGE = "com.rubenmayayo.reddit";
+    private static final List<String> SECTION_ORDER = Arrays.asList(
+            "morphe_category_interface",
+            "morphe_category_feed",
+            "morphe_category_navigation",
+            "morphe_category_links",
+            "morphe_category_comments_posting",
+            "morphe_category_media",
+            "morphe_category_undelete",
+            "morphe_category_login_api",
+            "morphe_category_ads_tracking",
+            "morphe_category_other_patches",
+            "morphe_category_advanced",
+            "morphe_category_diagnostics"
+    );
     private static final int SAVE_EXCEPTIONS = 7403;
     private static final int SAVE_CRASH = 7404;
     private static final int OPEN_CRASH = 7405;
@@ -60,6 +77,11 @@ public final class MorpheSettingsActivity extends MorphePreferenceActivity {
     private Uri pendingSource;
     private AlertDialog visibleDialog;
 
+    static int sectionOrder(String key, int fallbackOrder) {
+        int order = SECTION_ORDER.indexOf(key);
+        return order < 0 ? fallbackOrder : order;
+    }
+
     @Override
     protected void onCreate(Bundle state) {
         super.onCreate(state);
@@ -74,9 +96,20 @@ public final class MorpheSettingsActivity extends MorphePreferenceActivity {
             bindScreen(EXCEPTIONS);
             bindScreen(CRASHES);
             PreferenceScreen root = getPreferenceScreen();
+            if (screen == null) root.addPreference(aboutPreference());
             MorpheSettingsStyle.addSectionIcons(this, root);
+            List<Preference> sections = new ArrayList<>();
             for (int index = 0; index < root.getPreferenceCount(); index++) {
-                Preference entry = root.getPreference(index);
+                sections.add(root.getPreference(index));
+            }
+            int fallbackOrder = SECTION_ORDER.size();
+            for (Preference entry : sections) {
+                entry.setOrder(sectionOrder(entry.getKey(), fallbackOrder));
+                if (!SECTION_ORDER.contains(entry.getKey())) fallbackOrder++;
+            }
+            for (Preference entry : sections) root.removePreference(entry);
+            for (Preference entry : sections) root.addPreference(entry);
+            for (Preference entry : sections) {
                 if (entry instanceof PreferenceScreen) {
                     entry.setIntent(new Intent(this, MorpheSettingsActivity.class)
                             .putExtra(SCREEN, entry.getKey()));
@@ -118,6 +151,20 @@ public final class MorpheSettingsActivity extends MorphePreferenceActivity {
         });
         String source = state == null ? null : state.getString(SOURCE);
         pendingSource = source == null ? null : Uri.parse(source);
+    }
+
+    private Preference aboutPreference() {
+        Preference about = new Preference(this);
+        about.setKey(ABOUT);
+        about.setTitle(resource("string", "morphe_about_title"));
+        about.setSummary("Version " + MorpheAboutDialog.version());
+        about.setPersistent(false);
+        about.setOnPreferenceClickListener(ignored -> {
+            dismissDialog();
+            visibleDialog = MorpheAboutDialog.show(this, worker);
+            return true;
+        });
+        return about;
     }
 
     private void bindPatchPreferences(PreferenceGroup group) {

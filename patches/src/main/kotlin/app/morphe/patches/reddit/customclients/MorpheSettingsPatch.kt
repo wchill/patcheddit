@@ -62,6 +62,7 @@ internal val morpheSettingsResourcesPatch = resourcePatch(default = false) {
             "morphe_exception_log.xml", "morphe_fatal_crash_logs.xml"),
         ResourceGroup("layout", "morphe_settings_entry.xml", "morphe_log_text.xml"),
         ResourceGroup("drawable", "morphe_settings_icon.xml"),
+        ResourceGroup("raw", "patcheddit_licenses.json"),
     ))
 
     execute {

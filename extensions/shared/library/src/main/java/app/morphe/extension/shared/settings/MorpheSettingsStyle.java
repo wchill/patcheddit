@@ -224,7 +224,8 @@ final class MorpheSettingsStyle {
         }
         for (int index = 0; index < group.getPreferenceCount(); index++) {
             Preference entry = group.getPreference(index);
-            if (!(entry instanceof PreferenceScreen)) continue;
+            if (!(entry instanceof PreferenceScreen)
+                    && !MorpheSettingsActivity.ABOUT.equals(entry.getKey())) continue;
             Drawable icon = sectionIcon(activity, entry.getKey());
             icon.setTintList(tint);
             entry.setIcon(icon);
@@ -269,6 +270,10 @@ final class MorpheSettingsStyle {
                 break;
             case "morphe_category_diagnostics":
                 names = new String[]{"ic_bug_report_24dp", "ic_info_outline_24dp", "ic_bug_report_white_24dp", "ic_bug_report"};
+                fallback = android.R.drawable.ic_menu_info_details;
+                break;
+            case MorpheSettingsActivity.ABOUT:
+                names = new String[]{"ic_info_outline_24dp", "ic_info_24dp", "ic_info_outline_white_24dp", "ic_info"};
                 fallback = android.R.drawable.ic_menu_info_details;
                 break;
             case "morphe_category_interface":
