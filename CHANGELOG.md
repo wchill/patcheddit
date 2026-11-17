@@ -1,3 +1,18 @@
+# [2.4.0](https://github.com/wchill/patcheddit/compare/v2.3.0...v2.4.0) (2026-11-17)
+
+
+### Bug Fixes
+
+* **boost:** Add backwards compatibility Spoof client patch for users not using RedReader client ID ([3566b1f](https://github.com/wchill/patcheddit/commit/3566b1fb0ddf4b8926ca0edf43baf09ddc4eb92f))
+* **sync:** Crash in Sync free when opening Settings menu due to empty drawable ([6f9d17e](https://github.com/wchill/patcheddit/commit/6f9d17ed9d02a66a9935fd04eca6e2b32beb9651))
+
+
+### Features
+
+* Add About Patcheddit menu ([61284eb](https://github.com/wchill/patcheddit/commit/61284eb091a669219f70cd96fab798ddf444da4f))
+* **boost:** Add ability to manually fetch comments/posts from Arctic Shift and warn when loading failed ([cc20250](https://github.com/wchill/patcheddit/commit/cc20250bfbd4dd8b08ea5fe72c4751717d774e37))
+* **boost:** Make Arctic Shift URL configurable for development purposes ([342ced9](https://github.com/wchill/patcheddit/commit/342ced923dc33d2a97d9482c7850c4dff4dc0871))
+
 # [2.4.0-dev.1](https://github.com/wchill/patcheddit/compare/v2.3.0...v2.4.0-dev.1) (2026-11-17)
 
 
