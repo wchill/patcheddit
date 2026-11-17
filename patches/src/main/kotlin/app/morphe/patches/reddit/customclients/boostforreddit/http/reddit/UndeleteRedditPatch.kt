@@ -40,6 +40,7 @@ private const val GLIDE_REDDIT_MEDIA_WAYBACK_DESCRIPTOR =
     "Lapp/morphe/extension/boost/http/reddit/GlideRedditMediaWayback;->open(Ljava/net/HttpURLConnection;I)Ljava/io/InputStream;"
 internal const val EXTRA_EMOJI_CONTEXT_KEY = "extraEmoji"
 internal const val EXTRA_EMOJI_GETTER = "getExtraEmoji"
+internal const val ARCHIVE_RETRY_KEY = "morpheArchiveRetry"
 
 private fun extraEmojiInstructions(
     viewField: BoostFieldBinding,
@@ -144,6 +145,19 @@ val undeleteRedditPatch = morpheBytecodePatch(
         // region Add additional field and marshaling code for ContributionModel.
         val fieldType = "Ljava/lang/String;"
         ContributionModelConstructorFingerprint.classDef.apply {
+            fields.add(ImmutableField(
+                type, ARCHIVE_RETRY_KEY, fieldType, AccessFlags.PROTECTED.value,
+                null, null, null,
+            ).toMutable())
+            methods.add(ImmutableMethod(
+                type, "morpheArchiveRetryJson", emptyList(), fieldType, AccessFlags.PUBLIC.value,
+                null, null, MutableMethodImplementation(2),
+            ).toMutable().apply {
+                addInstructions(0, """
+                    iget-object v0, p0, $type->$ARCHIVE_RETRY_KEY:$fieldType
+                    return-object v0
+                """)
+            })
             fields.add(
                 ImmutableField(
                 type,
@@ -181,6 +195,9 @@ val undeleteRedditPatch = morpheBytecodePatch(
                 invoke-virtual      {p1}, Landroid/os/Parcel;->readString()$fieldType
                 move-result-object  v0
                 iput-object         v0, p0, ${this.definingClass}->$EXTRA_EMOJI_CONTEXT_KEY:$fieldType
+                invoke-virtual      {p1}, Landroid/os/Parcel;->readString()$fieldType
+                move-result-object  v0
+                iput-object         v0, p0, ${this.definingClass}->$ARCHIVE_RETRY_KEY:$fieldType
                 """
             )
         }
@@ -190,6 +207,8 @@ val undeleteRedditPatch = morpheBytecodePatch(
                 """
                 iget-object         v0, p0, ${this.definingClass}->$EXTRA_EMOJI_CONTEXT_KEY:$fieldType
                 invoke-virtual      {p1, v0}, Landroid/os/Parcel;->writeString($fieldType)V
+                iget-object         v0, p0, ${this.definingClass}->$ARCHIVE_RETRY_KEY:$fieldType
+                invoke-virtual      {p1, v0}, Landroid/os/Parcel;->writeString($fieldType)V
                 """
             )
         }
@@ -197,6 +216,10 @@ val undeleteRedditPatch = morpheBytecodePatch(
 
         // region Modify SubmissionModel/CommentModel deserialization.
         arrayOf(SubmissionModelDeserializeFingerprint, CommentModelDeserializeFingerprint).forEach { fingerprint ->
+            val retryJson = """
+                invoke-static {p0}, Lapp/morphe/extension/boost/http/reddit/ArcticShiftRetry;->retryJson(Ljava/lang/Object;)Ljava/lang/String;
+                move-result-object v1
+            """
             fingerprint.wrapHook(
                 setting = setting,
                 after = """
@@ -205,6 +228,8 @@ val undeleteRedditPatch = morpheBytecodePatch(
                     invoke-virtual      {p0, v1}, ${BoostApi.JsonModel.data}
                     move-result-object  v1
                     iput-object         v1, v0, ${BoostApi.ContributionModel.type}->extraEmoji:Ljava/lang/String;
+                    $retryJson
+                    iput-object         v1, v0, ${BoostApi.ContributionModel.type}->$ARCHIVE_RETRY_KEY:Ljava/lang/String;
                     :morphe_extra_emoji_deserialized
                 """,
             )
@@ -261,5 +286,6 @@ val undeleteRedditPatch = morpheBytecodePatch(
             )
         }
         // endregion
+        installArchiveRetry()
     }
 }

@@ -17,4 +17,5 @@ public class Emojis {
     public static final String DEVIL_EMOJI = "\uD83D\uDC7F";
     public static final String COPYRIGHT_EMOJI = "©\uFE0F";
     public static final String PROHIBITED_EMOJI = "\uD83D\uDEAB";
+    public static final String CLOCK_EMOJI = "\uD83D\uDD52";
 }

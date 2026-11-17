@@ -68,13 +68,17 @@ public class ArcticShift {
     }
 
     private static JsonNode makeApiCall(String url, long callTimeoutMillis) throws IOException {
+        return makeApiCall(url, callTimeoutMillis, false);
+    }
+
+    private static JsonNode makeApiCall(String url, long callTimeoutMillis, boolean retry) throws IOException {
         Long failedAt = lastFailureNanos;
-        if (failedAt != null && System.nanoTime() - failedAt < FAILURE_COOLDOWN_NANOS) {
+        if (!retry && failedAt != null && System.nanoTime() - failedAt < FAILURE_COOLDOWN_NANOS) {
             throw new IOException(ARCTIC_SHIFT_COOLDOWN_MARKER + ": skipping lookup after recent failure");
         }
         LoggingUtils.logInfo(true, () -> String.format("Arctic Shift: %s", url));
         try {
-            JsonNode result = HttpUtils.getJson(url, callTimeoutMillis);
+            JsonNode result = HttpUtils.getJson(url, callTimeoutMillis, retry);
             lastFailureNanos = null;
             return result;
         } catch (HttpUtils.HttpStatusException failure) {
@@ -100,13 +104,21 @@ public class ArcticShift {
     }
 
     public static ArrayNode getIds(SubmissionType submissionType, Collection<String> ids) throws IOException {
+        return getIds(submissionType, ids, false);
+    }
+
+    public static ArrayNode getIds(SubmissionType submissionType, Collection<String> ids, boolean retry) throws IOException {
         if (ids.size() > MAX_IDS_PER_REQUEST) {
             throw new IllegalArgumentException("At most " + MAX_IDS_PER_REQUEST + " IDs per request");
         }
         String url = ARCTIC_SHIFT_BASE_URL + submissionType.toString().toLowerCase() + "/ids?ids=" + String.join(",", ids);
-        JsonNode data = makeApiCall(url).get("data");
+        return idsData(makeApiCall(url, CALL_TIMEOUT_MS, retry));
+    }
+
+    static ArrayNode idsData(JsonNode response) throws IOException {
+        JsonNode data = response == null ? null : response.get("data");
         // Callers cache an empty answer as "not archived", so an error payload must not look empty.
-        if (data == null || !data.isArray()) {
+        if (data == null || !data.isArray() || response.hasNonNull("error")) {
             throw new IOException(ARCTIC_SHIFT_NULL_DATA_MARKER + ": non-array data for ids lookup");
         }
         return (ArrayNode) data;
