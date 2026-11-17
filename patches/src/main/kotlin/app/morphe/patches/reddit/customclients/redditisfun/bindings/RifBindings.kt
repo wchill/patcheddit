@@ -78,9 +78,12 @@ private fun nativeLayout(classes: Map<String, ClassDef>): NativeLayout {
     return layout
 }
 
-// HTTP linking also needs the native SKU, including after the paid gate has been rewritten.
+// Detection remains valid after the paid gate has been rewritten.
+internal fun resolveRifNativeSku(definitions: List<ClassDef>): RifNativeSku =
+    nativeLayout(definitions.associateBy { it.type }).sku
+
 internal fun rifHttpLibraryResourceNamespace(definitions: List<ClassDef>): String =
-    when (nativeLayout(definitions.associateBy { it.type }).sku) {
+    when (resolveRifNativeSku(definitions)) {
         RifNativeSku.FREE -> "redditisfun/free"
         RifNativeSku.PLATINUM -> "redditisfun/donation"
     }
