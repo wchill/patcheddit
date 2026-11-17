@@ -15,9 +15,19 @@ import java.util.regex.Pattern;
 
 public final class RelativeMarkdownLinks {
     private static final String TAG = "<!--(?s:.*?)(?:-->|\\z)|<(?:\"[^\"]*\"|'[^']*'|[^<'\">])*>";
-    private static final String CANDIDATE = "(?<construct>\\[(?<label>[^\\[\\]\\r\\n]++)]\\("
-            + "(?<target>(?<leading>/?)(?:<a\\b[^<>]*>)(?<innerLeading>/?)(?<kind>[ur])/"
-            + "(?<name>[a-z0-9_-]++)(?<innerTrailing>/?)(?:</a\\s*>)(?<trailing>/?))\\))";
+    // Named Matcher groups require Android 8; these renderers also run on Android 6 and 7.
+    private static final String CANDIDATE = "(\\[([^\\[\\]\\r\\n]++)]\\("
+            + "((/?)(?:<a\\b[^<>]*>)(/?)([ur])/"
+            + "([a-z0-9_-]++)(/?)(?:</a\\s*>)(/?))\\))";
+    private static final int CONSTRUCT = 1;
+    private static final int LABEL = 2;
+    private static final int TARGET = 3;
+    private static final int LEADING = 4;
+    private static final int INNER_LEADING = 5;
+    private static final int KIND = 6;
+    private static final int NAME = 7;
+    private static final int INNER_TRAILING = 8;
+    private static final int TRAILING = 9;
     private static final Pattern TOKENS = Pattern.compile(TAG + "|" + CANDIDATE + "|[\\[\\]]",
             Pattern.CASE_INSENSITIVE);
     private static final Pattern TAGS = Pattern.compile(TAG);
@@ -41,13 +51,13 @@ public final class RelativeMarkdownLinks {
         int brackets = 0;
         while (tokens.find()) {
             String token = tokens.group();
-            if (tokens.group("construct") != null) {
-                String label = tokens.group("label");
-                String path = "/" + tokens.group("kind").toLowerCase(Locale.ROOT) + "/" + tokens.group("name");
+            if (tokens.group(CONSTRUCT) != null) {
+                String label = tokens.group(LABEL);
+                String path = "/" + tokens.group(KIND).toLowerCase(Locale.ROOT) + "/" + tokens.group(NAME);
                 if (brackets == 0 && !state.protectedText() && !escaped(html, tokens.start())
-                        && (tokens.group("leading").isEmpty() || tokens.group("innerLeading").isEmpty())
-                        && (tokens.group("trailing").isEmpty() || tokens.group("innerTrailing").isEmpty())
-                        && validLabel(label) && matchingAnchor(tokens.group("target"), path)) {
+                        && (tokens.group(LEADING).isEmpty() || tokens.group(INNER_LEADING).isEmpty())
+                        && (tokens.group(TRAILING).isEmpty() || tokens.group(INNER_TRAILING).isEmpty())
+                        && validLabel(label) && matchingAnchor(tokens.group(TARGET), path)) {
                     if (result == null) result = new StringBuilder(html.length());
                     result.append(html, copied, tokens.start()).append("<a href=\"https://www.reddit.com")
                             .append(path).append("\">").append(withoutAnchors(label)).append("</a>");
@@ -112,9 +122,7 @@ public final class RelativeMarkdownLinks {
             if (actual == null) return false;
             if (!actual.startsWith("/")) actual = "/" + actual;
             if (actual.endsWith("/")) actual = actual.substring(0, actual.length() - 1);
-            return actual.length() == path.length()
-                    && actual.substring(0, 3).equalsIgnoreCase(path.substring(0, 3))
-                    && actual.substring(3).equals(path.substring(3));
+            return actual.equalsIgnoreCase(path);
         } catch (URISyntaxException invalidLink) {
             return false;
         }

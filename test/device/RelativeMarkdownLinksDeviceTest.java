@@ -46,6 +46,9 @@ public final class RelativeMarkdownLinksDeviceTest {
                     compare(context, preferences, renderer,
                             "[<a href=\"/u/other\">u/other</a> label](/<a href=\"/U/Example-Name/\">U/Example-Name</a>/)",
                             "<a href=\"https://www.reddit.com/u/Example-Name\">u/other label</a>");
+                    compare(context, preferences, renderer,
+                            "[Example case](<a href=\"/u/example_member\">u/Example_Member</a>)",
+                            "<a href=\"https://www.reddit.com/u/Example_Member\">Example case</a>");
                     for (String unchanged : new String[]{
                             "<pre><code>" + USER + "</code></pre>", "<tt>" + USER + "</tt>",
                             "<span style=\"font-family:monospace\">" + USER + "</span>",

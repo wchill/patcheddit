@@ -34,6 +34,8 @@ public class RelativeMarkdownLinksTest {
                 + "U/Example-Name</A>/)";
         assertEquals("<a href=\"https://www.reddit.com/u/Example-Name\">u/other label</a>",
                 RelativeMarkdownLinks.repairHtml(input));
+        assertEquals("<a href=\"https://www.reddit.com/u/Example-Name\">Member</a>",
+                RelativeMarkdownLinks.repairHtml("[Member](<a href='/u/example-name'>u/Example-Name</a>)"));
     }
 
     @Test
