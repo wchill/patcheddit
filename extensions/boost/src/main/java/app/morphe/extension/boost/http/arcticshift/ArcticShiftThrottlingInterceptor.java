@@ -21,7 +21,7 @@ public class ArcticShiftThrottlingInterceptor implements Interceptor {
     @NotNull
     @Override
     public Response intercept(@NotNull Chain chain) throws IOException {
-        if (chain.request().url().host().contains("arctic-shift.photon-reddit.com")) {
+        if (ArcticShiftSettings.isApiUrl(chain.request().url(), ArcticShiftSettings.getBaseUrl())) {
             limiter.acquire();
         }
         return chain.proceed(chain.request());

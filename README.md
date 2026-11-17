@@ -15,14 +15,14 @@ In addition, patches for some apps contain additional features that were not pre
     * Includes missing gallery image repairs when opening posts in BaconReader, Boost, Joey, Relay, RIF, and Sync. Relay's repair is limited to still images. If a previously opened gallery still fails after patching, clear the app's cache (not its storage).
     * Relay's subreddit sidebars remain usable when Reddit omits activity counters.
 * **Fix Redgifs API** restores playback in BaconReader, Joey, Relay, RIF, and Sync. Relay uses native media with sound instead of silent Reddit previews.
-* **Fix escaped URLs** repairs links broken by backslashes in posts and comments in BaconReader, Boost, Infinity, Joey, Relay, RIF, and Sync. It is separate from **Reddit API fixes** and can be switched off under **Morphe > Links**.
+* **Fix escaped URLs** repairs links broken by backslashes in posts and comments in BaconReader, Boost, Infinity, Joey, Relay, RIF, and Sync. It is separate from **Reddit API fixes** and can be switched off under **Patcheddit > Links**.
 * **Fix swipe back transparency** shows the previous screen during swipe-back gestures in Sync and Joey on Android 11 and newer.
 * **Log exceptions** saves fatal crashes for every supported client, including Sync for Lemmy, using morphe-patches-library's shared crash logger. BaconReader and Boost hook their native error-reporting handlers; other clients capture exceptions reported through Android error/warning logging, stack traces, and Crashlytics when present, without removing the original logging.
     * Fatal reports are saved in `Documents/Morphe`, falling back to the app-specific external Documents folder if public storage is unavailable. Non-fatal reports use private `no_backup/morphe-exceptions` storage, rotating at 4 MiB per file with one previous file retained and excluded from Android app backups.
     * Common credential-bearing lines are redacted from non-fatal logs; fatal reports are not filtered. Other personal or request data can remain, so review exported copies before sharing.
-* Every supported client exposes a Morphe settings menu. Included optional features register their own controls; deselected patches do not leave behind inactive options.
+* Every supported client exposes a Patcheddit settings menu with consistently sized, bundled icons. Included optional features register their own controls; deselected patches do not leave behind inactive options. **About Patcheddit** shows the installed patches version, checks for updates, and links to releases, the project, and r/Patcheddit. **Credits** lists GitHub contributors and includes offline license notices. Pre-release builds also check the development release channel.
     * Feature switches default to the patch's existing runtime behavior.
-    * OAuth client ID, redirect URI and user-agent overrides for clients other than Boost are settable in the Morphe settings menu. Empty overrides use the values configured when patching. For Boost, these settings are adjustable in the stock Developer settings menu.
+    * OAuth client ID, redirect URI and user-agent overrides for clients other than Boost are settable in the Patcheddit settings menu. Empty overrides use the values configured when patching. For Boost, these settings are adjustable in the stock Developer settings menu.
     * Infinity's patched callback URI is read-only because it is declared in the APK manifest. The original callback remains available when spoofing is disabled. Manifest/layout-only changes, including Android debugging, are also shown as read-only; repatch the app to change them.
     * Changing OAuth credentials requires restarting and signing in again.
 
@@ -31,10 +31,10 @@ In addition, patches for some apps contain additional features that were not pre
 * Boost 1.14.3 also handles the image-post submission kind, search callback lifecycle checks and media-viewer insets natively, so those overrides are no longer injected. The remaining navigation patches still support Patcheddit's custom navigation hosts and layout behavior.
 * Boost handles cached Redgifs playback without a separate fix.
 * **Repeat Boost thread level colors** repeats the color pattern in deep comment chains when **Thread level indicator** is set to colored lines or colored bars.
-* **Log exceptions** records errors reported through Boost's existing exception handler. **Settings > Morphe > Exception log** lists non-fatal reports, with **Fatal crash logs** alongside it in Diagnostics.
+* **Log exceptions** records errors reported through Boost's existing exception handler. **Settings > Patcheddit > Exception log** lists non-fatal reports, with **Fatal crash logs** alongside it in Diagnostics.
     * Fatal reports can be previewed in the app and exported in full using **Save a copy**. Reports in public or app-specific Documents folders are listed when accessible.
     * If app initialization or private storage is unavailable, logging failures are reported to Logcat without showing a toast.
-* **Import and export OAuth tokens** adds an editable JSON field and a **Save** button under **Settings > Morphe > OAuth tokens**. It displays the selected account's tokens for copying. Replace or edit the JSON to sign in or add an account without the browser login flow. There are no file import/export controls.
+* **Import and export OAuth tokens** adds an editable JSON field and a **Save** button under **Settings > Patcheddit > OAuth tokens**. It displays the selected account's tokens for copying. Replace or edit the JSON to sign in or add an account without the browser login flow. There are no file import/export controls.
     * **Save** checks the access-token owner with Reddit, validates the refresh token using Boost's configured OAuth client, and obtains fresh tokens before adding or updating the verified account. An expired access token can be restored with a valid refresh token. Boost then restarts with that account selected.
     * Tokens are bound to their OAuth client. Configure the same client ID in Boost's native API settings before importing; the patch does not change API settings automatically.
     * The JSON contains **unencrypted account credentials**. Copy it only into trusted apps and clear clipboard copies after use. The screen uses Android's secure-window flag to block screenshots and screen recording. The editor disables autofill, content capture and Android view-state saving, and asks keyboards not to learn its contents.
@@ -44,7 +44,11 @@ In addition, patches for some apps contain additional features that were not pre
     * **Configure editor image hosting** adds an editor-hosting setting for Imgur Free or ImgBB. It does not change post or gallery hosting.
     * **Preview images in the editor** adds previews of supported image URLs without changing upload providers.
 * The content of deleted Reddit posts and comments can be loaded from [Project Arctic Shift](https://github.com/ArthurHeitmann/arctic_shift).
+    * **Settings > Patcheddit > Undelete > Arctic Shift API base URL** can point to a self-hosted compatible API. Include the API path (usually `/api/`); leave it empty to use the public service. Restart Boost after changing it.
     * This only works for text and images, and not all content can be restored. Videos are unlikely to be available.
+    * Removed posts/comments show a warning symbol if Arctic Shift returns an error or times out, but not when the archive has no copy. **Reload from Arctic Shift** is available for any post or comment not yet loaded from the archive; a successful reload updates the item in place. For non-removed posts and comments, only the text body is replaced.
+    * Content loaded from Arctic Shift shows a clock symbol unless it already has a removal symbol.
+    * Posts and comments loaded from Arctic Shift have a **Refresh post**/**Refresh comment** option that reloads the current version from Reddit.
     * Posts/comments that were deleted are marked as follows:
         * 🗑️ if removed by the author
         * 🧹 if removed by a subreddit mod
@@ -59,8 +63,8 @@ In addition, patches for some apps contain additional features that were not pre
     * This feature makes extra network requests, so posts will load a little slower. In particular, retrieving images from the Wayback Machine is heavily ratelimited.
         * Caching is implemented to try and limit the impact of this.
 * Imgur images and albums are automatically loaded from the Wayback Machine if a 404 is detected.
-* Link context menus include an **Open with** submenu for Wayback Machine, Archive.is, Wallhop, smry.ai, RemovePaywall, Freedium, and Unwall. Each source can be enabled or disabled under **Settings > Morphe > Links**. When all sources are disabled, the menu shows a disabled **All archivers disabled** entry. Query parameters are stripped from archive links by default; this can also be changed in Morphe settings.
-* Links with query parameters offer an unchecked **Strip query parameters** checkbox for **Share link** and **Copy link**. Hide it using **Show strip query parameters option** in Morphe settings.
+* Link context menus include an **Open with** submenu for Wayback Machine, Archive.is, Wallhop, smry.ai, RemovePaywall, Freedium, and Unwall. Each source can be enabled or disabled under **Settings > Patcheddit > Links**. When all sources are disabled, the menu shows a disabled **All archivers disabled** entry. Query parameters are stripped from archive links by default; this can also be changed in Patcheddit settings.
+* Links with query parameters offer an unchecked **Strip query parameters** checkbox for **Share link** and **Copy link**. Hide it using **Show strip query parameters option** in Patcheddit settings.
 
 ### reddit is fun
 * Restores Imgur album and gallery loading in the built-in viewer, album thumbnails, and links that include a title.
@@ -82,6 +86,8 @@ In addition, patches for some apps contain additional features that were not pre
 5. Select desired patches, then patch.
    * **Reddit API fixes** includes RedReader 1.27 defaults, so you do not need to supply a client ID. See `What if I don't have a client ID?` below.
    * If you use a custom OAuth client ID, make sure its redirect URI matches the one in **Reddit API fixes** options and on https://www.reddit.com/prefs/apps/.
+   * Upgrading from before 2.3.0 with saved **Spoof client** options? Keep that legacy patch enabled for one update, then launch the app once. It includes **Reddit API fixes** and saves the OAuth values in the app's API settings, preserving existing in-app overrides. You can then deselect **Spoof client** without losing the saved values. It is off by default for new installations.
+   * Infinity users must also keep the same redirect URI in **Reddit API fixes** when repatching, because Android's login callback is fixed in the APK manifest.
 6. Once patching is complete, install the app and set it up as usual.
 
 For assistance with patching, please post a thread in [/r/Patcheddit](https://www.reddit.com/r/Patcheddit/) or [/r/MorpheApp](https://www.reddit.com/r/MorpheApp/). Only use the GitHub issue tracker for legitimate bug reports or feature requests.

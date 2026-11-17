@@ -13,6 +13,7 @@ import app.morphe.patches.reddit.customclients.relay.fix.morecomments.fixMoreCom
 import app.morphe.patches.reddit.customclients.relay.fix.slink.fixSLinksPatch
 import app.morphe.patches.reddit.customclients.relay.fix.sidebar.fixSidebarPatch
 import app.morphe.patches.reddit.customclients.redditApiPatch
+import app.morphe.patches.reddit.customclients.legacySpoofClientPatch
 
 @Suppress("unused")
 val redditApiPatch = redditApiPatch(
@@ -24,3 +25,6 @@ val redditApiPatch = redditApiPatch(
     fixSLinksPatch,
     fixSidebarPatch,
 )
+
+@Suppress("unused")
+val legacySpoofClientPatch = legacySpoofClientPatch(redditApiPatch)

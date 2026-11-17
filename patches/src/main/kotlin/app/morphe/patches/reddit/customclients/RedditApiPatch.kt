@@ -8,6 +8,8 @@ package app.morphe.patches.reddit.customclients
 
 import app.morphe.patcher.patch.Patch
 import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.util.returnEarly
 import app.morphe.patches.all.misc.PatchCategory
 
 internal fun redditApiPatch(spoofClient: Patch<*>, vararg fixes: Patch<*>) = bytecodePatch(
@@ -19,4 +21,22 @@ internal fun redditApiPatch(spoofClient: Patch<*>, vararg fixes: Patch<*>) = byt
     dependsOn(spoofClient, *fixes)
     // Share the actual options so dependencies see overrides before they execute.
     spoofClient.options.values.forEach { it() }
+}
+
+internal fun legacySpoofClientPatch(apiPatch: Patch<*>) = bytecodePatch(
+    name = "Spoof client",
+    description = "Restores saved OAuth options from before 2.3.0. Includes Reddit API fixes. " +
+        "Launch the updated app once to save these values in its API settings before deselecting this patch.",
+    default = false,
+) {
+    category(PatchCategory.LOGIN)
+    compatibleWith(*checkNotNull(apiPatch.compatibility).toTypedArray())
+    dependsOn(apiPatch, morpheSettingsContextPatch)
+    apiPatch.options.values.forEach { it() }
+    execute {
+        Fingerprint(
+            definingClass = OAUTH_SETTINGS_DESCRIPTOR,
+            name = "shouldMigratePatchOptions",
+        ).method.returnEarly(true)
+    }
 }

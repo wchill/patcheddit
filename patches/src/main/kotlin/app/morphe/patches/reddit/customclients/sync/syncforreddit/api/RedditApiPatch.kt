@@ -13,6 +13,7 @@ import app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.morecommen
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.slink.fixSLinksPatch
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.user.useUserEndpointPatch
 import app.morphe.patches.reddit.customclients.redditApiPatch
+import app.morphe.patches.reddit.customclients.legacySpoofClientPatch
 
 @Suppress("unused")
 val redditApiPatch = redditApiPatch(
@@ -24,3 +25,6 @@ val redditApiPatch = redditApiPatch(
     fixSLinksPatch,
     useUserEndpointPatch,
 )
+
+@Suppress("unused")
+val legacySpoofClientPatch = legacySpoofClientPatch(redditApiPatch)

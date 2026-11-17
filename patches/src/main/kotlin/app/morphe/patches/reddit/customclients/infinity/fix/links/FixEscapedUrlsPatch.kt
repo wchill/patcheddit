@@ -18,7 +18,6 @@ import com.android.tools.smali.dexlib2.iface.ClassDef
 internal fun isNativeResponseBody(owner: ClassDef): Boolean =
     AccessFlags.ABSTRACT.isSet(owner.accessFlags) && "Ljava/io/Closeable;" in owner.interfaces &&
         owner.methods.any { it.parameterTypes.isEmpty() && it.returnType == "Ljava/io/InputStream;" } &&
-        owner.methods.any { it.parameterTypes.isEmpty() && it.returnType == "Ljava/nio/charset/Charset;" } &&
         owner.methods.any {
             it.parameterTypes.isEmpty() && it.returnType == "J" && AccessFlags.ABSTRACT.isSet(it.accessFlags)
         }

@@ -76,8 +76,8 @@ public class RedditSubmissionUndeleteInterceptor implements Interceptor {
     private static final long MISSING_TTL_MILLIS = 6L * 60L * 60L * 1000L;
     private static final String NEGATIVE_CACHE_MARKER = "morphe_boost_undelete_negative_cache";
 
-    private final AutoSavingCache submissionCache = new AutoSavingCache("RedditSubmissions", 200);
-    private final AutoSavingCache commentsCache = new AutoSavingCache("RedditComments", 10000);
+    private static final AutoSavingCache submissionCache = new AutoSavingCache("RedditSubmissions", 200);
+    private static final AutoSavingCache commentsCache = new AutoSavingCache("RedditComments", 10000);
 
     @NotNull
     @Override
@@ -192,6 +192,7 @@ public class RedditSubmissionUndeleteInterceptor implements Interceptor {
                                 new LinkedHashMap<>(Map.of("kind", new TextNode("t3"), "data", recovered)))));
             } catch (Throwable failure) {
                 // Keep Reddit's post and still restore the comments below.
+                ArchiveRecoveryState.failed((ObjectNode) submission);
                 LoggingUtils.logInfo(false, () -> POST_RECOVERY_FAIL_OPEN_MARKER
                         + ": " + failure.getClass().getSimpleName());
             }
@@ -271,6 +272,7 @@ public class RedditSubmissionUndeleteInterceptor implements Interceptor {
                 if (isUsableSubmission(cached, id)) {
                     ObjectNode normalizedCached = JsonNodeFactory.instance.objectNode();
                     normalizedCached.setAll((ObjectNode) cached);
+                    ArchiveRecoveryState.loaded(normalizedCached);
                     boolean changed = clearRecoveredUserDeletedRenderMarker(normalizedCached);
                     // Gallery metadata may have been unavailable when the post was cached.
                     changed |= restoreRedditGalleryMetadataSafely(request, id, normalizedCached);
@@ -303,6 +305,15 @@ public class RedditSubmissionUndeleteInterceptor implements Interceptor {
             throw new IOException("No usable archived submission");
         }
 
+        ObjectNode editableNode = recoveredSubmission(dataNode, recovered, id);
+        restoreRedditGalleryMetadataSafely(request, id, editableNode);
+
+        submissionCache.put(id, HttpUtils.getStringFromJson(editableNode));
+        LoggingUtils.logInfo(true, () -> "morphe_boost_undelete_issue196_post_restored");
+        return editableNode;
+    }
+
+    private static ObjectNode recoveredSubmission(JsonNode dataNode, JsonNode recovered, String id) {
         ObjectNode editableNode;
         if (dataNode == null) {
             editableNode = JsonNodeFactory.instance.objectNode();
@@ -314,6 +325,8 @@ public class RedditSubmissionUndeleteInterceptor implements Interceptor {
             RedditApiUtils.setRemovalEmoji(editableNode);
         }
         ArcticShift.updateSubmissionNode(editableNode, recovered);
+        editableNode.remove(ArchiveRecoveryState.RETRY_KEY);
+        ArchiveRecoveryState.loaded(editableNode);
         clearRecoveredUserDeletedRenderMarker(editableNode);
         editableNode.set("archived", BooleanNode.TRUE);
         editableNode.set("stickied", BooleanNode.FALSE);
@@ -331,10 +344,6 @@ public class RedditSubmissionUndeleteInterceptor implements Interceptor {
         setIfUnset(editableNode, "link_flair_css_class", NullNode.instance);
         setIfUnset(editableNode, "link_flair_text", NullNode.instance);
 
-        restoreRedditGalleryMetadataSafely(request, id, editableNode);
-
-        submissionCache.put(id, HttpUtils.getStringFromJson(editableNode));
-        LoggingUtils.logInfo(true, () -> "morphe_boost_undelete_issue196_post_restored");
         return editableNode;
     }
 
@@ -410,13 +419,17 @@ public class RedditSubmissionUndeleteInterceptor implements Interceptor {
                 uncached.add(commentId);
             }
         }
-        fetchArchivedComments(new ArrayList<>(uncached), recoveredById);
+        Set<String> failedIds = new HashSet<>();
+        fetchArchivedComments(new ArrayList<>(uncached), recoveredById, failedIds);
 
         int restored = 0;
         for (ObjectNode comment : removed) {
             ObjectNode data = (ObjectNode) comment.get("data");
             JsonNode recovered = recoveredById.get(data.get("id").asText());
             if (recovered == null) {
+                if (failedIds.contains(data.get("id").asText())) {
+                    ArchiveRecoveryState.failed(data);
+                }
                 continue;
             }
             try {
@@ -425,6 +438,7 @@ public class RedditSubmissionUndeleteInterceptor implements Interceptor {
                 updated.setAll(data);
                 RedditApiUtils.setRemovalEmoji(updated);
                 ArcticShift.updateCommentNode(updated, recovered);
+                ArchiveRecoveryState.loaded(updated);
                 JsonNode collapsedReason = data.get("collapsed_reason_code");
                 if (collapsedReason != null && "DELETED".equals(collapsedReason.asText())) {
                     updated.replace("collapsed", BooleanNode.FALSE);
@@ -432,6 +446,7 @@ public class RedditSubmissionUndeleteInterceptor implements Interceptor {
                 comment.replace("data", updated);
                 restored++;
             } catch (RuntimeException failure) {
+                ArchiveRecoveryState.failed(data);
                 logRecoveryFailure(failure);
             }
         }
@@ -490,7 +505,8 @@ public class RedditSubmissionUndeleteInterceptor implements Interceptor {
         }
     }
 
-    private void fetchArchivedComments(List<String> commentIds, Map<String, JsonNode> recoveredById) {
+    private void fetchArchivedComments(List<String> commentIds, Map<String, JsonNode> recoveredById,
+                                       Set<String> failedIds) {
         for (int from = 0; from < commentIds.size(); from += ArcticShift.MAX_IDS_PER_REQUEST) {
             List<String> batch = commentIds.subList(
                     from, Math.min(from + ArcticShift.MAX_IDS_PER_REQUEST, commentIds.size()));
@@ -520,10 +536,65 @@ public class RedditSubmissionUndeleteInterceptor implements Interceptor {
                 }
             } catch (IOException | RuntimeException failure) {
                 // Keep what earlier batches recovered; the rest of the thread stays live.
+                failedIds.addAll(commentIds.subList(from, commentIds.size()));
                 logRecoveryFailure(failure);
                 return;
             }
         }
+    }
+
+    static final class ReloadResult {
+        final ObjectNode data;
+        final boolean found;
+
+        ReloadResult(ObjectNode data, boolean found) {
+            this.data = data;
+            this.found = found;
+        }
+    }
+
+    static ReloadResult reload(ObjectNode original) throws IOException {
+        boolean comment = original.has("body");
+        String id = original.path("id").asText();
+        ArrayNode response = ArcticShift.getIds(comment ? ArcticShift.SubmissionType.COMMENTS
+                : ArcticShift.SubmissionType.POSTS, List.of(id), true);
+        ObjectNode updated = original.deepCopy();
+        updated.remove(ArchiveRecoveryState.RETRY_KEY);
+        boolean bodyOnly = ArchiveRecoveryState.isBodyOnly(original);
+        if (!bodyOnly) updated.remove(Emojis.EXTRA_EMOJI_CONTEXT_KEY);
+        String bodyKey = comment ? "body" : "selftext";
+        for (JsonNode candidate : response) {
+            JsonNode recovered = comment ? commentRecoveryFields(candidate, id)
+                    : isUsableSubmission(candidate, id) ? candidate : null;
+            if (recovered == null) continue;
+            if (bodyOnly) {
+                JsonNode body = recovered.get(bodyKey);
+                if (body == null || !body.isTextual() || RedditApiUtils.isContentRemoved(recovered)) continue;
+                updated.set(bodyKey, body);
+                updated.put(bodyKey + "_html", MarkdownRenderer.render(body.asText()));
+                ArchiveRecoveryState.loaded(updated);
+                if (comment) commentsCache.put(id, HttpUtils.getStringFromJson(recovered));
+                return new ReloadResult(updated, true);
+            }
+            RedditApiUtils.setRemovalEmoji(updated);
+            if (comment) {
+                ArcticShift.updateCommentNode(updated, recovered);
+                if ("DELETED".equals(updated.path("collapsed_reason_code").asText())) {
+                    updated.put("collapsed", false);
+                }
+                ArchiveRecoveryState.loaded(updated);
+                commentsCache.put(id, HttpUtils.getStringFromJson(recovered));
+            } else {
+                updated = recoveredSubmission(updated, recovered, id);
+                submissionCache.put(id, HttpUtils.getStringFromJson(updated));
+                for (Map.Entry<String, JsonNode> entry : captureLiveState(original).entrySet()) {
+                    updated.set(entry.getKey(), entry.getValue());
+                }
+            }
+            return new ReloadResult(updated, true);
+        }
+        (comment ? commentsCache : submissionCache).put(id, missingMarker());
+        return new ReloadResult(updated, false);
     }
 
     /**
@@ -535,6 +606,7 @@ public class RedditSubmissionUndeleteInterceptor implements Interceptor {
         pending.push(root);
         while (!pending.isEmpty()) {
             ObjectNode node = pending.pop();
+            ArchiveRecoveryState.loaded(node);
             setIfUnset(node, "saved", BooleanNode.FALSE);
             setIfUnset(node, "controversiality", new IntNode(0));
             setIfUnset(node, "score_hidden", BooleanNode.FALSE);

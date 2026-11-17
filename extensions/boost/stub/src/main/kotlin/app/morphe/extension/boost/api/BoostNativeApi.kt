@@ -83,6 +83,10 @@ interface CaptchaView : app.morphe.extension.boost.api.MvpLoadingView {
 abstract class ChannelFlow protected constructor(stub: Unit) : app.morphe.extension.boost.api.internal.MeasurementProvider {
 }
 
+abstract class CommentMenuListener protected constructor(stub: Unit) {
+    @JvmField val holder: com.rubenmayayo.reddit.ui.adapters.CommentViewHolder = boostApiStub()
+}
+
 interface CommentViewHolderListener {
 }
 
@@ -216,14 +220,28 @@ abstract class Navigation protected constructor(stub: Unit) {
     }
 }
 
+open class NativeComment protected constructor(stub: Unit) {
+    constructor(p0: app.morphe.extension.boost.api.NativeJsonNode?) : this(Unit) { boostApiStub<Unit>() }
+}
+
+open class NativeJsonMapper protected constructor(stub: Unit) {
+    constructor() : this(Unit) { boostApiStub<Unit>() }
+    fun readTree(p0: String?): app.morphe.extension.boost.api.NativeJsonNode? = boostApiStub()
+}
+
 abstract class NativeJsonModel protected constructor(stub: Unit) :
     net.dean.jraw.models.JsonModel(boostApiStub<com.fasterxml.jackson.databind.JsonNode>()) {
     fun dataNode(): app.morphe.extension.boost.api.NativeJsonNode = boostApiStub()
 }
 
 abstract class NativeJsonNode protected constructor(stub: Unit) {
+    fun fields(): Iterator<Map.Entry<String, NativeJsonNode>> = boostApiStub()
     fun get(p0: String): app.morphe.extension.boost.api.NativeJsonNode? = boostApiStub()
     fun asBoolean(): Boolean = boostApiStub()
+}
+
+open class NativeSubmission protected constructor(stub: Unit) {
+    constructor(p0: app.morphe.extension.boost.api.NativeJsonNode?) : this(Unit) { boostApiStub<Unit>() }
 }
 
 interface NestedScrollingChild {
@@ -272,6 +290,7 @@ abstract class RedditJraw protected constructor(stub: Unit) : app.morphe.extensi
     @JvmField var client: app.morphe.extension.boost.api.MyRedditClient = boostApiStub()
     @JvmField var credentials: net.dean.jraw.http.oauth.Credentials? = boostApiStub()
     fun selectAccount(p0: Int): Unit = boostApiStub()
+    fun ensureAuthenticated(): Unit = boostApiStub()
     fun trendingSearches(): List<*>? = boostApiStub()
     fun trendingRows(): List<*>? = boostApiStub()
     companion object {

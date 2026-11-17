@@ -40,6 +40,54 @@ import kotlin.test.assertTrue
 
 class MorpheSettingsPatchTest {
     @Test
+    fun bundlesUniformSelfContainedIconsForSettingsAndAbout() {
+        val sources = java.util.Properties().apply {
+            assertNotNull(this@MorpheSettingsPatchTest.javaClass.classLoader
+                .getResourceAsStream("settings/icons.properties")).use(::load)
+        }.stringPropertyNames() - "revision"
+        assertEquals(sources, morpheSettingsIconNames.toSet())
+        assertEquals(sources.size, morpheSettingsIconNames.size)
+        for (name in morpheSettingsIconNames) {
+            val icon = resource("settings/drawable/patcheddit_icon_$name.xml").documentElement
+            assertEquals("vector", icon.tagName, name)
+            assertEquals("24dp", icon.getAttribute("android:width"), name)
+            assertEquals("24dp", icon.getAttribute("android:height"), name)
+            assertEquals("24", icon.getAttribute("android:viewportWidth"), name)
+            assertEquals("24", icon.getAttribute("android:viewportHeight"), name)
+            assertFalse(icon.hasAttribute("android:tint"), name)
+            val paths = icon.getElementsByTagName("path")
+            assertTrue(paths.length > 0, name)
+            for (index in 0 until paths.length) {
+                val path = paths.item(index) as Element
+                assertTrue(path.getAttribute("android:pathData").isNotBlank(), name)
+                assertEquals("#FF000000", path.getAttribute("android:fillColor"), name)
+            }
+        }
+        assertEquals("true", resource("settings/drawable/patcheddit_icon_chevron.xml")
+            .documentElement.getAttribute("android:autoMirrored"))
+    }
+
+    @Test
+    fun bundlesCompleteLicenseNoticesForOfflineReading() {
+        val input = assertNotNull(javaClass.classLoader.getResourceAsStream("settings/raw/patcheddit_licenses.json"))
+        val notices = input.bufferedReader().use { com.google.gson.JsonParser.parseReader(it).asJsonArray }
+            .associate { it.asJsonObject["name"].asString to it.asJsonObject["text"].asString }
+        val patcheddit = assertNotNull(notices["Patcheddit"])
+        assertTrue(patcheddit.contains("GNU GENERAL PUBLIC LICENSE"))
+        assertTrue(patcheddit.contains("Patcheddit NOTICE"))
+        assertTrue(patcheddit.contains("7c. Project Name Restriction"))
+        assertTrue(assertNotNull(notices["Morphe and ReVanced-derived code"]).contains("Morphe NOTICE"))
+        assertTrue(assertNotNull(notices["Google Material Design icons"]).contains("Apache License"))
+        assertTrue(assertNotNull(notices["Public Suffix List"]).contains("Mozilla Public License"))
+        assertTrue(assertNotNull(notices["OpenJDK desugaring libraries"]).contains("Classpath Exception"))
+        assertTrue(notices.keys.any { it.startsWith("com.google.code.gson:gson:") })
+        assertTrue(notices.keys.any { it.startsWith("androidx.room:") })
+        assertTrue(notices.keys.any { it.startsWith("com.squareup.okhttp3:") })
+        assertTrue(notices.filterKeys { it.startsWith("com.fasterxml.jackson.core:") }.values
+            .all { it.contains("Apache License") && it.contains("Jackson") })
+    }
+
+    @Test
     fun mergesDiagnosticStringsIntoTheStandardValuesFileWithoutReplacingNativeStrings() {
         val target = parse("<resources><string name=\"native_title\">Native title</string></resources>")
         val original = target.getElementsByTagName("string").item(0)
@@ -51,7 +99,7 @@ class MorpheSettingsPatchTest {
         assertEquals(source.getElementsByTagName("string").length + 1, strings.length)
         val title = (0 until strings.length).map { strings.item(it) as Element }
             .single { it.getAttribute("name") == "morphe_settings_title" }
-        assertEquals("Morphe", title.textContent)
+        assertEquals("Patcheddit", title.textContent)
         assertFailsWith<IllegalArgumentException> { mergeMorpheResources(target, source, "string") }
     }
 
@@ -169,6 +217,7 @@ class MorpheSettingsPatchTest {
                     assertSame(native, target.getElementsByTagName("Preference").item(1))
                     val preference = target.getElementsByTagName("Preference").item(0) as Element
                     assertEquals(MORPHE_SETTINGS_ENTRY, preference.getAttribute("android:key"))
+                    assertEquals("@drawable/morphe_settings_icon", preference.getAttribute("android:icon"))
                     assertEquals("", preference.getAttribute("android:fragment"))
                     val intent = preference.getElementsByTagName("intent").item(0) as Element
                     assertEquals(app.packageName, intent.getAttribute("android:targetPackage"))
@@ -255,6 +304,9 @@ class MorpheSettingsPatchTest {
         val label = labels.item(0) as Element
         assertEquals("@string/morphe_settings_title", label.getAttribute("android:text"))
         assertFalse(label.hasAttribute("android:id"))
+        val icon = card.getElementsByTagName("native.CImageView").item(0) as Element
+        assertEquals("@drawable/morphe_settings_icon", icon.getAttribute("app:srcCompat"))
+        assertEquals("@style/native_icon", icon.getAttribute("style"))
         val row = label.parentNode as Element
         assertEquals("@id/$MORPHE_SETTINGS_ENTRY", row.getAttribute("android:id"))
         assertEquals("@style/native_row", row.getAttribute("style"))
@@ -324,14 +376,15 @@ class MorpheSettingsPatchTest {
     ).toMutable()
 
     private fun joeyLayout() = parse("""
-        <native.CLinearLayout xmlns:android="http://schemas.android.com/apk/res/android">
+        <native.CLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
             <native.CNestedScrollView>
                 <native.CLinearLayout android:orientation="vertical">
                     <native.CCardView style="@style/native_card" android:id="@id/native_card">
                         <native.CLinearLayout android:orientation="vertical" android:id="@id/native_content">
                             <native.CTextView android:text="Native category" />
                             <native.CLinearLayout android:id="@id/native_setting" style="@style/native_row">
-                                <native.CImageView />
+                                <native.CImageView app:srcCompat="@drawable/native_icon" style="@style/native_icon" />
                                 <native.CTextView android:id="@id/native_label" android:text="Native setting" />
                             </native.CLinearLayout>
                         </native.CLinearLayout>

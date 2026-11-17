@@ -1,3 +1,7 @@
+import groovy.json.JsonOutput
+import org.gradle.api.artifacts.component.ModuleComponentIdentifier
+import java.util.zip.ZipInputStream
+
 group = "app.morphe"
 
 val httpLibraryResources by configurations.creating
@@ -46,8 +50,85 @@ val prepareHttpLibraryResources by tasks.registering(Sync::class) {
     }
 }
 
+val bundledExtensionLibraries = provider {
+    rootProject.subprojects.filter { it.path.startsWith(":extensions:") && !it.path.endsWith(":stub") }
+        .flatMap { project ->
+            project.configurations.findByName("releaseRuntimeClasspath")
+                ?.incoming?.artifactView {
+                    componentFilter { it is ModuleComponentIdentifier }
+                }?.artifacts?.artifacts.orEmpty()
+        }
+        .map { (it.id.componentIdentifier as ModuleComponentIdentifier) to it.file }
+        .distinctBy { it.first.displayName }
+        .sortedBy { it.first.displayName }
+}
+
+val prepareAboutLicenses by tasks.registering {
+    val licenseDirectory = file("src/main/resources/settings/licenses")
+    val outputDirectory = layout.buildDirectory.dir("generated/about-resources")
+    val output = outputDirectory.map { it.file("settings/raw/patcheddit_licenses.json") }
+    inputs.dir(licenseDirectory)
+    inputs.files(rootProject.files("LICENSE", "NOTICE"),
+        file("src/main/resources/branding-license/LICENSE_MORPHE.TXT"))
+    inputs.files(bundledExtensionLibraries.map { libraries -> libraries.map { it.second } })
+    outputs.dir(outputDirectory)
+    doLast {
+        fun document(name: String) = licenseDirectory.resolve(name).readText()
+        val gpl = rootProject.file("LICENSE").readText()
+        val apache = document("Apache-2.0.txt")
+        val notices = mutableListOf(
+            mapOf("name" to "Patcheddit", "text" to rootProject.file("NOTICE").readText() + "\n\n" + gpl),
+            mapOf("name" to "Morphe and ReVanced-derived code", "text" to
+                document("Morphe-patches-NOTICE.txt") + "\n\n" + document("Morphe-library-NOTICE.txt") +
+                "\n\n" + file("src/main/resources/branding-license/LICENSE_MORPHE.TXT").readText() + "\n\n" + gpl),
+            mapOf("name" to "Morphe branding", "text" to
+                "Copyright 2025 Morphe. Morphe branding is not licensed under open-source terms.\n" +
+                "https://github.com/MorpheApp/morphe-branding\n\n" +
+                "Patcheddit is a separate project, not the official Morphe patches."),
+            mapOf("name" to "Google Material Design icons", "text" to
+                "https://github.com/google/material-design-icons\n\n$apache"),
+        )
+        fun embeddedNotices(input: java.io.InputStream, prefix: String = ""): List<String> =
+            ZipInputStream(input).use { zip ->
+                buildList {
+                    while (true) {
+                        val entry = zip.nextEntry ?: break
+                        if (entry.isDirectory) continue
+                        if (entry.name == "classes.jar") {
+                            addAll(embeddedNotices(zip.readBytes().inputStream(), "$prefix/classes.jar"))
+                        } else if (entry.name.substringAfterLast('/').matches(
+                                Regex("(?i)(licen[cs]e|notice|copying)([._-].*)?"))) {
+                            add("$prefix/${entry.name}\n\n${zip.readBytes().toString(Charsets.UTF_8)}")
+                        }
+                    }
+                }
+            }
+        for ((id, artifact) in bundledExtensionLibraries.get()) {
+            if (id.group == "app.morphe") continue
+            check(id.group.startsWith("androidx.") ||
+                id.group in setOf("org.jetbrains", "org.jetbrains.kotlin", "org.jetbrains.kotlinx",
+                    "com.google.code.gson", "com.google.errorprone", "com.squareup.okhttp3",
+                    "com.squareup.okio", "com.fasterxml.jackson.core", "org.jspecify")) {
+                "Review the license for the new bundled dependency $id"
+            }
+            val embedded = artifact.inputStream().use { embeddedNotices(it) }.joinToString("\n\n")
+            notices += mapOf("name" to id.displayName, "text" to "${id.displayName}\n\n$embedded\n\n$apache")
+        }
+        notices += mapOf("name" to "Public Suffix List", "text" to
+            "OkHttp's PublicSuffixDatabase.gz is compiled from https://publicsuffix.org/list/public_suffix_list.dat\n" +
+            "It is subject to the Mozilla Public License, version 2.0.\n\n" + document("MPL-2.0.txt"))
+        notices += mapOf("name" to "OpenJDK desugaring libraries", "text" to
+            document("Desugar-LICENSE.txt") + "\n\n" + document("Desugar-ADDITIONAL_LICENSE_INFO.txt"))
+        output.get().asFile.apply {
+            parentFile.mkdirs()
+            writeText(JsonOutput.toJson(notices))
+        }
+    }
+}
+
 sourceSets.main {
     resources.srcDir(prepareHttpLibraryResources)
+    resources.srcDir(prepareAboutLicenses)
 }
 
 val compileBoostFingerprintDump by tasks.registering(JavaCompile::class) {

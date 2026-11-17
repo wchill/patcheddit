@@ -9,6 +9,7 @@ package app.morphe.extension.shared.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Base64;
+import android.util.Log;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,6 +27,7 @@ public final class OAuthSettings {
     private static final String BOOST_CLIENT_ID = "pref_dev_reddit_client_id";
     private static final String BOOST_REDIRECT_URI = "pref_dev_reddit_redirect_url";
     private static final String BOOST_USER_AGENT = "pref_dev_reddit_user_agent";
+    private static final String LEGACY_OPTIONS_MIGRATED = "morphe_legacy_spoof_client_options_migrated";
     private static boolean migrated;
 
     private OAuthSettings() {}
@@ -34,6 +36,7 @@ public final class OAuthSettings {
     public static String getDefaultClientId() { return ""; }
     public static String getDefaultRedirectUri() { return ""; }
     public static String getDefaultUserAgent() { return ""; }
+    public static boolean shouldMigratePatchOptions() { return false; }
 
     public static String getClientId(String original) {
         return enabled() ? getConfiguredClientId() : original;
@@ -177,18 +180,35 @@ public final class OAuthSettings {
         } else if (packageName.startsWith("o.o.joey")) {
             legacyName = "morphe_preferences";
         } else {
-            migrated = true;
-            return;
+            legacyName = null;
         }
         SharedPreferences current = PatchSettings.preferences(context);
-        SharedPreferences legacy = context.getSharedPreferences(legacyName, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = current.edit();
-        for (String key : new String[] { CLIENT_ID, REDIRECT_URI, USER_AGENT }) {
-            if (!current.contains(key) && legacy.contains(key)) {
-                editor.putString(key, legacy.getString(key, ""));
+        if (legacyName != null) {
+            SharedPreferences legacy = context.getSharedPreferences(legacyName, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = current.edit();
+            for (String key : new String[] { CLIENT_ID, REDIRECT_URI, USER_AGENT }) {
+                if (!current.contains(key) && legacy.contains(key)) {
+                    editor.putString(key, legacy.getString(key, ""));
+                }
             }
+            editor.apply();
         }
-        editor.apply();
+        if (shouldMigratePatchOptions() && !persistPatchOptions(current, preferenceKeys(context),
+                new String[] { getDefaultClientId(), getDefaultRedirectUri(), getDefaultUserAgent() })) {
+            Log.e("MorpheSettings", "Could not persist legacy OAuth patch options; migration will retry on next launch.");
+            return;
+        }
         migrated = true;
+    }
+
+    static boolean persistPatchOptions(SharedPreferences preferences, String[] keys, String[] defaults) {
+        if (preferences.getBoolean(LEGACY_OPTIONS_MIGRATED, false)) return true;
+        SharedPreferences.Editor editor = preferences.edit();
+        for (int index = 0; index < keys.length; index++) {
+            String saved = preferences.getString(keys[index], "");
+            if (saved == null || saved.trim().isEmpty()) editor.putString(keys[index], defaults[index]);
+        }
+        // Save before native API initialization, and do not resurrect intentionally cleared values later.
+        return editor.putBoolean(LEGACY_OPTIONS_MIGRATED, true).commit();
     }
 }

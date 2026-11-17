@@ -33,7 +33,6 @@ public class ArcticShift {
         COMMENTS
     }
 
-    private static final String ARCTIC_SHIFT_BASE_URL = "https://arctic-shift.photon-reddit.com/api/";
     private static final String ARCTIC_SHIFT_NULL_DATA_MARKER = "morphe_boost_arcticshift_null_data_fail_open";
     private static final String ARCTIC_SHIFT_COOLDOWN_MARKER = "morphe_boost_arcticshift_issue219_cooldown";
 
@@ -68,13 +67,17 @@ public class ArcticShift {
     }
 
     private static JsonNode makeApiCall(String url, long callTimeoutMillis) throws IOException {
+        return makeApiCall(url, callTimeoutMillis, false);
+    }
+
+    private static JsonNode makeApiCall(String url, long callTimeoutMillis, boolean retry) throws IOException {
         Long failedAt = lastFailureNanos;
-        if (failedAt != null && System.nanoTime() - failedAt < FAILURE_COOLDOWN_NANOS) {
+        if (!retry && failedAt != null && System.nanoTime() - failedAt < FAILURE_COOLDOWN_NANOS) {
             throw new IOException(ARCTIC_SHIFT_COOLDOWN_MARKER + ": skipping lookup after recent failure");
         }
         LoggingUtils.logInfo(true, () -> String.format("Arctic Shift: %s", url));
         try {
-            JsonNode result = HttpUtils.getJson(url, callTimeoutMillis);
+            JsonNode result = HttpUtils.getJson(url, callTimeoutMillis, retry);
             lastFailureNanos = null;
             return result;
         } catch (HttpUtils.HttpStatusException failure) {
@@ -100,13 +103,22 @@ public class ArcticShift {
     }
 
     public static ArrayNode getIds(SubmissionType submissionType, Collection<String> ids) throws IOException {
+        return getIds(submissionType, ids, false);
+    }
+
+    public static ArrayNode getIds(SubmissionType submissionType, Collection<String> ids, boolean retry) throws IOException {
         if (ids.size() > MAX_IDS_PER_REQUEST) {
             throw new IllegalArgumentException("At most " + MAX_IDS_PER_REQUEST + " IDs per request");
         }
-        String url = ARCTIC_SHIFT_BASE_URL + submissionType.toString().toLowerCase() + "/ids?ids=" + String.join(",", ids);
-        JsonNode data = makeApiCall(url).get("data");
+        String url = ArcticShiftSettings.getBaseUrl() + submissionType.toString().toLowerCase(java.util.Locale.ROOT)
+                + "/ids?ids=" + String.join(",", ids);
+        return idsData(makeApiCall(url, CALL_TIMEOUT_MS, retry));
+    }
+
+    static ArrayNode idsData(JsonNode response) throws IOException {
+        JsonNode data = response == null ? null : response.get("data");
         // Callers cache an empty answer as "not archived", so an error payload must not look empty.
-        if (data == null || !data.isArray()) {
+        if (data == null || !data.isArray() || response.hasNonNull("error")) {
             throw new IOException(ARCTIC_SHIFT_NULL_DATA_MARKER + ": non-array data for ids lookup");
         }
         return (ArrayNode) data;
@@ -115,12 +127,12 @@ public class ArcticShift {
     public static ArrayNode getCommentTree(String linkId) throws IOException {
         //return queryArcticShiftForCommentTree(id, null, null, null, null);
         // Enough for any thread Boost renders comfortably; 25000 made deleted megathreads time out.
-        String url = ARCTIC_SHIFT_BASE_URL + "comments/tree?limit=" + COMMENT_TREE_LIMIT + "&link_id=" + linkId;
+        String url = ArcticShiftSettings.getBaseUrl() + "comments/tree?limit=" + COMMENT_TREE_LIMIT + "&link_id=" + linkId;
         return getArrayDataOrEmpty(makeApiCall(url, COMMENT_TREE_CALL_TIMEOUT_MS), "comments/tree");
     }
 
     public static JsonNode getSubredditInfoById(String id) throws IOException {
-        String url = ARCTIC_SHIFT_BASE_URL + "subreddits/ids?ids=" + id;
+        String url = ArcticShiftSettings.getBaseUrl() + "subreddits/ids?ids=" + id;
         JsonNode data = makeApiCall(url);
         return new ObjectNode(
                 JsonNodeFactory.instance, new LinkedHashMap<>(Map.of(
@@ -135,7 +147,7 @@ public class ArcticShift {
     }
 
     public static ArrayNode getSubredditPosts(String subredditName, Integer limit, String before, String after) throws IOException {
-        String url = String.format(ARCTIC_SHIFT_BASE_URL + "posts/search?sort=desc&subreddit=%s&limit=", subredditName);
+        String url = ArcticShiftSettings.getBaseUrl() + "posts/search?sort=desc&subreddit=" + subredditName + "&limit=";
         if (limit == null) {
             url += "auto";
         } else if (limit > 0 && limit <= 100) {

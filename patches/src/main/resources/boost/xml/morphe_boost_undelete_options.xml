@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceCategory xmlns:android="http://schemas.android.com/apk/res/android">
+    <app.morphe.extension.boost.http.arcticshift.ArcticShiftBaseUrlPreference
+        android:key="morphe_boost_arctic_shift_base_url"
+        android:title="Arctic Shift API base URL"
+        android:dialogTitle="Arctic Shift API base URL"
+        android:dialogMessage="Enter the API base URL of a compatible Arctic Shift server, including its API path (usually /api/). Leave empty to use https://arctic-shift.photon-reddit.com/api/."
+        android:inputType="textUri"
+        android:defaultValue="" />
+</PreferenceCategory>

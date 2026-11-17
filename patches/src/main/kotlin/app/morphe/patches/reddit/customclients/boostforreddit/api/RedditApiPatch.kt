@@ -12,6 +12,7 @@ import app.morphe.patches.reddit.customclients.boostforreddit.fix.gallery.fixFai
 import app.morphe.patches.reddit.customclients.boostforreddit.fix.login.modifyLoginWebView
 import app.morphe.patches.reddit.customclients.boostforreddit.fix.slink.fixSlinksPatch
 import app.morphe.patches.reddit.customclients.redditApiPatch
+import app.morphe.patches.reddit.customclients.legacySpoofClientPatch
 
 @Suppress("unused")
 val redditApiPatch = redditApiPatch(
@@ -22,3 +23,6 @@ val redditApiPatch = redditApiPatch(
     fixRAll,
     fixSlinksPatch,
 )
+
+@Suppress("unused")
+val legacySpoofClientPatch = legacySpoofClientPatch(redditApiPatch)

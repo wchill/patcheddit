@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Preference xmlns:android="http://schemas.android.com/apk/res/android"
+    android:icon="@drawable/morphe_settings_icon"
     android:key="morphe_settings_entry"
     android:title="@string/morphe_settings_title"
     android:summary="@string/morphe_settings_summary"

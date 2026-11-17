@@ -28,6 +28,7 @@ import app.morphe.extension.boost.http.arcticshift.ArcticShiftThrottlingIntercep
 import app.morphe.extension.boost.http.wayback.WaybackThrottlingInterceptor;
 import app.morphe.extension.boost.utils.CacheUtils;
 import okhttp3.Cache;
+import okhttp3.CacheControl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
@@ -76,10 +77,15 @@ public class HttpUtils {
      * throw instead of handing an error page to the JSON parser.
      */
     public static JsonNode getJson(String url, long callTimeoutMillis) throws IOException {
-        Request request = new Request.Builder()
+        return getJson(url, callTimeoutMillis, false);
+    }
+
+    public static JsonNode getJson(String url, long callTimeoutMillis, boolean forceNetwork) throws IOException {
+        Request.Builder builder = new Request.Builder()
                 .get()
-                .url(url)
-                .build();
+                .url(url);
+        if (forceNetwork) builder.cacheControl(CacheControl.FORCE_NETWORK);
+        Request request = builder.build();
         try (Response response = clientWithCallTimeout(callTimeoutMillis).newCall(request).execute()) {
             if (!response.isSuccessful()) {
                 throw new HttpStatusException(response.code(),

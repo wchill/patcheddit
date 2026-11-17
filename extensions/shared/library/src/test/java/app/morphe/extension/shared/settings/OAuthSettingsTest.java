@@ -6,12 +6,18 @@
 
 package app.morphe.extension.shared.settings;
 
+import android.content.SharedPreferences;
 import org.junit.Test;
+
+import java.lang.reflect.Proxy;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 public class OAuthSettingsTest {
     @Test
@@ -66,5 +72,58 @@ public class OAuthSettingsTest {
     @Test
     public void rejectsUnknownPreferenceKeysEvenWhenTheValueIsEmpty() {
         assertThrows(IllegalArgumentException.class, () -> OAuthSettings.validationError("unknown", ""));
+    }
+
+    @Test
+    public void savesLegacyOptionsForNativeBoostAndSharedApiSettingsWithoutOverwritingOverrides() {
+        for (String[] keys : new String[][] {
+                { "pref_dev_reddit_client_id", "pref_dev_reddit_redirect_url", "pref_dev_reddit_user_agent" },
+                { OAuthSettings.CLIENT_ID, OAuthSettings.REDIRECT_URI, OAuthSettings.USER_AGENT }
+        }) {
+            Map<String, Object> disk = new HashMap<>();
+            disk.put(keys[1], "existing://callback");
+            disk.put(keys[2], " ");
+            String[] legacy = { "abcdefghijklmnopqrstuv", "legacy://callback", "legacy-agent" };
+            assertTrue(OAuthSettings.persistPatchOptions(preferences(disk), keys, legacy));
+            assertEquals(legacy[0], disk.get(keys[0]));
+            assertEquals("existing://callback", disk.get(keys[1]));
+            assertEquals(legacy[2], disk.get(keys[2]));
+
+            SharedPreferences reopened = preferences(disk);
+            assertEquals(legacy[0], reopened.getString(keys[0], "new-patch-default"));
+            // A later repatch or a deliberately cleared override must not rerun the migration.
+            reopened.edit().putString(keys[2], "").commit();
+            assertTrue(OAuthSettings.persistPatchOptions(reopened, keys,
+                    new String[] { "new-client", "new://callback", "new-agent" }));
+            assertEquals(legacy[0], disk.get(keys[0]));
+            assertEquals("", disk.get(keys[2]));
+        }
+    }
+
+    private static SharedPreferences preferences(Map<String, Object> disk) {
+        return (SharedPreferences) Proxy.newProxyInstance(SharedPreferences.class.getClassLoader(),
+                new Class<?>[] { SharedPreferences.class }, (proxy, method, args) -> {
+                    switch (method.getName()) {
+                        case "getString":
+                        case "getBoolean":
+                            return disk.getOrDefault(args[0], args[1]);
+                        case "edit":
+                            Map<String, Object> pending = new HashMap<>();
+                            return Proxy.newProxyInstance(SharedPreferences.Editor.class.getClassLoader(),
+                                    new Class<?>[] { SharedPreferences.Editor.class }, (editor, action, values) -> {
+                                        switch (action.getName()) {
+                                            case "putString":
+                                            case "putBoolean":
+                                                pending.put((String) values[0], values[1]);
+                                                return editor;
+                                            case "commit":
+                                                disk.putAll(pending);
+                                                return true;
+                                            default: throw new AssertionError(action.getName());
+                                        }
+                                    });
+                        default: throw new AssertionError(method.getName());
+                    }
+                });
     }
 }
