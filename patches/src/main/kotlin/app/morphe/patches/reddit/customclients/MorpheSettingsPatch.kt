@@ -61,6 +61,7 @@ internal val morpheSettingsResourcesPatch = resourcePatch(default = false) {
         ResourceGroup("xml", "morphe_settings.xml", "morphe_settings_entry.xml",
             "morphe_exception_log.xml", "morphe_fatal_crash_logs.xml"),
         ResourceGroup("layout", "morphe_settings_entry.xml", "morphe_log_text.xml"),
+        ResourceGroup("drawable", "morphe_settings_icon.xml"),
     ))
 
     execute {
@@ -251,6 +252,7 @@ internal fun addMorpheLayoutEntry(document: Document) {
     val row = content.childElements().first {
         it.tagName.endsWith("LinearLayout") && it.hasAttribute("android:id")
     }
+    val icon = row.childElements().single { it.tagName.endsWith("ImageView") }
     val label = row.childElements().single { it.tagName.endsWith("TextView") }
     val newCard = card.cloneNode(false) as Element
     val newContent = content.cloneNode(false) as Element
@@ -258,6 +260,11 @@ internal fun addMorpheLayoutEntry(document: Document) {
     newContent.removeAttribute("android:id")
     val newRow = row.cloneNode(false) as Element
     newRow.setAttribute("android:id", "@id/$MORPHE_SETTINGS_ENTRY")
+    newRow.appendChild(icon.cloneNode(false).also {
+        (it as Element).removeAttribute("android:id")
+        val source = listOf("app:srcCompat", "android:src").firstOrNull(it::hasAttribute) ?: "android:src"
+        it.setAttribute(source, "@drawable/morphe_settings_icon")
+    })
     newRow.appendChild(label.cloneNode(false).also {
         (it as Element).removeAttribute("android:id")
         it.setAttribute("android:text", "@string/morphe_settings_title")

@@ -51,7 +51,7 @@ class MorpheSettingsPatchTest {
         assertEquals(source.getElementsByTagName("string").length + 1, strings.length)
         val title = (0 until strings.length).map { strings.item(it) as Element }
             .single { it.getAttribute("name") == "morphe_settings_title" }
-        assertEquals("Morphe", title.textContent)
+        assertEquals("Patcheddit", title.textContent)
         assertFailsWith<IllegalArgumentException> { mergeMorpheResources(target, source, "string") }
     }
 
@@ -169,6 +169,7 @@ class MorpheSettingsPatchTest {
                     assertSame(native, target.getElementsByTagName("Preference").item(1))
                     val preference = target.getElementsByTagName("Preference").item(0) as Element
                     assertEquals(MORPHE_SETTINGS_ENTRY, preference.getAttribute("android:key"))
+                    assertEquals("@drawable/morphe_settings_icon", preference.getAttribute("android:icon"))
                     assertEquals("", preference.getAttribute("android:fragment"))
                     val intent = preference.getElementsByTagName("intent").item(0) as Element
                     assertEquals(app.packageName, intent.getAttribute("android:targetPackage"))
@@ -255,6 +256,9 @@ class MorpheSettingsPatchTest {
         val label = labels.item(0) as Element
         assertEquals("@string/morphe_settings_title", label.getAttribute("android:text"))
         assertFalse(label.hasAttribute("android:id"))
+        val icon = card.getElementsByTagName("native.CImageView").item(0) as Element
+        assertEquals("@drawable/morphe_settings_icon", icon.getAttribute("app:srcCompat"))
+        assertEquals("@style/native_icon", icon.getAttribute("style"))
         val row = label.parentNode as Element
         assertEquals("@id/$MORPHE_SETTINGS_ENTRY", row.getAttribute("android:id"))
         assertEquals("@style/native_row", row.getAttribute("style"))
@@ -324,14 +328,15 @@ class MorpheSettingsPatchTest {
     ).toMutable()
 
     private fun joeyLayout() = parse("""
-        <native.CLinearLayout xmlns:android="http://schemas.android.com/apk/res/android">
+        <native.CLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto">
             <native.CNestedScrollView>
                 <native.CLinearLayout android:orientation="vertical">
                     <native.CCardView style="@style/native_card" android:id="@id/native_card">
                         <native.CLinearLayout android:orientation="vertical" android:id="@id/native_content">
                             <native.CTextView android:text="Native category" />
                             <native.CLinearLayout android:id="@id/native_setting" style="@style/native_row">
-                                <native.CImageView />
+                                <native.CImageView app:srcCompat="@drawable/native_icon" style="@style/native_icon" />
                                 <native.CTextView android:id="@id/native_label" android:text="Native setting" />
                             </native.CLinearLayout>
                         </native.CLinearLayout>

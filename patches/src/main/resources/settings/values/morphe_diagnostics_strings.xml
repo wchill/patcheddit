@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="morphe_settings_title">Morphe</string>
-    <string name="morphe_settings_summary">Features added by Morphe patches</string>
+    <string name="morphe_settings_title">Patcheddit</string>
+    <string name="morphe_settings_summary">Features added by Patcheddit</string>
     <string name="morphe_diagnostics_title">Diagnostics</string>
     <string name="morphe_exception_log_title">Exception log</string>
     <string name="morphe_exception_log_summary">View non-fatal errors saved by Morphe.</string>
