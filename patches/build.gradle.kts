@@ -165,6 +165,15 @@ tasks {
             inputs.file(apk).withPropertyName("boostApkFixture")
             environment("BOOST_APK", apk.absolutePath)
         }
+        for (name in listOf("RIF_FREE_APK", "RIF_PLATINUM_APK")) {
+            val path = providers.environmentVariable(name).orNull
+            inputs.property(name, path.orEmpty())
+            if (path != null) {
+                val apk = rootProject.file(path)
+                inputs.file(apk).withPropertyName(name)
+                environment(name, apk.absolutePath)
+            }
+        }
     }
 
     register<JavaExec>("checkStringResources") {

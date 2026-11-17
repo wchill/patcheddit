@@ -69,7 +69,8 @@ In addition, patches for some apps contain additional features that were not pre
 ### reddit is fun
 * Restores Imgur album and gallery loading in the built-in viewer, album thumbnails, and links that include a title.
 * Restores native Redgifs playback and returns safely when a video is unavailable.
-* Enables pro features without ads.
+* Enables pro features in free RIF. **Block ads** independently prevents feed, banner, and image-viewer ad loading. After changing it, refresh feeds and reopen albums.
+* Prevents invalid ad rows from crashing Platinum feeds, including package-renamed installations.
 
 ### Infinity for Reddit
 * Supports Infinity+, Infinity++, and the Patreon variant.
