@@ -44,6 +44,7 @@ In addition, patches for some apps contain additional features that were not pre
     * **Configure editor image hosting** adds an editor-hosting setting for Imgur Free or ImgBB. It does not change post or gallery hosting.
     * **Preview images in the editor** adds previews of supported image URLs without changing upload providers.
 * The content of deleted Reddit posts and comments can be loaded from [Project Arctic Shift](https://github.com/ArthurHeitmann/arctic_shift).
+    * **Settings > Morphe > Undelete > Arctic Shift API base URL** can point to a self-hosted compatible API. Include the API path (usually `/api/`); leave it empty to use the public service. Restart Boost after changing it.
     * This only works for text and images, and not all content can be restored. Videos are unlikely to be available.
     * Removed posts/comments show a warning symbol if Arctic Shift returns an error or times out, but not when the archive has no copy. **Reload from Arctic Shift** is available for any post or comment not yet loaded from the archive; a successful reload updates the item in place. For non-removed posts and comments, only the text body is replaced.
     * Content loaded from Arctic Shift shows a clock symbol unless it already has a removal symbol.
