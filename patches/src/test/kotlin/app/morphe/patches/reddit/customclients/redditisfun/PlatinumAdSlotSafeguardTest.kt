@@ -18,6 +18,7 @@ import app.morphe.patches.reddit.customclients.redditisfun.bindings.RifNativeSku
 import app.morphe.patches.reddit.customclients.redditisfun.bindings.resolveRifAdBindings
 import app.morphe.patches.reddit.customclients.redditisfun.debug.hookExceptionHandler
 import app.morphe.patches.reddit.customclients.redditisfun.fix.apilookups.fixRedditApiLookups
+import app.morphe.patches.reddit.customclients.redditisfun.fix.blocks.explainRedditBlocksPatch
 import app.morphe.patches.reddit.customclients.redditisfun.fix.commentvideo.fixCommentVideoLinksPatch
 import app.morphe.patches.reddit.customclients.redditisfun.fix.gallery.fixFailedGalleryImagesPatch
 import app.morphe.patches.reddit.customclients.redditisfun.fix.history.fixHistoryImportPatch
@@ -159,7 +160,7 @@ class PlatinumAdSlotSafeguardTest {
             hookExceptionHandler, fixRedditApiLookups, fixFailedGalleryImagesPatch, fixEscapedUrlsPatch,
             modifyLoginWebView, fixMoreComments, fixRedgifsApi, fixRelativeMarkdownLinksPatch,
             fixCommentVideoLinksPatch, rifMorpheSettingsPatch,
-            fixHistoryImportPatch, postToProfilePatch,
+            fixHistoryImportPatch, postToProfilePatch, explainRedditBlocksPatch,
         )
         fun dependencies(vararg roots: Patch<*>) = buildSet {
             fun visit(patch: Patch<*>) {

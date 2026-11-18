@@ -75,6 +75,7 @@ In addition, patches for some apps contain additional features that were not pre
 * Prevents invalid ad rows from crashing Platinum feeds, including package-renamed installations.
 * **Fix history import** merges history from settings backups without replacing existing visits.
 * **Post to profile** adds a My profile button to Submit and a Submit action on your own profile.
+* **Explain Reddit blocks** clarifies recognized signed-in feed blocks while preserving other Reddit errors.
 
 ### Infinity for Reddit
 * Supports Infinity+, Infinity++, and the Patreon variant.
