@@ -29,6 +29,7 @@ import app.morphe.patches.reddit.customclients.redditisfun.fix.platinum.applyPla
 import app.morphe.patches.reddit.customclients.redditisfun.fix.platinum.platinumAdSlotSafeguardPatch
 import app.morphe.patches.reddit.customclients.redditisfun.fix.redgifs.fixRedgifsApi
 import app.morphe.patches.reddit.customclients.redditisfun.misc.settings.rifMorpheSettingsPatch
+import app.morphe.patches.reddit.customclients.redditisfun.submit.postToProfilePatch
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.DexFileFactory
 import com.android.tools.smali.dexlib2.Opcode
@@ -158,7 +159,7 @@ class PlatinumAdSlotSafeguardTest {
             hookExceptionHandler, fixRedditApiLookups, fixFailedGalleryImagesPatch, fixEscapedUrlsPatch,
             modifyLoginWebView, fixMoreComments, fixRedgifsApi, fixRelativeMarkdownLinksPatch,
             fixCommentVideoLinksPatch, rifMorpheSettingsPatch,
-            fixHistoryImportPatch,
+            fixHistoryImportPatch, postToProfilePatch,
         )
         fun dependencies(vararg roots: Patch<*>) = buildSet {
             fun visit(patch: Patch<*>) {

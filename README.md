@@ -74,6 +74,7 @@ In addition, patches for some apps contain additional features that were not pre
 * Enables pro features in free RIF. **Block ads** independently prevents feed, banner, and image-viewer ad loading. After changing it, refresh feeds and reopen albums.
 * Prevents invalid ad rows from crashing Platinum feeds, including package-renamed installations.
 * **Fix history import** merges history from settings backups without replacing existing visits.
+* **Post to profile** adds a My profile button to Submit and a Submit action on your own profile.
 
 ### Infinity for Reddit
 * Supports Infinity+, Infinity++, and the Patreon variant.
