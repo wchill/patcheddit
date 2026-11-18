@@ -1,3 +1,13 @@
+## [2.4.1-dev.1](https://github.com/wchill/patcheddit/compare/v2.4.0...v2.4.1-dev.1) (2026-11-18)
+
+
+### Bug Fixes
+
+* preserve Markdown repair compatibility with Android 6 ([1ca00f7](https://github.com/wchill/patcheddit/commit/1ca00f7a43bbc718aa7b2a2ae15b20b5eb17cbcb))
+* repair relative markdown links on all Reddit clients ([073cd3d](https://github.com/wchill/patcheddit/commit/073cd3dc2f37b28651c3af3764cb7c163069c7a7))
+* restore comment video streams in RIF, Boost, and Joey ([abe4047](https://github.com/wchill/patcheddit/commit/abe40475ea8e0eb5671d2030eb9bb00071fa2f95))
+* **rif:** block ads and fix crash on Platinum version ([76e649a](https://github.com/wchill/patcheddit/commit/76e649a4a478247644c3e927fe2c5cd4ad30f08f))
+
 # [2.4.0](https://github.com/wchill/patcheddit/compare/v2.3.0...v2.4.0) (2026-11-17)
 
 
