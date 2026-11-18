@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-11-18T03:28:24",
-  "description": "## [2.4.1-dev.1](https://github.com/wchill/patcheddit/compare/v2.4.0...v2.4.1-dev.1) (2026-11-18)\n\n\n### Bug Fixes\n\n* preserve Markdown repair compatibility with Android 6 ([1ca00f7](https://github.com/wchill/patcheddit/commit/1ca00f7a43bbc718aa7b2a2ae15b20b5eb17cbcb))\n* repair relative markdown links on all Reddit clients ([073cd3d](https://github.com/wchill/patcheddit/commit/073cd3dc2f37b28651c3af3764cb7c163069c7a7))\n* restore comment video streams in RIF, Boost, and Joey ([abe4047](https://github.com/wchill/patcheddit/commit/abe40475ea8e0eb5671d2030eb9bb00071fa2f95))\n* **rif:** block ads and fix crash on Platinum version ([76e649a](https://github.com/wchill/patcheddit/commit/76e649a4a478247644c3e927fe2c5cd4ad30f08f))",
-  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.4.1-dev.1/patches-2.4.1-dev.1.mpp",
-  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.4.1-dev.1/patches-2.4.1-dev.1.mpp.asc",
-  "version": "2.4.1-dev.1"
+  "created_at": "2026-11-18T16:58:18",
+  "description": "# [2.5.0-dev.1](https://github.com/wchill/patcheddit/compare/v2.4.1-dev.1...v2.5.0-dev.1) (2026-11-18)\n\n\n### Bug Fixes\n\n* explain signed-in Reddit feed blocks in RIF ([71c1b34](https://github.com/wchill/patcheddit/commit/71c1b34adc3a0ee278a9a9344e84546429cd2712))\n* restore RIF browsing history during settings import ([dbfa4f5](https://github.com/wchill/patcheddit/commit/dbfa4f55cf709807732ce1a6ddcf3bb7fd0678a8))\n\n\n### Features\n\n* add account-aware profile posting to RIF ([c3bd09c](https://github.com/wchill/patcheddit/commit/c3bd09cb4a5b6bb41efde02014665d6e4a2461e5))",
+  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.5.0-dev.1/patches-2.5.0-dev.1.mpp",
+  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.5.0-dev.1/patches-2.5.0-dev.1.mpp.asc",
+  "version": "2.5.0-dev.1"
 }
