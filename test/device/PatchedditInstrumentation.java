@@ -11,10 +11,12 @@ import android.content.Context;
 import android.os.Bundle;
 
 public final class PatchedditInstrumentation extends Instrumentation {
+    public static PatchedditInstrumentation instance;
     private Bundle arguments;
 
     @Override
     public void onCreate(Bundle arguments) {
+        instance = this;
         this.arguments = arguments;
         super.onCreate(arguments);
         start();
@@ -24,6 +26,7 @@ public final class PatchedditInstrumentation extends Instrumentation {
     public void onStart() {
         Bundle result = new Bundle();
         try {
+            waitForIdleSync();
             Class<?> suite = Class.forName(arguments.getString("suite"));
             suite.getMethod("run", Context.class, Bundle.class)
                     .invoke(null, getTargetContext(), arguments);

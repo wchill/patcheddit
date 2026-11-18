@@ -2,6 +2,7 @@
 """Run native fixture suites inside installed, Morphe-signed Android apps."""
 
 import argparse
+import os
 from pathlib import Path
 import subprocess
 import xml.etree.ElementTree as ET
@@ -33,15 +34,20 @@ def main() -> None:
     args = parser.parse_args()
     tools = args.sdk / "build-tools" / args.build_tools
     android = args.sdk / "platforms" / args.platform / "android.jar"
+    libraries = [android]
+    mock = android.parent / "optional" / "android.test.mock.jar"
+    if mock.is_file():
+        libraries.append(mock)
     output = ROOT / "output" / "device-tests"
     classes = output / args.suite / "classes"
     dex = output / args.suite / "dex"
     classes.mkdir(parents=True, exist_ok=True)
     dex.mkdir(parents=True, exist_ok=True)
     sources = [ROOT / "device" / "PatchedditInstrumentation.java", *args.source]
-    run("javac", "--release", "17", "-cp", str(android), "-d", str(classes),
+    run("javac", "--release", "17", "-cp", os.pathsep.join(map(str, libraries)), "-d", str(classes),
         *(str(path) for path in sources))
-    run(str(tools / "d8"), "--lib", str(android), "--output", str(dex),
+    run(str(tools / "d8"), *(argument for library in libraries for argument in ("--lib", str(library))),
+        "--output", str(dex),
         *(str(path) for path in classes.rglob("*.class")))
     adb = ["adb", "-s", args.serial]
     run(*adb, "shell", "svc", "power", "stayon", "true")
@@ -58,9 +64,13 @@ def main() -> None:
                 f"{{{ANDROID}}}minSdkVersion": "23",
                 f"{{{ANDROID}}}targetSdkVersion": "36",
             })
-            ET.SubElement(manifest, "application", {
+            application = ET.SubElement(manifest, "application", {
                 f"{{{ANDROID}}}label": "Patcheddit fixtures",
                 f"{{{ANDROID}}}debuggable": "true",
+            })
+            ET.SubElement(application, "uses-library", {
+                f"{{{ANDROID}}}name": "android.test.mock",
+                f"{{{ANDROID}}}required": "false",
             })
             ET.SubElement(manifest, "instrumentation", {
                 f"{{{ANDROID}}}name": f"{INSTRUMENTATION}.PatchedditInstrumentation",
