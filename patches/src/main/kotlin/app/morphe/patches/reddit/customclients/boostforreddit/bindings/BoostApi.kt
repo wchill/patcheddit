@@ -285,6 +285,7 @@ internal object BoostApi {
     }
     object SubmissionViewHolder : BoostTypeBinding("Lcom/rubenmayayo/reddit/ui/adapters/SubmissionViewHolder;") {
         val bind get() = method("bind(Lcom/rubenmayayo/reddit/models/reddit/SubmissionModel;ZZZLcom/bumptech/glide/RequestManager;)V")
+        val selfTv get() = field("selfTv:Lcom/rubenmayayo/reddit/ui/customviews/TableTextView;")
         val showMenu get() = method("showMenu(Landroid/view/View;Ljava/util/ArrayList;)V")
         val onMenuClick get() = method("onMenuClick(Lcom/rubenmayayo/reddit/ui/customviews/menu/MenuOption;)V")
         val infoSeparator get() = field("infoSeparator:Lcom/rubenmayayo/reddit/ui/customviews/BabushkaText\$Part;")
@@ -300,6 +301,8 @@ internal object BoostApi {
         val onHideToggle get() = method("onHideToggle(ILcom/rubenmayayo/reddit/models/reddit/SubmissionModel;Z)V")
     }
     object TableTextView : BoostTypeBinding("Lcom/rubenmayayo/reddit/ui/customviews/TableTextView;") {
+        val setTextHtml get() = method("setTextHtml(Ljava/lang/String;)V")
+        val clearTextExtras get() = method("clearTextExtras()V")
     }
     object ThingFragment : BoostTypeBinding("Lcom/rubenmayayo/reddit/ui/fragments/ThingFragment;") {
         val filteredNextPageSnackbar get() = method("filteredNextPageSnackbar(Landroid/view/View;)V")

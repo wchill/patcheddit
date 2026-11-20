@@ -107,6 +107,24 @@ By default, matching PKCS12 test keys are read from
 `test/.cache/device-signers/PACKAGE.p12`; use `--keystore` to override.
 These fixtures do not establish live-host availability or older Android decoder behavior.
 
+## Boost inline-media device tests
+
+With the patched Boost 1.14.4 APK installed and its matching test key available:
+
+```sh
+python3 -B test/run_device_tests.py \
+  --sdk "$ANDROID_HOME" --serial "$ANDROID_SERIAL" \
+  --package com.rubenmayayo.reddit \
+  --suite app.patcheddit.fixture.BoostInlineMediaDeviceTest \
+  --source test/device/BoostInlineMediaDeviceTest.java \
+  --asset test/device/media/inline-animation.gif
+adb -s "$ANDROID_SERIAL" shell am force-stop com.rubenmayayo.reddit
+```
+
+The fixture uses native Glide with synthetic responses and restores its test
+preferences, including recovery after an interrupted run. Force-stop clears the
+temporary transport before returning to normal use.
+
 ## Boost navigation device tests
 
 On Android 11 or newer, install Boost 1.14.4 with the standard bottom-navigation
