@@ -85,6 +85,28 @@ those mappings.
 Both complete and review-required results are supported.
 Its report is saved to `build/boost-mapping-tests/recovery.json`.
 
+## RIF inline-media device tests
+
+Install the patched free and Platinum APKs, signed with the matching test keys.
+The fixture exercises native body layouts, synthetic images/albums/video, gestures,
+cache expiry, failure recovery, and player teardown. It restores changed preferences.
+
+```sh
+python3 -B test/run_device_tests.py \
+  --sdk "$ANDROID_HOME" --serial "$ANDROID_SERIAL" \
+  --package com.andrewshu.android.reddit \
+  --package com.andrewshu.android.redditdonation \
+  --suite app.patcheddit.fixture.RifInlineMediaDeviceTest \
+  --source test/device/RifInlineMediaDeviceTest.java \
+  --asset test/device/media/inline-video.mp4 \
+  --asset test/device/media/inline-audio.m4a \
+  --asset test/device/media/inline-animation.gif
+```
+
+By default, matching PKCS12 test keys are read from
+`test/.cache/device-signers/PACKAGE.p12`; use `--keystore` to override.
+These fixtures do not establish live-host availability or older Android decoder behavior.
+
 ## Boost navigation device tests
 
 On Android 11 or newer, install Boost 1.14.4 with the standard bottom-navigation

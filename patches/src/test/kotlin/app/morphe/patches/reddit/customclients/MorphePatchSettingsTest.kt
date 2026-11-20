@@ -147,6 +147,21 @@ class MorphePatchSettingsTest {
     }
 
     @Test
+    fun preservesChainedMediaDependenciesWhenAddingTheMasterSwitch() {
+        val menu = resource("settings/xml/morphe_settings.xml")
+        val options = resource("settings/xml/morphe_rif_inline_media.xml")
+        val dependencies = options.documentElement.childElements().associate {
+            it.getAttribute("android:key") to it.getAttribute("android:dependency")
+        }
+        addMorphePatchPreference(menu, switch(), spec("morphe_patch_inline_media"), options)
+        val controls = menu.documentElement.childElements().last().childElements().drop(1)
+        for (control in controls) {
+            assertEquals(dependencies.getValue(control.getAttribute("android:key")).ifEmpty { "morphe_patch_inline_media" },
+                control.getAttribute("android:dependency"))
+        }
+    }
+
+    @Test
     fun boostLinksUseThreeOrderedSectionsWithoutChangingControlsOrDependencies() {
         val menu = resource("boost/xml/morphe_boost_settings_skeleton.xml")
         val archives = "morphe_patch_add_archive_links_to_context_menu"

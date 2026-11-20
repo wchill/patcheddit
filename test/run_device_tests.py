@@ -28,6 +28,7 @@ def main() -> None:
     parser.add_argument("--package", action="append", required=True)
     parser.add_argument("--suite", required=True)
     parser.add_argument("--source", type=Path, action="append", required=True)
+    parser.add_argument("--asset", type=Path, action="append", default=[])
     parser.add_argument("--keystore", type=Path,
                         help="PKCS12 test key (Morphe password); defaults to .cache/device-signers/PACKAGE.p12")
     parser.add_argument("--arg", action="append", default=[], metavar="KEY=VALUE")
@@ -84,6 +85,8 @@ def main() -> None:
                 "--manifest", str(manifest_path), "-o", str(unsigned))
             with zipfile.ZipFile(unsigned, "a") as apk:
                 apk.write(dex / "classes.dex", "classes.dex")
+                for asset in args.asset:
+                    apk.write(asset, "assets/" + asset.name)
             run(str(tools / "zipalign"), "-f", "-p", "4", str(unsigned), str(signed))
             run(str(tools / "apksigner"), "sign", "--ks",
                 str(args.keystore or ROOT / ".cache" / "device-signers" / f"{package}.p12"),

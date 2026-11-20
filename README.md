@@ -69,6 +69,7 @@ In addition, patches for some apps contain additional features that were not pre
 * Links with query parameters offer an unchecked **Strip query parameters** checkbox for **Share link** and **Copy link**. Hide it using **Show strip query parameters option** in Patcheddit settings.
 
 ### reddit is fun
+* **Inline media** displays images, animated images, albums, and videos in comments and text posts, with sizing and playback controls under **Patcheddit > Media**. URLs are kept above previews by default; turn off **Keep inline media URLs** to hide bare URLs.
 * Restores Imgur album and gallery loading in the built-in viewer, album thumbnails, and links that include a title.
 * Restores native Redgifs playback and returns safely when a video is unavailable.
 * Enables pro features in free RIF. **Block ads** independently prevents feed, banner, and image-viewer ad loading. After changing it, refresh feeds and reopen albums.
