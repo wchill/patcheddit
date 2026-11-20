@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-11-18T16:58:18",
-  "description": "# [2.5.0-dev.1](https://github.com/wchill/patcheddit/compare/v2.4.1-dev.1...v2.5.0-dev.1) (2026-11-18)\n\n\n### Bug Fixes\n\n* explain signed-in Reddit feed blocks in RIF ([71c1b34](https://github.com/wchill/patcheddit/commit/71c1b34adc3a0ee278a9a9344e84546429cd2712))\n* restore RIF browsing history during settings import ([dbfa4f5](https://github.com/wchill/patcheddit/commit/dbfa4f55cf709807732ce1a6ddcf3bb7fd0678a8))\n\n\n### Features\n\n* add account-aware profile posting to RIF ([c3bd09c](https://github.com/wchill/patcheddit/commit/c3bd09cb4a5b6bb41efde02014665d6e4a2461e5))",
-  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.5.0-dev.1/patches-2.5.0-dev.1.mpp",
-  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.5.0-dev.1/patches-2.5.0-dev.1.mpp.asc",
-  "version": "2.5.0-dev.1"
+  "created_at": "2026-11-20T21:53:12",
+  "description": "# [2.5.0-dev.2](https://github.com/wchill/patcheddit/compare/v2.5.0-dev.1...v2.5.0-dev.2) (2026-11-20)\n\n\n### Bug Fixes\n\n* **boost:** navigation bar no longer covered by system gesture bar ([71d8b17](https://github.com/wchill/patcheddit/commit/71d8b17297e4b884cf44b45d51c19aaef1c75314))\n\n\n### Features\n\n* **boost:** Load all inline media ([b983b21](https://github.com/wchill/patcheddit/commit/b983b21a190d730066faacae213e392c9643e40f))\n* **rif:** Add inline media support ([220dd17](https://github.com/wchill/patcheddit/commit/220dd17f63d0cba2ab98b357a50673abeec06535))",
+  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.5.0-dev.2/patches-2.5.0-dev.2.mpp",
+  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.5.0-dev.2/patches-2.5.0-dev.2.mpp.asc",
+  "version": "2.5.0-dev.2"
 }

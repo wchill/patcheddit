@@ -1,3 +1,16 @@
+# [2.5.0-dev.2](https://github.com/wchill/patcheddit/compare/v2.5.0-dev.1...v2.5.0-dev.2) (2026-11-20)
+
+
+### Bug Fixes
+
+* **boost:** navigation bar no longer covered by system gesture bar ([71d8b17](https://github.com/wchill/patcheddit/commit/71d8b17297e4b884cf44b45d51c19aaef1c75314))
+
+
+### Features
+
+* **boost:** Load all inline media ([b983b21](https://github.com/wchill/patcheddit/commit/b983b21a190d730066faacae213e392c9643e40f))
+* **rif:** Add inline media support ([220dd17](https://github.com/wchill/patcheddit/commit/220dd17f63d0cba2ab98b357a50673abeec06535))
+
 # [2.5.0-dev.1](https://github.com/wchill/patcheddit/compare/v2.4.1-dev.1...v2.5.0-dev.1) (2026-11-18)
 
 
