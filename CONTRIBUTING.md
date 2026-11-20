@@ -85,4 +85,23 @@ those mappings.
 Both complete and review-required results are supported.
 Its report is saved to `build/boost-mapping-tests/recovery.json`.
 
+## Boost navigation device tests
+
+On Android 11 or newer, install Boost 1.14.4 with the standard bottom-navigation
+and navigation-overlap patches. Run this fixture in both gesture and three-button
+navigation modes. It checks that stale system-bar surfaces cannot cover the native
+controls, that surfaces follow changing and zero bottom insets, and that disabling
+navigation survives later inset dispatches. Changed preferences are restored.
+
+```sh
+python3 -B test/run_device_tests.py \
+  --sdk "$ANDROID_HOME" --serial "$ANDROID_SERIAL" \
+  --package com.rubenmayayo.reddit \
+  --suite app.patcheddit.fixture.BoostNavigationInsetsDeviceTest \
+  --source test/device/BoostNavigationInsetsDeviceTest.java \
+  --keystore /path/to/boost-test-key.p12
+```
+
+The test key must match the installed APK's signature.
+
 ❤️ Thank you for considering contributing to Patcheddit

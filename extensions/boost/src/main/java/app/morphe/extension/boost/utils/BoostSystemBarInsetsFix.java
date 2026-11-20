@@ -1,5 +1,6 @@
 /*
  * Modifications Copyright 2026 brealorg.
+ * Modifications Copyright 2026 wchill.
  *
  * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
  * Adapted from https://github.com/brealorg/breal-morphe-patches (82d70f7).
@@ -970,8 +971,7 @@ public final class BoostSystemBarInsetsFix {
             if (!isOpaque(color)) color = fallbackColor;
             if (!isOpaque(color)) return;
 
-            int bottomInset = getEffectiveNavigationBottomInset(decor, getBestCurrentInsets(decor));
-            installMainNavigationBarSurface(decor, bottomInset, color);
+            installMainNavigationBarSurface(decor, color);
 
             // Android edge-to-edge/gesture navigation may ignore opaque nav-bar colors.
             // Keep the system area transparent and provide the visible surface ourselves.
@@ -994,20 +994,19 @@ public final class BoostSystemBarInsetsFix {
         }
     }
 
-    private static void installMainNavigationBarSurface(View decor, int bottomInset, int color) {
+    private static void installMainNavigationBarSurface(View decor, int color) {
         try {
             if (!(decor instanceof FrameLayout)) return;
-            if (bottomInset <= 0) return;
 
             FrameLayout group = (FrameLayout) decor;
             View surface = decor.findViewWithTag(MAIN_NAV_BAR_SURFACE_OVERLAY_MARKER_V4);
 
             // The canonical bottom navigation paints this strip with its own
-            // surface color. Only act as the fallback when it is not shown,
-            // instead of both overlays racing with bringToFront().
+            // surface color. Only act as the fallback when it is not shown.
             View navigationUnderlay = decor.findViewWithTag(NAVIGATION_DECOR_UNDERLAY_TAG);
             if (navigationUnderlay != null && navigationUnderlay.getVisibility() == View.VISIBLE) {
                 if (surface != null) {
+                    surface.setEnabled(false);
                     surface.setVisibility(View.GONE);
                 }
                 return;
@@ -1024,23 +1023,44 @@ public final class BoostSystemBarInsetsFix {
 
                 FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
-                        bottomInset,
+                        0,
                         Gravity.BOTTOM
                 );
-                group.addView(surface, params);
+                group.addView(surface, 0, params);
+                watchNavigationBarSurfaceInsets(surface);
             }
 
-            ViewGroup.LayoutParams params = surface.getLayoutParams();
-            if (params != null && params.height != bottomInset) {
-                params.height = bottomInset;
-                surface.setLayoutParams(params);
-            }
-
+            surface.setEnabled(true);
             surface.setBackgroundColor(color);
-            surface.bringToFront();
-            surface.invalidate();
+            updateNavigationBarSurfaceInsets(surface, decor.getRootWindowInsets());
         } catch (Throwable ignored) {
         }
+    }
+
+    static void watchNavigationBarSurfaceInsets(View surface) {
+        // A decor child otherwise draws above the entire activity, including
+        // elevated navigation controls, when an OEM reports a stale inset.
+        surface.setTranslationZ(-1f);
+        surface.setVisibility(View.GONE);
+        surface.setOnApplyWindowInsetsListener((view, insets) -> {
+            updateNavigationBarSurfaceInsets(view, insets);
+            return insets;
+        });
+        surface.requestApplyInsets();
+    }
+
+    static void updateNavigationBarSurfaceInsets(View surface, WindowInsets insets) {
+        if (insets == null) return;
+
+        // Zero is authoritative: gesture navigation can have no bottom inset,
+        // and navigation buttons can move to a side edge in landscape.
+        int bottomInset = getNavigationBottomInset(insets);
+        ViewGroup.LayoutParams params = surface.getLayoutParams();
+        if (params.height != bottomInset) {
+            params.height = bottomInset;
+            surface.setLayoutParams(params);
+        }
+        surface.setVisibility(surface.isEnabled() && bottomInset > 0 ? View.VISIBLE : View.GONE);
     }
 
     private static int findMainNavigationSurfaceColor(Activity activity, View decor) {
