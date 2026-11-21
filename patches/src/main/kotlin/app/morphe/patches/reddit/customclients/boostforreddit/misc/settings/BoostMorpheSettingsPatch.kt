@@ -15,7 +15,6 @@ import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.addMorpheApkSettings
 import app.morphe.patches.reddit.customclients.morpheSettingsContextPatch
 import app.morphe.patches.reddit.customclients.morpheSettingsResourcesPatch
-import app.morphe.patches.reddit.customclients.boostforreddit.http.interceptHttpRequests
 import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.util.ResourceGroup
 import org.w3c.dom.Element
@@ -139,6 +138,6 @@ val boostMorpheSettingsPatch = resourcePatch(
     default = true,
 ) {
     category(PatchCategory.INTERFACE)
-    dependsOn(ExtensionPatches.Boost, boostMorpheSettingsResourcesPatch, morpheSettingsContextPatch, interceptHttpRequests)
+    dependsOn(ExtensionPatches.Boost, boostMorpheSettingsResourcesPatch, morpheSettingsContextPatch)
     compatibleWith(*AppCompatibility.Boost)
 }

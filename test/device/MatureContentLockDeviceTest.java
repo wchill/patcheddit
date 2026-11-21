@@ -66,15 +66,7 @@ public final class MatureContentLockDeviceTest {
             return null;
         });
 
-        Class<?> filter = loader.loadClass("app.morphe.extension.shared.fixes.feed.MatureContentFilter");
-        String feed = "{\"kind\":\"Listing\",\"data\":{\"children\":["
-                + "{\"kind\":\"t3\",\"data\":{\"over_18\":true}},"
-                + "{\"kind\":\"t3\",\"data\":{\"over_18\":false,\"id\":\"safe\"}}]}}";
-        String filtered = (String) filter.getMethod("filterLegacyResponse", String.class, String.class,
-                int.class, String.class).invoke(null, feed, "https://oauth.reddit.com/hot", 200, "application/json");
-        var children = new JSONObject(filtered).getJSONObject("data").getJSONArray("children");
-        check(children.length() == 1 && children.getJSONObject(0).getJSONObject("data").getString("id").equals("safe"),
-                "The reloaded lock failed to remove a marked post");
+        verifyHttpFiltering(loader);
 
         Class<?> boost = loader.loadClass("xs2");
         Object nativePreferences = boost.getMethod("n").invoke(null);
@@ -84,6 +76,55 @@ public final class MatureContentLockDeviceTest {
             check(preferences.edit().remove(KEY).commit(), "Could not simulate restoring into cleared settings");
             importSettings(context, backup);
             check(preferences.getBoolean(KEY, false), "Boost's native settings import did not restore the lock");
+        }
+    }
+
+    private static void verifyHttpFiltering(ClassLoader loader) throws Exception {
+        Class<?> clientType = loader.loadClass("okhttp3.OkHttpClient");
+        Class<?> interceptorType = loader.loadClass("okhttp3.Interceptor");
+        Class<?> chainType = loader.loadClass("okhttp3.Interceptor$Chain");
+        Class<?> requestType = loader.loadClass("okhttp3.Request");
+        Class<?> responseType = loader.loadClass("okhttp3.Response");
+        Class<?> bodyType = loader.loadClass("okhttp3.ResponseBody");
+        Class<?> protocolType = loader.loadClass("okhttp3.Protocol");
+        Class<?> mediaType = loader.loadClass("okhttp3.MediaType");
+        Class<?> responseBuilderType = loader.loadClass("okhttp3.Response$Builder");
+        Object transport = Proxy.newProxyInstance(loader, new Class<?>[]{interceptorType}, (proxy, method, args) -> {
+            if (!method.getName().equals("intercept")) throw new UnsupportedOperationException(method.getName());
+            String feed = "{\"kind\":\"Listing\",\"data\":{\"children\":["
+                    + "{\"kind\":\"t3\",\"data\":{\"over_18\":true}},"
+                    + "{\"kind\":\"t3\",\"data\":{\"over_18\":false,\"id\":\"safe\"}}]}}";
+            Object json = mediaType.getMethod("get", String.class).invoke(null, "application/json");
+            Object body = bodyType.getMethod("create", String.class, mediaType).invoke(null, feed, json);
+            Object response = responseBuilderType.getConstructor().newInstance();
+            responseBuilderType.getMethod("request", requestType).invoke(response, chainType.getMethod("request").invoke(args[0]));
+            responseBuilderType.getMethod("protocol", protocolType).invoke(response, protocolType.getField("HTTP_1_1").get(null));
+            responseBuilderType.getMethod("code", int.class).invoke(response, 200);
+            responseBuilderType.getMethod("message", String.class).invoke(response, "OK");
+            responseBuilderType.getMethod("body", bodyType).invoke(response, body);
+            return responseBuilderType.getMethod("build").invoke(response);
+        });
+
+        Object original = clientType.getConstructor().newInstance();
+        Object builder = clientType.getMethod("newBuilder").invoke(original);
+        builder.getClass().getMethod("addInterceptor", interceptorType).invoke(builder, transport);
+        Object client = builder.getClass().getMethod("build").invoke(builder);
+        var interceptors = (List<?>) clientType.getMethod("interceptors").invoke(client);
+        String filter = "app.morphe.extension.shared.fixes.feed.MatureContentInterceptor";
+        check(interceptors.stream().filter(hook -> hook.getClass().getName().equals(filter)).count() == 1,
+                "Boost's native OkHttp client did not install exactly one content filter");
+
+        Class<?> requestBuilderType = loader.loadClass("okhttp3.Request$Builder");
+        Object requestBuilder = requestBuilderType.getConstructor().newInstance();
+        requestBuilderType.getMethod("url", String.class).invoke(requestBuilder, "https://oauth.reddit.com/hot");
+        Object request = requestBuilderType.getMethod("build").invoke(requestBuilder);
+        Object call = clientType.getMethod("newCall", requestType).invoke(client, request);
+        try (var response = (AutoCloseable) loader.loadClass("okhttp3.Call").getMethod("execute").invoke(call)) {
+            Object body = responseType.getMethod("body").invoke(response);
+            String filtered = (String) bodyType.getMethod("string").invoke(body);
+            var children = new JSONObject(filtered).getJSONObject("data").getJSONArray("children");
+            check(children.length() == 1 && children.getJSONObject(0).getJSONObject("data").getString("id").equals("safe"),
+                    "Boost's native OkHttp response still contains the marked post");
         }
     }
 

@@ -8,6 +8,7 @@ package app.morphe.patches.reddit.customclients.http
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.patch.BytecodePatch
+import app.morphe.patcher.patch.BytecodePatchContext
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.patch.resourcePatch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableAnnotation.Companion.toMutable
@@ -55,6 +56,23 @@ private fun ClassDef.genericSignatureTypes(): Sequence<String> =
         .map { fragments -> fragments.value.joinToString("") { (it as? StringEncodedValue)?.value.orEmpty() } }
         .flatMap { signature -> signatureClassName.findAll(signature).map { "${it.value};" } }
 
+context(ctx: BytecodePatchContext)
+internal fun installOkHttpInterceptors(client: String, clientType: String) {
+    val hook = "Lapp/morphe/extension/$client/http/OkHttpRequestHook;"
+    val builder = clientType.removeSuffix(";") + "\$Builder;"
+    val constructor = ctx.mutableClassDefBy(clientType).methods.single {
+        it.name == "<init>" && it.parameterTypes.map(CharSequence::toString) == listOf(builder)
+    }
+    constructor.addInstructions(
+        0,
+        """
+            invoke-static {}, $hook->init()V
+            invoke-static/range {p1 .. p1}, $hook->installInterceptor($builder)$builder
+            move-result-object p1
+        """,
+    )
+}
+
 internal fun httpClientExtensionPatch(
     client: String,
     vararg hookedClasses: String,
@@ -100,19 +118,7 @@ internal fun httpClientExtensionPatch(
     return bytecodePatch(default = false) {
         dependsOn(native, httpLibraryResourcesPatch, extension)
         execute {
-            val hook = "Lapp/morphe/extension/$client/http/OkHttpRequestHook;"
-            val builder = privateHttpType($$"Lokhttp3/OkHttpClient$Builder;")
-            val constructor = mutableClassDefBy(privateHttpType("Lokhttp3/OkHttpClient;")).methods.single {
-                it.name == "<init>" && it.parameterTypes.map(CharSequence::toString) == listOf(builder)
-            }
-            constructor.addInstructions(
-                0,
-                """
-                    invoke-static {}, $hook->init()V
-                    invoke-static/range {p1 .. p1}, $hook->installInterceptor($builder)$builder
-                    move-result-object p1
-                """,
-            )
+            installOkHttpInterceptors(client, privateHttpType("Lokhttp3/OkHttpClient;"))
         }
         finalize {
             val definitions = buildList { classDefForEach(::add) }

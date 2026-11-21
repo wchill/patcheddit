@@ -22,7 +22,6 @@ import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMuta
 import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
-import app.morphe.patches.reddit.customclients.boostforreddit.http.interceptHttpRequests
 import app.morphe.patches.reddit.customclients.boostforreddit.http.REDDIT_UNDELETE_APPLIED_RESOURCE
 import app.morphe.patches.reddit.customclients.boostforreddit.http.undeleteAppliedMarkerPatch
 import app.morphe.patches.reddit.customclients.boostforreddit.wrapHook
@@ -92,7 +91,7 @@ val undeleteRedditPatch = morpheBytecodePatch(
     settingsSummary = "Restore removed Reddit posts and comments from Arctic Shift and the Wayback Machine. " +
         "When a thread has removed content, its post and comment IDs are sent to these third-party archives.",
 ) { setting ->
-    dependsOn(ExtensionPatches.Boost, interceptHttpRequests, undeleteAppliedMarkerPatch(REDDIT_UNDELETE_APPLIED_RESOURCE))
+    dependsOn(ExtensionPatches.Boost, undeleteAppliedMarkerPatch(REDDIT_UNDELETE_APPLIED_RESOURCE))
     compatibleWith(*AppCompatibility.Boost)
 
     execute {

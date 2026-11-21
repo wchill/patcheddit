@@ -7,8 +7,8 @@
 package app.morphe.patches.reddit.customclients.boostforreddit.fix.links
 
 import app.morphe.patches.reddit.customclients.AppCompatibility
-import app.morphe.patches.reddit.customclients.boostforreddit.http.interceptHttpRequests
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.fixEscapedUrlsPatch
 
 @Suppress("unused")
-val fixEscapedUrlsPatch = fixEscapedUrlsPatch(interceptHttpRequests, AppCompatibility.Boost)
+val fixEscapedUrlsPatch = fixEscapedUrlsPatch(ExtensionPatches.Boost, AppCompatibility.Boost)
