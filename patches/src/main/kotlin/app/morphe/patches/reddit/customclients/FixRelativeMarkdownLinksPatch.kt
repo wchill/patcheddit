@@ -7,9 +7,10 @@
 package app.morphe.patches.reddit.customclients
 
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
-import app.morphe.patcher.patch.BytecodePatchContext
 import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.Patch
+import app.morphe.patcher.patch.classDefForEach
+import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patches.all.misc.PatchCategory
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.BuilderInstruction
@@ -32,7 +33,7 @@ internal fun fixRelativeMarkdownLinksPatch(
     extensionPatch: Patch,
     compatible: Array<Compatibility>,
     frameworkRenderer: Boolean = true,
-    additional: BytecodePatchContext.() -> Unit = {},
+    additional: () -> Unit = {},
 ) = morpheBytecodePatch(
     name = "Fix broken markdown links",
     description = "Repairs malformed user and subreddit links while preserving code and ordinary links.",

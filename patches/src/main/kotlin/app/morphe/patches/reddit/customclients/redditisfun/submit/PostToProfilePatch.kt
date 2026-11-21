@@ -8,7 +8,10 @@ package app.morphe.patches.reddit.customclients.redditisfun.submit
 
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.classDefForEach
+import app.morphe.patcher.patch.document
+import app.morphe.patcher.patch.mutableClassDefBy
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.util.getReference
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
 import app.morphe.patches.all.misc.PatchCategory
@@ -43,7 +46,7 @@ val postToProfilePatch = morpheBytecodePatch(
     readOnly = true,
 ) {
     compatibleWith(*AppCompatibility.RedditIsFun)
-    dependsOn(rifFeatureResources, resourcePatch(default = false) {
+    dependsOn(rifFeatureResources, patch(default = false) {
         execute {
             // Reuse the picker styling in both native Submit layouts.
             for (directory in listOf("layout", "layout-v22")) {

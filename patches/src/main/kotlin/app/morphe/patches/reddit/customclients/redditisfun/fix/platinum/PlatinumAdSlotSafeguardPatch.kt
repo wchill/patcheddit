@@ -7,7 +7,9 @@
 package app.morphe.patches.reddit.customclients.redditisfun.fix.platinum
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.classDefForEach
+import app.morphe.patcher.patch.mutableClassDefBy
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
 import app.morphe.patches.reddit.customclients.redditisfun.bindings.RifAdBindings
@@ -35,7 +37,7 @@ internal fun applyPlatinumAdSlotSafeguard(
     replaceGate(original, replacement)
 }
 
-internal val platinumAdSlotSafeguardPatch = bytecodePatch(default = false) {
+internal val platinumAdSlotSafeguardPatch = patch(default = false) {
     execute {
         val bindings = resolveRifAdBindings(buildList { classDefForEach(::add) })
         applyPlatinumAdSlotSafeguard(bindings) { target, replacement ->

@@ -7,6 +7,7 @@
 package app.morphe.patches.reddit.customclients.boostforreddit.fix.video
 
 import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.COMMENT_VIDEO_LINKS
 import app.morphe.patches.reddit.customclients.ExtensionPatches

@@ -6,6 +6,7 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.fix.imagesearch
 
+import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches

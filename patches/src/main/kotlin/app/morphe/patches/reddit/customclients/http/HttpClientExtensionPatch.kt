@@ -7,10 +7,12 @@
 package app.morphe.patches.reddit.customclients.http
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.BytecodePatch
-import app.morphe.patcher.patch.BytecodePatchContext
-import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.Patch
+import app.morphe.patcher.patch.classDefForEach
+import app.morphe.patcher.patch.document
+import app.morphe.patcher.patch.mutableClassDefBy
+import app.morphe.patcher.patch.patch
+import app.morphe.patcher.patch.resourceFile
 import app.morphe.patcher.util.proxy.mutableTypes.MutableAnnotation.Companion.toMutable
 import app.morphe.patcher.util.proxy.mutableTypes.MutableField.Companion.toMutable
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
@@ -30,7 +32,7 @@ import com.android.tools.smali.dexlib2.writer.pool.DexPool
 import java.io.ByteArrayInputStream
 import java.util.logging.Logger
 
-private val httpLibraryResourcesPatch = resourcePatch(default = false) {
+private val httpLibraryResourcesPatch = patch(default = false) {
     execute {
         for (name in listOf("PublicSuffixDatabase.gz", "NOTICE")) {
             val resource = "okhttp3/internal/publicsuffix/$name"
@@ -38,7 +40,7 @@ private val httpLibraryResourcesPatch = resourcePatch(default = false) {
                 "Bundled OkHttp resource was not found: $resource"
             }
             input.use { source ->
-                this["${HTTP_LIBRARY_PREFIX.removePrefix("L")}$resource", false].outputStream().use(source::copyTo)
+                resourceFile("${HTTP_LIBRARY_PREFIX.removePrefix("L")}$resource", copy = false).outputStream().use(source::copyTo)
             }
         }
     }
@@ -56,11 +58,10 @@ private fun ClassDef.genericSignatureTypes(): Sequence<String> =
         .map { fragments -> fragments.value.joinToString("") { (it as? StringEncodedValue)?.value.orEmpty() } }
         .flatMap { signature -> signatureClassName.findAll(signature).map { "${it.value};" } }
 
-context(ctx: BytecodePatchContext)
 internal fun installOkHttpInterceptors(client: String, clientType: String) {
     val hook = "Lapp/morphe/extension/$client/http/OkHttpRequestHook;"
     val builder = clientType.removeSuffix(";") + "\$Builder;"
-    val constructor = ctx.mutableClassDefBy(clientType).methods.single {
+    val constructor = mutableClassDefBy(clientType).methods.single {
         it.name == "<init>" && it.parameterTypes.map(CharSequence::toString) == listOf(builder)
     }
     constructor.addInstructions(
@@ -76,18 +77,18 @@ internal fun installOkHttpInterceptors(client: String, clientType: String) {
 internal fun httpClientExtensionPatch(
     client: String,
     vararg hookedClasses: String,
-): BytecodePatch {
+): Patch {
     var nativeClasses = emptyList<ClassDef>()
     lateinit var profile: HttpLibraryProfile
     var packageName = ""
-    val packageMetadata = resourcePatch(default = false) {
+    val packageMetadata = patch(default = false) {
         execute {
             document("AndroidManifest.xml").use {
                 packageName = it.documentElement.getAttribute("package")
             }
         }
     }
-    val native = bytecodePatch(default = false) {
+    val native = patch(default = false) {
         dependsOn(packageMetadata)
         execute {
             nativeClasses = buildList { classDefForEach(::add) }
@@ -115,7 +116,7 @@ internal fun httpClientExtensionPatch(
         pool.writeTo(output)
         ByteArrayInputStream(output.data)
     }
-    return bytecodePatch(default = false) {
+    return patch(default = false) {
         dependsOn(native, httpLibraryResourcesPatch, extension)
         execute {
             installOkHttpInterceptors(client, privateHttpType("Lokhttp3/OkHttpClient;"))

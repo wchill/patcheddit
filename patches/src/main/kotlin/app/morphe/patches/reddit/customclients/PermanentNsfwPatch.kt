@@ -8,7 +8,8 @@ package app.morphe.patches.reddit.customclients
 
 import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.Patch
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.document
+import app.morphe.patcher.patch.patch
 import app.morphe.patches.reddit.customclients.baconreader.misc.settings.baconReaderMorpheSettingsPatch
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.settings.boostMorpheSettingsPatch
 import app.morphe.patches.reddit.customclients.infinity.misc.settings.infinityMorpheSettingsPatch
@@ -20,7 +21,7 @@ import org.w3c.dom.Element
 
 private const val CATEGORY = "Content filtering"
 
-private fun permanentNsfwOption(menu: Patch, compatible: Array<Compatibility>) = resourcePatch(
+private fun permanentNsfwOption(menu: Patch, compatible: Array<Compatibility>) = patch(
     name = "Permanently disable NSFW",
     description = "Adds a one-way NSFW lock to Patcheddit settings. Does not activate it automatically.",
     default = false,

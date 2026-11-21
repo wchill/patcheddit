@@ -8,12 +8,12 @@
 package app.morphe.patches.reddit.customclients.relay.fix.sidebar
 
 import app.morphe.patcher.Fingerprint
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.util.returnEarly
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 
-internal val fixSidebarPatch = bytecodePatch(
+internal val fixSidebarPatch = patch(
     description = "Restores subreddit sidebars when Reddit omits display counters.",
 ) {
     compatibleWith(*AppCompatibility.Relay)

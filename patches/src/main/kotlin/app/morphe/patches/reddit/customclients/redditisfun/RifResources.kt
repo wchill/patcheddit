@@ -6,11 +6,12 @@
 
 package app.morphe.patches.reddit.customclients.redditisfun
 
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.document
+import app.morphe.patcher.patch.patch
 import app.morphe.patches.reddit.customclients.mergeMorpheResources
 import app.morphe.util.inputStreamFromBundledResource
 
-internal val rifFeatureResources = resourcePatch(default = false) {
+internal val rifFeatureResources = patch(default = false) {
     execute {
         checkNotNull(inputStreamFromBundledResource("redditisfun", "values/patcheddit_features.xml")).use { input ->
             document(input).use { source ->

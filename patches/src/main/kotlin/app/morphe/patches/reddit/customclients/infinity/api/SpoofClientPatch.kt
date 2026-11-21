@@ -7,8 +7,9 @@
 
 package app.morphe.patches.reddit.customclients.infinity.api
 
-import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.document
+import app.morphe.patcher.patch.packageMetadata
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
@@ -27,7 +28,7 @@ internal const val GET_CLIENT_ID_METHOD = "$EXTENSION_CLASS_NAME->getClientId"
 internal const val GET_USER_AGENT_METHOD = "$EXTENSION_CLASS_NAME->getUserAgent"
 internal const val GET_REDIRECT_URI_METHOD = "$EXTENSION_CLASS_NAME->getRedirectUri"
 
-private val disableBillingPatch = bytecodePatch(default = false) {
+private val disableBillingPatch = patch(default = false) {
     execute {
         // The Patreon build has no Google Play billing client.
         if (packageMetadata.packageName != "ml.docilealligator.infinityforreddit.patreon") {
@@ -45,7 +46,7 @@ val spoofClientPatch = spoofClientPatch(ExtensionPatches.Infinity) { clientIdOpt
     dependsOn(
         disableBillingPatch,
         ExtensionPatches.Infinity,
-        resourcePatch(default = false) {
+        patch(default = false) {
             execute {
                 val uri = URI(redirectUri!!)
                 // Android accepts underscores in hosts such as RedReader's rr_oauth_redir.

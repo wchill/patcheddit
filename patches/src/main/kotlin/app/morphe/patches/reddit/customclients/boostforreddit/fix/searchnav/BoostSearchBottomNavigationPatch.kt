@@ -9,7 +9,8 @@ package app.morphe.patches.reddit.customclients.boostforreddit.fix.searchnav
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patches.reddit.customclients.morpheBytecodePatch
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.document
+import app.morphe.patcher.patch.patch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patcher.util.getReference
@@ -23,7 +24,7 @@ private const val MATERIAL_BOTTOM_NAVIGATION =
 private const val EXTENSION_CLASS_DESCRIPTOR =
     "Lapp/morphe/extension/boost/utils/BoostSearchBottomNavigation;"
 
-private val addSearchBottomNavigationHostPatch = resourcePatch(
+private val addSearchBottomNavigationHostPatch = patch(
     name = "Add Boost Search bottom navigation host",
     description = "Adds Boost's native Material bottom-navigation host to the generic Search layout.",
     default = false,

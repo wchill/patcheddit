@@ -11,7 +11,10 @@ import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.Patch
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.classDefForEach
+import app.morphe.patcher.patch.document
+import app.morphe.patcher.patch.mutableClassDefBy
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableClass
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
@@ -79,7 +82,7 @@ fun crashLogPatch(
         returnType = "V",
         custom = { _, classDef -> classDef.type == crashActivityType },
     )))
-    dependsOn(resourcePatch(default = false) {
+    dependsOn(patch(default = false) {
         execute {
             document("AndroidManifest.xml").use { manifest ->
                 val application = checkNotNull(

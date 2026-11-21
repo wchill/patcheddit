@@ -11,7 +11,8 @@ import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 
 import app.morphe.patcher.extensions.InstructionExtensions.removeInstructions
 import app.morphe.patches.reddit.customclients.morpheBytecodePatch
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.document
+import app.morphe.patcher.patch.patch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patcher.util.getReference
@@ -31,7 +32,7 @@ private val CRASHLYTICS_GET_INSTANCE_REFERENCE =
 private val CRASHLYTICS_SET_COLLECTION_REFERENCE =
     BoostApi.FirebaseCrashlytics.setCollectionEnabled.toString()
 
-private val removeBoostCrashlyticsRegistrarPatch = resourcePatch(
+private val removeBoostCrashlyticsRegistrarPatch = patch(
     name = "Remove Boost Crashlytics registrar",
     description = "Removes Firebase Crashlytics auto-registration while keeping other Firebase components.",
     default = true

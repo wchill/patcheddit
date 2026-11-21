@@ -9,8 +9,9 @@ package app.morphe.patches.reddit.customclients
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.addInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
-import app.morphe.patcher.patch.BytecodePatchContext
 import app.morphe.patcher.patch.PatchException
+import app.morphe.patcher.patch.classDefForEach
+import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.util.getReference
 import app.morphe.patcher.util.proxy.mutableTypes.MutableField.Companion.toMutable
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
@@ -42,7 +43,6 @@ private const val BACON_SETTING = "Lcom/onelouder/baconreader/adapters/Setting;"
 private const val BACON_SETTING_ID = "Lcom/onelouder/baconreader/adapters/SettingIds;"
 private const val SHARED_PREFERENCES = "Landroid/content/SharedPreferences;"
 
-context(ctx: BytecodePatchContext)
 internal fun installMatureContentEnforcement(packageName: String) {
     if (packageName == AppCompatibility.SyncForLemmy.packageName) return
     hookNativePreferences()
@@ -68,8 +68,7 @@ internal fun installMatureContentEnforcement(packageName: String) {
     }
 }
 
-context(ctx: BytecodePatchContext)
-private fun hookNativePreferences() = with(ctx) {
+private fun hookNativePreferences() {
     val classes = buildList { classDefForEach(::add) }
     val native = classes.filterNot { it.type.startsWith("Lapp/morphe/") }
     val read = ImmutableMethodReference(
@@ -181,8 +180,7 @@ private fun newPreferenceKeyGetter(name: String, key: FieldReference): MutableMe
 private inline fun <reified T : Reference> Method.references(): List<T> =
     implementation?.instructions?.mapNotNull { it.getReference<T>() }.orEmpty()
 
-context(ctx: BytecodePatchContext)
-private fun hookBoostBackup() = with(ctx) {
+private fun hookBoostBackup() {
     val export = BoostApi.BoostPreferences.exportSettings.fingerprint()
     export.wrapMorpheHook(after = """
         invoke-static {v0}, $LOCK->exportBoostSetting(Ljava/lang/String;)Ljava/lang/String;
@@ -199,8 +197,7 @@ private fun hookBoostBackup() = with(ctx) {
     """.trimIndent())
 }
 
-context(ctx: BytecodePatchContext)
-private fun hookBaconReader() = with(ctx) {
+private fun hookBaconReader() {
     val selectedSetting = """
         invoke-virtual {p0, p1}, $BACON_ADAPTER->getItem(I)$BACON_SETTING
         move-result-object v1
@@ -244,8 +241,7 @@ private fun hookBaconReader() = with(ctx) {
     """.trimIndent())
 }
 
-context(ctx: BytecodePatchContext)
-private fun hookInfinityBodies() = with(ctx) {
+private fun hookInfinityBodies() {
     val body = Fingerprint(
         parameters = emptyList(), returnType = "Ljava/lang/String;",
         custom = { method, owner ->

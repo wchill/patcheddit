@@ -9,7 +9,7 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.debug
 
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.patch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.all.misc.resources.addResourcesPatch
@@ -22,7 +22,7 @@ import app.morphe.util.ResourceGroup
 
 const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boost/debug/ExceptionHook;"
 
-private val exceptionLogResourcesPatch = resourcePatch(default = false) {
+private val exceptionLogResourcesPatch = patch(default = false) {
     dependsOn(
         boostMorpheSettingsPatch,
         boostMorpheSettingsResourcesPatch,

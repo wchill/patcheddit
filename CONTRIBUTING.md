@@ -27,6 +27,13 @@ that your pull request closes in the description of your pull request
 5. Our team will review your pull request and provide feedback. Once your pull request is approved,
 it will be merged into the `dev` branch and will be included in the next release of Patcheddit.
 
+## Writing patches
+
+Use Morphe's unified `patch {}` DSL for both resource and bytecode changes.
+In `execute` and `finalize`, call patcher functions such as `document()`,
+`resourceFile()`, and `mutableClassDefBy()` directly rather than passing a
+patch context to helpers.
+
 ## Updating Boost's library mapping
 
 `scripts/update_boost_mapping.py` transfers the previous vetted `mapping.txt`

@@ -7,7 +7,7 @@
 package app.morphe.patches.reddit.customclients.boostforreddit.http.reddit
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.BytecodePatchContext
+import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patcher.util.getReference
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.BoostNativeLibraries
@@ -21,8 +21,7 @@ private const val RETRY = "Lapp/morphe/extension/boost/http/reddit/ArcticShiftRe
 internal fun archiveRetryFields(fields: List<FieldReference>) =
     fields.joinToString(" ") { "${it.definingClass}->${it.name}:${it.type}" }
 
-context(context: BytecodePatchContext)
-internal fun installArchiveRetry() = with(context) {
+internal fun installArchiveRetry() {
     val native = BoostNativeLibraries.classes.associateBy { it.type }
     val (commentFields, submissionFields) = listOf(
         BoostApi.CommentModel.commentModelDeserialize,

@@ -9,7 +9,8 @@ package app.morphe.patches.reddit.customclients.boostforreddit.http.links
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.mutableClassDefBy
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.util.getReference
 import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.patches.reddit.customclients.AppCompatibility
@@ -28,7 +29,7 @@ import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 private const val QUERY = "Lapp/morphe/extension/boost/utils/LinkQueryParameters;"
 private const val IMAGE_SEARCH = "Lapp/morphe/extension/boost/utils/ImageSearchMenu;"
 
-internal val boostLinkMenuPatch = bytecodePatch {
+internal val boostLinkMenuPatch = patch {
     dependsOn(ExtensionPatches.Boost)
     execute {
         LinkBuildContextMenuFingerprint.method.apply {

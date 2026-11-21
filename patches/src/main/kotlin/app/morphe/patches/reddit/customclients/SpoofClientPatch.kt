@@ -9,10 +9,10 @@
 
 package app.morphe.patches.reddit.customclients
 
-import app.morphe.patcher.patch.BytecodePatchBuilder
 import app.morphe.patcher.patch.Option
 import app.morphe.patcher.patch.Patch
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.PatchDefinition
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.patch.stringOption
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.util.returnEarly
@@ -39,12 +39,12 @@ fun spoofClientPatch(
     name: String?,
     description: String,
     extensionPatch: Patch?,
-    block: BytecodePatchBuilder.(
+    block: PatchDefinition.(
         clientIdOption: Option<String>,
         redirectUriOption: Option<String>,
         userAgentOption: Option<String>
     ) -> Unit,
-) = bytecodePatch(
+) = patch(
     name = name,
     description = description,
     default = true
@@ -89,7 +89,7 @@ fun spoofClientPatch(
     )
 
     // Resolve before client-specific dependencies without exposing the ID in option metadata.
-    dependsOn(bytecodePatch(default = false) {
+    dependsOn(patch(default = false) {
         extensionPatch?.let { dependsOn(it) }
         execute {
             applyDefaultClientId(clientIdOption)
@@ -113,7 +113,7 @@ fun spoofClientPatch(
 fun spoofClientPatch(
     name: String,
     description: String,
-    block: BytecodePatchBuilder.(
+    block: PatchDefinition.(
         clientIdOption: Option<String>,
         redirectUriOption: Option<String>,
         userAgentOption: Option<String>,
@@ -121,7 +121,7 @@ fun spoofClientPatch(
 ) = spoofClientPatch(name, description, null, block)
 
 fun spoofClientPatch(
-    block: BytecodePatchBuilder.(
+    block: PatchDefinition.(
         clientIdOption: Option<String>,
         redirectUriOption: Option<String>,
         userAgentOption: Option<String>
@@ -134,7 +134,7 @@ fun spoofClientPatch(
 
 fun spoofClientPatch(
     extensionPatch: Patch,
-    block: BytecodePatchBuilder.(
+    block: PatchDefinition.(
         clientIdOption: Option<String>,
         redirectUriOption: Option<String>,
         userAgentOption: Option<String>,

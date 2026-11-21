@@ -8,7 +8,6 @@
 package app.morphe.patches.reddit.customclients.boostforreddit
 
 import app.morphe.patcher.Fingerprint
-import app.morphe.patcher.patch.BytecodePatchContext
 import app.morphe.patches.reddit.customclients.MorphePatchSetting
 import app.morphe.patches.reddit.customclients.wrapMorpheHook
 
@@ -17,7 +16,6 @@ import app.morphe.patches.reddit.customclients.wrapMorpheHook
  * original arguments alive for hooks without changing the native register map.
  * The native result, when present, is available to [after] in v0 (v0/v1 for wide).
  */
-context(patchContext: BytecodePatchContext)
 internal fun Fingerprint.wrapHook(
     before: String = "",
     after: String = "",

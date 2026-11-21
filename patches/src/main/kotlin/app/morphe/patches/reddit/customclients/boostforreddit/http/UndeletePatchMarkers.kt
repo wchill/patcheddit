@@ -7,14 +7,15 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.http
 
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.document
+import app.morphe.patcher.patch.patch
 
 // Retain inclusion markers for native integrations. Morphe menu entries are now registered
 // directly by the selected patches.
 internal const val REDDIT_UNDELETE_APPLIED_RESOURCE = "morphe_boost_undelete_reddit_applied"
 internal const val IMGUR_UNDELETE_APPLIED_RESOURCE = "morphe_boost_undelete_imgur_applied"
 
-internal fun undeleteAppliedMarkerPatch(resourceName: String) = resourcePatch {
+internal fun undeleteAppliedMarkerPatch(resourceName: String) = patch {
     execute {
         document("res/values/strings.xml").use { document ->
             val resources = document.documentElement

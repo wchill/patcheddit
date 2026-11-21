@@ -7,6 +7,7 @@
 package app.morphe.patches.reddit.customclients.redditisfun.fix.links
 
 import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.patch.classDefForEach
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.RELATIVE_MARKDOWN_LINKS

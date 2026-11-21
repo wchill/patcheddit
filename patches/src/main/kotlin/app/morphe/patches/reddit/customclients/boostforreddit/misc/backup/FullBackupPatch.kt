@@ -6,8 +6,8 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.misc.backup
 
-import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.document
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.patch.resourceXml
 import app.morphe.patcher.xml.XmlElement
 import app.morphe.patches.all.misc.PatchCategory
@@ -19,7 +19,7 @@ import org.w3c.dom.Element
 
 private const val EXTENSION = "Lapp/morphe/extension/boost/backup/BoostFullBackup;"
 
-private val keepBoostStoresInOneProcess = resourcePatch(default = false) {
+private val keepBoostStoresInOneProcess = patch(default = false) {
     execute {
         document("AndroidManifest.xml").use { manifest ->
             val receivers = manifest.getElementsByTagName("receiver")
@@ -34,7 +34,7 @@ private val keepBoostStoresInOneProcess = resourcePatch(default = false) {
     }
 }
 
-private val addFullBackupRows = resourcePatch(default = false) {
+private val addFullBackupRows = patch(default = false) {
     execute {
         resourceXml("res/layout/content_backup.xml").use { layout ->
             val container = layout.root.children.single()
@@ -69,7 +69,7 @@ private val addFullBackupRows = resourcePatch(default = false) {
 private fun XmlElement.hasId(name: String) = attribute("android:id")?.substringAfterLast('/') == name
 
 @Suppress("unused")
-val boostFullBackupPatch = bytecodePatch(
+val boostFullBackupPatch = patch(
     name = "Full Boost backup",
     description = "Adds full backups of local settings, accounts, drafts, and history to Boost's Backup screen.",
 ) {

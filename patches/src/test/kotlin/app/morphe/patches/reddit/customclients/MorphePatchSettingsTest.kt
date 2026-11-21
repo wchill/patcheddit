@@ -9,7 +9,7 @@ package app.morphe.patches.reddit.customclients
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.Patch
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableClass
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
@@ -240,7 +240,7 @@ class MorphePatchSettingsTest {
 
     @Test
     fun preservesTheLegacyAppAgnosticFactoryWithoutRequiringAClientSettingsMenu() {
-        val extension = bytecodePatch {}
+        val extension = patch {}
         val legacy = fixMoreCommentsPatch(extension, emptyArray())
         assertTrue(legacy.default)
         assertEquals(emptyList(), legacy.compatibility)
