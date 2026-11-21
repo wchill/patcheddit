@@ -1,3 +1,15 @@
+# [2.5.0-dev.3](https://github.com/wchill/patcheddit/compare/v2.5.0-dev.2...v2.5.0-dev.3) (2026-11-21)
+
+
+### Bug Fixes
+
+* **relay:** Handle more filetypes in native image viewer ([9cf3f41](https://github.com/wchill/patcheddit/commit/9cf3f41887144419de1a5f38a20991d9af4898c8))
+
+
+### Features
+
+* **relay:** Add inline media ([855249d](https://github.com/wchill/patcheddit/commit/855249da8eb09eef82f5d23dfc6d87ef34d3a1a5))
+
 # [2.5.0-dev.2](https://github.com/wchill/patcheddit/compare/v2.5.0-dev.1...v2.5.0-dev.2) (2026-11-20)
 
 

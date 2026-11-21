@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "2.5.0-dev.2",
+  "version": "2.5.0-dev.3",
   "patches": [
     {
       "name": "Add Boost Search bottom navigation",
@@ -667,6 +667,51 @@
           "targets": [
             {
               "version": "1.14.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix Reddit media link handling",
+      "description": "Opens Reddit-hosted images, GIFs, and videos in Relay's native media viewer.",
+      "default": true,
+      "category": "Media",
+      "compatiblePackages": [
+        {
+          "packageName": "free.reddit.news",
+          "name": "Relay for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "reddit.news",
+          "name": "Relay for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2089,6 +2134,51 @@
           "targets": [
             {
               "version": "5.6.22",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Inline media",
+      "description": "Shows linked images and GIFs in Relay comments and text posts.",
+      "default": true,
+      "category": "Media",
+      "compatiblePackages": [
+        {
+          "packageName": "free.reddit.news",
+          "name": "Relay for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "reddit.news",
+          "name": "Relay for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
