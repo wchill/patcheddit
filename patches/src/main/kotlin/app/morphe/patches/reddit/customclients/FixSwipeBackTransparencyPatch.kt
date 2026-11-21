@@ -20,7 +20,7 @@ import app.morphe.patches.all.misc.PatchCategory
 import com.android.tools.smali.dexlib2.AccessFlags
 
 internal fun fixSwipeBackTransparencyPatch(
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     compatible: Array<Compatibility>,
     restoreOpaque: Boolean,
 ) = morpheBytecodePatch(

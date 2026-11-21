@@ -66,7 +66,7 @@ internal data class MorphePreferenceSpec(
  * [optionsResource] is a bundled PreferenceCategory containing additional controls.
  */
 fun PatchBuilder<*>.addMorpheSettings(
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     title: String,
     description: String = "",
     category: String = PatchCategory.INTERFACE,
@@ -154,7 +154,7 @@ fun morpheBytecodePatch(
     name: String,
     description: String? = null,
     default: Boolean = true,
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     category: String? = null,
     preferenceKey: String? = null,
     defaultEnabled: Boolean = true,
@@ -179,7 +179,7 @@ fun morpheResourcePatch(
     name: String,
     description: String,
     default: Boolean = true,
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     category: String = PatchCategory.INTERFACE,
     readOnly: Boolean = true,
     optionsResource: String? = null,
@@ -196,10 +196,10 @@ fun morpheResourcePatch(
     block(setting)
 }
 
-private fun settingsPatchFor(extensionPatch: Patch<*>): Patch<*>? {
-    val pending = ArrayDeque<Patch<*>>().apply { add(extensionPatch) }
-    val visited = mutableSetOf<Patch<*>>()
-    val menus = mutableSetOf<Patch<*>>()
+private fun settingsPatchFor(extensionPatch: Patch): Patch? {
+    val pending = ArrayDeque<Patch>().apply { add(extensionPatch) }
+    val visited = mutableSetOf<Patch>()
+    val menus = mutableSetOf<Patch>()
     while (pending.isNotEmpty()) {
         val current = pending.removeFirst()
         if (!visited.add(current)) continue

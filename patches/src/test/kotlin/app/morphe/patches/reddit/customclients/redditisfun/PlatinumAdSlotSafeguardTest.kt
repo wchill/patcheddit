@@ -162,8 +162,8 @@ class PlatinumAdSlotSafeguardTest {
             fixCommentVideoLinksPatch, rifMorpheSettingsPatch,
             fixHistoryImportPatch, postToProfilePatch, explainRedditBlocksPatch,
         )
-        fun dependencies(vararg roots: Patch<*>) = buildSet {
-            fun visit(patch: Patch<*>) {
+        fun dependencies(vararg roots: Patch) = buildSet {
+            fun visit(patch: Patch) {
                 if (add(patch)) patch.dependencies.forEach(::visit)
             }
             roots.forEach(::visit)

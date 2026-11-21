@@ -217,8 +217,8 @@ class CrashLogPatchTest {
         ) { true })
     }
 
-    private fun dependencies(patch: Patch<*>): Set<Patch<*>> = buildSet {
-        fun visit(current: Patch<*>) {
+    private fun dependencies(patch: Patch): Set<Patch> = buildSet {
+        fun visit(current: Patch) {
             for (dependency in current.dependencies) if (add(dependency)) visit(dependency)
         }
         visit(patch)

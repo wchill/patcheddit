@@ -38,7 +38,7 @@ internal fun applyDefaultClientId(option: Option<String>) {
 fun spoofClientPatch(
     name: String?,
     description: String,
-    extensionPatch: Patch<*>?,
+    extensionPatch: Patch?,
     block: BytecodePatchBuilder.(
         clientIdOption: Option<String>,
         redirectUriOption: Option<String>,
@@ -133,7 +133,7 @@ fun spoofClientPatch(
 )
 
 fun spoofClientPatch(
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     block: BytecodePatchBuilder.(
         clientIdOption: Option<String>,
         redirectUriOption: Option<String>,

@@ -52,4 +52,9 @@
     <string name="morphe_crash_logs_open_title">Open a saved crash report</string>
     <string name="morphe_crash_logs_open_summary">Use the document picker if a report is not listed or storage access is restricted.</string>
     <string name="morphe_crash_logs_reports_title">Crash reports (newest first)</string>
+    <string name="morphe_debug_level_title">Debug logging</string>
+    <string name="morphe_debug_level_message">Include more Morphe messages in future crash reports. Logs can contain personal information. Review reports before sharing.</string>
+    <string name="morphe_debug_level_off">Off</string>
+    <string name="morphe_debug_level_debug">Debug</string>
+    <string name="morphe_debug_level_verbose">Verbose</string>
 </resources>

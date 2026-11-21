@@ -25,7 +25,7 @@ import com.android.tools.smali.dexlib2.immutable.ImmutableMethod
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethodParameter
 
 fun modifyWebViewPatch(
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     compatible: Array<Compatibility>
 ) = bytecodePatch(
     description = "Adjusts the Reddit login page to prevent sign-in problems.",

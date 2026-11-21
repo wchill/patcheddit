@@ -52,12 +52,12 @@ internal fun isCrashlyticsExceptionHandler(method: Method): Boolean =
             method.returnType == "V" && method.implementation != null
 
 fun crashLogPatch(
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     compatible: Array<Compatibility>,
     mainActivity: Fingerprint? = null,
     exceptionHandler: Fingerprint? = null,
     exceptionHookDescriptor: String = EXCEPTION_HOOK_CLASS_DESCRIPTOR,
-    settingsPatch: Patch<*>? = null,
+    settingsPatch: Patch? = null,
     description: String = "Logs reported errors and fatal crashes, viewable in Morphe settings.",
 ) = morpheBytecodePatch(
     name = "Log exceptions",

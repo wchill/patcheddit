@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceCategory;
 import android.preference.PreferenceGroup;
@@ -140,6 +141,23 @@ public final class MorpheSettingsActivity extends MorphePreferenceActivity {
             throw new IllegalStateException("The Morphe reports category is missing.");
         }
         reports = (PreferenceCategory) category;
+        if (!exceptions) {
+            // Morphe's logger reads its own setting, not the host app's default preferences.
+            ListPreference debugLevel = (ListPreference) preference(BaseSettings.DEBUG_LEVEL.key);
+            debugLevel.setEntries(new CharSequence[]{
+                    getText(resource("string", "morphe_debug_level_off")),
+                    getText(resource("string", "morphe_debug_level_debug")),
+                    getText(resource("string", "morphe_debug_level_verbose"))
+            });
+            debugLevel.setEntryValues(new CharSequence[]{
+                    DebugLevel.DISABLED.name(), DebugLevel.DEBUG.name(), DebugLevel.VERBOSE.name()
+            });
+            debugLevel.setValue(BaseSettings.DEBUG_LEVEL.get().name());
+            debugLevel.setOnPreferenceChangeListener((entry, value) -> {
+                BaseSettings.DEBUG_LEVEL.save(DebugLevel.valueOf((String) value));
+                return true;
+            });
+        }
         action = preference(exceptions ? "morphe_exception_log_save" : "morphe_crash_logs_open");
         action.setOnPreferenceClickListener(ignored -> {
             if (exceptions) {

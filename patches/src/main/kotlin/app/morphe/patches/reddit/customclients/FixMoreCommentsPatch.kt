@@ -15,7 +15,7 @@ import app.morphe.patcher.util.returnEarly
 
 @JvmOverloads
 fun fixMoreCommentsPatch(
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     compatible: Array<Compatibility>,
     default: Boolean = true,
 ) = bytecodePatch(

@@ -15,7 +15,7 @@ import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.util.returnEarly
 
 internal fun fixFailedGalleryImagesPatch(
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     compatible: Array<Compatibility>,
     additional: BytecodePatchContext.() -> Unit = {},
 ) = bytecodePatch(

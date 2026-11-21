@@ -12,7 +12,7 @@ import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.util.returnEarly
 import app.morphe.patches.all.misc.PatchCategory
 
-internal fun redditApiPatch(spoofClient: Patch<*>, vararg fixes: Patch<*>) = bytecodePatch(
+internal fun redditApiPatch(spoofClient: Patch, vararg fixes: Patch) = bytecodePatch(
     name = "Reddit API fixes",
     description = "Restores Reddit API access and login with the fixes required by this app.",
 ) {
@@ -23,7 +23,7 @@ internal fun redditApiPatch(spoofClient: Patch<*>, vararg fixes: Patch<*>) = byt
     spoofClient.options.values.forEach { it() }
 }
 
-internal fun legacySpoofClientPatch(apiPatch: Patch<*>) = bytecodePatch(
+internal fun legacySpoofClientPatch(apiPatch: Patch) = bytecodePatch(
     name = "Spoof client",
     description = "Restores saved OAuth options from before 2.3.0. Includes Reddit API fixes. " +
         "Launch the updated app once to save these values in its API settings before deselecting this patch.",

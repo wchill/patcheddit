@@ -28,7 +28,10 @@ dependencies {
     // Required due to smali, or build fails. Can be removed once smali is bumped.
     implementation(libs.guava)
 
-    implementation(libs.morphe.patches.library)
+    implementation(libs.morphe.patches.library) {
+        // The library still requests the older smali hash, which Gradle sorts above the patcher's.
+        exclude(group = "com.github.MorpheApp.smali", module = "smali")
+    }
 
     // Android API stubs defined here.
     compileOnly(project(":patches:stub"))

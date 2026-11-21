@@ -21,7 +21,7 @@ internal const val CREATE_NEW_CLIENT_METHOD = "createClient()Lokhttp3/OkHttpClie
 internal val redgifsSetting = MorphePatchSetting("morphe_patch_fix_redgifs_api")
 
 fun fixRedgifsApiPatch(
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     block: BytecodePatchBuilder.() -> Unit = {},
 ) = morpheBytecodePatch(
     name = "Fix Redgifs API",

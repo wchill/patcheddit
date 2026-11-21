@@ -16,7 +16,7 @@ internal const val ESCAPED_URLS_PATCH = "Lapp/morphe/extension/shared/fixes/link
 internal const val ESCAPED_URLS = "Lapp/morphe/extension/shared/fixes/links/EscapedUrls;"
 
 internal fun fixEscapedUrlsPatch(
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     compatible: Array<Compatibility>,
     additional: BytecodePatchContext.(MorphePatchSetting) -> Unit = {},
 ) = morpheBytecodePatch(

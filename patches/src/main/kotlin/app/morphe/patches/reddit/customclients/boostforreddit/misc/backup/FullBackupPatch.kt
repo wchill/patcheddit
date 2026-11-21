@@ -8,6 +8,8 @@ package app.morphe.patches.reddit.customclients.boostforreddit.misc.backup
 
 import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.resourceXml
+import app.morphe.patcher.xml.XmlElement
 import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
@@ -34,11 +36,12 @@ private val keepBoostStoresInOneProcess = resourcePatch(default = false) {
 
 private val addFullBackupRows = resourcePatch(default = false) {
     execute {
-        document("res/layout/content_backup.xml").use { layout ->
-            val container = layout.documentElement.childElements().single()
-            val rows = container.childElements()
-            val explanation = rows.single { it.hasId("backup_explanation") }
-            val actions = layout.createElement("LinearLayout").apply {
+        resourceXml("res/layout/content_backup.xml").use { layout ->
+            val container = layout.root.children.single()
+            val rows = container.children
+            val explanationIndex = rows.indexOfFirst { it.hasId("backup_explanation") }
+            check(explanationIndex >= 0) { "Missing native Boost backup explanation" }
+            val actions = container.insertChild(explanationIndex, "LinearLayout") {
                 setAttribute("android:tag", "morphe_full_backup_actions")
                 setAttribute("android:orientation", "vertical")
                 setAttribute("android:layout_width", "match_parent")
@@ -46,29 +49,24 @@ private val addFullBackupRows = resourcePatch(default = false) {
                 setAttribute("android:visibility", "gone")
             }
             for ((action, title) in listOf("export" to "Export full backup", "import" to "Import full backup")) {
-                val native = rows.single { row -> row.childElements().any { it.hasId("${action}_settings") } }
+                val native = rows.single { row -> row.children.any { it.hasId("${action}_settings") } }
                 val divider = rows[rows.indexOf(native) + 1]
-                check(divider.tagName == "com.google.android.material.divider.MaterialDivider") {
+                check(divider.tag == "com.google.android.material.divider.MaterialDivider") {
                     "Missing native Boost backup divider"
                 }
-                val row = native.cloneNode(true) as Element
-                val clickable = row.childElements().single { it.hasId("${action}_settings") }
+                val row = actions.appendCopy(native)
+                val clickable = row.children.single { it.hasId("${action}_settings") }
                 clickable.removeAttribute("android:id")
                 clickable.setAttribute("android:tag", "morphe_full_backup_$action")
-                clickable.childElements().single { it.tagName == "TextView" }
+                clickable.children("TextView").single()
                     .setAttribute("android:text", title)
-                actions.appendChild(row)
-                actions.appendChild(divider.cloneNode(true))
+                actions.appendCopy(divider)
             }
-            container.insertBefore(actions, explanation)
         }
     }
 }
 
-private fun Element.childElements(): List<Element> =
-    (0 until childNodes.length).mapNotNull { childNodes.item(it) as? Element }
-
-private fun Element.hasId(name: String) = getAttribute("android:id").substringAfterLast('/') == name
+private fun XmlElement.hasId(name: String) = attribute("android:id")?.substringAfterLast('/') == name
 
 @Suppress("unused")
 val boostFullBackupPatch = bytecodePatch(

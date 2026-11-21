@@ -13,6 +13,8 @@ import android.content.SharedPreferences;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.PreferenceActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -44,12 +46,56 @@ public final class BoostFullBackupDeviceTest {
     private static final String LOCAL = "patcheddit.fixture.destination_only";
 
     public static void run(Context context, Bundle arguments) throws Exception {
-        if ("verify".equals(arguments.getString("phase"))) {
+        if ("diagnostics".equals(arguments.getString("phase"))) {
+            verifyDebugLogging(context);
+        } else if ("verify".equals(arguments.getString("phase"))) {
             verifyRestored(context);
         } else {
             verifyActions(context);
             stageRestore(context, Integer.parseInt(arguments.getString("version-offset", "0")));
         }
+    }
+
+    private static void verifyDebugLogging(Context context) throws Exception {
+        var instrumentation = PatchedditInstrumentation.instance;
+        String type = "app.morphe.extension.shared.settings.MorpheSettingsActivity";
+        var monitor = instrumentation.addMonitor(type, null, false);
+        Activity activity;
+        try {
+            context.startActivity(new Intent().setClassName(context, type)
+                    .putExtra("morphe_screen", "morphe_fatal_crash_logs")
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            activity = monitor.waitForActivityWithTimeout(15_000);
+            check(activity != null, "Fatal crash logs screen did not start");
+        } finally {
+            instrumentation.removeMonitor(monitor);
+        }
+        FutureTask<Void> assertions = new FutureTask<>(() -> {
+            Class<?> logger = context.getClassLoader().loadClass("app.morphe.extension.shared.Logger");
+            Method debug = logger.getMethod("isDebugEnabled");
+            Method verbose = logger.getMethod("isVerboseEnabled");
+            ListPreference level = (ListPreference) ((PreferenceActivity) activity).findPreference("morphe_debug_level");
+            check(level != null, "Missing crash log level preference");
+            var listener = level.getOnPreferenceChangeListener();
+            check(listener != null, "The debug logging preference is not bound");
+            String previous = level.getValue();
+            try {
+                check("DISABLED".equals(previous) && !(Boolean) debug.invoke(null),
+                        "Debug logging was enabled by default");
+                check(listener.onPreferenceChange(level, "DEBUG") && (Boolean) debug.invoke(null)
+                        && !(Boolean) verbose.invoke(null), "Debug level did not reach the Morphe logger");
+                check(listener.onPreferenceChange(level, "VERBOSE") && (Boolean) verbose.invoke(null),
+                        "Verbose level did not reach the Morphe logger");
+                check(listener.onPreferenceChange(level, "DISABLED") && !(Boolean) debug.invoke(null),
+                        "Disabling debug logging did not reach the Morphe logger");
+            } finally {
+                listener.onPreferenceChange(level, previous);
+                activity.finish();
+            }
+            return null;
+        });
+        instrumentation.runOnMainSync(assertions);
+        assertions.get(10, TimeUnit.SECONDS);
     }
 
     private static void verifyActions(Context context) throws Exception {

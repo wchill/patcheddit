@@ -13,7 +13,7 @@ import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.util.returnEarly
 
 fun fixRedditApiLookupsPatch(
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     compatible: Array<Compatibility>,
 ) = bytecodePatch(
     description = "Fixes blocked post, comment, and community info requests.",

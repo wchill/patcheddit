@@ -16,7 +16,7 @@ import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patcher.util.returnEarly
 
 fun fixRAllPatch(
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     compatible: Array<Compatibility>
 ) = bytecodePatch(
     description = "Loads /r/all through Reddit's .json endpoint so the feed shows posts.",

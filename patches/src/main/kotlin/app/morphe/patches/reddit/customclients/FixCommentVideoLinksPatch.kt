@@ -14,7 +14,7 @@ import app.morphe.patches.all.misc.PatchCategory
 internal const val COMMENT_VIDEO_LINKS = "Lapp/morphe/extension/shared/fixes/media/CommentVideoLinks;"
 
 internal fun fixCommentVideoLinksPatch(
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     compatible: Array<Compatibility>,
     hook: BytecodePatchContext.() -> Unit,
 ) = morpheBytecodePatch(

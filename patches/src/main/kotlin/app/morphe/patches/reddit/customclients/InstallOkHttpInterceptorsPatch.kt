@@ -17,7 +17,7 @@ import app.morphe.patcher.util.registersUsed
 
 @Suppress("unused")
 internal fun interceptHttpRequestsPatch(
-    dependsOn: Array<Patch<*>>,
+    dependsOn: Array<Patch>,
     compatibleWith: Array<Compatibility>,
     extensionClassDescriptor: String
 ) = bytecodePatch(

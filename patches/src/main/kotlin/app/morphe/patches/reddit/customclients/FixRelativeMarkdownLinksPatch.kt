@@ -29,7 +29,7 @@ private const val HTML_LINKS =
 private const val STRING = "Ljava/lang/String;"
 
 internal fun fixRelativeMarkdownLinksPatch(
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     compatible: Array<Compatibility>,
     frameworkRenderer: Boolean = true,
     additional: BytecodePatchContext.() -> Unit = {},

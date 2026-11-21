@@ -9,7 +9,7 @@ import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 fun disableAdsPatch(block: BytecodePatchBuilder.() -> Unit = {}) = disableAdsPatch(ExtensionPatches.Sync, block)
 
 fun disableAdsPatch(
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     block: BytecodePatchBuilder.() -> Unit = {},
 ) = morpheBytecodePatch(
     name = "Disable ads",

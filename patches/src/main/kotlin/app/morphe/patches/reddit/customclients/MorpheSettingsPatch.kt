@@ -124,7 +124,7 @@ internal fun registerMorpheSettingsActivity(manifest: Document) {
 
 internal fun morphePreferencesPatch(
     name: String,
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     compatible: Array<Compatibility>,
     resourceName: String,
     nativeStyle: Boolean = false,
@@ -153,7 +153,7 @@ internal fun morphePreferencesPatch(
 
 internal fun morpheListSettingsPatch(
     name: String,
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     compatible: Array<Compatibility>,
     menu: Fingerprint,
 ) = bytecodePatch(

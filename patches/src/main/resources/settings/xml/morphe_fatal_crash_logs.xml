@@ -5,6 +5,12 @@
             android:summary="@string/morphe_crash_logs_about_summary"
             android:selectable="false" />
     </PreferenceCategory>
+    <ListPreference
+        android:key="morphe_debug_level"
+        android:title="@string/morphe_debug_level_title"
+        android:summary="%s"
+        android:dialogMessage="@string/morphe_debug_level_message"
+        android:persistent="false" />
     <Preference
         android:key="morphe_crash_logs_open"
         android:title="@string/morphe_crash_logs_open_title"
