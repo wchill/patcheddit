@@ -16,10 +16,15 @@ import android.graphics.Color;
 import android.graphics.Insets;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowInsets;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -29,12 +34,18 @@ import java.util.concurrent.TimeUnit;
 public final class BoostNavigationInsetsDeviceTest {
     private static final String MAIN =
             "com.rubenmayayo.reddit.ui.submissions.subreddit.MainActivity";
+    private static final String SUBREDDIT =
+            "com.rubenmayayo.reddit.ui.submissions.subreddit.SubredditActivity";
+    private static final String SUBREDDIT_SEARCH =
+            "com.rubenmayayo.reddit.ui.subreddits.SearchSubredditActivity";
     private static final String NAVIGATION =
             "app.morphe.extension.boost.utils.BoostSearchBottomNavigation";
     private static final String UNDERLAY =
             "morphe_boost_bottom_navigation_decor_underlay";
     private static final String FALLBACK =
             "MORPHE_BOOST_MAIN_NAV_BAR_SURFACE_OVERLAY_V4";
+    private static final String STATUS_SURFACE =
+            "MORPHE_BOOST_COMMENTS_SYSTEM_BAR_SURFACE_V1";
 
     public static void run(Context context, Bundle arguments) throws Exception {
         SharedPreferences preferences =
@@ -43,7 +54,8 @@ public final class BoostNavigationInsetsDeviceTest {
         String[] keys = {
                 "pref_dev_reddit_client_id", "pref_dev_reddit_redirect_url",
                 "pref_dev_reddit_user_agent", "pref_saved_version",
-                "pref_bottom_navigation", "pref_bottom_navigation_hide_on_scroll"
+                "pref_bottom_navigation", "pref_bottom_navigation_hide_on_scroll",
+                "pref_show_subreddit_header"
         };
         SharedPreferences.Editor setup = preferences.edit()
                 .putBoolean("pref_bottom_navigation", true)
@@ -100,6 +112,15 @@ public final class BoostNavigationInsetsDeviceTest {
                 check(bar.getVisibility() == View.VISIBLE, "Navigation could not be re-enabled");
                 return null;
             });
+
+            if (android.os.Build.VERSION.SDK_INT >= 35) {
+                for (boolean header : new boolean[]{false, true}) {
+                    check(preferences.edit().putBoolean("pref_show_subreddit_header", header).commit(),
+                            "Could not set the subreddit header preference");
+                    testSubredditStatusBar(context, SUBREDDIT);
+                }
+                testSubredditStatusBar(context, SUBREDDIT_SEARCH);
+            }
         } finally {
             instrumentation.removeMonitor(monitor);
             if (activity != null) {
@@ -115,6 +136,87 @@ public final class BoostNavigationInsetsDeviceTest {
                 else restore.putString(key, (String) value);
             }
             check(restore.commit(), "Could not restore native preferences");
+        }
+    }
+
+    private static void testSubredditStatusBar(Context context, String name) throws Exception {
+        var instrumentation = PatchedditInstrumentation.instance;
+        var monitor = instrumentation.addMonitor(name, null, false);
+        Activity activity;
+        try {
+            Intent intent = new Intent().setClassName(context, name).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (SUBREDDIT.equals(name)) {
+                intent.setAction(Intent.ACTION_VIEW).setData(Uri.parse("https://www.reddit.com/r/patcheddit/"));
+            }
+            context.startActivity(intent);
+            activity = monitor.waitForActivityWithTimeout(15_000);
+            check(activity != null, name + " did not start");
+        } finally {
+            instrumentation.removeMonitor(monitor);
+        }
+
+        try {
+            ScrollView scroll = onMain(() -> {
+                FrameLayout content = activity.findViewById(android.R.id.content);
+                ScrollView list = new ScrollView(activity);
+                LinearLayout rows = new LinearLayout(activity);
+                rows.setOrientation(LinearLayout.VERTICAL);
+                for (int i = 0; i < 3; i++) {
+                    View row = new View(activity);
+                    row.setBackgroundColor(i % 2 == 0 ? Color.MAGENTA : Color.GREEN);
+                    rows.addView(row, new LinearLayout.LayoutParams(-1,
+                            activity.getResources().getDisplayMetrics().heightPixels));
+                }
+                list.addView(rows);
+                content.addView(list, new FrameLayout.LayoutParams(-1, -1));
+                return list;
+            });
+            for (int attempt = 0; attempt < 100 && !onMain(() -> scroll.getHeight() > 0); attempt++) {
+                SystemClock.sleep(50);
+            }
+            onMain(() -> {
+                View decor = activity.getWindow().getDecorView();
+                int top = decor.getRootWindowInsets().getInsets(WindowInsets.Type.statusBars()).top;
+                check(top > 0 && scroll.getHeight() > top, "No status inset or scrollable content on " + name);
+                int[] position = new int[2], origin = new int[2];
+                scroll.getLocationInWindow(position);
+                decor.getLocationInWindow(origin);
+                scroll.setTranslationY(origin[1] - position[1]);
+
+                int attribute = activity.getResources().getIdentifier("ToolbarColor", "attr", activity.getPackageName());
+                TypedValue value = new TypedValue();
+                check(activity.getTheme().resolveAttribute(attribute, value, true), "No native toolbar color");
+                int expected = value.data | 0xff000000;
+                for (int y : new int[]{0, scroll.getChildAt(0).getHeight() / 3}) {
+                    scroll.scrollTo(0, y);
+                    check(scroll.getScrollY() == y, "Synthetic rows did not scroll");
+                    Bitmap bitmap = Bitmap.createBitmap(decor.getWidth(), top + 1, Bitmap.Config.ARGB_8888);
+                    try {
+                        decor.draw(new Canvas(bitmap));
+                        int x = bitmap.getWidth() / 2;
+                        check(bitmap.getPixel(x, top) == (y == 0 ? Color.MAGENTA : Color.GREEN),
+                                "Test rows did not draw immediately below the status bar on " + name);
+                        int actual = bitmap.getPixel(x, top / 2);
+                        check(actual == expected, "Scrolled content shows through the status bar on " + name
+                                + " (expected " + Integer.toHexString(expected)
+                                + ", got " + Integer.toHexString(actual) + ")");
+                    } finally {
+                        bitmap.recycle();
+                    }
+                }
+                View surface = decor.findViewWithTag(STATUS_SURFACE);
+                check(surface != null, "No status bar surface on " + name);
+                for (int height : new int[]{top / 2, 0, top}) {
+                    WindowInsets insets = new WindowInsets.Builder()
+                            .setInsets(WindowInsets.Type.statusBars(), Insets.of(0, height, 0, 0))
+                            .build();
+                    check(surface.dispatchApplyWindowInsets(insets) == insets, "Status surface consumed insets");
+                    check(surface.getLayoutParams().height == height, "Status surface retained a stale inset");
+                }
+                return null;
+            });
+        } finally {
+            onMain(() -> { activity.finish(); return null; });
         }
     }
 

@@ -692,6 +692,7 @@ public final class BoostSystemBarInsetsFix {
         // Issue #37 also reproduces on the main feed/subreddit listing activity.
         // Keep scope explicit instead of applying to all Boost activities.
         if (isMainListingActivity(activity)) return true;
+        if (needsSubredditStatusBarSurface(activity)) return true;
 
         // Settings was part of the original report. Keep it scoped to Boost settings
         // activities and let the toolbar detector decide whether there is a top toolbar.
@@ -713,6 +714,14 @@ public final class BoostSystemBarInsetsFix {
         if (className.contains(".ui.images.")) return false;
 
         return false;
+    }
+
+    private static boolean needsSubredditStatusBarSurface(Activity activity) {
+        if (Build.VERSION.SDK_INT < 35) return false;
+
+        String name = activity.getClass().getName();
+        return name.equals("com.rubenmayayo.reddit.ui.submissions.subreddit.SubredditActivity")
+                || name.equals("com.rubenmayayo.reddit.ui.subreddits.SearchSubredditActivity");
     }
 
     private static boolean isMainListingActivity(Activity activity) {
@@ -741,27 +750,32 @@ public final class BoostSystemBarInsetsFix {
             View decor = window.getDecorView();
             if (decor == null) return;
 
+            boolean subreddit = needsSubredditStatusBarSurface(activity);
             int statusHeight = getStatusBarTopInset(decor);
-            if (statusHeight <= 0) {
+            if (!subreddit && statusHeight <= 0) {
                 statusHeight = getStatusBarHeight(activity);
+                if (statusHeight <= 0) return;
             }
-            if (statusHeight <= 0) return;
 
-            int color = findCommentsToolbarSurfaceColor(activity, decor, statusHeight);
+            // The subreddit banner or results can scroll under the bar, so their
+            // current backgrounds aren't a stable source for the status bar color.
+            int color = subreddit ? resolveThemeColor(activity, "ToolbarColor", 0) : 0;
+            if (!isOpaque(color)) color = findCommentsToolbarSurfaceColor(activity, decor, statusHeight);
+            if (subreddit) color |= 0xff000000;
+            installStatusBarSurface(decor, statusHeight, color, subreddit);
 
-            installStatusBarSurface(decor, statusHeight, color);
-
-            if (Build.VERSION.SDK_INT >= 21) {
+            if (!subreddit && Build.VERSION.SDK_INT >= 21) {
                 window.setStatusBarColor(color);
             }
             applyLightStatusBarFlag(decor, color);
+            if (subreddit) return; // Keep the native toolbar and bottom navigation unchanged.
             applyMainActivityNavigationBarSurface(activity, window, decor, color);
             applyCommentsToolbarForeground(activity, decor, statusHeight, color);
         } catch (Throwable ignored) {
         }
     }
 
-    private static void installStatusBarSurface(View decor, int statusHeight, int color) {
+    private static void installStatusBarSurface(View decor, int statusHeight, int color, boolean followInsets) {
         if (!(decor instanceof ViewGroup)) return;
 
         ViewGroup group = (ViewGroup) decor;
@@ -789,17 +803,27 @@ public final class BoostSystemBarInsetsFix {
                         statusHeight
                 ));
             }
+            if (followInsets) {
+                surface.setOnApplyWindowInsetsListener((view, insets) -> {
+                    setStatusBarSurfaceHeight(view, insets.getInsets(WindowInsets.Type.statusBars()).top);
+                    return insets;
+                });
+                surface.requestApplyInsets();
+            }
         }
 
+        setStatusBarSurfaceHeight(surface, statusHeight);
+        surface.setBackgroundColor(color);
+        surface.bringToFront();
+        surface.invalidate();
+    }
+
+    private static void setStatusBarSurfaceHeight(View surface, int statusHeight) {
         ViewGroup.LayoutParams params = surface.getLayoutParams();
         if (params != null && params.height != statusHeight) {
             params.height = statusHeight;
             surface.setLayoutParams(params);
         }
-
-        surface.setBackgroundColor(color);
-        surface.bringToFront();
-        surface.invalidate();
     }
 
     private static int findCommentsToolbarSurfaceColor(Activity activity, View decor, int statusHeight) {
