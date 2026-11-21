@@ -124,6 +124,7 @@ abstract class Drawer protected constructor(stub: Unit) {
 }
 
 abstract class DrawerActivity protected constructor(stub: Unit) : com.rubenmayayo.reddit.ui.activities.ToolbarActivity(Unit), app.morphe.extension.boost.api.Drawer.ItemListener, app.morphe.extension.boost.api.Drawer.SelectionListener, com.rubenmayayo.reddit.ui.customviews.dialogs.UserSelectorView.Callback {
+    fun reloadDrawerSubscriptions(): Unit = boostApiStub()
     open fun onNavigationLongPress(p0: Int, p1: Boolean): Unit = boostApiStub()
     fun selectAccount(p0: Int): Unit = boostApiStub()
     open fun currentCommunity(): String? = boostApiStub()

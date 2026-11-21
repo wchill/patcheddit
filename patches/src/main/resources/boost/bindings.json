@@ -1,6 +1,7 @@
 {
   "version": "1.14.4",
   "classes": {
+    "Lcom/rubenmayayo/reddit/ui/customviews/SearchOptionsView;": "Lcom/rubenmayayo/reddit/ui/customviews/SearchOptionsView;",
     "Lapp/morphe/extension/boost/api/CommentMenuListener;": "Ljv;",
     "Lapp/morphe/extension/boost/api/NativeComment;": "Lnet/dean/jraw/models/Comment;",
     "Lapp/morphe/extension/boost/api/NativeJsonMapper;": "Lcom/fasterxml/jackson/databind/ObjectMapper;",
@@ -87,6 +88,7 @@
     "Lapp/morphe/extension/boost/api/BackActivity;": "Lhh;",
     "Lapp/morphe/extension/boost/api/BaseImageActivity;": "Lri;",
     "Lapp/morphe/extension/boost/api/BoostPreferences;": "Lxs2;",
+    "Lapp/morphe/extension/boost/api/BoostSettingsBackup;": "Lxs2$f;",
     "Lapp/morphe/extension/boost/api/BottomSheetMenu$OnMenuOptionSelected;": "Lfm$b;",
     "Lapp/morphe/extension/boost/api/BottomSheetMenu;": "Lfm;",
     "Lapp/morphe/extension/boost/api/BottomSheetPro$ProResultListener;": "Lhm$c;",
@@ -358,6 +360,9 @@
     "Lokhttp3/OkHttpClient;": "Lokhttp3/OkHttpClient;"
   },
   "methods": {
+    "Lapp/morphe/extension/boost/api/DrawerActivity;->reloadDrawerSubscriptions()V": "Lxj0;->E1()V",
+    "Lapp/morphe/extension/boost/api/DrawerActivity;->setDrawerSubscriptions(Ljava/util/ArrayList;)V": "Lxj0;->U1(Ljava/util/ArrayList;)V",
+    "Lcom/rubenmayayo/reddit/ui/customviews/SearchOptionsView;->refreshOptions()V": "Lcom/rubenmayayo/reddit/ui/customviews/SearchOptionsView;->b()V",
     "Lapp/morphe/extension/boost/api/NativeJsonMapper;-><init>()V": "Lcom/fasterxml/jackson/databind/ObjectMapper;-><init>()V",
     "Lapp/morphe/extension/boost/api/NativeJsonMapper;->readTree(Ljava/lang/String;)Lapp/morphe/extension/boost/api/NativeJsonNode;": "Lcom/fasterxml/jackson/databind/ObjectMapper;->readTree(Ljava/lang/String;)Lcom/fasterxml/jackson/databind/JsonNode;",
     "Lapp/morphe/extension/boost/api/NativeComment;-><init>(Lapp/morphe/extension/boost/api/NativeJsonNode;)V": "Lnet/dean/jraw/models/Comment;-><init>(Lcom/fasterxml/jackson/databind/JsonNode;)V",
@@ -375,6 +380,8 @@
     "Lapp/morphe/extension/boost/api/RedditJraw;->ensureAuthenticated()V": "Lxd2;->b()V",
     "Lapp/morphe/extension/boost/api/AccountStore;->users()Ljava/util/List;": "Lj;->m()Ljava/util/List;",
     "Lapp/morphe/extension/boost/api/BoostPreferences;->getUserAgent()Ljava/lang/String;": "Lxs2;->f0()Ljava/lang/String;",
+    "Lapp/morphe/extension/boost/api/BoostPreferences;->exportSettings(Landroid/content/Context;)Ljava/lang/String;": "Lxs2;->c(Landroid/content/Context;)Ljava/lang/String;",
+    "Lapp/morphe/extension/boost/api/BoostSettingsBackup;->restore(Landroid/content/Context;)V": "Lxs2$f;->a(Landroid/content/Context;)V",
     "Lcom/activeandroid/ActiveAndroid;->beginTransaction()V": "Lcom/activeandroid/ActiveAndroid;->beginTransaction()V",
     "Lcom/activeandroid/ActiveAndroid;->setTransactionSuccessful()V": "Lcom/activeandroid/ActiveAndroid;->setTransactionSuccessful()V",
     "Lcom/activeandroid/ActiveAndroid;->endTransaction()V": "Lcom/activeandroid/ActiveAndroid;->endTransaction()V",
@@ -886,6 +893,7 @@
     "Lnet/dean/jraw/util/JrawUtils;->newUrl(Ljava/lang/String;)Ljava/net/URL;": "Lnet/dean/jraw/util/JrawUtils;->newUrl(Ljava/lang/String;)Ljava/net/URL;"
   },
   "fields": {
+    "Lcom/rubenmayayo/reddit/models/reddit/SubscriptionViewModel;->isMultireddit:Z": "Lcom/rubenmayayo/reddit/models/reddit/SubscriptionViewModel;->b:Z",
     "Lcom/rubenmayayo/reddit/ui/adapters/CommentViewHolder;->menuDialog:Lcom/afollestad/materialdialogs/MaterialDialog;": "Lcom/rubenmayayo/reddit/ui/adapters/CommentViewHolder;->r0:Lip1;",
     "Lapp/morphe/extension/boost/api/CommentMenuListener;->holder:Lcom/rubenmayayo/reddit/ui/adapters/CommentViewHolder;": "Ljv;->a:Lcom/rubenmayayo/reddit/ui/adapters/CommentViewHolder;",
     "Lapp/morphe/extension/boost/api/RedditJraw;->credentials:Lnet/dean/jraw/http/oauth/Credentials;": "Lxd2;->d:Lnet/dean/jraw/http/oauth/Credentials;",

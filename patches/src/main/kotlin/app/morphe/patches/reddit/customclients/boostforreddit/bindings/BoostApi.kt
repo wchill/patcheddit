@@ -10,6 +10,10 @@
 package app.morphe.patches.reddit.customclients.boostforreddit.bindings
 
 internal object BoostApi {
+    object SearchOptionsView : BoostTypeBinding("Lcom/rubenmayayo/reddit/ui/customviews/SearchOptionsView;") {
+        val refreshOptions get() = method("refreshOptions()V")
+    }
+
     object AHBottomNavigationBehavior : BoostTypeBinding("Lcom/aurelhubert/ahbottomnavigation/AHBottomNavigationBehavior;") {
         val legacyNavigationSnackbarMargin get() = method("legacyNavigationSnackbarMargin(Landroid/view/View;Landroid/view/View;)Z")
     }
@@ -48,7 +52,11 @@ internal object BoostApi {
         val onBindViewHolder get() = method("onBindViewHolder(Landroidx/recyclerview/widget/RecyclerView\$ViewHolder;I)V")
     }
     object BoostPreferences : BoostTypeBinding("Lapp/morphe/extension/boost/api/BoostPreferences;") {
+        val exportSettings get() = method("exportSettings(Landroid/content/Context;)Ljava/lang/String;")
         val getApiPreference get() = method("getApiPreference(Ljava/lang/String;)Ljava/lang/String;")
+    }
+    object BoostSettingsBackup : BoostTypeBinding("Lapp/morphe/extension/boost/api/BoostSettingsBackup;") {
+        val restore get() = method("restore(Landroid/content/Context;)V")
     }
     object CodecSpecificDataUtil : BoostTypeBinding("Lapp/morphe/extension/boost/api/CodecSpecificDataUtil;") {
         val findSubmissionIndex get() = method("findSubmissionIndex(Ljava/util/List;Lcom/rubenmayayo/reddit/models/reddit/SubmissionModel;)I")
@@ -90,6 +98,7 @@ internal object BoostApi {
         val onNestedPreScroll get() = method("onNestedPreScroll(Landroidx/coordinatorlayout/widget/CoordinatorLayout;Landroid/view/View;Landroid/view/View;II[II)V")
     }
     object DrawerActivity : BoostTypeBinding("Lapp/morphe/extension/boost/api/DrawerActivity;") {
+        val setDrawerSubscriptions get() = method("setDrawerSubscriptions(Ljava/util/ArrayList;)V")
         val setBottomNavigationVisible get() = method("setBottomNavigationVisible(Z)V")
         val setProfileAvatar get() = method("setProfileAvatar(Lapp/morphe/extension/boost/api/ProfileAvatarDrawable;)V")
         val setupBottomNavigation get() = method("setupBottomNavigation(I)V")

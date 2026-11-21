@@ -34,20 +34,20 @@ internal const val MORPHE_SETTINGS_DESCRIPTION =
 
 internal val morpheSettingsContextPatch = bytecodePatch(default = false) {
     lateinit var applicationType: String
+    lateinit var packageName: String
     dependsOn(resourcePatch(default = false) {
         execute {
             document("AndroidManifest.xml").use { manifest ->
                 val application = checkNotNull(manifest.getElementsByTagName("application").item(0) as? Element) {
                     "AndroidManifest.xml has no application element."
                 }
-                applicationType = applicationDescriptor(
-                    manifest.documentElement.getAttribute("package"),
-                    application.getAttribute("android:name"),
-                )
+                packageName = manifest.documentElement.getAttribute("package")
+                applicationType = applicationDescriptor(packageName, application.getAttribute("android:name"))
             }
         }
     })
     finalize {
+        installMatureContentEnforcement(packageName)
         onCreateMethod(mutableClassDefBy(applicationType)).addInstruction(
             0,
             "invoke-static/range {p0 .. p0}, $PATCH_SETTINGS_DESCRIPTOR->initialize(Landroid/app/Application;)V",

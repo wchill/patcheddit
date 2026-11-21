@@ -29,6 +29,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -38,6 +39,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
+
+import app.morphe.extension.shared.settings.MatureContentLock;
 
 final class BoostBackupStorage {
     private static final String FORMAT_VERSION = "1";
@@ -148,7 +151,7 @@ final class BoostBackupStorage {
                 output.getFD().sync();
             }
             if (i < PREFERENCES.length) {
-                validatePreferences(file);
+                readPreferences(file);
             } else {
                 BackupDatabase.validate(file.toFile(), REQUIRED_TABLES[i - PREFERENCES.length]);
             }
@@ -208,6 +211,7 @@ final class BoostBackupStorage {
             Path staged = entry(pending, i);
             if (!Files.exists(staged)) continue; // Already installed before an interrupted startup.
             File target = stores[i];
+            if (i == 0) preserveMatureContentLock(target.toPath(), staged);
             Files.createDirectories(target.toPath().getParent());
             String[] sidecars = i < PREFERENCES.length ? new String[]{".bak"}
                     : new String[]{"-wal", "-shm", "-journal"};
@@ -272,7 +276,11 @@ final class BoostBackupStorage {
     // Snapshot the in-memory preferences, including edits that Android hasn't flushed to disk yet.
     private static void snapshotPreferences(Context context, int index, File file) throws IOException {
         Map<String, ?> values = context.getSharedPreferences(prefName(context, index), Context.MODE_PRIVATE).getAll();
-        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(file.toPath()))) {
+        writePreferences(values, file.toPath());
+    }
+
+    private static void writePreferences(Map<String, ?> values, Path file) throws IOException {
+        try (OutputStream output = new BufferedOutputStream(Files.newOutputStream(file))) {
             XmlSerializer xml = Xml.newSerializer();
             xml.setOutput(output, "UTF-8");
             xml.startDocument("UTF-8", true);
@@ -310,7 +318,21 @@ final class BoostBackupStorage {
         xml.endTag(null, type);
     }
 
-    private static void validatePreferences(Path file) throws IOException {
+    private static void preserveMatureContentLock(Path target, Path staged) throws IOException {
+        Path rollback = target.resolveSibling(target.getFileName() + ".bak");
+        Path current = Files.exists(rollback) ? rollback : target;
+        if (!Files.exists(current) || !Boolean.TRUE.equals(readPreferences(current).get(MatureContentLock.KEY))) {
+            return;
+        }
+        Map<String, Object> imported = readPreferences(staged);
+        if (Boolean.TRUE.equals(imported.put(MatureContentLock.KEY, true))) return;
+        Path replacement = staged.resolveSibling("lock-preserved.xml");
+        writePreferences(imported, replacement);
+        Files.move(replacement, staged, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    private static Map<String, Object> readPreferences(Path file) throws IOException {
+        Map<String, Object> values = new LinkedHashMap<>();
         try (InputStream input = Files.newInputStream(file)) {
             XmlPullParser xml = Xml.newPullParser();
             xml.setFeature(XmlPullParser.FEATURE_PROCESS_DOCDECL, false);
@@ -319,25 +341,34 @@ final class BoostBackupStorage {
                 throw new IOException("Invalid settings in the backup.");
             }
             while (xml.nextTag() == XmlPullParser.START_TAG) {
-                if (xml.getAttributeValue(null, "name") == null) {
+                String name = xml.getAttributeValue(null, "name");
+                if (name == null) {
                     throw new IOException("Invalid settings in the backup.");
                 }
                 String value = xml.getAttributeValue(null, "value");
-                switch (xml.getName()) {
+                String type = xml.getName();
+                Object parsed = switch (type) {
                     case "string" -> xml.nextText();
                     case "set" -> {
+                        Set<String> items = new HashSet<>();
                         while (xml.nextTag() == XmlPullParser.START_TAG) {
                             xml.require(XmlPullParser.START_TAG, null, "string");
-                            xml.nextText();
+                            items.add(xml.nextText());
                         }
+                        yield items;
                     }
                     case "int", "long", "float", "boolean" -> {
-                        if (!isValidPreferenceValue(xml.getName(), value) || !xml.nextText().isEmpty()) {
+                        if (value == null || !xml.nextText().isEmpty()) {
                             throw new IOException("Invalid settings in the backup.");
                         }
+                        yield parsePreferenceValue(type, value);
                     }
                     default -> throw new IOException("Invalid settings in the backup.");
+                };
+                if (MatureContentLock.KEY.equals(name) && !(parsed instanceof Boolean)) {
+                    throw new IOException("Invalid mature content lock in the backup.");
                 }
+                values.put(name, parsed);
             }
             if (xml.next() != XmlPullParser.END_DOCUMENT) {
                 throw new IOException("Invalid settings in the backup.");
@@ -345,20 +376,22 @@ final class BoostBackupStorage {
         } catch (XmlPullParserException | NumberFormatException exception) {
             throw new IOException("Invalid settings in the backup.", exception);
         }
+        return values;
     }
 
-    private static boolean isValidPreferenceValue(String type, String value) {
-        if (value == null) return false;
-        switch (type) {
+    private static Object parsePreferenceValue(String type, String value) throws IOException {
+        return switch (type) {
             case "int" -> Integer.parseInt(value);
             case "long" -> Long.parseLong(value);
             case "float" -> Float.parseFloat(value);
             case "boolean" -> {
-                return "true".equals(value) || "false".equals(value);
+                if (!"true".equals(value) && !"false".equals(value)) {
+                    throw new IOException("Invalid Boolean setting in the backup.");
+                }
+                yield Boolean.parseBoolean(value);
             }
-            default -> throw new IllegalArgumentException("Unsupported preference type");
-        }
-        return true;
+            default -> throw new IOException("Unsupported preference type in the backup.");
+        };
     }
 
     private static long copy(InputStream input, OutputStream output, long limit, String overflow) throws IOException {

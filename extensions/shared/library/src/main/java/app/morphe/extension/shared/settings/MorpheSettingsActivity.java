@@ -55,6 +55,7 @@ public final class MorpheSettingsActivity extends MorphePreferenceActivity {
             "morphe_category_navigation",
             "morphe_category_links",
             "morphe_category_comments_posting",
+            "morphe_category_content_filtering",
             "morphe_category_media",
             "morphe_category_undelete",
             "morphe_category_login_api",
@@ -94,6 +95,7 @@ public final class MorpheSettingsActivity extends MorphePreferenceActivity {
                     ? "morphe_boost_settings_skeleton" : "morphe_settings"));
             setTitle(resource("string", "morphe_settings_title"));
             bindPatchPreferences(getPreferenceScreen());
+            bindMatureContentLock();
             bindOAuthPreferences();
             bindScreen(EXCEPTIONS, EXCEPTIONS);
             bindScreen("morphe_crash_logs", CRASHES);
@@ -191,6 +193,39 @@ public final class MorpheSettingsActivity extends MorphePreferenceActivity {
             return true;
         });
         return about;
+    }
+
+    private void bindMatureContentLock() {
+        CheckBoxPreference entry = (CheckBoxPreference) findPreference("morphe_enable_mature_content_lock");
+        if (entry == null) return;
+        boolean locked = MatureContentLock.isLocked(this);
+        entry.setChecked(locked);
+        entry.setEnabled(!locked);
+        if (locked) {
+            entry.setOnPreferenceChangeListener(null);
+            entry.setSummary(resource("string", "morphe_mature_content_locked"));
+            return;
+        }
+        entry.setOnPreferenceChangeListener((preference, value) -> {
+            if (!Boolean.TRUE.equals(value) || MatureContentLock.isLocked(this)) return false;
+            show(new AlertDialog.Builder(this)
+                    .setTitle(resource("string", "morphe_mature_content_lock_title"))
+                    .setMessage(resource("string", "morphe_mature_content_lock_confirm"))
+                    .setNegativeButton(android.R.string.cancel, null)
+                    .setPositiveButton(resource("string", "morphe_mature_content_lock_enable"), (dialog, which) -> {
+                        try {
+                            MatureContentLock.enable(this);
+                            bindMatureContentLock();
+                            message(entry.getTitle().toString(),
+                                    getString(resource("string", "morphe_mature_content_restart")));
+                        } catch (IOException failure) {
+                            Log.e(TAG, "Could not save the mature content lock.", failure);
+                            message(entry.getTitle().toString(),
+                                    getString(resource("string", "morphe_mature_content_lock_failed")));
+                        }
+                    }));
+            return false; // Only reflect the lock after confirmation and saving.
+        });
     }
 
     private void bindPatchPreferences(PreferenceGroup group) {

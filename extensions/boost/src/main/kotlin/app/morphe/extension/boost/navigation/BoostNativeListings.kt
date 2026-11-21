@@ -28,6 +28,8 @@ import net.dean.jraw.paginators.SubredditPaginator
 import app.morphe.extension.boost.api.RedditJraw
 import app.morphe.extension.boost.api.NativeJsonModel
 import app.morphe.extension.boost.api.TrendingSearch
+import org.json.JSONObject
+import java.util.Locale
 
 /** Typed bindings for Boost 1.14.1's native JRAW, search rows and sidebar loader. */
 object BoostNativeListings {
@@ -46,6 +48,28 @@ object BoostNativeListings {
     @JvmStatic
     fun fetchSubreddit(name: String): SubredditModel =
         SubredditModel(client().getSubreddit(name))
+
+    fun safeCommunities(names: List<String>): Set<String> {
+        val reddit = checkNotNull(RedditJraw.instance) { "Boost RedditJRAW is not initialized" }
+        val client = checkNotNull(reddit.client) { "Boost RedditJRAW client is not initialized" }
+        reddit.ensureAuthenticated()
+        val request = client.request().path("/api/info").query("sr_name", names.joinToString(","), "raw_json", "1")
+            .build()
+        val response = checkNotNull(client.execute(request)) { "Boost's community lookup returned no response" }
+        val json = JSONObject(checkNotNull(response.raw) { "Boost's community lookup returned no body" })
+        val children = json.getJSONObject("data").getJSONArray("children")
+        val requested = names.toSet()
+        return buildSet {
+            for (index in 0 until children.length()) {
+                val child = children.optJSONObject(index) ?: continue
+                if (child.optString("kind") != "t5") continue
+                val data = child.optJSONObject("data") ?: continue
+                val name = (data.opt("display_name") as? String)?.lowercase(Locale.ROOT) ?: continue
+                val flags = listOfNotNull(data.opt("over18"), data.opt("over_18"))
+                if (name in requested && flags.isNotEmpty() && flags.all { it == false }) add(name)
+            }
+        }
+    }
 
     @JvmStatic
     fun searchRow(name: String, model: SubredditModel): Any =

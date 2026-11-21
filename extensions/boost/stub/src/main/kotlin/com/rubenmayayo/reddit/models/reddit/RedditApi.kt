@@ -65,6 +65,7 @@ open class SubscriptionViewModel protected constructor(stub: Unit) : android.os.
     constructor(p0: String?) : this(Unit) { boostApiStub<Unit>() }
     constructor(p0: String?, p1: Boolean) : this(Unit) { boostApiStub<Unit>() }
     @JvmField var community: String = boostApiStub()
+    @JvmField var isMultireddit: Boolean = boostApiStub()
     override fun describeContents(): Int = boostApiStub()
     override fun writeToParcel(p0: android.os.Parcel, p1: Int): Unit = boostApiStub()
     companion object {

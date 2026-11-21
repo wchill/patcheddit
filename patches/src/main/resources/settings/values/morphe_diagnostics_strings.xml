@@ -68,4 +68,12 @@
     <string name="morphe_debug_level_off">Off</string>
     <string name="morphe_debug_level_debug">Debug</string>
     <string name="morphe_debug_level_verbose">Verbose</string>
+    <string name="morphe_content_filtering_title">Content filtering</string>
+    <string name="morphe_mature_content_lock_title">Permanently disable NSFW</string>
+    <string name="morphe_mature_content_lock_summary">Lock mature content settings and hide content Reddit marks as NSFW.</string>
+    <string name="morphe_mature_content_lock_confirm">Once enabled, this cannot be turned off in the app. The lock survives repatching and is stored with your settings. Continuing requires you to restart the app.</string>
+    <string name="morphe_mature_content_lock_enable">Enable permanently</string>
+    <string name="morphe_mature_content_locked">NSFW filtering is permanently enabled.</string>
+    <string name="morphe_mature_content_restart">Close and reopen the app to reload its settings and feeds.</string>
+    <string name="morphe_mature_content_lock_failed">Could not save the lock. NSFW filtering may not persist after restarting.</string>
 </resources>

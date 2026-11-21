@@ -184,7 +184,8 @@ public final class BoostFullBackupDeviceTest {
         expectInvalid(restore, context, rewriteZip(backup, 1, false), "newer version");
         check(prefs.getLong(KEY, -1) == 42, "A rejected backup modified data");
 
-        check(prefs.edit().remove(KEY).putString(LOCAL, "not in the backup").commit(),
+        check(prefs.edit().remove(KEY).putString(LOCAL, "not in the backup")
+                        .putBoolean("pref_patcheddit_mature_content_lock", true).commit(),
                 "Could not create destination-only settings");
         check(prefs(context, ".READ").edit().remove(READ).putBoolean(LOCAL, true).commit(),
                 "Could not create destination-only read history");
@@ -204,6 +205,8 @@ public final class BoostFullBackupDeviceTest {
     private static void verifyRestored(Context context) {
         SharedPreferences prefs = prefs(context, "_preferences");
         check(prefs.getLong(KEY, -1) == 42 && !prefs.contains(LOCAL), "Full restore did not replace settings");
+        check(prefs.getBoolean("pref_patcheddit_mature_content_lock", false),
+                "Restoring an older backup removed an active mature content lock");
         check(Set.of("fixture & <>", "value").equals(prefs.getStringSet(KEY + ".set", null)),
                 "Full restore lost a native preference type");
         check(SUBREDDIT.equals(prefs(context, ".SUBREDDIT_HISTORY").getString(KEY, "")),
