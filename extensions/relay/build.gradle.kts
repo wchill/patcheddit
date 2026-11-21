@@ -4,4 +4,5 @@ dependencies {
     compileOnly(project(":extensions:relay:stub"))
     compileOnly(libs.annotation)
     compileOnly(libs.okhttp)
+    testImplementation("junit:junit:4.13.2")
 }
