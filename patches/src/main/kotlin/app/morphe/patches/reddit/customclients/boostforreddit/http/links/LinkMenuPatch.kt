@@ -26,6 +26,7 @@ import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 
 private const val QUERY = "Lapp/morphe/extension/boost/utils/LinkQueryParameters;"
+private const val IMAGE_SEARCH = "Lapp/morphe/extension/boost/utils/ImageSearchMenu;"
 
 internal val boostLinkMenuPatch = bytecodePatch {
     dependsOn(ExtensionPatches.Boost)
@@ -40,6 +41,8 @@ internal val boostLinkMenuPatch = bytecodePatch {
                 invoke-static {v$list}, $SETTINGS_UTILS_EXTENSION_CLASS_DESCRIPTOR->addMenuOptions(Ljava/util/List;)V
                 invoke-static {p0, v$list}, $QUERY->addMenuOption(${BoostApi.LinkMenu.type}Ljava/util/List;)V
             """)
+            addInstructions(index,
+                "invoke-static {v$list}, $IMAGE_SEARCH->replaceOptions(Ljava/util/List;)V")
         }
         OnClickContextMenuFingerprint.method.apply {
             val actions = setOf(BoostApi.Utils.copyLink.toString(), BoostApi.Utils.shareLink.toString())
@@ -58,6 +61,12 @@ internal val boostLinkMenuPatch = bytecodePatch {
             }
         }
         OnClickContextMenuFingerprint.wrapHook(before = """
+            iget-object v0, p0, ${BoostApi.LinkMenuListener.linkMenu}
+            invoke-static {v0, p1}, $IMAGE_SEARCH->onClick(${BoostApi.LinkMenu.type}${BoostApi.MenuOption.type})Z
+            move-result v0
+            if-eqz v0, :morphe_native_image_action
+            return-void
+            :morphe_native_image_action
             iget-object v0, p0, ${BoostApi.LinkMenuListener.linkMenu}
             invoke-static {v0, p1}, $QUERY->onClick(${BoostApi.LinkMenu.type}${BoostApi.MenuOption.type})Z
             move-result v0
