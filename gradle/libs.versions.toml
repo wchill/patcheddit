@@ -27,6 +27,10 @@ material = { module = "com.google.android.material:material", version.ref = "mat
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 
+# Compile against the APIs provided by the stock Boost APK, not the shared extension versions.
+androidx-preference-boost = { module = "androidx.preference:preference", version = "1.2.0" }
+okhttp-boost = { module = "com.squareup.okhttp3:okhttp", version = "5.0.0-alpha.8" }
+
 #noinspection NewerVersionAvailable
 jackson-databind-boost = { module = "com.fasterxml.jackson.core:jackson-databind", version = "2.6.0" }
 jraw-boost = { module = "com.github.wchill:JRAW", version = "454a2f9" }
