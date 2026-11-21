@@ -17,8 +17,6 @@ import android.os.Build;
 import android.os.Process;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -31,7 +29,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public final class BoostFullBackup {
     private static final String TAG = "BoostFullBackup";
     private static final String MIME = "application/zip";
-    private static final String BUTTON_TAG = "morphe_full_backup_export";
     private static final int EXPORT = 15001, IMPORT = 15002;
     private static final ExecutorService WORKER = Executors.newSingleThreadExecutor();
     private static final AtomicBoolean BUSY = new AtomicBoolean();
@@ -55,19 +52,14 @@ public final class BoostFullBackup {
 
     public static void addActions(Activity activity) {
         if (Build.VERSION.SDK_INT < 26) return;
-        int id = activity.getResources().getIdentifier("backup_explanation", "id", activity.getPackageName());
-        View explanation = activity.findViewById(id);
-        if (explanation == null || !(explanation.getParent() instanceof LinearLayout)) {
-            Log.e(TAG, "Could not find the native backup screen");
+        View actions = activity.getWindow().getDecorView().findViewWithTag("morphe_full_backup_actions");
+        View export = actions == null ? null : actions.findViewWithTag("morphe_full_backup_export");
+        View restore = actions == null ? null : actions.findViewWithTag("morphe_full_backup_import");
+        if (export == null || restore == null) {
+            Log.e(TAG, "Could not find the full backup rows");
             Toast.makeText(activity, "Full backup options are unavailable.", Toast.LENGTH_LONG).show();
             return;
         }
-        LinearLayout parent = (LinearLayout) explanation.getParent();
-        if (parent.findViewWithTag(BUTTON_TAG) != null) return;
-        int position = parent.indexOfChild(explanation);
-        Button export = new Button(activity);
-        export.setText("Export full backup");
-        export.setTag(BUTTON_TAG);
         export.setOnClickListener(view -> new AlertDialog.Builder(activity)
                 .setTitle("Export unencrypted backup?")
                 .setMessage("The file includes your account sign-in tokens, drafts, and history. "
@@ -75,11 +67,8 @@ public final class BoostFullBackup {
                 .setNegativeButton(android.R.string.cancel, null)
                 .setPositiveButton("Choose where to save", (dialog, which) -> chooseDocument(activity, true))
                 .show());
-        parent.addView(export, position);
-        Button restore = new Button(activity);
-        restore.setText("Import full backup");
         restore.setOnClickListener(view -> chooseDocument(activity, false));
-        parent.addView(restore, position + 1);
+        actions.setVisibility(View.VISIBLE);
     }
 
     private static void chooseDocument(Activity activity, boolean export) {

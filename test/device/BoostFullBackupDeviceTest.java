@@ -14,6 +14,8 @@ import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -63,17 +65,42 @@ public final class BoostFullBackupDeviceTest {
             instrumentation.removeMonitor(monitor);
         }
         FutureTask<Void> checkActions = new FutureTask<>(() -> {
-            for (String id : new String[]{"export_settings", "import_settings"}) {
-                View view = activity.findViewById(context.getResources().getIdentifier(id, "id", context.getPackageName()));
-                check(view != null && view.hasOnClickListeners(), "Native settings-only action was removed: " + id);
-            }
-            View full = activity.getWindow().getDecorView().findViewWithTag("morphe_full_backup_export");
-            check(full != null && full.hasOnClickListeners(), "Full backup action is unavailable");
+            checkBackupRow(activity, "export", "Export full backup");
+            checkBackupRow(activity, "import", "Import full backup");
             activity.finish();
             return null;
         });
         instrumentation.runOnMainSync(checkActions);
         checkActions.get(10, TimeUnit.SECONDS);
+    }
+
+    private static void checkBackupRow(Activity activity, String action, String title) {
+        int id = activity.getResources().getIdentifier(action + "_settings", "id", activity.getPackageName());
+        View existing = activity.findViewById(id);
+        check(existing != null && existing.hasOnClickListeners(), "Native settings-only action was removed: " + action);
+        View full = activity.getWindow().getDecorView().findViewWithTag("morphe_full_backup_" + action);
+        check(full instanceof ViewGroup && full.isShown() && full.hasOnClickListeners(),
+                "Full backup action is unavailable or is not a settings row: " + action);
+
+        TextView nativeLabel = (TextView) ((ViewGroup) existing).getChildAt(0);
+        TextView fullLabel = (TextView) ((ViewGroup) full).getChildAt(0);
+        check(title.contentEquals(fullLabel.getText())
+                        && nativeLabel.getTextSize() == fullLabel.getTextSize()
+                        && nativeLabel.getCurrentTextColor() == fullLabel.getCurrentTextColor(),
+                "Full backup label does not match the native row: " + action);
+        check(existing.getPaddingStart() == full.getPaddingStart() && existing.getPaddingEnd() == full.getPaddingEnd()
+                        && existing.getPaddingTop() == full.getPaddingTop()
+                        && existing.getPaddingBottom() == full.getPaddingBottom(),
+                "Full backup spacing does not match the native row: " + action);
+        View nativeRow = (View) existing.getParent(), fullRow = (View) full.getParent();
+        check(nativeRow.getBackground().getClass() == fullRow.getBackground().getClass()
+                        && dividerAfter(nativeRow).getClass() == dividerAfter(fullRow).getClass(),
+                "Full backup background or divider does not match the native row: " + action);
+    }
+
+    private static View dividerAfter(View row) {
+        ViewGroup group = (ViewGroup) row.getParent();
+        return group.getChildAt(group.indexOfChild(row) + 1);
     }
 
     private static void stageRestore(Context context, int versionOffset) throws Exception {
