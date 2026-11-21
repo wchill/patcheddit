@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-11-21T04:36:30",
-  "description": "# [2.5.0-dev.3](https://github.com/wchill/patcheddit/compare/v2.5.0-dev.2...v2.5.0-dev.3) (2026-11-21)\n\n\n### Bug Fixes\n\n* **relay:** Handle more filetypes in native image viewer ([9cf3f41](https://github.com/wchill/patcheddit/commit/9cf3f41887144419de1a5f38a20991d9af4898c8))\n\n\n### Features\n\n* **relay:** Add inline media ([855249d](https://github.com/wchill/patcheddit/commit/855249da8eb09eef82f5d23dfc6d87ef34d3a1a5))",
-  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.5.0-dev.3/patches-2.5.0-dev.3.mpp",
-  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.5.0-dev.3/patches-2.5.0-dev.3.mpp.asc",
-  "version": "2.5.0-dev.3"
+  "created_at": "2026-11-21T06:56:19",
+  "description": "# [2.5.0-dev.4](https://github.com/wchill/patcheddit/compare/v2.5.0-dev.3...v2.5.0-dev.4) (2026-11-21)\n\n\n### Bug Fixes\n\n* **boost:** Make status bar opaque in subreddit search results ([4315ee9](https://github.com/wchill/patcheddit/commit/4315ee98c2d272327a42b0c50c72d86305bd6f91))\n* **boost:** Update Google reverse image search URL ([ebe3b3b](https://github.com/wchill/patcheddit/commit/ebe3b3bf0b15edf7db213c4830d357fb8f18b07e))\n\n\n### Features\n\n* **boost:** Add ability to backup/restore full viewing history ([49e28c1](https://github.com/wchill/patcheddit/commit/49e28c12e1f850fc8f6626d09b13a788e62e24c9))\n* **boost:** Remember collapsed comments ([98ed133](https://github.com/wchill/patcheddit/commit/98ed133d382ce176c6d16056423c951fc3b9b195))",
+  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.5.0-dev.4/patches-2.5.0-dev.4.mpp",
+  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.5.0-dev.4/patches-2.5.0-dev.4.mpp.asc",
+  "version": "2.5.0-dev.4"
 }

@@ -1,3 +1,17 @@
+# [2.5.0-dev.4](https://github.com/wchill/patcheddit/compare/v2.5.0-dev.3...v2.5.0-dev.4) (2026-11-21)
+
+
+### Bug Fixes
+
+* **boost:** Make status bar opaque in subreddit search results ([4315ee9](https://github.com/wchill/patcheddit/commit/4315ee98c2d272327a42b0c50c72d86305bd6f91))
+* **boost:** Update Google reverse image search URL ([ebe3b3b](https://github.com/wchill/patcheddit/commit/ebe3b3bf0b15edf7db213c4830d357fb8f18b07e))
+
+
+### Features
+
+* **boost:** Add ability to backup/restore full viewing history ([49e28c1](https://github.com/wchill/patcheddit/commit/49e28c12e1f850fc8f6626d09b13a788e62e24c9))
+* **boost:** Remember collapsed comments ([98ed133](https://github.com/wchill/patcheddit/commit/98ed133d382ce176c6d16056423c951fc3b9b195))
+
 # [2.5.0-dev.3](https://github.com/wchill/patcheddit/compare/v2.5.0-dev.2...v2.5.0-dev.3) (2026-11-21)
 
 

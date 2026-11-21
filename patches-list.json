@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "2.5.0-dev.3",
+  "version": "2.5.0-dev.4",
   "patches": [
     {
       "name": "Add Boost Search bottom navigation",
@@ -625,7 +625,7 @@
     },
     {
       "name": "Fix Boost navigation bar overlap",
-      "description": "Keeps Boost's bottom controls and drawer clear of the system navigation bar on Android 15 and newer.",
+      "description": "Keeps Boost's bottom controls and drawer clear of the system navigation bar and prevents content from showing through the status bar in subreddits on Android 15 and newer.",
       "default": true,
       "category": "Navigation",
       "compatiblePackages": [
@@ -1812,6 +1812,33 @@
       "options": []
     },
     {
+      "name": "Fix image search",
+      "description": "Updates image search engines in the link menu, including Google Lens.",
+      "default": true,
+      "category": "Media",
+      "compatiblePackages": [
+        {
+          "packageName": "com.rubenmayayo.reddit",
+          "name": "Boost for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "1.14.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Fix post thumbnails",
       "description": "Fixes loading post thumbnails by correcting their URLs.",
       "default": true,
@@ -1999,6 +2026,33 @@
           "targets": [
             {
               "version": "v23.06.30-13:39",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Full Boost backup",
+      "description": "Adds full backups of local settings, accounts, drafts, and history to Boost's Backup screen.",
+      "default": true,
+      "category": "Advanced",
+      "compatiblePackages": [
+        {
+          "packageName": "com.rubenmayayo.reddit",
+          "name": "Boost for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "1.14.4",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -3374,6 +3428,33 @@
           "targets": [
             {
               "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Remember collapsed comments",
+      "description": "Keeps collapsed replies closed when you reopen their parent comment.",
+      "default": true,
+      "category": "Comments & posting",
+      "compatiblePackages": [
+        {
+          "packageName": "com.rubenmayayo.reddit",
+          "name": "Boost for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "1.14.4",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
