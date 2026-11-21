@@ -70,6 +70,7 @@ In addition, patches for some apps contain additional features that were not pre
 * Links with query parameters offer an unchecked **Strip query parameters** checkbox for **Share link** and **Copy link**. Hide it using **Show strip query parameters option** in Patcheddit settings.
 
 ### Relay
+* **Inline media** shows Reddit, Imgur, and Giphy images and GIFs in comments and text posts. **Patcheddit > Media > Keep inline media URLs** defaults to on; turning it off hides bare URLs without removing descriptive labels.
 * **Fix Reddit media link handling** opens Reddit-hosted images, GIFs, and videos in Relay's native media viewer, including signed preview links, thumbnails, avatars, and emoji. It defaults to on under **Patcheddit > Media**.
 
 ### reddit is fun

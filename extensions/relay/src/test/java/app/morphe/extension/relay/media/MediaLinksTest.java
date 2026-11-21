@@ -5,6 +5,18 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class MediaLinksTest {
+    @Test public void inlineMediaUsesPublicImagesNotVideosOrPages() {
+        String signed = "https://preview.redd.it/image.jpeg?format=pjpg&s=a%2Fb";
+        assertEquals(signed, MediaLinks.inlineImage(signed));
+        assertEquals("https://media.giphy.com/media/AbC123/giphy.gif",
+                MediaLinks.inlineImage("https://giphy.com/gifs/some-title-AbC123"));
+        assertEquals("https://i.imgur.com/image.gif", MediaLinks.inlineImage("https://i.imgur.com/image.gif"));
+        for (String url : new String[]{"https://preview.redd.it/image.gif?format=mp4",
+                "https://v.redd.it/abc", "https://i.imgur.com/a/abc", "https://localhost/image.png",
+                "https://media.giphy.com.attacker.test/image.gif", "https://user@i.imgur.com/image.png"}) {
+            assertNull(url, MediaLinks.inlineImage(url));
+        }
+    }
     @Test public void imageCdnFamiliesAndFormats() {
         for (String host : new String[]{"i.redd.it", "preview.redd.it", "external-preview.redd.it",
                 "a.thumbs.redditmedia.com", "b.thumbs.redditmedia.com", "styles.redditmedia.com",

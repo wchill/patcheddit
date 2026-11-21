@@ -17,7 +17,7 @@ public final class MediaLinks {
 
     private MediaLinks() {}
 
-    static URI uri(String link) {
+    private static URI webUri(String link) {
         if (link == null || link.length() > 8192) return null;
         try {
             URI uri = new URI(link);
@@ -26,16 +26,39 @@ public final class MediaLinks {
                     || !(scheme.equalsIgnoreCase("https") || scheme.equalsIgnoreCase("http"))) return null;
             int port = uri.getPort();
             if (port != -1 && port != (scheme.equalsIgnoreCase("https") ? 443 : 80)) return null;
-            host = host.toLowerCase(Locale.ROOT);
-            if (!(host.equals("i.redd.it") || host.equals("preview.redd.it")
-                    || host.equals("external-preview.redd.it") || host.equals("v.redd.it")
-                    || host.equals("vcf.redd.it") || host.equals("packaged-media.redd.it")
-                    || host.equals("redditmedia.com") || host.endsWith(".redditmedia.com")
-                    || host.equals("redditstatic.com") || host.endsWith(".redditstatic.com"))) return null;
             return uri;
         } catch (URISyntaxException invalidUrl) {
             return null;
         }
+    }
+
+    static URI uri(String link) {
+        URI uri = webUri(link);
+        if (uri == null) return null;
+        String host = uri.getHost().toLowerCase(Locale.ROOT);
+        return host.equals("i.redd.it") || host.equals("preview.redd.it")
+                || host.equals("external-preview.redd.it") || host.equals("v.redd.it")
+                || host.equals("vcf.redd.it") || host.equals("packaged-media.redd.it")
+                || host.equals("redditmedia.com") || host.endsWith(".redditmedia.com")
+                || host.equals("redditstatic.com") || host.endsWith(".redditstatic.com") ? uri : null;
+    }
+
+    static String inlineImage(String link) {
+        int kind = kind(link);
+        if (kind == IMAGE || kind == ANIMATED) return link;
+        URI uri = webUri(link);
+        if (uri == null) return null;
+        String host = uri.getHost().toLowerCase(Locale.ROOT), path = uri.getPath();
+        if (host.equals("giphy.com") || host.equals("www.giphy.com")) {
+            String id = path.substring(path.lastIndexOf('/') + 1);
+            id = id.substring(id.lastIndexOf('-') + 1);
+            return id.matches("[A-Za-z0-9]{1,64}") && path.startsWith("/gifs/")
+                    ? "https://media.giphy.com/media/" + id + "/giphy.gif" : null;
+        }
+        if (!(host.equals("i.imgur.com") || host.equals("media.giphy.com") || host.equals("i.giphy.com"))) return null;
+        String format = format(uri);
+        String suffix = format.isEmpty() ? path.substring(path.lastIndexOf('.') + 1).toLowerCase(Locale.ROOT) : format;
+        return suffix.matches("jpe?g|pjpg|png|gif|webp|avif|bmp") ? link : null;
     }
 
     static String format(URI uri) {

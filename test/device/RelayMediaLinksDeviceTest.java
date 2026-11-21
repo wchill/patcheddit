@@ -42,6 +42,7 @@ public final class RelayMediaLinksDeviceTest {
     private static SharedPreferences preferences;
     private static final Map<String, byte[]> images = new HashMap<>();
     private static final List<String> requests = java.util.Collections.synchronizedList(new ArrayList<>());
+    static final CountDownLatch SLOW = new CountDownLatch(1);
     private static final String run = Long.toString(System.nanoTime());
     private static final String query = "?s=fixture%2Fsignature%3D&run=" + run;
 
@@ -162,6 +163,10 @@ public final class RelayMediaLinksDeviceTest {
                         "Live Reddit CDN image did not decode");
                 closePreview();
             }
+            if ("true".equals(arguments.getString("inline"))) {
+                type("app.patcheddit.fixture.RelayInlineMediaDeviceTest")
+                        .getMethod("verify", Context.class, Activity.class).invoke(null, context, host);
+            }
             check(preferences.edit().putBoolean(KEY, false).commit(), "Could not disable the patch");
             check(!(Boolean) fetchType.getMethod("k", String.class).invoke(fetcher, still),
                     "Disabled patch still intercepted JPEG previews");
@@ -281,13 +286,15 @@ public final class RelayMediaLinksDeviceTest {
             check(request.getClass().getMethod("header", String.class).invoke(request, "Authorization") == null
                     && request.getClass().getMethod("header", String.class).invoke(request, "Cookie") == null,
                     "Account credentials reached a public media request");
+            if (path.endsWith("slow.jpeg")) check(SLOW.await(15, TimeUnit.SECONDS), "Slow fixture timed out");
             byte[] bytes;
             String location = null;
             if (path.endsWith("redirect.mpd") || path.endsWith("outside.mpd")) {
                 location = path.endsWith("outside.mpd") ? "https://example.com/manifest.mpd"
                         : "https://vcf.redd.it/PatchedditFixture/moved/DASHPlaylist.mpd" + query;
                 bytes = new byte[0];
-            } else if (path.endsWith("oversized.mpd")) bytes = new byte[513 * 1024];
+            } else if (path.endsWith("corrupt.png")) bytes = new byte[]{1, 2, 3};
+            else if (path.endsWith("oversized.mpd")) bytes = new byte[513 * 1024];
             else if (path.endsWith("broken.mpd")) bytes = "<broken>".getBytes(StandardCharsets.UTF_8);
             else if (path.endsWith(".mpd")) bytes = ("<MPD xmlns=\"urn:mpeg:dash:schema:mpd:2011\" "
                     + "mediaPresentationDuration=\"PT2S\" minBufferTime=\"PT1S\" type=\"static\"><Period>"
