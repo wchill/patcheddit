@@ -36,6 +36,7 @@ In addition, patches for some apps contain additional features that were not pre
 * Boost handles cached Redgifs playback without a separate fix.
 * **Repeat Boost thread level colors** repeats the color pattern in deep comment chains when **Thread level indicator** is set to colored lines or colored bars.
 * **Remember collapsed comments** keeps collapsed replies closed when you reopen their parent comment.
+* **Full Boost backup** adds **Export full backup** and **Import full backup** to Boost's Backup screen on Android 8 and newer. The ZIP includes settings, saved accounts and tokens, drafts, visited communities, and read-post history, but not widgets, media downloads, or caches. **Keep these unencrypted ZIP files private.** You can restore on the same or a newer Boost version. A restore replaces local data after confirmation and restart; the original settings-only backup is unchanged.
 * **Log exceptions** records errors reported through Boost's existing exception handler. **Settings > Patcheddit > Exception log** lists non-fatal reports, with **Fatal crash logs** alongside it in Diagnostics.
     * Fatal reports can be previewed in the app and exported in full using **Save a copy**. Reports in public or app-specific Documents folders are listed when accessible.
     * If app initialization or private storage is unavailable, logging failures are reported to Logcat without showing a toast.

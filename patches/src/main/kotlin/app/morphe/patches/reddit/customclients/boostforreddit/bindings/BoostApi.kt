@@ -27,6 +27,10 @@ internal object BoostApi {
     object BaseActivity : BoostTypeBinding("Lcom/rubenmayayo/reddit/ui/activities/BaseActivity;") {
         val onCreate get() = method("onCreate(Landroid/os/Bundle;)V")
     }
+    object BackupActivity : BoostTypeBinding("Lcom/rubenmayayo/reddit/BackupActivity;") {
+        val onCreate get() = method("onCreate(Landroid/os/Bundle;)V")
+        val onActivityResult get() = method("onActivityResult(IILandroid/content/Intent;)V")
+    }
     object BaseTransientBottomBar : BoostTypeBinding("Lcom/google/android/material/snackbar/BaseTransientBottomBar;") {
         val getAnchorView get() = method("getAnchorView()Landroid/view/View;")
         val setAnchorView get() = method("setAnchorView(Landroid/view/View;)V")
@@ -201,6 +205,7 @@ internal object BoostApi {
         val onResume get() = method("onResume()V")
     }
     object MyApplication : BoostTypeBinding("Lcom/rubenmayayo/reddit/MyApplication;") {
+        val attachBaseContext get() = method("attachBaseContext(Landroid/content/Context;)V")
         val onCreate get() = method("onCreate()V")
     }
     object Navigation : BoostTypeBinding("Lapp/morphe/extension/boost/api/Navigation;") {
