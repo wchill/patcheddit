@@ -1,3 +1,16 @@
+# [2.5.0-dev.5](https://github.com/wchill/patcheddit/compare/v2.5.0-dev.4...v2.5.0-dev.5) (2026-11-21)
+
+
+### Bug Fixes
+
+* **sync:** Crash when tapping toolbar buttons ([ef79a18](https://github.com/wchill/patcheddit/commit/ef79a188c49acbd3ebce3db3df7968d168247e6a))
+
+
+### Features
+
+* Add permanent NSFW filtering option ([febb0c7](https://github.com/wchill/patcheddit/commit/febb0c78435c39748290660c1c3db7fcf7122960))
+* Allow deleting of saved exception/crash reports ([cc90196](https://github.com/wchill/patcheddit/commit/cc901967075806ef4df6aeba895a1873fc3bfc11))
+
 # [2.5.0-dev.4](https://github.com/wchill/patcheddit/compare/v2.5.0-dev.3...v2.5.0-dev.4) (2026-11-21)
 
 
