@@ -35,6 +35,7 @@ In addition, patches for some apps contain additional features that were not pre
 * Boost 1.14.3 also handles the image-post submission kind, search callback lifecycle checks and media-viewer insets natively, so those overrides are no longer injected. The remaining navigation patches still support Patcheddit's custom navigation hosts and layout behavior.
 * Boost handles cached Redgifs playback without a separate fix.
 * **Repeat Boost thread level colors** repeats the color pattern in deep comment chains when **Thread level indicator** is set to colored lines or colored bars.
+* **Remember collapsed comments** keeps collapsed replies closed when you reopen their parent comment.
 * **Log exceptions** records errors reported through Boost's existing exception handler. **Settings > Patcheddit > Exception log** lists non-fatal reports, with **Fatal crash logs** alongside it in Diagnostics.
     * Fatal reports can be previewed in the app and exported in full using **Save a copy**. Reports in public or app-specific Documents folders are listed when accessible.
     * If app initialization or private storage is unavailable, logging failures are reported to Logcat without showing a toast.

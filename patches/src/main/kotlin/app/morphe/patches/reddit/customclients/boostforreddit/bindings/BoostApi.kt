@@ -56,6 +56,15 @@ internal object BoostApi {
         val bodyHtml get() = field("bodyHtml:Ljava/lang/String;")
         val commentModelDeserialize get() = method("commentModelDeserialize(Lnet/dean/jraw/models/Comment;)Lcom/rubenmayayo/reddit/models/reddit/CommentModel;")
     }
+    object CommentsFragment : BoostTypeBinding("Lcom/rubenmayayo/reddit/ui/comments/CommentsFragment;") {
+        val expandCommentBranch get() = method("expandCommentBranch(I)Z")
+    }
+    object CommentViewModel : BoostTypeBinding("Lcom/rubenmayayo/reddit/models/reddit/CommentViewModel;") {
+        val depth get() = field("depth:I")
+        val isExpanded get() = field("isExpanded:Z")
+        val isFullyCollapsed get() = field("isFullyCollapsed:Z")
+        val isVisible get() = field("isVisible:Z")
+    }
     object CommentViewHolder : BoostTypeBinding("Lcom/rubenmayayo/reddit/ui/adapters/CommentViewHolder;") {
         val bind get() = method("bind(Lcom/rubenmayayo/reddit/models/reddit/CommentModel;ZZZLcom/bumptech/glide/RequestManager;)V")
         val showMenu get() = method("showMenu(Landroid/view/View;Ljava/util/ArrayList;)V")
