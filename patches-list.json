@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "2.4.0",
+  "version": "2.5.0-dev.4",
   "patches": [
     {
       "name": "Add Boost Search bottom navigation",
@@ -226,6 +226,33 @@
           "targets": [
             {
               "version": "6.1.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Block ads",
+      "description": "Prevents native ad slots and feed, banner, and image-album ad loading.",
+      "default": true,
+      "category": "Ads & tracking",
+      "compatiblePackages": [
+        {
+          "packageName": "com.andrewshu.android.reddit",
+          "name": "rif is fun",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -471,6 +498,51 @@
       "options": []
     },
     {
+      "name": "Explain Reddit blocks",
+      "description": "Explains recognized signed-in feed blocks without changing requests or other API errors.",
+      "default": true,
+      "category": "Feed",
+      "compatiblePackages": [
+        {
+          "packageName": "com.andrewshu.android.reddit",
+          "name": "rif is fun",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.andrewshu.android.redditdonation",
+          "name": "rif is fun golden platinum",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Fake reddit premium",
       "description": "Allows using pro features without ads.",
       "default": true,
@@ -553,7 +625,7 @@
     },
     {
       "name": "Fix Boost navigation bar overlap",
-      "description": "Keeps Boost's bottom controls and drawer clear of the system navigation bar on Android 15 and newer.",
+      "description": "Keeps Boost's bottom controls and drawer clear of the system navigation bar and prevents content from showing through the status bar in subreddits on Android 15 and newer.",
       "default": true,
       "category": "Navigation",
       "compatiblePackages": [
@@ -595,6 +667,51 @@
           "targets": [
             {
               "version": "1.14.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix Reddit media link handling",
+      "description": "Opens Reddit-hosted images, GIFs, and videos in Relay's native media viewer.",
+      "default": true,
+      "category": "Media",
+      "compatiblePackages": [
+        {
+          "packageName": "free.reddit.news",
+          "name": "Relay for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "reddit.news",
+          "name": "Relay for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -849,6 +966,474 @@
       "options": []
     },
     {
+      "name": "Fix broken markdown links",
+      "description": "Repairs malformed user and subreddit links while preserving code and ordinary links.",
+      "default": true,
+      "category": "Links",
+      "compatiblePackages": [
+        {
+          "packageName": "com.onelouder.baconreader",
+          "name": "BaconReader",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "6.1.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.onelouder.baconreader.premium",
+          "name": "BaconReader Premium",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "6.1.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix broken markdown links",
+      "description": "Repairs malformed user and subreddit links while preserving code and ordinary links.",
+      "default": true,
+      "category": "Links",
+      "compatiblePackages": [
+        {
+          "packageName": "com.rubenmayayo.reddit",
+          "name": "Boost for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "1.14.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix broken markdown links",
+      "description": "Repairs malformed user and subreddit links while preserving code and ordinary links.",
+      "default": true,
+      "category": "Links",
+      "compatiblePackages": [
+        {
+          "packageName": "ml.docilealligator.infinityforreddit.plus",
+          "name": "Infinity for Reddit+",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "ml.docilealligator.infinityforreddit.plus2",
+          "name": "Infinity for Reddit++",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "ml.docilealligator.infinityforreddit.patreon",
+          "name": "Infinity for Reddit (Patreon)",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix broken markdown links",
+      "description": "Repairs malformed user and subreddit links while preserving code and ordinary links.",
+      "default": true,
+      "category": "Links",
+      "compatiblePackages": [
+        {
+          "packageName": "o.o.joey",
+          "name": "Joey for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "o.o.joey.pro",
+          "name": "Joey for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "o.o.joey.dev",
+          "name": "Joey for Reddit Dev",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix broken markdown links",
+      "description": "Repairs malformed user and subreddit links while preserving code and ordinary links.",
+      "default": true,
+      "category": "Links",
+      "compatiblePackages": [
+        {
+          "packageName": "com.andrewshu.android.reddit",
+          "name": "rif is fun",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.andrewshu.android.redditdonation",
+          "name": "rif is fun golden platinum",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix broken markdown links",
+      "description": "Repairs malformed user and subreddit links while preserving code and ordinary links.",
+      "default": true,
+      "category": "Links",
+      "compatiblePackages": [
+        {
+          "packageName": "free.reddit.news",
+          "name": "Relay for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "reddit.news",
+          "name": "Relay for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix broken markdown links",
+      "description": "Repairs malformed user and subreddit links while preserving code and ordinary links.",
+      "default": true,
+      "category": "Links",
+      "compatiblePackages": [
+        {
+          "packageName": "com.laurencedawson.reddit_sync",
+          "name": "Sync for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "v23.06.30-13:39",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.laurencedawson.reddit_sync.pro",
+          "name": "Sync for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "v23.06.30-13:39",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix comment video links",
+      "description": "Restores native playback of Reddit videos embedded in comments.",
+      "default": true,
+      "category": "Media",
+      "compatiblePackages": [
+        {
+          "packageName": "com.rubenmayayo.reddit",
+          "name": "Boost for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "1.14.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix comment video links",
+      "description": "Restores native playback of Reddit videos embedded in comments.",
+      "default": true,
+      "category": "Media",
+      "compatiblePackages": [
+        {
+          "packageName": "o.o.joey",
+          "name": "Joey for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "o.o.joey.pro",
+          "name": "Joey for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "o.o.joey.dev",
+          "name": "Joey for Reddit Dev",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix comment video links",
+      "description": "Restores native playback of Reddit videos embedded in comments.",
+      "default": true,
+      "category": "Media",
+      "compatiblePackages": [
+        {
+          "packageName": "com.andrewshu.android.reddit",
+          "name": "rif is fun",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.andrewshu.android.redditdonation",
+          "name": "rif is fun golden platinum",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Fix escaped URLs",
       "description": "Fixes URLs broken by backslash-escaped punctuation in Reddit posts and comments.",
       "default": true,
@@ -1182,6 +1767,78 @@
       "options": []
     },
     {
+      "name": "Fix history import",
+      "description": "Adds missing visits from backups without replacing existing browsing history.",
+      "default": true,
+      "category": "Advanced",
+      "compatiblePackages": [
+        {
+          "packageName": "com.andrewshu.android.reddit",
+          "name": "rif is fun",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.andrewshu.android.redditdonation",
+          "name": "rif is fun golden platinum",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Fix image search",
+      "description": "Updates image search engines in the link menu, including Google Lens.",
+      "default": true,
+      "category": "Media",
+      "compatiblePackages": [
+        {
+          "packageName": "com.rubenmayayo.reddit",
+          "name": "Boost for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "1.14.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Fix post thumbnails",
       "description": "Fixes loading post thumbnails by correcting their URLs.",
       "default": true,
@@ -1380,6 +2037,33 @@
       "options": []
     },
     {
+      "name": "Full Boost backup",
+      "description": "Adds full backups of local settings, accounts, drafts, and history to Boost's Backup screen.",
+      "default": true,
+      "category": "Advanced",
+      "compatiblePackages": [
+        {
+          "packageName": "com.rubenmayayo.reddit",
+          "name": "Boost for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "1.14.4",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Import and export OAuth tokens",
       "description": "Adds an editable JSON field in Morphe settings to view or replace Reddit account tokens.",
       "default": true,
@@ -1470,6 +2154,96 @@
       "options": []
     },
     {
+      "name": "Inline media",
+      "description": "Shows images, albums, animated images, and videos in comments and text posts.",
+      "default": true,
+      "category": "Media",
+      "compatiblePackages": [
+        {
+          "packageName": "com.andrewshu.android.reddit",
+          "name": "rif is fun",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.andrewshu.android.redditdonation",
+          "name": "rif is fun golden platinum",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Inline media",
+      "description": "Shows linked images and GIFs in Relay comments and text posts.",
+      "default": true,
+      "category": "Media",
+      "compatiblePackages": [
+        {
+          "packageName": "free.reddit.news",
+          "name": "Relay for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "reddit.news",
+          "name": "Relay for Reddit Pro",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
       "name": "Joey Morphe settings",
       "description": "Adds a Morphe settings menu for included patches, with exception and fatal crash log viewers.",
       "default": true,
@@ -1522,6 +2296,33 @@
           "targets": [
             {
               "version": null,
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Load all inline media",
+      "description": "Displays every linked image or GIF immediately after its link in comments and text posts.",
+      "default": true,
+      "category": "Media",
+      "compatiblePackages": [
+        {
+          "packageName": "com.rubenmayayo.reddit",
+          "name": "Boost for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "1.14.4",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -1882,6 +2683,51 @@
           "targets": [
             {
               "version": "v23.06.30-13:39",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Post to profile",
+      "description": "Adds account-aware profile destinations to Submit and the own-profile menu.",
+      "default": true,
+      "category": "Comments & posting",
+      "compatiblePackages": [
+        {
+          "packageName": "com.andrewshu.android.reddit",
+          "name": "rif is fun",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        },
+        {
+          "packageName": "com.andrewshu.android.redditdonation",
+          "name": "rif is fun golden platinum",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "5.6.22",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,
@@ -2582,6 +3428,33 @@
           "targets": [
             {
               "version": "10.2.40",
+              "versionCodes": null,
+              "isExperimental": false,
+              "minSdk": null,
+              "description": null
+            }
+          ]
+        }
+      ],
+      "options": []
+    },
+    {
+      "name": "Remember collapsed comments",
+      "description": "Keeps collapsed replies closed when you reopen their parent comment.",
+      "default": true,
+      "category": "Comments & posting",
+      "compatiblePackages": [
+        {
+          "packageName": "com.rubenmayayo.reddit",
+          "name": "Boost for Reddit",
+          "description": null,
+          "apkFileType": null,
+          "appIconColor": null,
+          "signatures": null,
+          "formFactor": "MOBILE",
+          "targets": [
+            {
+              "version": "1.14.4",
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,

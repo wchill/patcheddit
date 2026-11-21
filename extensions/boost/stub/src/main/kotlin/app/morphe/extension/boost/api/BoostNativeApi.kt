@@ -208,6 +208,7 @@ abstract class MyRedditClient protected constructor(stub: Unit) : net.dean.jraw.
 
 abstract class Navigation protected constructor(stub: Unit) {
     companion object {
+        @JvmStatic fun openUrl(p0: android.content.Context?, p1: String?): Unit = boostApiStub()
         @JvmStatic fun openUser(p0: android.content.Context?, p1: String?): Unit = boostApiStub()
         @JvmStatic fun openCommunity(p0: android.app.Activity?, p1: com.rubenmayayo.reddit.models.reddit.SubscriptionViewModel?): Unit = boostApiStub()
         @JvmStatic fun openSupport(p0: android.content.Context?): Unit = boostApiStub()

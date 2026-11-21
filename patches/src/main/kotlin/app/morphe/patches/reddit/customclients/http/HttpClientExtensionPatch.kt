@@ -73,7 +73,7 @@ internal fun httpClientExtensionPatch(
         dependsOn(packageMetadata)
         execute {
             nativeClasses = buildList { classDefForEach(::add) }
-            val resourceNamespace = httpLibraryResourceNamespace(client, packageName)
+            val resourceNamespace = httpLibraryResourceNamespace(client, packageName, nativeClasses)
             val input = checkNotNull(object {}.javaClass.classLoader.getResourceAsStream("$resourceNamespace/mapping.txt")) {
                 "HTTP library mapping for $resourceNamespace was not found"
             }

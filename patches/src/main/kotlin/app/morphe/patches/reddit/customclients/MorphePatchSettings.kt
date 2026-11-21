@@ -266,7 +266,8 @@ internal fun addMorphePatchPreference(
     options?.takeIf { action == null }?.let {
         entries += it.documentElement.childElements().map { entry ->
             (target.importNode(entry, true) as Element).apply {
-                if (!spec.readOnly && optionsDependOnSwitch && getAttribute("android:selectable") != "false") {
+                if (!spec.readOnly && optionsDependOnSwitch && getAttribute("android:selectable") != "false"
+                    && !hasAttribute("android:dependency")) {
                     setAttribute("android:dependency", spec.key)
                 }
             }

@@ -15,7 +15,9 @@ In addition, patches for some apps contain additional features that were not pre
     * Includes missing gallery image repairs when opening posts in BaconReader, Boost, Joey, Relay, RIF, and Sync. Relay's repair is limited to still images. If a previously opened gallery still fails after patching, clear the app's cache (not its storage).
     * Relay's subreddit sidebars remain usable when Reddit omits activity counters.
 * **Fix Redgifs API** restores playback in BaconReader, Joey, Relay, RIF, and Sync. Relay uses native media with sound instead of silent Reddit previews.
+* **Fix comment video links** restores native playback of Reddit comment videos in Boost, Joey, and RIF without relying on post metadata to contain the video.
 * **Fix escaped URLs** repairs links broken by backslashes in posts and comments in BaconReader, Boost, Infinity, Joey, Relay, RIF, and Sync. It is separate from **Reddit API fixes** and can be switched off under **Patcheddit > Links**.
+* **Fix broken markdown links** repairs user and subreddit links displayed with stray Markdown brackets in those clients, without changing code examples or ordinary links. It can be switched off under **Patcheddit > Links**.
 * **Fix swipe back transparency** shows the previous screen during swipe-back gestures in Sync and Joey on Android 11 and newer.
 * **Log exceptions** saves fatal crashes for every supported client, including Sync for Lemmy, using morphe-patches-library's shared crash logger. BaconReader and Boost hook their native error-reporting handlers; other clients capture exceptions reported through Android error/warning logging, stack traces, and Crashlytics when present, without removing the original logging.
     * Fatal reports are saved in `Documents/Morphe`, falling back to the app-specific external Documents folder if public storage is unavailable. Non-fatal reports use private `no_backup/morphe-exceptions` storage, rotating at 4 MiB per file with one previous file retained and excluded from Android app backups.
@@ -28,9 +30,13 @@ In addition, patches for some apps contain additional features that were not pre
 
 ### Boost for Reddit
 * Boost patches target the official [Boost 1.14.4 APK](https://github.com/rubenmayayo/boost-for-reddit/releases/tag/v1.14.4).
+* **Load all inline media** shows linked images and GIFs immediately after their corresponding links in comments and text-post bodies, respecting Boost's inline-media setting. **Patcheddit > Media > Keep inline media URLs** defaults to on; turning it off hides bare URLs without removing descriptive labels.
+* **Fix image search** updates Google's image search to Google Lens while keeping Yandex and TinEye in the image-search submenu.
 * Boost 1.14.3 also handles the image-post submission kind, search callback lifecycle checks and media-viewer insets natively, so those overrides are no longer injected. The remaining navigation patches still support Patcheddit's custom navigation hosts and layout behavior.
 * Boost handles cached Redgifs playback without a separate fix.
 * **Repeat Boost thread level colors** repeats the color pattern in deep comment chains when **Thread level indicator** is set to colored lines or colored bars.
+* **Remember collapsed comments** keeps collapsed replies closed when you reopen their parent comment.
+* **Full Boost backup** adds **Export full backup** and **Import full backup** to Boost's Backup screen on Android 8 and newer. The ZIP includes settings, saved accounts and tokens, drafts, visited communities, and read-post history, but not widgets, media downloads, or caches. **Keep these unencrypted ZIP files private.** You can restore on the same or a newer Boost version. A restore replaces local data after confirmation and restart; the original settings-only backup is unchanged.
 * **Log exceptions** records errors reported through Boost's existing exception handler. **Settings > Patcheddit > Exception log** lists non-fatal reports, with **Fatal crash logs** alongside it in Diagnostics.
     * Fatal reports can be previewed in the app and exported in full using **Save a copy**. Reports in public or app-specific Documents folders are listed when accessible.
     * If app initialization or private storage is unavailable, logging failures are reported to Logcat without showing a toast.
@@ -66,10 +72,19 @@ In addition, patches for some apps contain additional features that were not pre
 * Link context menus include an **Open with** submenu for Wayback Machine, Archive.is, Wallhop, smry.ai, RemovePaywall, Freedium, and Unwall. Each source can be enabled or disabled under **Settings > Patcheddit > Links**. When all sources are disabled, the menu shows a disabled **All archivers disabled** entry. Query parameters are stripped from archive links by default; this can also be changed in Patcheddit settings.
 * Links with query parameters offer an unchecked **Strip query parameters** checkbox for **Share link** and **Copy link**. Hide it using **Show strip query parameters option** in Patcheddit settings.
 
+### Relay
+* **Inline media** shows Reddit, Imgur, and Giphy images and GIFs in comments and text posts. **Patcheddit > Media > Keep inline media URLs** defaults to on; turning it off hides bare URLs without removing descriptive labels.
+* **Fix Reddit media link handling** opens Reddit-hosted images, GIFs, and videos in Relay's native media viewer, including signed preview links, thumbnails, avatars, and emoji. It defaults to on under **Patcheddit > Media**.
+
 ### reddit is fun
+* **Inline media** displays images, animated images, albums, and videos in comments and text posts, with sizing and playback controls under **Patcheddit > Media**. URLs are kept above previews by default; turn off **Keep inline media URLs** to hide bare URLs.
 * Restores Imgur album and gallery loading in the built-in viewer, album thumbnails, and links that include a title.
 * Restores native Redgifs playback and returns safely when a video is unavailable.
-* Enables pro features without ads.
+* Enables pro features in free RIF. **Block ads** independently prevents feed, banner, and image-viewer ad loading. After changing it, refresh feeds and reopen albums.
+* Prevents invalid ad rows from crashing Platinum feeds, including package-renamed installations.
+* **Fix history import** merges history from settings backups without replacing existing visits.
+* **Post to profile** adds a My profile button to Submit and a Submit action on your own profile.
+* **Explain Reddit blocks** clarifies recognized signed-in feed blocks while preserving other Reddit errors.
 
 ### Infinity for Reddit
 * Supports Infinity+, Infinity++, and the Patreon variant.

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceCategory xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference
+        android:key="morphe_inline_keep_urls"
+        android:title="Keep inline media URLs"
+        android:summary="Keep bare URLs above inline media. Descriptive link labels are always kept."
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="morphe_inline_scale"
+        android:title="Scale inline images to fit"
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="morphe_inline_limit_width"
+        android:title="Limit inline media width"
+        android:defaultValue="false" />
+    <SeekBarPreference
+        android:key="morphe_inline_max_width"
+        android:title="Maximum width (%)"
+        android:dependency="morphe_inline_limit_width"
+        android:defaultValue="100"
+        android:min="10"
+        android:max="100"
+        android:seekBarIncrement="5" />
+    <CheckBoxPreference
+        android:key="morphe_inline_limit_height"
+        android:title="Limit inline media height"
+        android:defaultValue="false" />
+    <SeekBarPreference
+        android:key="morphe_inline_max_height"
+        android:title="Maximum height (%)"
+        android:dependency="morphe_inline_limit_height"
+        android:defaultValue="100"
+        android:min="10"
+        android:max="100"
+        android:seekBarIncrement="5" />
+    <CheckBoxPreference
+        android:key="morphe_inline_album_navigation"
+        android:title="Inline album navigation"
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="morphe_inline_videos"
+        android:title="Inline videos"
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="morphe_inline_autoplay"
+        android:title="Autoplay inline videos"
+        android:dependency="morphe_inline_videos"
+        android:defaultValue="true" />
+    <CheckBoxPreference
+        android:key="morphe_inline_long_press"
+        android:title="Long press image to select comment"
+        android:defaultValue="true" />
+    <SeekBarPreference
+        android:key="morphe_inline_hold_delay"
+        android:title="Long press delay (ms)"
+        android:dependency="morphe_inline_long_press"
+        android:defaultValue="250"
+        android:min="100"
+        android:max="1000"
+        android:seekBarIncrement="50" />
+</PreferenceCategory>

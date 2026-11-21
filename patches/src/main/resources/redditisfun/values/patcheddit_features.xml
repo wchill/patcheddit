@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="patcheddit_history_import_failed">History could not be fully imported. Existing visits were kept; settings import can continue.</string>
+    <string name="patcheddit_my_profile">My profile</string>
+    <string name="patcheddit_reddit_blocked">Reddit may be temporarily blocking these requests. Try again in a few minutes.</string>
+</resources>

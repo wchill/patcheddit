@@ -1,9 +1,11 @@
 package app.morphe.patches.reddit.customclients
 
 import app.morphe.patcher.patch.BytecodePatch
+import app.morphe.patcher.patch.bytecodePatch
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.boostExtensionPatch
 import app.morphe.patches.reddit.customclients.http.httpClientExtensionPatch
 import app.morphe.patches.reddit.customclients.misc.extension.clientExtensionPatch
+import app.morphe.patches.reddit.customclients.redditisfun.fix.platinum.platinumAdSlotSafeguardPatch
 
 object ExtensionPatches {
     private fun hook(extensionName: String, vararg hookedClasses: String): BytecodePatch =
@@ -15,7 +17,12 @@ object ExtensionPatches {
     internal val Boost = boostExtensionPatch
     internal val Infinity = hook("infinity", "Lml/docilealligator/infinityforreddit/Infinity;")
     internal val Joey = httpHook("joey", "Lo/o/joey/MyApplication;")
-    internal val RIF = httpHook("redditisfun", "Lcom/andrewshu/android/reddit/RedditIsFunApplication;")
+    internal val RIF = bytecodePatch(default = false) {
+        dependsOn(
+            platinumAdSlotSafeguardPatch,
+            httpHook("redditisfun", "Lcom/andrewshu/android/reddit/RedditIsFunApplication;"),
+        )
+    }
     internal val Relay = httpHook("relay", "Lreddit/news/RelayApplication;")
     internal val Sync = httpHook("syncforreddit", "Lcom/laurencedawson/reddit_sync/RedditApplication;")
     internal val SyncForLemmy = clientExtensionPatch(null, emptyArray())

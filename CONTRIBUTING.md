@@ -85,4 +85,63 @@ those mappings.
 Both complete and review-required results are supported.
 Its report is saved to `build/boost-mapping-tests/recovery.json`.
 
+## RIF inline-media device tests
+
+Install the patched free and Platinum APKs, signed with the matching test keys.
+The fixture exercises native body layouts, synthetic images/albums/video, gestures,
+cache expiry, failure recovery, and player teardown. It restores changed preferences.
+
+```sh
+python3 -B test/run_device_tests.py \
+  --sdk "$ANDROID_HOME" --serial "$ANDROID_SERIAL" \
+  --package com.andrewshu.android.reddit \
+  --package com.andrewshu.android.redditdonation \
+  --suite app.patcheddit.fixture.RifInlineMediaDeviceTest \
+  --source test/device/RifInlineMediaDeviceTest.java \
+  --asset test/device/media/inline-video.mp4 \
+  --asset test/device/media/inline-audio.m4a \
+  --asset test/device/media/inline-animation.gif
+```
+
+By default, matching PKCS12 test keys are read from
+`test/.cache/device-signers/PACKAGE.p12`; use `--keystore` to override.
+These fixtures do not establish live-host availability or older Android decoder behavior.
+
+## Boost inline-media device tests
+
+With the patched Boost 1.14.4 APK installed and its matching test key available:
+
+```sh
+python3 -B test/run_device_tests.py \
+  --sdk "$ANDROID_HOME" --serial "$ANDROID_SERIAL" \
+  --package com.rubenmayayo.reddit \
+  --suite app.patcheddit.fixture.BoostInlineMediaDeviceTest \
+  --source test/device/BoostInlineMediaDeviceTest.java \
+  --asset test/device/media/inline-animation.gif
+adb -s "$ANDROID_SERIAL" shell am force-stop com.rubenmayayo.reddit
+```
+
+The fixture uses native Glide with synthetic responses and restores its test
+preferences, including recovery after an interrupted run. Force-stop clears the
+temporary transport before returning to normal use.
+
+## Boost navigation device tests
+
+On Android 11 or newer, install Boost 1.14.4 with the standard bottom-navigation
+and navigation-overlap patches. Run this fixture in both gesture and three-button
+navigation modes. It checks that stale system-bar surfaces cannot cover the native
+controls, that surfaces follow changing and zero bottom insets, and that disabling
+navigation survives later inset dispatches. Changed preferences are restored.
+
+```sh
+python3 -B test/run_device_tests.py \
+  --sdk "$ANDROID_HOME" --serial "$ANDROID_SERIAL" \
+  --package com.rubenmayayo.reddit \
+  --suite app.patcheddit.fixture.BoostNavigationInsetsDeviceTest \
+  --source test/device/BoostNavigationInsetsDeviceTest.java \
+  --keystore /path/to/boost-test-key.p12
+```
+
+The test key must match the installed APK's signature.
+
 ❤️ Thank you for considering contributing to Patcheddit
