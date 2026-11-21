@@ -16,6 +16,10 @@
         android:title="@string/morphe_crash_logs_open_title"
         android:summary="@string/morphe_crash_logs_open_summary"
         android:persistent="false" />
+    <Preference
+        android:key="morphe_log_clear"
+        android:title="@string/morphe_crash_logs_clear_title"
+        android:persistent="false" />
     <PreferenceCategory
         android:key="morphe_crash_logs_reports"
         android:title="@string/morphe_crash_logs_reports_title" />
