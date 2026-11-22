@@ -1,3 +1,10 @@
+# [2.5.0-dev.6](https://github.com/wchill/patcheddit/compare/v2.5.0-dev.5...v2.5.0-dev.6) (2026-11-22)
+
+
+### Features
+
+* Use new embedded YouTube player for RIF and Sync ([6f0982a](https://github.com/wchill/patcheddit/commit/6f0982a974257e8270840604714cea2048e96071))
+
 # [2.5.0-dev.5](https://github.com/wchill/patcheddit/compare/v2.5.0-dev.4...v2.5.0-dev.5) (2026-11-21)
 
 

@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-11-21T21:04:44",
-  "description": "# [2.5.0-dev.5](https://github.com/wchill/patcheddit/compare/v2.5.0-dev.4...v2.5.0-dev.5) (2026-11-21)\n\n\n### Bug Fixes\n\n* **sync:** Crash when tapping toolbar buttons ([ef79a18](https://github.com/wchill/patcheddit/commit/ef79a188c49acbd3ebce3db3df7968d168247e6a))\n\n\n### Features\n\n* Add permanent NSFW filtering option ([febb0c7](https://github.com/wchill/patcheddit/commit/febb0c78435c39748290660c1c3db7fcf7122960))\n* Allow deleting of saved exception/crash reports ([cc90196](https://github.com/wchill/patcheddit/commit/cc901967075806ef4df6aeba895a1873fc3bfc11))",
-  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.5.0-dev.5/patches-2.5.0-dev.5.mpp",
-  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.5.0-dev.5/patches-2.5.0-dev.5.mpp.asc",
-  "version": "2.5.0-dev.5"
+  "created_at": "2026-11-22T00:19:01",
+  "description": "# [2.5.0-dev.6](https://github.com/wchill/patcheddit/compare/v2.5.0-dev.5...v2.5.0-dev.6) (2026-11-22)\n\n\n### Features\n\n* Use new embedded YouTube player for RIF and Sync ([6f0982a](https://github.com/wchill/patcheddit/commit/6f0982a974257e8270840604714cea2048e96071))",
+  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.5.0-dev.6/patches-2.5.0-dev.6.mpp",
+  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.5.0-dev.6/patches-2.5.0-dev.6.mpp.asc",
+  "version": "2.5.0-dev.6"
 }
