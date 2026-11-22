@@ -124,6 +124,7 @@ abstract class Drawer protected constructor(stub: Unit) {
 }
 
 abstract class DrawerActivity protected constructor(stub: Unit) : com.rubenmayayo.reddit.ui.activities.ToolbarActivity(Unit), app.morphe.extension.boost.api.Drawer.ItemListener, app.morphe.extension.boost.api.Drawer.SelectionListener, com.rubenmayayo.reddit.ui.customviews.dialogs.UserSelectorView.Callback {
+    fun reloadDrawerSubscriptions(): Unit = boostApiStub()
     open fun onNavigationLongPress(p0: Int, p1: Boolean): Unit = boostApiStub()
     fun selectAccount(p0: Int): Unit = boostApiStub()
     open fun currentCommunity(): String? = boostApiStub()
@@ -208,6 +209,7 @@ abstract class MyRedditClient protected constructor(stub: Unit) : net.dean.jraw.
 
 abstract class Navigation protected constructor(stub: Unit) {
     companion object {
+        @JvmStatic fun openUrl(p0: android.content.Context?, p1: String?): Unit = boostApiStub()
         @JvmStatic fun openUser(p0: android.content.Context?, p1: String?): Unit = boostApiStub()
         @JvmStatic fun openCommunity(p0: android.app.Activity?, p1: com.rubenmayayo.reddit.models.reddit.SubscriptionViewModel?): Unit = boostApiStub()
         @JvmStatic fun openSupport(p0: android.content.Context?): Unit = boostApiStub()

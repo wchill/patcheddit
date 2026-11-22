@@ -7,8 +7,8 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.misc.settings
 
-import app.morphe.patcher.patch.ResourcePatchContext
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.document
+import app.morphe.patcher.patch.patch
 import app.morphe.patches.all.misc.resources.addResourcesPatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
@@ -20,7 +20,7 @@ import app.morphe.util.ResourceGroup
 import org.w3c.dom.Element
 import org.w3c.dom.Document
 
-internal fun ResourcePatchContext.addBoostSettings(resourceName: String, beforeTitle: String? = null) {
+internal fun addBoostSettings(resourceName: String, beforeTitle: String? = null) {
     document("res/xml/$resourceName.xml").use { source ->
         document("res/xml/morphe_boost_settings_skeleton.xml").use { target ->
             addBoostSettings(target, source, beforeTitle)
@@ -81,7 +81,7 @@ internal fun groupBoostLinkSettings(target: Document) {
     }
 }
 
-internal val boostMorpheSettingsResourcesPatch = resourcePatch(
+internal val boostMorpheSettingsResourcesPatch = patch(
     default = false
 ) {
     dependsOn(
@@ -132,7 +132,7 @@ internal val boostMorpheSettingsResourcesPatch = resourcePatch(
 }
 
 @Suppress("unused")
-val boostMorpheSettingsPatch = resourcePatch(
+val boostMorpheSettingsPatch = patch(
     name = "Boost Morphe settings",
     description = "Adds a native-style Morphe section while keeping Boost's original settings screens.",
     default = true,

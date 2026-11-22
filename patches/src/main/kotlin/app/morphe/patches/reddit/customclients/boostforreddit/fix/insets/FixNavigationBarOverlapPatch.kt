@@ -24,7 +24,7 @@ private const val EXTENSION_CLASS_DESCRIPTOR =
 @Suppress("unused")
 val fixNavigationBarOverlapPatch = morpheBytecodePatch(
     name = "Fix Boost navigation bar overlap",
-    description = "Keeps Boost's bottom controls and drawer clear of the system navigation bar on Android 15 and newer.",
+    description = "Keeps Boost's bottom controls and drawer clear of the system navigation bar and prevents content from showing through the status bar in subreddits on Android 15 and newer.",
     default = true,
     extensionPatch = ExtensionPatches.Boost,
     category = PatchCategory.NAVIGATION,

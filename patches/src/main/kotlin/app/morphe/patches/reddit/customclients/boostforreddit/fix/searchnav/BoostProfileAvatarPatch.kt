@@ -6,12 +6,12 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.fix.searchnav
 
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 import app.morphe.patches.reddit.customclients.boostforreddit.wrapHook
 
-internal val boostProfileAvatarPatch = bytecodePatch(default = false) {
+internal val boostProfileAvatarPatch = patch(default = false) {
     dependsOn(ExtensionPatches.Boost)
 
     execute {

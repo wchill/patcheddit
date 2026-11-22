@@ -95,19 +95,30 @@ public final class ExceptionLogStore {
 
     public synchronized String read() throws IOException {
         requireDirectory();
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        read(previous, output);
-        read(current, output);
-        return output.toString(StandardCharsets.UTF_8.name());
+        return read(previous) + read(current);
     }
 
     public List<Report> reports() throws IOException {
-        String text = read();
+        String rotated, active;
+        synchronized (this) {
+            requireDirectory();
+            rotated = read(previous);
+            active = read(current);
+        }
         List<Report> reports = new ArrayList<>();
+        parseReports(previous, rotated, reports);
+        parseReports(current, active, reports);
+        Collections.reverse(reports);
+        reports.sort((left, right) -> right.timestamp.compareTo(left.timestamp));
+        return Collections.unmodifiableList(reports);
+    }
+
+    private static void parseReports(File file, String text, List<Report> reports) throws IOException {
         Matcher header = REPORT_HEADER.matcher(text);
         int cursor = 0;
         while (header.find(cursor)) {
-            requireWhitespace(text, cursor, header.start());
+            int recordStart = header.start();
+            requireWhitespace(text, cursor, recordStart);
             String timestamp = header.group(1);
             String length = header.group(2);
             int bodyStart = header.end();
@@ -138,13 +149,10 @@ public final class ExceptionLogStore {
                 end = header.find(bodyStart) ? header.start() : text.length();
                 exceptionClass = legacyClass(text, bodyStart, end);
             }
-            reports.add(new Report(timestamp, exceptionClass, text, bodyStart, end, incomplete));
+            reports.add(new Report(timestamp, exceptionClass, file, text, recordStart, bodyStart, end, incomplete));
             cursor = end;
         }
         requireWhitespace(text, cursor, text.length());
-        Collections.reverse(reports);
-        reports.sort((left, right) -> right.timestamp.compareTo(left.timestamp));
-        return Collections.unmodifiableList(reports);
     }
 
     private static int lineEnd(String text, int start, int end) {
@@ -177,15 +185,19 @@ public final class ExceptionLogStore {
         public final String timestamp;
         public final String exceptionClass;
         public final boolean incomplete;
+        private final File file;
         private final String snapshot;
+        private final int recordStart;
         private final int start;
         private final int end;
 
-        private Report(String timestamp, String exceptionClass, String snapshot, int start, int end,
-                       boolean incomplete) {
+        private Report(String timestamp, String exceptionClass, File file, String snapshot,
+                       int recordStart, int start, int end, boolean incomplete) {
             this.timestamp = timestamp;
             this.exceptionClass = exceptionClass;
+            this.file = file;
             this.snapshot = snapshot;
+            this.recordStart = recordStart;
             this.start = start;
             this.end = end;
             this.incomplete = incomplete;
@@ -201,24 +213,62 @@ public final class ExceptionLogStore {
         }
     }
 
-    private static void read(File file, ByteArrayOutputStream output) throws IOException {
-        if (!file.exists()) return;
-        int total = 0;
+    private static String read(File file) throws IOException {
+        if (!file.exists()) return "";
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
         try (FileInputStream stream = new FileInputStream(file)) {
             byte[] buffer = new byte[4096];
             int count;
             while ((count = stream.read(buffer)) != -1) {
-                total += count;
-                if (total > MAX_FILE_BYTES) throw new IOException("Saved exception log exceeds its size limit.");
+                if (output.size() + count > MAX_FILE_BYTES) {
+                    throw new IOException("Saved exception log exceeds its size limit.");
+                }
                 output.write(buffer, 0, count);
             }
         }
+        return output.toString(StandardCharsets.UTF_8.name());
+    }
+
+    /** Returns false if the selected report's file was replaced, cleared, or rotated. */
+    public synchronized boolean deleteReport(Report report) throws IOException {
+        requireDirectory();
+        File file = report.file;
+        if (!file.equals(current) && !file.equals(previous)) {
+            throw new IOException("The report does not belong to this exception log.");
+        }
+        String text = read(file);
+        // Accept new entries appended after the preview, but never reuse offsets after a rewrite.
+        if (!text.startsWith(report.snapshot) || (report.incomplete && text.length() != report.snapshot.length())) {
+            return false;
+        }
+        String remaining = text.substring(0, report.recordStart) + text.substring(report.end);
+        if (remaining.trim().isEmpty()) {
+            delete(file);
+            return true;
+        }
+        File replacement = File.createTempFile("exceptions-", ".tmp", directory);
+        try {
+            try (FileOutputStream output = new FileOutputStream(replacement)) {
+                output.write(remaining.getBytes(StandardCharsets.UTF_8));
+                output.getFD().sync();
+            }
+            if (!replacement.renameTo(file)) throw new IOException("Could not update the exception log.");
+        } finally {
+            delete(replacement);
+        }
+        return true;
     }
 
     public synchronized void clear() throws IOException {
         requireDirectory();
         delete(previous);
         delete(current);
+        if (directory.exists()) {
+            File[] interruptedWrites = directory.listFiles((parent, name) ->
+                    name.startsWith("exceptions-") && name.endsWith(".tmp"));
+            if (interruptedWrites == null) throw new IOException("Could not list temporary exception logs.");
+            for (File file : interruptedWrites) delete(file);
+        }
     }
 
     private static void delete(File file) throws IOException {

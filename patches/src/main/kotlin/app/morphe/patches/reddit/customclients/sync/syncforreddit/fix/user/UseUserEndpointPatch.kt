@@ -2,7 +2,7 @@ package app.morphe.patches.reddit.customclients.sync.syncforreddit.fix.user
 
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patcher.util.getReference
@@ -11,7 +11,7 @@ import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.StringReference
 
 @Suppress("unused")
-val useUserEndpointPatch = bytecodePatch(
+val useUserEndpointPatch = patch(
     description = "Replaces the deprecated endpoint for viewing user profiles /u with /user, that used to fix a bug.",
     default = true,
 ) {

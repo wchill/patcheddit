@@ -1,5 +1,6 @@
 /*
  * Copyright 2026 brealorg.
+ * Modifications Copyright 2026 wchill.
  * Adapted from https://github.com/brealorg/breal-morphe-patches (0226c2e).
  *
  * See the included NOTICE file for GPLv3 section 7 terms.
@@ -651,16 +652,6 @@ public final class BoostSearchBottomNavigation {
             return;
         }
 
-        int insetBottom =
-                resolveNavigationInsetBottom(
-                        activity,
-                        decor
-                );
-
-        if (insetBottom <= 0) {
-            return;
-        }
-
         ViewGroup decorGroup = (ViewGroup) decor;
         View underlay =
                 decor.findViewWithTag(
@@ -682,31 +673,25 @@ public final class BoostSearchBottomNavigation {
                 FrameLayout.LayoutParams frameParams =
                         new FrameLayout.LayoutParams(
                                 ViewGroup.LayoutParams.MATCH_PARENT,
-                                insetBottom
+                                0
                         );
                 frameParams.gravity = Gravity.BOTTOM;
                 params = frameParams;
             } else {
                 params = new ViewGroup.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
-                        insetBottom
+                        0
                 );
             }
 
-            decorGroup.addView(underlay, params);
-        } else {
-            ViewGroup.LayoutParams params =
-                    underlay.getLayoutParams();
-
-            if (params.height != insetBottom) {
-                params.height = insetBottom;
-                underlay.setLayoutParams(params);
-            }
+            decorGroup.addView(underlay, 0, params);
+            BoostSystemBarInsetsFix.watchNavigationBarSurfaceInsets(underlay);
         }
 
+        underlay.setEnabled(true);
         underlay.setBackgroundColor(surfaceColor);
-        underlay.setVisibility(View.VISIBLE);
-        underlay.bringToFront();
+        BoostSystemBarInsetsFix.updateNavigationBarSurfaceInsets(
+                underlay, decor.getRootWindowInsets());
 
         Log.i(
                 TAG,
@@ -717,7 +702,7 @@ public final class BoostSearchBottomNavigation {
                         + " activity="
                         + activity.getClass().getName()
                         + " inset="
-                        + insetBottom
+                        + underlay.getLayoutParams().height
                         + " color=#"
                         + String.format(
                                 "%08X",
@@ -738,44 +723,11 @@ public final class BoostSearchBottomNavigation {
                     );
 
             if (underlay != null) {
+                underlay.setEnabled(false);
                 underlay.setVisibility(View.GONE);
             }
         } catch (Throwable ignored) {
         }
-    }
-
-    private static int resolveNavigationInsetBottom(
-            Activity activity,
-            View decor
-    ) {
-        if (Build.VERSION.SDK_INT >= 23) {
-            WindowInsets insets =
-                    decor.getRootWindowInsets();
-
-            if (insets != null) {
-                if (Build.VERSION.SDK_INT >= 30) {
-                    return insets.getInsets(
-                            WindowInsets.Type.navigationBars()
-                    ).bottom;
-                }
-
-                return insets
-                        .getSystemWindowInsetBottom();
-            }
-        }
-
-        int resourceId = activity
-                .getResources()
-                .getIdentifier(
-                        "navigation_bar_height",
-                        "dimen",
-                        "android"
-                );
-
-        return resourceId != 0
-                ? activity.getResources()
-                    .getDimensionPixelSize(resourceId)
-                : 0;
     }
 
     /**

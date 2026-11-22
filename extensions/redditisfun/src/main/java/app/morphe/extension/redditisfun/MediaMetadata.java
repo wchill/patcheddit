@@ -23,10 +23,10 @@ import okio.BufferedSource;
 import okio.ForwardingSource;
 import okio.Okio;
 
-final class MediaMetadata {
+public final class MediaMetadata {
     private MediaMetadata() {}
 
-    static void checkJsonDepth(String text, int limit, String description) throws IOException {
+    public static void checkJsonDepth(String text, int limit, String description) throws IOException {
         int depth = 0;
         boolean quoted = false;
         boolean escaped = false;

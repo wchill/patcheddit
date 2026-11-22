@@ -5,6 +5,7 @@ import java.util.zip.ZipInputStream
 group = "app.morphe"
 
 val httpLibraryResources by configurations.creating
+val youtubePlayerResources by configurations.creating
 
 patches {
     about {
@@ -22,13 +23,19 @@ dependencies {
     httpLibraryResources(libs.okhttp.transport) {
         isTransitive = false
     }
+    youtubePlayerResources(variantOf(libs.youtube.player) { artifactType("aar") }) {
+        isTransitive = false
+    }
     // Used by JsonGenerator.
     implementation(libs.gson)
 
     // Required due to smali, or build fails. Can be removed once smali is bumped.
     implementation(libs.guava)
 
-    implementation(libs.morphe.patches.library)
+    implementation(libs.morphe.patches.library) {
+        // The library still requests the older smali hash, which Gradle sorts above the patcher's.
+        exclude(group = "com.github.MorpheApp.smali", module = "smali")
+    }
 
     // Android API stubs defined here.
     compileOnly(project(":patches:stub"))
@@ -46,6 +53,22 @@ val prepareHttpLibraryResources by tasks.registering(Sync::class) {
     doLast {
         check(destinationDir.resolve("http/okhttp3/internal/publicsuffix/PublicSuffixDatabase.gz").isFile) {
             "OkHttp public suffix database was not found"
+        }
+    }
+}
+
+val prepareYoutubePlayerResources by tasks.registering(Sync::class) {
+    from({ zipTree(youtubePlayerResources.singleFile) }) {
+        include("res/raw/ayp_youtube_player.html")
+        eachFile {
+            path = "youtube/raw/patcheddit_youtube_player.html"
+        }
+        includeEmptyDirs = false
+    }
+    into(layout.buildDirectory.dir("generated/youtube-resources"))
+    doLast {
+        check(destinationDir.resolve("youtube/raw/patcheddit_youtube_player.html").isFile) {
+            "The bundled android-youtube-player HTML was not found."
         }
     }
 }
@@ -108,11 +131,17 @@ val prepareAboutLicenses by tasks.registering {
             check(id.group.startsWith("androidx.") ||
                 id.group in setOf("org.jetbrains", "org.jetbrains.kotlin", "org.jetbrains.kotlinx",
                     "com.google.code.gson", "com.google.errorprone", "com.squareup.okhttp3",
-                    "com.squareup.okio", "com.fasterxml.jackson.core", "org.jspecify")) {
+                    "com.squareup.okio", "com.fasterxml.jackson.core", "org.jspecify",
+                    "com.pierfrancescosoffritti.androidyoutubeplayer")) {
                 "Review the license for the new bundled dependency $id"
             }
             val embedded = artifact.inputStream().use { embeddedNotices(it) }.joinToString("\n\n")
-            notices += mapOf("name" to id.displayName, "text" to "${id.displayName}\n\n$embedded\n\n$apache")
+            val license = if (id.group == "com.pierfrancescosoffritti.androidyoutubeplayer") {
+                document("Android-YouTube-Player-LICENSE.txt")
+            } else {
+                apache
+            }
+            notices += mapOf("name" to id.displayName, "text" to "${id.displayName}\n\n$embedded\n\n$license")
         }
         notices += mapOf("name" to "Public Suffix List", "text" to
             "OkHttp's PublicSuffixDatabase.gz is compiled from https://publicsuffix.org/list/public_suffix_list.dat\n" +
@@ -128,6 +157,7 @@ val prepareAboutLicenses by tasks.registering {
 
 sourceSets.main {
     resources.srcDir(prepareHttpLibraryResources)
+    resources.srcDir(prepareYoutubePlayerResources)
     resources.srcDir(prepareAboutLicenses)
 }
 
@@ -165,6 +195,15 @@ tasks {
             inputs.file(apk).withPropertyName("boostApkFixture")
             environment("BOOST_APK", apk.absolutePath)
         }
+        for (name in listOf("RIF_FREE_APK", "RIF_PLATINUM_APK")) {
+            val path = providers.environmentVariable(name).orNull
+            inputs.property(name, path.orEmpty())
+            if (path != null) {
+                val apk = rootProject.file(path)
+                inputs.file(apk).withPropertyName(name)
+                environment(name, apk.absolutePath)
+            }
+        }
     }
 
     register<JavaExec>("checkStringResources") {
@@ -187,12 +226,6 @@ tasks {
     // Used by gradle-semantic-release-plugin.
     publish {
         dependsOn("generatePatchesList")
-    }
-}
-
-kotlin {
-    compilerOptions {
-        freeCompilerArgs = listOf("-Xcontext-parameters")
     }
 }
 

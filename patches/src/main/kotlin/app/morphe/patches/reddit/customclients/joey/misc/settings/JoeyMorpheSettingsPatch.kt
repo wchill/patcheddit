@@ -8,8 +8,8 @@ package app.morphe.patches.reddit.customclients.joey.misc.settings
 
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.extensions.InstructionExtensions.addInstruction
-import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.document
+import app.morphe.patcher.patch.patch
 import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
@@ -21,7 +21,7 @@ import app.morphe.patches.reddit.customclients.morpheSettingsContextPatch
 import app.morphe.patches.reddit.customclients.settingsResourcePaths
 import com.android.tools.smali.dexlib2.Opcode
 
-private val joeySettingsResourcesPatch = resourcePatch(default = false) {
+private val joeySettingsResourcesPatch = patch(default = false) {
     dependsOn(morpheSettingsResourcesPatch)
     execute {
         for (path in settingsResourcePaths("layout", "settings_activity")) {
@@ -31,7 +31,7 @@ private val joeySettingsResourcesPatch = resourcePatch(default = false) {
 }
 
 @Suppress("unused")
-val joeyMorpheSettingsPatch = bytecodePatch(
+val joeyMorpheSettingsPatch = patch(
     name = "Joey Morphe settings",
     description = MORPHE_SETTINGS_DESCRIPTION,
     default = true,

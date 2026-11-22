@@ -14,4 +14,11 @@ package com.bumptech.glide.request
 private fun <T> boostApiStub(): T = throw UnsupportedOperationException("Compile-only Boost adapter stub")
 
 abstract class BaseRequestOptions protected constructor(stub: Unit) : Cloneable {
+    fun override(width: Int, height: Int): BaseRequestOptions = boostApiStub()
+}
+
+// Boost's R8-specialized listener does not retain Glide's upstream signatures.
+interface RequestListener {
+    fun onResourceReady(resource: Any?)
+    fun onLoadFailed(exception: com.bumptech.glide.load.engine.GlideException?): Boolean
 }

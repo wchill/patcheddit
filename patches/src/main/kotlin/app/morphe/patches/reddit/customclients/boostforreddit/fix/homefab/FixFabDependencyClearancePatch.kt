@@ -8,7 +8,7 @@
 package app.morphe.patches.reddit.customclients.boostforreddit.fix.homefab
 
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 
 private const val FAB_CLEARANCE_EXTENSION_DESCRIPTOR =
@@ -21,7 +21,7 @@ private const val FAB_CLEARANCE_EXTENSION_DESCRIPTOR =
  * Applied through [fixBoostHomeFloatingActionMenuOverlapPatch], which removes
  * the static FAB margin and therefore relies on this translation.
  */
-internal val fixFabDependencyClearancePatch = bytecodePatch {
+internal val fixFabDependencyClearancePatch = patch {
     dependsOn(ExtensionPatches.Boost)
 
     execute {

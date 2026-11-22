@@ -7,15 +7,17 @@
 package app.morphe.patches.reddit.customclients.http
 
 import app.morphe.patches.reddit.customclients.misc.extension.mapping.ProguardMapping
+import app.morphe.patches.reddit.customclients.redditisfun.bindings.rifHttpLibraryResourceNamespace
+import com.android.tools.smali.dexlib2.iface.ClassDef
 import java.io.Reader
 import java.io.StringReader
 
-internal fun httpLibraryResourceNamespace(client: String, packageName: String): String = when (client) {
-    "redditisfun" -> when (packageName) {
-        "com.andrewshu.android.reddit" -> "redditisfun/free"
-        "com.andrewshu.android.redditdonation" -> "redditisfun/donation"
-        else -> error("Unsupported RIF HTTP library profile: $packageName")
-    }
+internal fun httpLibraryResourceNamespace(
+    client: String,
+    packageName: String,
+    nativeDefinitions: List<ClassDef> = emptyList(),
+): String = when (client) {
+    "redditisfun" -> rifHttpLibraryResourceNamespace(nativeDefinitions)
     "relay" -> when (packageName) {
         "free.reddit.news" -> "relay/free"
         "reddit.news" -> "relay/pro"

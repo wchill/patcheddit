@@ -7,8 +7,8 @@
 package app.morphe.patches.reddit.customclients.misc.extension
 
 import app.morphe.patcher.Fingerprint
-import app.morphe.patcher.patch.BytecodePatchContext
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.classDefBy
+import app.morphe.patcher.patch.patch
 import app.morphe.patches.all.misc.extension.SHARED_UTILS_EXTENSION_CLASS
 import app.morphe.patches.all.misc.extension.activityOnCreateExtensionHook
 import com.android.tools.smali.dexlib2.dexbacked.DexBackedDexFile
@@ -23,7 +23,7 @@ internal fun clientExtensionPatch(
     extensionName: String?,
     hookedClasses: Array<out String>,
     prepareShared: (InputStream) -> InputStream = ::withoutHttpLibraries,
-) = bytecodePatch(default = false) {
+) = patch(default = false) {
     extendWith {
         val input = checkNotNull(object {}.javaClass.classLoader.getResourceAsStream("extensions/shared.mpe")) {
             "Shared extension payload was not found"
@@ -42,7 +42,7 @@ internal fun clientExtensionPatch(
     }
 }
 
-internal fun BytecodePatchContext.setExtensionReleaseVersion() {
+internal fun setExtensionReleaseVersion() {
     val marker = object {}.javaClass
     val resource = checkNotNull(marker.classLoader.getResource(marker.name.replace('.', '/') + ".class")) {
         "Cannot locate the patch bundle for its version"

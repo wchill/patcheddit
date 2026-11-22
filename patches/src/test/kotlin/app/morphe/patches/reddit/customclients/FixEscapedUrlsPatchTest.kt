@@ -72,8 +72,8 @@ class FixEscapedUrlsPatchTest {
         }
     }
 
-    private fun dependencies(patch: Patch<*>): Set<Patch<*>> = buildSet {
-        fun visit(current: Patch<*>) {
+    private fun dependencies(patch: Patch): Set<Patch> = buildSet {
+        fun visit(current: Patch) {
             if (add(current)) current.dependencies.forEach(::visit)
         }
         visit(patch)

@@ -7,6 +7,7 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.fix.homefab
 
+import app.morphe.patcher.patch.document
 import app.morphe.patches.reddit.customclients.morpheResourcePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches

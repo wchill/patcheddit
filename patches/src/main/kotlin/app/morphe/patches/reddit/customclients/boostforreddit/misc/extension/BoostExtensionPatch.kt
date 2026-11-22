@@ -8,13 +8,16 @@ package app.morphe.patches.reddit.customclients.boostforreddit.misc.extension
 
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.classDefBy
+import app.morphe.patcher.patch.classDefForEach
+import app.morphe.patcher.patch.patch
 import app.morphe.patches.all.misc.extension.SHARED_UTILS_EXTENSION_CLASS
 import app.morphe.patches.all.misc.extension.activityOnCreateExtensionHook
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.mapping.verifyBoostLibraryReferences
+import app.morphe.patches.reddit.customclients.http.installOkHttpInterceptors
 import app.morphe.patches.reddit.customclients.misc.extension.setExtensionReleaseVersion
 
-internal val boostExtensionPatch = bytecodePatch {
+internal val boostExtensionPatch = patch {
     dependsOn(boostNativeLibrariesPatch, boostPrivateLibraryResourcesPatch)
     extendWith {
         val input = checkNotNull(object {}.javaClass.classLoader.getResourceAsStream("extensions/boost.mpe")) {
@@ -25,6 +28,7 @@ internal val boostExtensionPatch = bytecodePatch {
 
     execute {
         classDefBy(SHARED_UTILS_EXTENSION_CLASS)
+        installOkHttpInterceptors("boost", "Lokhttp3/OkHttpClient;")
     }
 
     finalize {

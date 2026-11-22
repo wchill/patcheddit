@@ -13,6 +13,8 @@ import org.junit.rules.TemporaryFolder;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -166,12 +168,51 @@ public class ExceptionLogStoreTest {
             store.append(new IOException(detail), "fixture-context");
         }
         assertTrue(new File(directory, "exceptions.previous.log").exists());
+        Files.write(new File(directory, "exceptions-interrupted.tmp").toPath(), new byte[]{1});
         store.clear();
         assertEquals("", store.read());
         assertEquals(0, directory.listFiles().length);
         store.clear();
         store.append(new IOException("new-event"), "fixture-context");
         assertTrue(store.read().contains("new-event"));
+    }
+
+    @Test
+    public void deletesOnlyTheSelectedReportAndPreservesSubsequentAppends() throws Exception {
+        ExceptionLogStore store = new ExceptionLogStore(temporary.newFolder());
+        store.append(new IOException("keep-first"), "context");
+        store.append(new IllegalStateException("remove-only"), "context");
+        ExceptionLogStore.Report selected = store.reports().get(0);
+        assertTrue(selected.details(4096).contains("remove-only"));
+
+        store.append(new IOException("keep-last"), "context");
+        assertTrue(store.deleteReport(selected));
+        String remaining = store.read();
+        assertFalse(remaining.contains("remove-only"));
+        assertTrue(remaining.contains("keep-first"));
+        assertTrue(remaining.contains("keep-last"));
+        assertEquals(2, store.reports().size());
+        assertFalse(store.deleteReport(selected));
+    }
+
+    @Test
+    public void deletesLegacyRotatedReportsWithoutChangingTheActiveLog() throws Exception {
+        File directory = temporary.newFolder();
+        File rotated = new File(directory, "exceptions.previous.log");
+        Files.write(rotated.toPath(), ("2026-10-26T12:00:00.000Z\n"
+                + "Thread: fixture\nContext: fixture\njava.io.IOException: legacy-report\n\n")
+                .getBytes(StandardCharsets.UTF_8));
+        ExceptionLogStore store = new ExceptionLogStore(directory);
+        store.append(new IOException("active-report"), "context");
+        ExceptionLogStore.Report selected = store.reports().stream()
+                .filter(report -> report.details(4096).contains("legacy-report"))
+                .findFirst().orElseThrow(AssertionError::new);
+        byte[] before = Files.readAllBytes(new File(directory, "exceptions.log").toPath());
+
+        assertTrue(store.deleteReport(selected));
+        assertFalse(rotated.exists());
+        assertEquals(new String(before, StandardCharsets.UTF_8), store.read());
+        assertEquals(1, store.reports().size());
     }
 
     @Test

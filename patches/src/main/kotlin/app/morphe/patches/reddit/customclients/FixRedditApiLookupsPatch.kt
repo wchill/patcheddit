@@ -9,13 +9,13 @@ package app.morphe.patches.reddit.customclients
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.Patch
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.util.returnEarly
 
 fun fixRedditApiLookupsPatch(
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     compatible: Array<Compatibility>,
-) = bytecodePatch(
+) = patch(
     description = "Fixes blocked post, comment, and community info requests.",
     default = true,
 ) {

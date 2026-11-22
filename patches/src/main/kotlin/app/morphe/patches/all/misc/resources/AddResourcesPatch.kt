@@ -6,13 +6,14 @@
 
 package app.morphe.patches.all.misc.resources
 
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.patch
+import app.morphe.patcher.patch.resourceFile
 import app.morphe.util.ResourceGroup
 import app.morphe.util.inputStreamFromBundledResource
 import java.nio.file.Files
 
 internal fun addResourcesPatch(sourceDirectory: String, vararg resources: ResourceGroup) =
-    resourcePatch(default = false) {
+    patch(default = false) {
         execute {
             for (group in resources) {
                 for (name in group.resources) {
@@ -22,7 +23,7 @@ internal fun addResourcesPatch(sourceDirectory: String, vararg resources: Resour
                     }
                     source.use { input ->
                         // Track each file so on-demand decoding registers new values and ID declarations.
-                        val target = this["res/$path", false]
+                        val target = resourceFile("res/$path", copy = false)
                         Files.createDirectories(target.parentFile.toPath())
                         target.outputStream().use(input::copyTo)
                     }

@@ -8,17 +8,16 @@
 package app.morphe.patches.reddit.customclients
 
 import app.morphe.patcher.Fingerprint
-import app.morphe.patcher.patch.BytecodePatchContext
 import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.Patch
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.util.returnEarly
 
 internal fun fixFailedGalleryImagesPatch(
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     compatible: Array<Compatibility>,
-    additional: BytecodePatchContext.() -> Unit = {},
-) = bytecodePatch(
+    additional: () -> Unit = {},
+) = patch(
     description = "Restores Reddit gallery images that the API reports as failed when opening posts.",
 ) {
     compatibleWith(*compatible)

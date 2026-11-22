@@ -10,9 +10,9 @@
 package app.morphe.patches.reddit.customclients
 
 import app.morphe.patcher.Fingerprint
-import app.morphe.patcher.patch.BytecodePatchBuilder
 import app.morphe.patcher.patch.Patch
-import app.morphe.patcher.patch.bytecodePatch
+import app.morphe.patcher.patch.PatchDefinition
+import app.morphe.patcher.patch.patch
 import app.morphe.patches.all.misc.PatchCategory
 
 internal const val INSTALL_NEW_CLIENT_METHOD =
@@ -21,8 +21,8 @@ internal const val CREATE_NEW_CLIENT_METHOD = "createClient()Lokhttp3/OkHttpClie
 internal val redgifsSetting = MorphePatchSetting("morphe_patch_fix_redgifs_api")
 
 fun fixRedgifsApiPatch(
-    extensionPatch: Patch<*>,
-    block: BytecodePatchBuilder.() -> Unit = {},
+    extensionPatch: Patch,
+    block: PatchDefinition.() -> Unit = {},
 ) = morpheBytecodePatch(
     name = "Fix Redgifs API",
     description = "Fetches a fresh Redgifs API token so Redgifs videos load.",
@@ -32,7 +32,7 @@ fun fixRedgifsApiPatch(
 ) { setting ->
     dependsOn(
         extensionPatch,
-        bytecodePatch {
+        patch {
             execute {
                 setting.returnEnabled(Fingerprint(
                     definingClass = "Lapp/morphe/extension/shared/fixes/redgifs/BaseFixRedgifsApiPatch;",

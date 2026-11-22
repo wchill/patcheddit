@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     compileOnly(libs.bundles.boost)
-    compileOnly(libs.okhttp)
+    compileOnly(libs.okhttp.boost)
 }
 
 android {

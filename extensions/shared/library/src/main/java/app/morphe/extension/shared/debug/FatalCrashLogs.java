@@ -33,6 +33,8 @@ public final class FatalCrashLogs {
     private static final String TAG = "MorpheCrashLogs";
     // Naming and locations used by morphe-patches-library's CrashLogPatch.
     private static final String FOLDER = "Morphe";
+    private static final String PUBLIC_PATH = Environment.DIRECTORY_DOCUMENTS + "/" + FOLDER;
+    private static final String PUBLIC_SELECTION = MediaStore.MediaColumns.RELATIVE_PATH + " IN (?, ?)";
 
     private FatalCrashLogs() {}
 
@@ -92,11 +94,9 @@ public final class FatalCrashLogs {
 
     private static void addMediaStore(List<Entry> entries, Context context) throws IOException {
         Uri collection = MediaStore.Files.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
-        String folder = Environment.DIRECTORY_DOCUMENTS + "/" + FOLDER;
         String[] projection = {MediaStore.MediaColumns._ID, MediaStore.MediaColumns.DISPLAY_NAME};
-        String selection = MediaStore.MediaColumns.RELATIVE_PATH + " IN (?, ?)";
         try (Cursor cursor = context.getContentResolver().query(
-                collection, projection, selection, new String[]{folder, folder + "/"}, null)) {
+                collection, projection, PUBLIC_SELECTION, new String[]{PUBLIC_PATH, PUBLIC_PATH + "/"}, null)) {
             if (cursor == null) throw new IOException("The crash report provider is unavailable.");
             int idColumn = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns._ID);
             int nameColumn = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DISPLAY_NAME);
@@ -117,6 +117,55 @@ public final class FatalCrashLogs {
                 );
     }
 
+    public static void delete(Context context, Entry entry) throws IOException {
+        if (!isCrashLogName(entry.name, context.getPackageName())) {
+            throw new IOException("The selected file is not a crash report for this app.");
+        }
+        if ("file".equals(entry.uri.getScheme())) {
+            File file = checkedFile(context, entry.uri);
+            if (!file.getName().equals(entry.name) || !file.delete()) {
+                throw new IOException("Could not delete the selected crash report.");
+            }
+        } else if ("content".equals(entry.uri.getScheme()) && Build.VERSION.SDK_INT >= 29
+                && MediaStore.AUTHORITY.equals(entry.uri.getAuthority())) {
+            int deleted = context.getContentResolver().delete(entry.uri,
+                    PUBLIC_SELECTION + " AND " + MediaStore.MediaColumns.DISPLAY_NAME + " = ?",
+                    new String[]{PUBLIC_PATH, PUBLIC_PATH + "/", entry.name});
+            if (deleted != 1) throw new IOException("Could not delete the selected crash report.");
+        } else {
+            throw new IOException("Unsupported crash report location.");
+        }
+    }
+
+    public static boolean clear(Context context) throws IOException {
+        Listing listing = list(context);
+        boolean complete = !listing.incomplete;
+        for (Entry entry : listing.entries) {
+            checkInterrupted();
+            try {
+                delete(context, entry);
+            } catch (IOException | SecurityException | IllegalArgumentException failure) {
+                complete = false;
+                Log.w(TAG, "Could not delete a fatal crash report.", failure);
+            }
+        }
+        return complete;
+    }
+
+    private static File checkedFile(Context context, Uri uri) throws IOException {
+        String path = uri.getPath();
+        if (path == null) throw new IOException("Unsupported crash report location.");
+        File canonical = new File(path).getCanonicalFile();
+        File appDocuments = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
+        File parent = canonical.getParentFile();
+        boolean appFile = appDocuments != null && appDocuments.getCanonicalFile().equals(parent);
+        if ((!appFile && !publicFolder().getCanonicalFile().equals(parent))
+                || !isCrashLogName(canonical.getName(), context.getPackageName())) {
+            throw new IOException("The selected file is not a crash report for this app.");
+        }
+        return canonical;
+    }
+
     private static File publicFolder() {
         return new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), FOLDER);
     }
@@ -127,16 +176,8 @@ public final class FatalCrashLogs {
             if (stream == null) throw new IOException("The selected crash report is unavailable.");
             return stream;
         }
-        if ("file".equals(uri.getScheme()) && uri.getPath() != null) {
-            File file = new File(uri.getPath()).getCanonicalFile();
-            File appDocuments = context.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS);
-            File parent = file.getParentFile();
-            boolean appFile = appDocuments != null && appDocuments.getCanonicalFile().equals(parent);
-            if ((!appFile && !publicFolder().getCanonicalFile().equals(parent))
-                    || !isCrashLogName(file.getName(), context.getPackageName())) {
-                throw new IOException("The selected file is not a crash report for this app.");
-            }
-            return new FileInputStream(file);
+        if ("file".equals(uri.getScheme())) {
+            return new FileInputStream(checkedFile(context, uri));
         }
         throw new IOException("Unsupported crash report location.");
     }

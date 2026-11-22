@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="patcheddit_youtube_open_external">Open in YouTube or browser</string>
+    <string name="patcheddit_youtube_invalid">This link does not point to a supported YouTube video.</string>
+    <string name="patcheddit_youtube_playback_error">YouTube could not play this video here. Try opening it externally.</string>
+    <string name="patcheddit_youtube_no_browser">No app is available to open this YouTube link.</string>
+</resources>

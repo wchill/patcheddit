@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-11-17T17:26:42",
-  "description": "# [2.4.0](https://github.com/wchill/patcheddit/compare/v2.3.0...v2.4.0) (2026-11-17)\n\n\n### Bug Fixes\n\n* **boost:** Add backwards compatibility Spoof client patch for users not using RedReader client ID ([3566b1f](https://github.com/wchill/patcheddit/commit/3566b1fb0ddf4b8926ca0edf43baf09ddc4eb92f))\n* **sync:** Crash in Sync free when opening Settings menu due to empty drawable ([6f9d17e](https://github.com/wchill/patcheddit/commit/6f9d17ed9d02a66a9935fd04eca6e2b32beb9651))\n\n\n### Features\n\n* Add About Patcheddit menu ([61284eb](https://github.com/wchill/patcheddit/commit/61284eb091a669219f70cd96fab798ddf444da4f))\n* **boost:** Add ability to manually fetch comments/posts from Arctic Shift and warn when loading failed ([cc20250](https://github.com/wchill/patcheddit/commit/cc20250bfbd4dd8b08ea5fe72c4751717d774e37))\n* **boost:** Make Arctic Shift URL configurable for development purposes ([342ced9](https://github.com/wchill/patcheddit/commit/342ced923dc33d2a97d9482c7850c4dff4dc0871))",
-  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.4.0/patches-2.4.0.mpp",
-  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.4.0/patches-2.4.0.mpp.asc",
-  "version": "2.4.0"
+  "created_at": "2026-11-22T00:19:01",
+  "description": "# [2.5.0-dev.6](https://github.com/wchill/patcheddit/compare/v2.5.0-dev.5...v2.5.0-dev.6) (2026-11-22)\n\n\n### Features\n\n* Use new embedded YouTube player for RIF and Sync ([6f0982a](https://github.com/wchill/patcheddit/commit/6f0982a974257e8270840604714cea2048e96071))",
+  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.5.0-dev.6/patches-2.5.0-dev.6.mpp",
+  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.5.0-dev.6/patches-2.5.0-dev.6.mpp.asc",
+  "version": "2.5.0-dev.6"
 }

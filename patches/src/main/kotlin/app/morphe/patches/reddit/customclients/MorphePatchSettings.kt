@@ -11,14 +11,12 @@ import app.morphe.patcher.Match
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
-import app.morphe.patcher.patch.BytecodePatchBuilder
-import app.morphe.patcher.patch.BytecodePatchContext
 import app.morphe.patcher.patch.Patch
 import app.morphe.patcher.patch.PatchBuilder
-import app.morphe.patcher.patch.ResourcePatchBuilder
-import app.morphe.patcher.patch.ResourcePatchContext
-import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.PatchDefinition
+import app.morphe.patcher.patch.document
+import app.morphe.patcher.patch.mutableClassDefBy
+import app.morphe.patcher.patch.patch
 import app.morphe.patcher.util.returnEarly
 import app.morphe.patcher.util.proxy.mutableTypes.MutableClass
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
@@ -66,7 +64,7 @@ internal data class MorphePreferenceSpec(
  * [optionsResource] is a bundled PreferenceCategory containing additional controls.
  */
 fun PatchBuilder<*>.addMorpheSettings(
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     title: String,
     description: String = "",
     category: String = PatchCategory.INTERFACE,
@@ -93,7 +91,7 @@ fun PatchBuilder<*>.addMorpheSettings(
         key, title, description, category,
         defaultEnabled, readOnly,
     )
-    val resources = resourcePatch(default = false) {
+    val resources = patch(default = false) {
         dependsOn(menu)
         optionsResource?.let {
             dependsOn(addResourcesPatch(resourceDirectory, ResourceGroup("xml", "$it.xml")))
@@ -124,7 +122,7 @@ fun PatchBuilder<*>.addMorpheSettings(
             }
         }
     }
-    dependsOn(if (readOnly) resources else bytecodePatch(default = false) {
+    dependsOn(if (readOnly) resources else patch(default = false) {
         dependsOn(extensionPatch, resources)
         execute {
             val owner = mutableClassDefBy(PATCH_SETTINGS_DESCRIPTOR)
@@ -154,7 +152,7 @@ fun morpheBytecodePatch(
     name: String,
     description: String? = null,
     default: Boolean = true,
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     category: String? = null,
     preferenceKey: String? = null,
     defaultEnabled: Boolean = true,
@@ -162,8 +160,8 @@ fun morpheBytecodePatch(
     optionsResource: String? = null,
     resourceDirectory: String = "settings",
     settingsSummary: String? = null,
-    block: BytecodePatchBuilder.(MorphePatchSetting) -> Unit,
-) = bytecodePatch(name, description, default) {
+    block: PatchDefinition.(MorphePatchSetting) -> Unit,
+) = patch(name, description, default) {
     category?.let { category(it) }
     dependsOn(extensionPatch)
     val setting = addMorpheSettings(
@@ -179,14 +177,14 @@ fun morpheResourcePatch(
     name: String,
     description: String,
     default: Boolean = true,
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     category: String = PatchCategory.INTERFACE,
     readOnly: Boolean = true,
     optionsResource: String? = null,
     resourceDirectory: String = "settings",
     settingsSummary: String? = null,
-    block: ResourcePatchBuilder.(MorphePatchSetting) -> Unit,
-) = resourcePatch(name, description, default) {
+    block: PatchDefinition.(MorphePatchSetting) -> Unit,
+) = patch(name, description, default) {
     category(category)
     dependsOn(extensionPatch)
     val setting = addMorpheSettings(
@@ -196,10 +194,10 @@ fun morpheResourcePatch(
     block(setting)
 }
 
-private fun settingsPatchFor(extensionPatch: Patch<*>): Patch<*>? {
-    val pending = ArrayDeque<Patch<*>>().apply { add(extensionPatch) }
-    val visited = mutableSetOf<Patch<*>>()
-    val menus = mutableSetOf<Patch<*>>()
+private fun settingsPatchFor(extensionPatch: Patch): Patch? {
+    val pending = ArrayDeque<Patch>().apply { add(extensionPatch) }
+    val visited = mutableSetOf<Patch>()
+    val menus = mutableSetOf<Patch>()
     while (pending.isNotEmpty()) {
         val current = pending.removeFirst()
         if (!visited.add(current)) continue
@@ -266,7 +264,8 @@ internal fun addMorphePatchPreference(
     options?.takeIf { action == null }?.let {
         entries += it.documentElement.childElements().map { entry ->
             (target.importNode(entry, true) as Element).apply {
-                if (!spec.readOnly && optionsDependOnSwitch && getAttribute("android:selectable") != "false") {
+                if (!spec.readOnly && optionsDependOnSwitch && getAttribute("android:selectable") != "false"
+                    && !hasAttribute("android:dependency")) {
                     setAttribute("android:dependency", spec.key)
                 }
             }
@@ -297,7 +296,7 @@ internal fun addMorphePatchPreference(
     for (entry in entries) category.appendChild(entry)
 }
 
-internal fun ResourcePatchContext.addMorpheApkSettings() {
+internal fun addMorpheApkSettings() {
     val packageName = document("AndroidManifest.xml").use { manifest ->
         val application = checkNotNull(manifest.getElementsByTagName("application").item(0) as? Element) {
             "AndroidManifest.xml has no application element."
@@ -404,9 +403,8 @@ class MorphePatchSetting internal constructor(
     }
 
     /** Gate an extension hook, returning its first argument unchanged for identity transforms. */
-    context(patchContext: BytecodePatchContext)
     fun guardHook(type: String, name: String, identity: Boolean = false) {
-        val owner = patchContext.mutableClassDefBy(type)
+        val owner = mutableClassDefBy(type)
         guardHook(owner, name, identity)
     }
 
@@ -426,7 +424,6 @@ class MorphePatchSetting internal constructor(
     }
 
     /** Preserve a native implementation before applying a reversible, method-local change. */
-    context(patchContext: BytecodePatchContext)
     fun patchMethod(fingerprint: Fingerprint, block: MutableMethod.() -> Unit) {
         val owner = fingerprint.classDef
         val target = currentMethod(owner, fingerprint.method)
@@ -551,7 +548,6 @@ private fun defaultReturn(type: String): String = when (type.first()) {
     else -> "const/4 v0, 0x0\n${returnInstruction(type, "v0")}"
 }
 
-context(patchContext: BytecodePatchContext)
 internal fun Fingerprint.wrapMorpheHook(
     before: String = "",
     after: String = "",
@@ -598,7 +594,6 @@ internal fun wrapMorpheHook(
     check(owner.methods.add(wrapper))
 }
 
-context(patchContext: BytecodePatchContext)
 internal fun Fingerprint.overrideOAuthReturn(getter: String): MutableMethod {
     require(method.returnType == "Ljava/lang/String;") { "OAuth getters must return a string." }
     val configuredGetter = when (getter) {

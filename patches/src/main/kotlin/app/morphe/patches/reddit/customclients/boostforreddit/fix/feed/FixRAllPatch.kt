@@ -7,11 +7,11 @@
 package app.morphe.patches.reddit.customclients.boostforreddit.fix.feed
 
 import app.morphe.patches.reddit.customclients.AppCompatibility
-import app.morphe.patches.reddit.customclients.boostforreddit.http.interceptHttpRequests
+import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.fixRAllPatch
 
 @Suppress("unused")
 val fixRAll = fixRAllPatch(
-    extensionPatch = interceptHttpRequests,
+    extensionPatch = ExtensionPatches.Boost,
     compatible = AppCompatibility.Boost,
 )

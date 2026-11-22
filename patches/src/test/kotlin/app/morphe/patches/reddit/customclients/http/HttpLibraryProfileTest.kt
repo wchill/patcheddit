@@ -57,8 +57,6 @@ class HttpLibraryProfileTest {
             Triple("relay", "reddit.news", "relay/pro"),
             Triple("syncforreddit", "com.laurencedawson.reddit_sync", "syncforreddit"),
             Triple("syncforreddit", "com.laurencedawson.reddit_sync.pro", "syncforreddit/pro"),
-            Triple("redditisfun", "com.andrewshu.android.reddit", "redditisfun/free"),
-            Triple("redditisfun", "com.andrewshu.android.redditdonation", "redditisfun/donation"),
         )) {
             assertEquals(expected, httpLibraryResourceNamespace(client, packageName))
         }
@@ -69,6 +67,9 @@ class HttpLibraryProfileTest {
             assertFailsWith<IllegalStateException> { httpLibraryResourceNamespace("syncforreddit", packageName) }
         }
         assertEquals("joey", httpLibraryResourceNamespace("joey", "o.o.joey"))
+        for (packageName in listOf("com.andrewshu.android.reddit", "com.andrewshu.android.redditdonation", "unknown")) {
+            assertFailsWith<IllegalArgumentException> { httpLibraryResourceNamespace("redditisfun", packageName) }
+        }
     }
 
     @Test

@@ -6,8 +6,9 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.misc.extension
 
-import app.morphe.patcher.patch.bytecodePatch
-import app.morphe.patcher.patch.resourcePatch
+import app.morphe.patcher.patch.classDefForEach
+import app.morphe.patcher.patch.patch
+import app.morphe.patcher.patch.resourceFile
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostBindings
 import app.morphe.patches.reddit.customclients.misc.extension.mapping.DexMappingRewriter
 import app.morphe.patches.reddit.customclients.misc.extension.mapping.ProguardMapping
@@ -38,16 +39,16 @@ internal object BoostNativeLibraries {
     }
 }
 
-internal val boostNativeLibrariesPatch = bytecodePatch(default = false) {
+internal val boostNativeLibrariesPatch = patch(default = false) {
     execute {
         BoostNativeLibraries.classes = buildList { classDefForEach(::add) }
     }
 }
 
-internal val boostPrivateLibraryResourcesPatch = resourcePatch(default = false) {
+internal val boostPrivateLibraryResourcesPatch = patch(default = false) {
     execute {
         for ((service, provider) in coroutineServices) {
-            this["META-INF/services/$PRIVATE_LIBRARY_PACKAGE.$service", false]
+            resourceFile("META-INF/services/$PRIVATE_LIBRARY_PACKAGE.$service", copy = false)
                 .writeText("$PRIVATE_LIBRARY_PACKAGE.$provider\n")
         }
     }

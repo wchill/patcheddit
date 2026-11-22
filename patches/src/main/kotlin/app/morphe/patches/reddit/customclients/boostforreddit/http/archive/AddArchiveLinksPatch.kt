@@ -9,6 +9,7 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.http.archive
 
+import app.morphe.patcher.patch.mutableClassDefBy
 import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches

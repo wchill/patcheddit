@@ -33,12 +33,12 @@ public class HttpRequestHookTest {
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         assertSame(builder, TestHook.installInterceptor(builder));
         TestHook.installInterceptor(builder);
-        assertEquals(1, builder.interceptors().size());
+        assertEquals(2, builder.interceptors().size());
         assertEquals(1, builder.networkInterceptors().size());
 
         OkHttpClient.Builder clone = builder.build().newBuilder();
         TestHook.installInterceptor(clone);
-        assertEquals(1, clone.interceptors().size());
+        assertEquals(2, clone.interceptors().size());
         assertEquals(1, clone.networkInterceptors().size());
     }
 

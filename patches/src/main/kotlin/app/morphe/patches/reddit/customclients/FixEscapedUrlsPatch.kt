@@ -7,7 +7,6 @@
 package app.morphe.patches.reddit.customclients
 
 import app.morphe.patcher.Fingerprint
-import app.morphe.patcher.patch.BytecodePatchContext
 import app.morphe.patcher.patch.Compatibility
 import app.morphe.patcher.patch.Patch
 import app.morphe.patches.all.misc.PatchCategory
@@ -16,9 +15,9 @@ internal const val ESCAPED_URLS_PATCH = "Lapp/morphe/extension/shared/fixes/link
 internal const val ESCAPED_URLS = "Lapp/morphe/extension/shared/fixes/links/EscapedUrls;"
 
 internal fun fixEscapedUrlsPatch(
-    extensionPatch: Patch<*>,
+    extensionPatch: Patch,
     compatible: Array<Compatibility>,
-    additional: BytecodePatchContext.(MorphePatchSetting) -> Unit = {},
+    additional: (MorphePatchSetting) -> Unit = {},
 ) = morpheBytecodePatch(
     name = "Fix escaped URLs",
     description = "Fixes URLs broken by backslash-escaped punctuation in Reddit posts and comments.",
