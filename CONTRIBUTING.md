@@ -112,6 +112,14 @@ those mappings.
 Both complete and review-required results are supported.
 Its report is saved to `build/boost-mapping-tests/recovery.json`.
 
+## Listing device tests
+
+On a disposable APK signed with the fixture key, run `RAllDeviceTest` with
+**Reddit API fixes** applied. Pass `--arg stock=baconreader` for BaconReader to
+exercise its Apache request path as well as OkHttp. The fixture preserves the
+query and headers and checks that unrelated routes are left alone without using
+the live Reddit service.
+
 ## Share links and native media device tests
 
 `ShareLinksDeviceTest` requires a disposable APK with **Reddit API fixes** applied.

@@ -14,6 +14,7 @@ import app.morphe.extension.joey.FixRedgifsApiPatch;
 import app.morphe.extension.shared.fixes.api.FailedGalleryMetadataPatch;
 import app.morphe.extension.shared.fixes.api.RedditInfoResponsePatch;
 import app.morphe.extension.shared.fixes.comments.MoreChildrenResponsePatch;
+import app.morphe.extension.shared.fixes.feed.RAllPatch;
 import app.morphe.extension.shared.fixes.links.EscapedUrlsPatch;
 import app.morphe.extension.shared.requests.BaseOkHttpRequestHook;
 import okhttp3.Interceptor;
@@ -28,7 +29,7 @@ public final class OkHttpRequestHook extends BaseOkHttpRequestHook {
     @Override
     protected List<Interceptor> getInterceptors() {
         return Arrays.asList(new EscapedUrlsPatch(), new FailedGalleryMetadataPatch(), new RedditInfoResponsePatch(),
-                new MoreChildrenResponsePatch(), new FixRedgifsApiPatch());
+                new MoreChildrenResponsePatch(), new FixRedgifsApiPatch(), new RAllPatch());
     }
 
     @Override

@@ -9,6 +9,7 @@ package app.morphe.extension.shared.requests;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -23,6 +24,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 
 public class HttpRequestHookTest {
@@ -66,12 +68,23 @@ public class HttpRequestHookTest {
             assertEquals("preserved", response.request().header("X-Test"));
         }
         for (String url : List.of("https://notreddit.com/r/all", "https://reddit.com.evil.example/r/all",
-                "https://oauth.reddit.com/r/all/.json", "https://oauth.reddit.com/r/java")) {
+                "https://oauth.reddit.com/r/all/.json", "https://oauth.reddit.com/r/all.json",
+                "https://oauth.reddit.com/r/allthings", "https://oauth.reddit.com/r/all/about",
+                "https://oauth.reddit.com/r/all/comments/abc/title", "https://oauth.reddit.com/r/java")) {
             Request request = new Request.Builder().url(url).build();
             try (Response response = client.newCall(request).execute()) {
                 assertSame(request, response.request());
             }
         }
+    }
+
+    @Test
+    public void rewritesLegacyGetWithoutDroppingListingParameters() {
+        URI listing = URI.create("https://oauth.reddit.com/r/all/top/?t=week&after=t3_abc");
+        assertEquals("https://oauth.reddit.com/r/all/top/.json?t=week&after=t3_abc",
+                RAllPatch.rewriteLegacyListing("GET", listing).toString());
+        assertNull(RAllPatch.rewriteLegacyListing("POST", listing));
+        assertNull(RAllPatch.rewriteLegacyListing("GET", URI.create("https://oauth.reddit.com/r/allthings")));
     }
 
     @Test

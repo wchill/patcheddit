@@ -6,6 +6,7 @@
 
 package app.morphe.patches.reddit.customclients.relay.api
 
+import app.morphe.patches.reddit.customclients.relayRAllPatch
 import app.morphe.patches.reddit.customclients.relay.fix.apilookups.fixRedditApiLookups
 import app.morphe.patches.reddit.customclients.relay.fix.gallery.fixFailedGalleryImagesPatch
 import app.morphe.patches.reddit.customclients.relay.fix.login.modifyLoginWebView
@@ -22,6 +23,7 @@ val redditApiPatch = redditApiPatch(
     fixRedditApiLookups,
     fixFailedGalleryImagesPatch,
     fixMoreComments,
+    relayRAllPatch,
     fixSLinksPatch,
     fixSidebarPatch,
 )

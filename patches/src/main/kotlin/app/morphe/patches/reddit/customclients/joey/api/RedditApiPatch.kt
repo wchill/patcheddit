@@ -6,6 +6,7 @@
 
 package app.morphe.patches.reddit.customclients.joey.api
 
+import app.morphe.patches.reddit.customclients.joeyRAllPatch
 import app.morphe.patches.reddit.customclients.joey.fix.apilookups.fixRedditApiLookups
 import app.morphe.patches.reddit.customclients.joey.fix.gallery.fixFailedGalleryImagesPatch
 import app.morphe.patches.reddit.customclients.joey.fix.login.modifyLoginWebView
@@ -22,6 +23,7 @@ val redditApiPatch = redditApiPatch(
     fixFailedGalleryImagesPatch,
     fixMoreComments,
     fixSLinksPatch,
+    joeyRAllPatch,
 )
 
 @Suppress("unused")
