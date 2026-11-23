@@ -18,7 +18,12 @@ public class ImageSearchMenuTest {
         String image = "https://preview.redd.it/image.jpeg?format=pjpg&s=abc%2Fdef%3D";
         for (ImageSearchMenu.Engine engine : ImageSearchMenu.ENGINES) {
             String target = engine.url(image);
-            assertEquals(image, URLDecoder.decode(target.substring(target.indexOf("url=") + 4), "UTF-8"));
+            int placeholder = engine.template.indexOf("[url]");
+            String prefix = engine.template.substring(0, placeholder);
+            String suffix = engine.template.substring(placeholder + "[url]".length());
+            assertTrue(engine.title + ": " + target, target.startsWith(prefix) && target.endsWith(suffix));
+            String encodedImage = target.substring(prefix.length(), target.length() - suffix.length());
+            assertEquals(engine.title, image, URLDecoder.decode(encodedImage, "UTF-8"));
         }
     }
 

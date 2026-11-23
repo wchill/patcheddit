@@ -5,28 +5,24 @@
  * Adapted from https://github.com/brealorg/breal-morphe-patches (0226c2e).
  */
 
-package app.morphe.extension.boost.utils;
+package app.morphe.extension.shared.fixes.refresh;
 
 import android.app.Activity;
 import android.app.Application;
-import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import androidx.annotation.NonNull;
+
 import java.util.WeakHashMap;
 
-/**
- * @noinspection unused
- */
 public final class AdaptiveRefreshRate {
     private static final String TAG = "MorpheRefresh";
-    private static final String MARKER = "MORPHE_BOOST_ADAPTIVE_REFRESH_RATE_V2";
-    private static final String PREF_KEY = "morphe_boost_prefer_high_refresh_rate";
+    private static final String MARKER = "MORPHE_ADAPTIVE_REFRESH_RATE_V2";
 
     private static final float HIGH_REFRESH_RATE_HINT_HZ = 120.0f;
 
@@ -36,38 +32,36 @@ public final class AdaptiveRefreshRate {
     private AdaptiveRefreshRate() {
     }
 
-    public static void install(final Application application) {
+    public static void install(@NonNull Application application) {
+        if (INSTALLED.containsKey(application)) return;
         try {
-            if (application == null || INSTALLED.containsKey(application)) return;
-            INSTALLED.put(application, Boolean.TRUE);
-
             application.registerActivityLifecycleCallbacks(new Application.ActivityLifecycleCallbacks() {
                 @Override
-                public void onActivityCreated(final Activity activity, Bundle savedInstanceState) {
+                public void onActivityCreated(@NonNull final Activity activity, Bundle savedInstanceState) {
                     apply(activity);
                 }
 
                 @Override
-                public void onActivityResumed(final Activity activity) {
+                public void onActivityResumed(@NonNull final Activity activity) {
                     apply(activity);
                 }
 
-                @Override public void onActivityStarted(Activity activity) {}
-                @Override public void onActivityPaused(Activity activity) {}
-                @Override public void onActivityStopped(Activity activity) {}
-                @Override public void onActivitySaveInstanceState(Activity activity, Bundle outState) {}
-                @Override public void onActivityDestroyed(Activity activity) {
+                @Override public void onActivityStarted(@NonNull Activity activity) {}
+                @Override public void onActivityPaused(@NonNull Activity activity) {}
+                @Override public void onActivityStopped(@NonNull Activity activity) {}
+                @Override public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle outState) {}
+                @Override public void onActivityDestroyed(@NonNull Activity activity) {
                     LOGGED.remove(activity);
                 }
             });
-        } catch (Throwable ignored) {
+            INSTALLED.put(application, Boolean.TRUE);
+        } catch (RuntimeException failure) {
+            Log.w(TAG, "Could not install adaptive refresh rate callbacks", failure);
         }
     }
 
-    public static void apply(final Activity activity) {
+    private static void apply(Activity activity) {
         try {
-            if (activity == null) return;
-
             applyNow(activity);
 
             final Window window = activity.getWindow();
@@ -76,17 +70,13 @@ public final class AdaptiveRefreshRate {
             final View decor = window.getDecorView();
             if (decor == null) return;
 
-            Runnable retry = new Runnable() {
-                @Override
-                public void run() {
-                    applyNow(activity);
-                }
-            };
+            Runnable retry = () -> applyNow(activity);
 
             decor.post(retry);
             decor.postDelayed(retry, 250L);
             decor.postDelayed(retry, 1000L);
-        } catch (Throwable ignored) {
+        } catch (RuntimeException failure) {
+            Log.w(TAG, "Could not schedule adaptive refresh rate updates", failure);
         }
     }
 
@@ -95,7 +85,7 @@ public final class AdaptiveRefreshRate {
             Window window = activity.getWindow();
             if (window == null) return;
 
-            if (!isEnabled(activity)) {
+            if (!isEnabled()) {
                 clearWindowPreference(activity, window);
                 return;
             }
@@ -112,35 +102,25 @@ public final class AdaptiveRefreshRate {
             }
 
             logAppliedOnce(activity, attrs == null ? 0.0f : attrs.preferredRefreshRate);
-        } catch (Throwable ignored) {
+        } catch (RuntimeException | LinkageError failure) {
+            Log.w(TAG, "Could not apply the refresh rate preference", failure);
         }
     }
 
-    private static boolean isEnabled(Context context) {
-        try {
-            return PreferenceManager.getDefaultSharedPreferences(context)
-                    .getBoolean(PREF_KEY, true);
-        } catch (Throwable ignored) {
-            return true;
-        }
+    private static boolean isEnabled() {
+        // The patch binds this to the client's Patcheddit setting.
+        return true;
     }
 
     private static void clearWindowPreference(Activity activity, Window window) {
-        try {
-            WindowManager.LayoutParams attrs = window.getAttributes();
-            if (attrs != null && attrs.preferredRefreshRate != 0.0f) {
-                attrs.preferredRefreshRate = 0.0f;
-                window.setAttributes(attrs);
-            }
-
-            View decor = window.getDecorView();
-            if (decor != null) {
-                requestViewNoPreference(decor);
-            }
-
-            LOGGED.remove(activity);
-        } catch (Throwable ignored) {
+        WindowManager.LayoutParams attrs = window.getAttributes();
+        if (attrs != null && attrs.preferredRefreshRate != 0.0f) {
+            attrs.preferredRefreshRate = 0.0f;
+            window.setAttributes(attrs);
         }
+
+        requestViewNoPreference(window.getDecorView());
+        LOGGED.remove(activity);
     }
 
     private static void requestViewHighRefreshRate(View view) {
@@ -156,14 +136,9 @@ public final class AdaptiveRefreshRate {
     }
 
     private static void logAppliedOnce(Activity activity, float preferredRefreshRate) {
-        try {
-            if (LOGGED.containsKey(activity)) return;
-            LOGGED.put(activity, Boolean.TRUE);
-
-            Log.i(TAG, MARKER
-                    + " activity=" + activity.getClass().getName()
-                    + " preferredRefreshRate=" + preferredRefreshRate);
-        } catch (Throwable ignored) {
-        }
+        if (LOGGED.put(activity, Boolean.TRUE) != null) return;
+        Log.i(TAG, MARKER
+                + " activity=" + activity.getClass().getName()
+                + " preferredRefreshRate=" + preferredRefreshRate);
     }
 }

@@ -29,10 +29,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import app.morphe.extension.boost.http.wayback.WaybackMachine;
-import app.morphe.extension.boost.http.wayback.WaybackResponse;
 import app.morphe.extension.boost.utils.BoostUndeleteSettings;
 import app.morphe.extension.shared.archive.HttpUtils;
+import app.morphe.extension.shared.archive.wayback.WaybackMachine;
+import app.morphe.extension.shared.archive.wayback.WaybackResponse;
 import app.morphe.extension.shared.cache.AutoSavingCache;
 import app.morphe.extension.shared.debug.LoggingUtils;
 import app.morphe.extension.shared.requests.PatchedditInterceptor;
@@ -44,6 +44,11 @@ public class ImgurUndeleteInterceptor extends PatchedditInterceptor {
     private static final String FAIL_OPEN_MARKER = "morphe_boost_undelete_imgur_fail_open";
 
     @Override
+    public boolean isEnabled() {
+        return BoostUndeleteSettings.isImgurUndeleteEnabled();
+    }
+
+    @Override
     public boolean isPatchIncluded() {
         // To be overridden by patch.
         return false;
@@ -53,10 +58,6 @@ public class ImgurUndeleteInterceptor extends PatchedditInterceptor {
     @Override
     public Response doIntercept(Chain chain) throws IOException {
         Request request = chain.request();
-        if (!BoostUndeleteSettings.isImgurUndeleteEnabled()) {
-            return chain.proceed(request);
-        }
-
         String host = request.url().host();
 
         if (!host.contains("imgur.com") && !host.contains("imgur-apiv3.p.rapidapi.com")) {

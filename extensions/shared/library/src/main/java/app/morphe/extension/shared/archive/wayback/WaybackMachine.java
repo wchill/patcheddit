@@ -7,7 +7,7 @@
  * Adapted from https://github.com/brealorg/breal-morphe-patches (0226c2e).
  */
 
-package app.morphe.extension.boost.http.wayback;
+package app.morphe.extension.shared.archive.wayback;
 
 import app.morphe.extension.vendored.com.fasterxml.jackson.databind.JsonNode;
 
@@ -28,7 +28,7 @@ public class WaybackMachine {
     private static final String COOLDOWN_MARKER = "morphe_boost_wayback_cooldown";
     private static final AutoSavingCache waybackCache = new AutoSavingCache("WaybackMachine", 100);
 
-    // Lookups run inside Boost's own requests, so a slow archive must not hold them for long.
+    // Lookups run inside client requests, so a slow archive must not hold them for long.
     private static final long CDX_CALL_TIMEOUT_MS = 10_000L;
     // Content is streamed to the caller, so only connecting and each read are bounded.
     public static final long CONTENT_TIMEOUT_MS = 15_000L;

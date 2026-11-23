@@ -8,7 +8,7 @@
  * Modified for Breal issue #219: bounded calls and failure cooldown (2026-10-12).
  */
 
-package app.morphe.extension.boost.http.arcticshift;
+package app.morphe.extension.shared.archive.arcticshift;
 
 import app.morphe.extension.vendored.com.fasterxml.jackson.databind.JsonNode;
 import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.ArrayNode;
@@ -22,10 +22,9 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.UnaryOperator;
 
-import app.morphe.extension.boost.utils.MarkdownRenderer;
 import app.morphe.extension.shared.archive.HttpUtils;
-import app.morphe.extension.shared.archive.arcticshift.ArcticShiftSettings;
 import app.morphe.extension.shared.debug.LoggingUtils;
 
 public class ArcticShift {
@@ -44,7 +43,7 @@ public class ArcticShift {
 
     private static final long QUERY_TIMEOUT_RETRY_DELAY_MS = 1_000L;
 
-    // Lookups run inside Boost's own Reddit requests, so a slow archive must not hold them for long.
+    // Lookups run inside Reddit requests, so a slow archive must not hold them for long.
     private static final long CALL_TIMEOUT_MS = 10_000L;
     private static final long COMMENT_TREE_CALL_TIMEOUT_MS = 20_000L;
 
@@ -126,8 +125,7 @@ public class ArcticShift {
     }
 
     public static ArrayNode getCommentTree(String linkId) throws IOException {
-        //return queryArcticShiftForCommentTree(id, null, null, null, null);
-        // Enough for any thread Boost renders comfortably; 25000 made deleted megathreads time out.
+        // A limit of 25000 made deleted megathreads time out.
         String url = ArcticShiftSettings.getBaseUrl() + "comments/tree?limit=" + COMMENT_TREE_LIMIT + "&link_id=" + linkId;
         return getArrayDataOrEmpty(makeApiCall(url, COMMENT_TREE_CALL_TIMEOUT_MS), "comments/tree");
     }
@@ -197,15 +195,16 @@ public class ArcticShift {
         return new ArrayNode(app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.JsonNodeFactory.instance);
     }
 
-    public static void updateSubmissionNode(ObjectNode oldNode, JsonNode newNode) {
-        mergeJsonNodes(oldNode, newNode, POSTS_FIELDS, "selftext");
+    public static void updateSubmissionNode(ObjectNode oldNode, JsonNode newNode, UnaryOperator<String> renderMarkdown) {
+        mergeJsonNodes(oldNode, newNode, POSTS_FIELDS, "selftext", renderMarkdown);
     }
 
-    public static void updateCommentNode(ObjectNode oldNode, JsonNode newNode) {
-        mergeJsonNodes(oldNode, newNode, COMMENTS_FIELDS, "body");
+    public static void updateCommentNode(ObjectNode oldNode, JsonNode newNode, UnaryOperator<String> renderMarkdown) {
+        mergeJsonNodes(oldNode, newNode, COMMENTS_FIELDS, "body", renderMarkdown);
     }
 
-    private static void mergeJsonNodes(ObjectNode oldNode, JsonNode newNode, String[] fields, String markdownField) {
+    private static void mergeJsonNodes(ObjectNode oldNode, JsonNode newNode, String[] fields, String markdownField,
+                                       UnaryOperator<String> renderMarkdown) {
         if (oldNode == null) {
             throw new IllegalArgumentException("oldNode must not be null");
         }
@@ -223,7 +222,7 @@ public class ArcticShift {
                 if (node != null) {
                     oldNode.replace(fieldName, node);
                     if (fieldName.equals(markdownField)) {
-                        String renderedHtml = MarkdownRenderer.render(node.asText());
+                        String renderedHtml = renderMarkdown.apply(node.asText());
                         oldNode.replace(markdownField + "_html", new TextNode(renderedHtml));
                     }
                 }

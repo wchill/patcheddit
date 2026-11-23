@@ -32,7 +32,6 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import app.morphe.extension.shared.requests.PatchedditInterceptor;
 import app.morphe.extension.shared.requests.RedditRouteResponseShim;
 import app.morphe.extension.shared.settings.OAuthSettings;
 import okhttp3.Call;
@@ -58,7 +57,7 @@ import okhttp3.ResponseBody;
  *
  * <p>Same approach as Apollo Reborn PR #1589.
  */
-public final class FailedGalleryMetadataPatch extends PatchedditInterceptor {
+public final class FailedGalleryMetadataPatch extends RedditRouteResponseShim {
     private static final Logger LOGGER = Logger.getLogger(FailedGalleryMetadataPatch.class.getName());
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private static final long MAX_BODY_BYTES = 8L * 1024 * 1024;
@@ -89,16 +88,16 @@ public final class FailedGalleryMetadataPatch extends PatchedditInterceptor {
     }
 
     public FailedGalleryMetadataPatch(boolean repairGifs) {
-        prober = null;
-        this.repairGifs = repairGifs;
+        this(null, repairGifs);
     }
 
     FailedGalleryMetadataPatch(Prober prober) {
-        this(prober, true);
+        this(java.util.Objects.requireNonNull(prober), true);
     }
 
     FailedGalleryMetadataPatch(Prober prober, boolean repairGifs) {
-        this.prober = java.util.Objects.requireNonNull(prober);
+        super(request -> isPostLookupPath(normalizePath(request.url().encodedPath())));
+        this.prober = prober;
         this.repairGifs = repairGifs;
     }
 
@@ -110,10 +109,9 @@ public final class FailedGalleryMetadataPatch extends PatchedditInterceptor {
 
     @NonNull
     @Override
-    protected Response doIntercept(@NonNull Chain chain) throws IOException {
-        Request request = chain.request();
+    protected Response shimResponse(@NonNull Chain chain, @NonNull Request request) throws IOException {
         Response response = chain.proceed(request);
-        if (!isPostLookup(request) || !response.isSuccessful()) return response;
+        if (!response.isSuccessful()) return response;
         String encoding = response.header("Content-Encoding");
         if (encoding != null && !encoding.equalsIgnoreCase("identity")) return response;
         ResponseBody body = response.body();
@@ -161,14 +159,14 @@ public final class FailedGalleryMetadataPatch extends PatchedditInterceptor {
     }
 
     /** Repairs BaconReader's Apache HTTP response after its stream has been consumed. */
-    public static String repairLegacyResponse(String body, String url, int code, String contentType)
+    public static String repairApacheResponse(String body, String url, int code, String contentType)
             throws IOException {
         long deadline = System.nanoTime() + REPAIR_BUDGET_NANOS;
-        return repairLegacyBody(body, url, code, contentType,
+        return repairApacheBody(body, url, code, contentType,
                 candidate -> legacyHead(candidate, deadline), deadline);
     }
 
-    static String repairLegacyBody(String body, String url, int code, String contentType,
+    static String repairApacheBody(String body, String url, int code, String contentType,
                                    Prober prober, long deadline) throws IOException {
         if (body == null || url == null || code < 200 || code >= 300 || contentType == null
                 || !contentType.toLowerCase(Locale.ROOT).contains("json")
@@ -180,18 +178,18 @@ public final class FailedGalleryMetadataPatch extends PatchedditInterceptor {
             LOGGER.log(Level.WARNING, "Invalid legacy Reddit gallery URL", exception);
             return body;
         }
-        if (!isPostLookup(request)) return body;
+        if (!isRedditHost(request.url().host()) || !isPostLookupPath(normalizePath(request.url().encodedPath()))) {
+            return body;
+        }
         Object json = galleryJson(body);
         if (json == null) return body;
         String repaired = repair(json, prober, deadline, true, true);
         return repaired == null ? body : repaired;
     }
 
-    private static boolean isPostLookup(Request request) {
-        if (!RedditRouteResponseShim.isRedditHost(request.url().host())) return false;
-        String path = RedditRouteResponseShim.normalizePath(request.url().encodedPath());
+    private static boolean isPostLookupPath(String path) {
         return path.equals("/api/info") || path.startsWith("/by_id/")
-                || path.startsWith("/comments/") || path.contains("/comments/");
+                || path.contains("/comments/");
     }
 
     private static Object galleryJson(String text) {

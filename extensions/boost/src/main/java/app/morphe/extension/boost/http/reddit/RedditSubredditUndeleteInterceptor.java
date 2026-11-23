@@ -12,6 +12,9 @@ package app.morphe.extension.boost.http.reddit;
 
 import static app.morphe.extension.boost.http.reddit.RedditApiUtils.setIfUnset;
 
+import androidx.annotation.NonNull;
+
+import app.morphe.extension.shared.requests.RedditRouteResponseShim;
 import app.morphe.extension.vendored.com.fasterxml.jackson.databind.JsonNode;
 import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.ArrayNode;
 import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.BooleanNode;
@@ -20,8 +23,6 @@ import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.JsonNod
 import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.NullNode;
 import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.ObjectNode;
 import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.TextNode;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -35,50 +36,48 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import app.morphe.extension.boost.http.arcticshift.ArcticShift;
 import app.morphe.extension.boost.utils.BoostUndeleteSettings;
 import app.morphe.extension.shared.archive.ArchiveBadges;
 import app.morphe.extension.shared.archive.HttpUtils;
+import app.morphe.extension.shared.archive.arcticshift.ArcticShift;
 import app.morphe.extension.shared.cache.AutoSavingCache;
 import app.morphe.extension.shared.debug.LoggingUtils;
 import okhttp3.HttpUrl;
-import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class RedditSubredditUndeleteInterceptor implements Interceptor {
-    private static final Pattern SUBREDDIT_ABOUT_API_REGEX = Pattern.compile("^https?://\\w+\\.reddit\\.com/r/(\\w+)/about$");
-    private static final Pattern SUBREDDIT_ABOUT_RULES_API_REGEX = Pattern.compile("^https?://\\w+\\.reddit\\.com/r/(\\w+)/about/rules$");
-    private static final Pattern SUBREDDIT_POSTS_API_REGEX = Pattern.compile("^https?://\\w+\\.reddit\\.com/r/(\\w+)/(?:hot|new|rising|top|controversial)");
+public class RedditSubredditUndeleteInterceptor extends RedditRouteResponseShim {
+    private static final Pattern SUBREDDIT_API_ROUTE = Pattern.compile(
+            "^https?://\\w+\\.reddit\\.com/r/(\\w+)/(about(?:/rules)?$|hot|new|rising|top|controversial)");
     private static final String SUBREDDIT_LISTING_SCOPE_MARKER = "morphe_boost_reddit_subreddit_listing_fallback_scope";
     private static final String FAIL_OPEN_MARKER = "morphe_boost_undelete_subreddit_fail_open";
     private final AutoSavingCache subredditCache = new AutoSavingCache("RedditSubreddits", 10);
-    @NotNull
+
+    public RedditSubredditUndeleteInterceptor() {
+        super(request -> SUBREDDIT_API_ROUTE.matcher(request.url().toString()).find());
+    }
+
     @Override
-    public Response intercept(@NotNull Chain chain) throws IOException {
-        Request request = chain.request();
-        if (!BoostUndeleteSettings.isRedditUndeleteEnabled()) {
-            return chain.proceed(request);
-        }
+    public boolean isEnabled() {
+        return BoostUndeleteSettings.isRedditUndeleteEnabled();
+    }
 
-        String url = request.url().toString();
+    @Override
+    public boolean isPatchIncluded() {
+        // To be overridden by patch.
+        return false;
+    }
 
-        Matcher matcher = SUBREDDIT_ABOUT_API_REGEX.matcher(url);
-        if (matcher.find()) {
-            return handleAbout(chain, request, matcher.group(1));
-        }
-
-        matcher = SUBREDDIT_ABOUT_RULES_API_REGEX.matcher(url);
-        if (matcher.find()) {
-            return handleRules(chain, request, matcher.group(1));
-        }
-
-        matcher = SUBREDDIT_POSTS_API_REGEX.matcher(url);
-        if (matcher.find()) {
-            return handlePosts(chain, request, matcher.group(1));
-        }
-
-        return chain.proceed(request);
+    @NonNull
+    @Override
+    protected Response shimResponse(@NonNull Chain chain, @NonNull Request request) throws IOException {
+        Matcher matcher = SUBREDDIT_API_ROUTE.matcher(request.url().toString());
+        if (!matcher.find()) return chain.proceed(request);
+        String subreddit = matcher.group(1);
+        String route = matcher.group(2);
+        if ("about".equals(route)) return handleAbout(chain, request, subreddit);
+        if ("about/rules".equals(route)) return handleRules(chain, request, subreddit);
+        return handlePosts(chain, request, subreddit);
     }
 
     // Reddit answers banned and private subreddits with 404 and 403. Anything else (auth,

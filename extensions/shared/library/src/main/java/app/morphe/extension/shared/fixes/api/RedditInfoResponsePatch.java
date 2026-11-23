@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import app.morphe.extension.shared.requests.PatchedditInterceptor;
 import app.morphe.extension.shared.requests.RedditRequestParameters;
 import app.morphe.extension.shared.requests.RedditRouteResponseShim;
 import okhttp3.HttpUrl;
@@ -30,7 +29,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public final class RedditInfoResponsePatch extends PatchedditInterceptor {
+public final class RedditInfoResponsePatch extends RedditRouteResponseShim {
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private static final long MAX_CONTEXT_BYTES = 8L * 1024 * 1024;
     private static final RedditCommentContext SHARED_CONTEXT = new RedditCommentContext(10_000);
@@ -41,6 +40,7 @@ public final class RedditInfoResponsePatch extends PatchedditInterceptor {
     }
 
     RedditInfoResponsePatch(RedditCommentContext context) {
+        super(request -> shouldIndex(request, normalizePath(request.url().encodedPath())));
         this.context = context;
     }
 
@@ -52,12 +52,8 @@ public final class RedditInfoResponsePatch extends PatchedditInterceptor {
 
     @NonNull
     @Override
-    protected Response doIntercept(@NonNull Chain chain) throws IOException {
-        Request request = chain.request();
-        if (!RedditRouteResponseShim.isRedditHost(request.url().host())) {
-            return chain.proceed(request);
-        }
-        String path = RedditRouteResponseShim.normalizePath(request.url().encodedPath());
+    protected Response shimResponse(@NonNull Chain chain, @NonNull Request request) throws IOException {
+        String path = normalizePath(request.url().encodedPath());
         boolean info = path.equals("/api/info")
                 && (request.method().equals("GET") || request.method().equals("POST"));
         boolean byId = path.startsWith("/by_id/") && request.method().equals("GET");
@@ -80,7 +76,7 @@ public final class RedditInfoResponsePatch extends PatchedditInterceptor {
             response.close();
             return lookup(chain, request, parameters, lookups);
         }
-        if (shouldIndex(request, path)) indexResponse(response, request);
+        indexResponse(response, request);
         return response;
     }
 

@@ -14,6 +14,9 @@ package app.morphe.extension.boost.http.reddit;
 
 import static app.morphe.extension.boost.http.reddit.RedditApiUtils.setIfUnset;
 
+import androidx.annotation.NonNull;
+
+import app.morphe.extension.shared.requests.RedditRouteResponseShim;
 import app.morphe.extension.vendored.com.fasterxml.jackson.databind.JsonNode;
 import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.ArrayNode;
 import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.BooleanNode;
@@ -23,8 +26,6 @@ import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.JsonNod
 import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.NullNode;
 import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.ObjectNode;
 import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.TextNode;
-
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.ArrayDeque;
@@ -40,21 +41,20 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import app.morphe.extension.boost.http.arcticshift.ArcticShift;
-import app.morphe.extension.boost.http.wayback.WaybackMachine;
-import app.morphe.extension.boost.http.wayback.WaybackResponse;
 import app.morphe.extension.boost.utils.BoostUndeleteSettings;
 import app.morphe.extension.boost.utils.MarkdownRenderer;
 import app.morphe.extension.shared.archive.ArchiveBadges;
 import app.morphe.extension.shared.archive.HttpUtils;
+import app.morphe.extension.shared.archive.arcticshift.ArcticShift;
+import app.morphe.extension.shared.archive.wayback.WaybackMachine;
+import app.morphe.extension.shared.archive.wayback.WaybackResponse;
 import app.morphe.extension.shared.cache.AutoSavingCache;
 import app.morphe.extension.shared.debug.LoggingUtils;
-import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class RedditSubmissionUndeleteInterceptor implements Interceptor {
+public class RedditSubmissionUndeleteInterceptor extends RedditRouteResponseShim {
     private static final Pattern SUBMISSION_API_REGEX = Pattern.compile("^https?://\\w+\\.reddit\\.com/comments/");
     private static final Pattern GALLERY_REGEX = Pattern.compile("window\\.___r\\s*=\\s*(\\{.+\\})\\s*</script>", Pattern.DOTALL | Pattern.MULTILINE);
     private static final String GALLERY_UNDELETE_MARKER = "morphe_boost_reddit_gallery_undelete_submission_json";
@@ -79,19 +79,24 @@ public class RedditSubmissionUndeleteInterceptor implements Interceptor {
     private static final AutoSavingCache submissionCache = new AutoSavingCache("RedditSubmissions", 200);
     private static final AutoSavingCache commentsCache = new AutoSavingCache("RedditComments", 10000);
 
-    @NotNull
+    public RedditSubmissionUndeleteInterceptor() {
+        super(request -> SUBMISSION_API_REGEX.matcher(request.url().toString()).find());
+    }
+
     @Override
-    public Response intercept(@NotNull Chain chain) throws IOException {
-        Request request = chain.request();
-        if (!BoostUndeleteSettings.isRedditUndeleteEnabled()) {
-            return chain.proceed(request);
-        }
+    public boolean isEnabled() {
+        return BoostUndeleteSettings.isRedditUndeleteEnabled();
+    }
 
-        String url = request.url().toString();
+    @Override
+    public boolean isPatchIncluded() {
+        // To be overridden by patch.
+        return false;
+    }
 
-        if (!SUBMISSION_API_REGEX.matcher(url).find()) {
-            return chain.proceed(request);
-        }
+    @NonNull
+    @Override
+    protected Response shimResponse(@NonNull Chain chain, @NonNull Request request) throws IOException {
         String[] pathParts = request.url().encodedPath().split("/");
         if (pathParts.length < 3) {
             return chain.proceed(request);
@@ -324,7 +329,7 @@ public class RedditSubmissionUndeleteInterceptor implements Interceptor {
             editableNode.setAll((ObjectNode) dataNode);
             RedditApiUtils.setRemovalEmoji(editableNode);
         }
-        ArcticShift.updateSubmissionNode(editableNode, recovered);
+        ArcticShift.updateSubmissionNode(editableNode, recovered, MarkdownRenderer::render);
         editableNode.remove(ArchiveRecoveryState.RETRY_KEY);
         ArchiveRecoveryState.loaded(editableNode);
         clearRecoveredUserDeletedRenderMarker(editableNode);
@@ -437,7 +442,7 @@ public class RedditSubmissionUndeleteInterceptor implements Interceptor {
                 ObjectNode updated = JsonNodeFactory.instance.objectNode();
                 updated.setAll(data);
                 RedditApiUtils.setRemovalEmoji(updated);
-                ArcticShift.updateCommentNode(updated, recovered);
+                ArcticShift.updateCommentNode(updated, recovered, MarkdownRenderer::render);
                 ArchiveRecoveryState.loaded(updated);
                 JsonNode collapsedReason = data.get("collapsed_reason_code");
                 if (collapsedReason != null && "DELETED".equals(collapsedReason.asText())) {
@@ -578,7 +583,7 @@ public class RedditSubmissionUndeleteInterceptor implements Interceptor {
             }
             RedditApiUtils.setRemovalEmoji(updated);
             if (comment) {
-                ArcticShift.updateCommentNode(updated, recovered);
+                ArcticShift.updateCommentNode(updated, recovered, MarkdownRenderer::render);
                 if ("DELETED".equals(updated.path("collapsed_reason_code").asText())) {
                     updated.put("collapsed", false);
                 }

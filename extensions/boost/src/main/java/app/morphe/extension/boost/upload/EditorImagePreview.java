@@ -71,12 +71,7 @@ public final class EditorImagePreview {
             return;
         }
 
-        editText.post(new Runnable() {
-            @Override
-            public void run() {
-                bindOnMain(editText);
-            }
-        });
+        editText.post(() -> bindOnMain(editText));
     }
 
     private static void bindOnMain(EditText editText) {
@@ -101,12 +96,7 @@ public final class EditorImagePreview {
 
         Session(EditText editText) {
             this.editText = editText;
-            this.renderRunnable = new Runnable() {
-                @Override
-                public void run() {
-                    render();
-                }
-            };
+            this.renderRunnable = this::render;
         }
 
         void attach(final int attempt) {

@@ -46,6 +46,11 @@ public abstract class BaseFixRedgifsApiPatch extends PatchedditInterceptor {
 
     public abstract String getDefaultUserAgent();
 
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
     public boolean isPatchIncluded() {
         // Overridden by patch.
         return false;

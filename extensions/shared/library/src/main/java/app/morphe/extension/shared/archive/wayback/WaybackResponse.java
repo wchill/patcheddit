@@ -7,7 +7,7 @@
  * Adapted from https://github.com/brealorg/breal-morphe-patches (0226c2e).
  */
 
-package app.morphe.extension.boost.http.wayback;
+package app.morphe.extension.shared.archive.wayback;
 
 import java.io.Closeable;
 import java.util.Optional;

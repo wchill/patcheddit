@@ -13,9 +13,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.Locale;
 
-import app.morphe.extension.boost.http.wayback.WaybackMachine;
-import app.morphe.extension.boost.http.wayback.WaybackResponse;
 import app.morphe.extension.boost.utils.BoostUndeleteSettings;
+import app.morphe.extension.shared.archive.wayback.WaybackMachine;
+import app.morphe.extension.shared.archive.wayback.WaybackResponse;
 import app.morphe.extension.shared.debug.LoggingUtils;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -62,7 +62,7 @@ public final class GlideRedditMediaWayback {
             }
 
             Response response = waybackResponse.getResponse();
-            if (response == null || response.body() == null || !response.isSuccessful()) {
+            if (response == null || !response.isSuccessful()) {
                 waybackResponse.close();
                 LoggingUtils.logInfo(true, () -> MARKER + ": unusable Wayback response for " + contentUrl);
                 return null;

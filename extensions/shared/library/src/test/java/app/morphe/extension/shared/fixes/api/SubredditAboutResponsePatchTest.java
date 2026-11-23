@@ -17,12 +17,13 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+import static app.morphe.extension.shared.requests.RedditRouteFixture.included;
 import static org.junit.Assert.*;
 
 public class SubredditAboutResponsePatchTest {
     private Response fetch(String url, String json, int code) throws Exception {
         OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new SubredditAboutResponsePatch()::doIntercept)
+                .addInterceptor(included(new SubredditAboutResponsePatch()))
                 .addInterceptor(chain -> new Response.Builder().request(chain.request())
                         .protocol(Protocol.HTTP_1_1).code(code).message("fixture")
                         .header("ETag", "original")

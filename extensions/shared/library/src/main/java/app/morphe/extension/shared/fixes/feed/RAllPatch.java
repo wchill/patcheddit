@@ -11,13 +11,19 @@ import androidx.annotation.NonNull;
 
 import java.io.IOException;
 
-import app.morphe.extension.shared.requests.PatchedditInterceptor;
-import okhttp3.HttpUrl;
+import app.morphe.extension.shared.requests.RedditRouteResponseShim;
 import okhttp3.Request;
 import okhttp3.Response;
 
 
-public class RAllPatch extends PatchedditInterceptor {
+public class RAllPatch extends RedditRouteResponseShim {
+    public RAllPatch() {
+        super(request -> {
+            String path = request.url().encodedPath();
+            return path.contains("/r/all") && !path.endsWith("/.json");
+        });
+    }
+
     @Override
     public boolean isPatchIncluded() {
         // Overridden by patch.
@@ -26,23 +32,9 @@ public class RAllPatch extends PatchedditInterceptor {
 
     @NonNull
     @Override
-    public Response doIntercept(@NonNull Chain chain) throws IOException {
-        Request request = chain.request();
-        HttpUrl url = request.url();
-        if (!url.host().endsWith("reddit.com")) {
-            return chain.proceed(request);
-        }
-
-        if (!url.encodedPath().contains("/r/all")) {
-            return chain.proceed(request);
-        }
-
-        if (url.encodedPath().endsWith("/.json")) {
-            return chain.proceed(request);
-        }
-
+    protected Response shimResponse(@NonNull Chain chain, @NonNull Request request) throws IOException {
         Request newRequest = request.newBuilder()
-                .url(url.newBuilder().addEncodedPathSegment(".json").build())
+                .url(request.url().newBuilder().addEncodedPathSegment(".json").build())
                 .build();
         return chain.proceed(newRequest);
     }

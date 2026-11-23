@@ -23,6 +23,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+import static app.morphe.extension.shared.requests.RedditRouteFixture.included;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
@@ -332,7 +333,7 @@ public class RedditInfoResponsePatchTest {
     }
 
     private OkHttpClient client(RedditInfoResponsePatch patch, Responder responder) {
-        return new OkHttpClient.Builder().addInterceptor(patch::doIntercept)
+        return new OkHttpClient.Builder().addInterceptor(included(patch))
                 .addInterceptor(chain -> {
                     requests.add(chain.request());
                     try {

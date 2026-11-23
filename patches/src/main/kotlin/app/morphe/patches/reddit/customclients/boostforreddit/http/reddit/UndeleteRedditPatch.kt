@@ -9,6 +9,7 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.http.reddit
 
+import app.morphe.patcher.Fingerprint
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostFieldBinding
 
@@ -26,6 +27,7 @@ import app.morphe.patches.reddit.customclients.boostforreddit.http.REDDIT_UNDELE
 import app.morphe.patches.reddit.customclients.boostforreddit.http.undeleteAppliedMarkerPatch
 import app.morphe.patches.reddit.customclients.boostforreddit.wrapHook
 import app.morphe.patcher.util.getReference
+import app.morphe.patcher.util.returnEarly
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.MutableMethodImplementation
@@ -95,6 +97,12 @@ val undeleteRedditPatch = morpheBytecodePatch(
     compatibleWith(*AppCompatibility.Boost)
 
     execute {
+        for (interceptor in listOf("RedditSubmission", "RedditSubreddit", "RedditMedia")) {
+            Fingerprint(
+                definingClass = "Lapp/morphe/extension/boost/http/reddit/${interceptor}UndeleteInterceptor;",
+                name = "isPatchIncluded",
+            ).method.returnEarly(true)
+        }
         // Glide uses HttpURLConnection directly, bypassing the OkHttp interceptors.
         GlideHttpUrlFetcherFetchFingerprint.method.apply {
             val nativeInstructions = implementation!!.instructions

@@ -23,6 +23,11 @@ public final class EscapedUrlsPatch extends PatchedditInterceptor {
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
     public boolean isPatchIncluded() {
         // Overridden by patch.
         return false;
@@ -62,7 +67,7 @@ public final class EscapedUrlsPatch extends PatchedditInterceptor {
     }
 
     /** BaconReader's Reddit API uses Apache HTTP rather than OkHttp. */
-    public static String repairLegacyResponse(String body, String url, int code, String contentType) {
+    public static String repairApacheResponse(String body, String url, int code, String contentType) {
         if (body == null || url == null || code < 200 || code >= 300
                 || !isJson(contentType) || body.getBytes(StandardCharsets.UTF_8).length > EscapedUrls.MAX_BODY_BYTES) {
             return body;

@@ -13,29 +13,42 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.function.Predicate;
 
 import okhttp3.Request;
 import okhttp3.Response;
 
 public abstract class RedditRouteResponseShim extends PatchedditInterceptor {
-    private final Set<String> methods;
-    private final String path;
+    private final Predicate<Request> route;
+
+    @Override
+    public boolean isEnabled() {
+        // Always enable for Reddit API fixes.
+        return true;
+    }
 
     protected RedditRouteResponseShim(String path, String... methods) {
-        this.path = normalizePath(path);
-        this.methods = new HashSet<>();
-        for (String method : methods) {
-            this.methods.add(method.toUpperCase(Locale.ROOT));
-        }
+        this(exactRoute(path, methods));
+    }
+
+    /** Matches a Reddit request whose route cannot be expressed as one exact normalized path. */
+    protected RedditRouteResponseShim(Predicate<Request> route) {
+        this.route = route;
+    }
+
+    private static Predicate<Request> exactRoute(String path, String[] methods) {
+        String normalizedPath = normalizePath(path);
+        Set<String> allowed = new HashSet<>();
+        for (String method : methods) allowed.add(method.toUpperCase(Locale.ROOT));
+        return request -> allowed.contains(request.method().toUpperCase(Locale.ROOT))
+                && normalizedPath.equals(normalizePath(request.url().encodedPath()));
     }
 
     @NonNull
     @Override
     protected final Response doIntercept(@NonNull Chain chain) throws IOException {
         Request request = chain.request();
-        if (!isRedditHost(request.url().host())
-                || !methods.contains(request.method().toUpperCase(Locale.ROOT))
-                || !path.equals(normalizePath(request.url().encodedPath()))) {
+        if (!isRedditHost(request.url().host()) || !route.test(request)) {
             return chain.proceed(request);
         }
         return shimResponse(chain, request);
