@@ -26,4 +26,9 @@ public class FixRedgifsApiPatch extends BaseFixRedgifsApiPatch {
     public static OkHttpClient install(OkHttpClient.Builder builder) {
         return builder.addInterceptor(INSTANCE).build();
     }
+
+    @Override
+    protected boolean preferAudioSources() {
+        return true;
+    }
 }

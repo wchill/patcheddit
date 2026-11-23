@@ -16,7 +16,7 @@ In addition, patches for some apps contain additional features that were not pre
     * Relay's subreddit sidebars remain usable when Reddit omits activity counters.
     * BaconReader, Boost, Joey, Relay, RIF, and Sync use Reddit's JSON endpoint for `r/all` feeds.
     * Opens Reddit subreddit and profile share links in BaconReader, Boost, Joey, Relay, RIF, and Sync. Joey also handles Reddit app and email links.
-* **Fix Redgifs API** restores playback in BaconReader, Joey, Relay, RIF, and Sync. Relay uses native media with sound instead of silent Reddit previews.
+* **Fix Redgifs API** restores playback in BaconReader, Joey, Relay, RIF, and Sync. BaconReader, Joey, and Relay prefer the original video with sound over silent previews.
 * **Fix comment video links** restores native playback of Reddit comment videos in BaconReader, Boost, Joey, RIF, and Sync without relying on post metadata to contain the video. Relay provides this through **Fix Reddit media link handling**.
 * **Prefer high refresh rate** requests a higher display refresh rate in BaconReader, Boost, Joey, Relay, RIF, and Sync. The display and Android still determine the actual refresh rate.
 * **Fix escaped URLs** repairs links broken by backslashes in posts and comments in BaconReader, Boost, Infinity, Joey, Relay, RIF, and Sync. It is separate from **Reddit API fixes** and can be switched off under **Patcheddit > Links**.

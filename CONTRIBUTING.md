@@ -155,6 +155,25 @@ stock content providers at startup.
 with **Fix comment video links** applied. Pass `--arg stock=baconreader` for a
 package-renamed BaconReader fixture.
 
+With **Fix Redgifs API** applied to Joey or BaconReader, the Redgifs fixture
+checks native playback with a synthetic H.264/AAC clip and scripted metadata.
+Run it on a disposable install signed with the matching fixture key:
+
+```sh
+ffmpeg -i test/device/media/inline-video.mp4 -stream_loop -1 \
+  -i test/device/media/inline-audio.m4a -map 0:v:0 -map 1:a:0 \
+  -c copy -shortest -movflags +faststart /tmp/redgifs-clip.mp4
+python3 -B test/run_device_tests.py \
+  --sdk "$ANDROID_HOME" --serial "$ANDROID_SERIAL" \
+  --package "$DISPOSABLE_PACKAGE" --keystore "$FIXTURE_KEYSTORE" \
+  --suite app.patcheddit.fixture.RedgifsPlaybackDeviceTest \
+  --source test/device/RedgifsPlaybackDeviceTest.java \
+  --asset /tmp/redgifs-clip.mp4 --asset test/device/media/inline-video.mp4 \
+  --arg stock=joey
+```
+
+Use `stock=baconreader` for BaconReader. The fixture does not contact Redgifs.
+
 With **Reddit API fixes** applied to Relay, run `RelayMediaLinksDeviceTest`
 with `--arg stock=gallery` for Free or `--arg stock=gallery-pro` for Pro and
 the media assets under `test/device/media/`. This checks gallery repair and

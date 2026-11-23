@@ -550,9 +550,7 @@ internal fun Fingerprint.wrapMorpheHook(
     before: String = "",
     after: String = "",
     setting: MorphePatchSetting? = null,
-) {
-    wrapMorpheHook(classDef, method, before, after, setting)
-}
+): MutableMethod = wrapMorpheHook(classDef, method, before, after, setting)
 
 internal fun wrapMorpheHook(
     owner: MutableClass,
@@ -560,7 +558,7 @@ internal fun wrapMorpheHook(
     before: String = "",
     after: String = "",
     setting: MorphePatchSetting? = null,
-) {
+): MutableMethod {
     val target = currentMethod(owner, signature)
     require(!target.name.startsWith('<') && target.implementation != null) {
         "Morphe hooks require implemented methods other than constructors."
@@ -590,6 +588,7 @@ internal fun wrapMorpheHook(
     }
     check(owner.methods.remove(target))
     check(owner.methods.add(wrapper))
+    return wrapper
 }
 
 internal fun Fingerprint.overrideOAuthReturn(getter: String): MutableMethod {
