@@ -7,11 +7,7 @@
  * Adapted from https://github.com/brealorg/breal-morphe-patches (0226c2e).
  */
 
-package app.morphe.extension.boost.http;
-
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+package app.morphe.extension.shared.archive;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,9 +20,13 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-import app.morphe.extension.boost.http.arcticshift.ArcticShiftThrottlingInterceptor;
-import app.morphe.extension.boost.http.wayback.WaybackThrottlingInterceptor;
-import app.morphe.extension.boost.utils.CacheUtils;
+import app.morphe.extension.reddit.http.NoOpUrlStreamHandler;
+import app.morphe.extension.shared.Utils;
+import app.morphe.extension.shared.archive.arcticshift.ArcticShiftThrottlingInterceptor;
+import app.morphe.extension.shared.archive.wayback.WaybackThrottlingInterceptor;
+import app.morphe.extension.vendored.com.fasterxml.jackson.core.JsonProcessingException;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.JsonNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.Cache;
 import okhttp3.CacheControl;
 import okhttp3.MediaType;
@@ -43,7 +43,7 @@ public class HttpUtils {
     private static final Map<Long, OkHttpClient> streamingTimeoutClients = new ConcurrentHashMap<>();
 
     static {
-        File cacheDir = CacheUtils.getHttpCacheDir();
+        File cacheDir = new File(Utils.getContext().getCacheDir(), "undelete_http_cache");
         // Archive responses only; 2 GB filled phones with old Wayback media. OkHttp trims an
         // existing larger cache to this size.
         Cache cache = new Cache(cacheDir, 200L * 1024L * 1024L);
@@ -117,7 +117,7 @@ public class HttpUtils {
 
     /**
      * GET whose connect and per-read waits are bounded, without a limit on the whole call,
-     * so the body can still be streamed to Glide or Boost after this returns.
+     * so callers can still stream the body after this returns.
      */
     public static Response get(String url, long connectAndReadTimeoutMillis) throws IOException {
         Request request = new Request.Builder()

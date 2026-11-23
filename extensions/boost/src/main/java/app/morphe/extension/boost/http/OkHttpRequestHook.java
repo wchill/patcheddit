@@ -11,12 +11,12 @@ package app.morphe.extension.boost.http;
 
 import java.util.List;
 
-import app.morphe.extension.boost.http.arcticshift.ArcticShiftThrottlingInterceptor;
 import app.morphe.extension.boost.http.imgur.ImgurUndeleteInterceptor;
 import app.morphe.extension.boost.http.reddit.RedditMediaUndeleteInterceptor;
 import app.morphe.extension.boost.http.reddit.RedditSubmissionUndeleteInterceptor;
 import app.morphe.extension.boost.http.reddit.RedditSubredditUndeleteInterceptor;
-import app.morphe.extension.boost.http.wayback.WaybackThrottlingInterceptor;
+import app.morphe.extension.shared.archive.arcticshift.ArcticShiftThrottlingInterceptor;
+import app.morphe.extension.shared.archive.wayback.WaybackThrottlingInterceptor;
 import app.morphe.extension.shared.fixes.api.FailedGalleryMetadataPatch;
 import app.morphe.extension.shared.fixes.api.RedditInfoResponsePatch;
 import app.morphe.extension.shared.fixes.feed.RAllPatch;

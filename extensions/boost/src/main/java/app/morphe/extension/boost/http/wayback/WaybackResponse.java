@@ -12,7 +12,7 @@ package app.morphe.extension.boost.http.wayback;
 import java.io.Closeable;
 import java.util.Optional;
 
-import app.morphe.extension.boost.http.HttpUtils;
+import app.morphe.extension.shared.archive.HttpUtils;
 import okhttp3.Request;
 import okhttp3.Response;
 

@@ -12,14 +12,14 @@ package app.morphe.extension.boost.http.reddit;
 
 import static app.morphe.extension.boost.http.reddit.RedditApiUtils.setIfUnset;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.BooleanNode;
-import com.fasterxml.jackson.databind.node.IntNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.NullNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.JsonNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.ArrayNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.BooleanNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.IntNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.NullNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.ObjectNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.TextNode;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -36,11 +36,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import app.morphe.extension.boost.http.arcticshift.ArcticShift;
-import app.morphe.extension.boost.http.AutoSavingCache;
-import app.morphe.extension.boost.http.HttpUtils;
-import app.morphe.extension.boost.utils.Emojis;
-import app.morphe.extension.boost.utils.LoggingUtils;
 import app.morphe.extension.boost.utils.BoostUndeleteSettings;
+import app.morphe.extension.shared.archive.ArchiveBadges;
+import app.morphe.extension.shared.archive.HttpUtils;
+import app.morphe.extension.shared.cache.AutoSavingCache;
+import app.morphe.extension.shared.debug.LoggingUtils;
 import okhttp3.HttpUrl;
 import okhttp3.Interceptor;
 import okhttp3.Request;
@@ -223,7 +223,7 @@ public class RedditSubredditUndeleteInterceptor implements Interceptor {
         for (JsonNode node : rootNode) {
             ObjectNode child = JsonNodeFactory.instance.objectNode();
             child.setAll((ObjectNode) node);
-            child.set(Emojis.EXTRA_EMOJI_CONTEXT_KEY, new TextNode(Emojis.PROHIBITED_EMOJI));
+            child.put(ArchiveRecoveryState.EXTRA_EMOJI_CONTEXT_KEY, ArchiveBadges.UNAVAILABLE);
             child.set("saved", BooleanNode.FALSE);
             child.set("likes", NullNode.instance);
             applyArchivedPostDefaults(child, subredditName);

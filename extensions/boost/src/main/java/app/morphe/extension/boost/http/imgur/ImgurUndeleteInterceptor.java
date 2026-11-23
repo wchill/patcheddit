@@ -10,14 +10,14 @@
 
 package app.morphe.extension.boost.http.imgur;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.BooleanNode;
-import com.fasterxml.jackson.databind.node.IntNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.NullNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.JsonNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.ArrayNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.BooleanNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.IntNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.NullNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.ObjectNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.TextNode;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -29,13 +29,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import app.morphe.extension.boost.http.AutoSavingCache;
-import app.morphe.extension.boost.http.HttpUtils;
 import app.morphe.extension.boost.http.wayback.WaybackMachine;
 import app.morphe.extension.boost.http.wayback.WaybackResponse;
-import app.morphe.extension.shared.requests.PatchedditInterceptor;
 import app.morphe.extension.boost.utils.BoostUndeleteSettings;
-import app.morphe.extension.boost.utils.LoggingUtils;
+import app.morphe.extension.shared.archive.HttpUtils;
+import app.morphe.extension.shared.cache.AutoSavingCache;
+import app.morphe.extension.shared.debug.LoggingUtils;
+import app.morphe.extension.shared.requests.PatchedditInterceptor;
 import okhttp3.Response;
 import okhttp3.Request;
 

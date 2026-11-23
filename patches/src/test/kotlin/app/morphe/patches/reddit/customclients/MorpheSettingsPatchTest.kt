@@ -80,6 +80,9 @@ class MorpheSettingsPatchTest {
         assertTrue(assertNotNull(notices["Public Suffix List"]).contains("Mozilla Public License"))
         assertTrue(assertNotNull(notices["OpenJDK desugaring libraries"]).contains("Classpath Exception"))
         assertTrue(notices.keys.any { it.startsWith("com.google.code.gson:gson:") })
+        assertTrue(notices.any { (name, text) ->
+            name.startsWith("com.google.guava:guava:") && text.contains("Apache License")
+        })
         assertTrue(notices.keys.any { it.startsWith("androidx.room:") })
         assertTrue(notices.keys.any { it.startsWith("com.squareup.okhttp3:") })
         assertTrue(notices.filterKeys { it.startsWith("com.fasterxml.jackson.core:") }.values

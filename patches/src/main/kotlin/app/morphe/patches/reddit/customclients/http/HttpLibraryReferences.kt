@@ -6,6 +6,7 @@
 
 package app.morphe.patches.reddit.customclients.http
 
+import app.morphe.patches.reddit.customclients.misc.extension.privateCacheLibraryType
 import app.morphe.patches.reddit.customclients.misc.extension.mapping.forEachReference
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
@@ -31,7 +32,7 @@ internal fun privateSharedLibraryType(type: String): String =
     if (type.startsWith("Lkotlin/")) {
         HTTP_LIBRARY_PREFIX + type.removePrefix("L")
     } else {
-        privateHttpType(type)
+        privateCacheLibraryType(privateHttpType(type))
     }
 
 internal fun verifyHttpLibraryReferences(

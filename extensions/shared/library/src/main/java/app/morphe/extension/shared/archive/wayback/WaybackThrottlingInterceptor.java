@@ -7,28 +7,28 @@
  * Adapted from https://github.com/brealorg/breal-morphe-patches (0226c2e).
  */
 
-package app.morphe.extension.boost.http.wayback;
+package app.morphe.extension.shared.archive.wayback;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-import app.morphe.extension.boost.utils.CompatibleRateLimiter;
+import app.morphe.extension.vendored.RateLimiter;
 import okhttp3.Interceptor;
 import okhttp3.Response;
 
 public class WaybackThrottlingInterceptor implements Interceptor {
-    private static final CompatibleRateLimiter searchLimiter = CompatibleRateLimiter.create(1);
-    private static final CompatibleRateLimiter retrieveLimiter = CompatibleRateLimiter.create(30);
-    // A long queue means the archive is already being hammered; fail instead of blocking Boost.
+    private static final RateLimiter searchLimiter = RateLimiter.create(1);
+    private static final RateLimiter retrieveLimiter = RateLimiter.create(30);
+    // A long queue means the archive is already being hammered; fail instead of blocking the app.
     private static final long MAX_WAIT_SECONDS = 5L;
 
     @NotNull
     @Override
     public Response intercept(@NotNull Chain chain) throws IOException {
         String url = chain.request().url().toString();
-        CompatibleRateLimiter limiter = null;
+        RateLimiter limiter = null;
         if (url.contains("web.archive.org/web/timemap")) {
             limiter = searchLimiter;
         } else if (url.contains("web.archive.org/web/")) {

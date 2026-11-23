@@ -14,15 +14,15 @@ package app.morphe.extension.boost.http.reddit;
 
 import static app.morphe.extension.boost.http.reddit.RedditApiUtils.setIfUnset;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.BooleanNode;
-import com.fasterxml.jackson.databind.node.IntNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.JsonNodeType;
-import com.fasterxml.jackson.databind.node.NullNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.JsonNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.ArrayNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.BooleanNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.IntNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.JsonNodeType;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.NullNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.ObjectNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.TextNode;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -40,15 +40,15 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import app.morphe.extension.boost.utils.LoggingUtils;
-import app.morphe.extension.boost.utils.BoostUndeleteSettings;
-import app.morphe.extension.boost.utils.MarkdownRenderer;
 import app.morphe.extension.boost.http.arcticshift.ArcticShift;
-import app.morphe.extension.boost.http.AutoSavingCache;
-import app.morphe.extension.boost.http.HttpUtils;
 import app.morphe.extension.boost.http.wayback.WaybackMachine;
 import app.morphe.extension.boost.http.wayback.WaybackResponse;
-import app.morphe.extension.boost.utils.Emojis;
+import app.morphe.extension.boost.utils.BoostUndeleteSettings;
+import app.morphe.extension.boost.utils.MarkdownRenderer;
+import app.morphe.extension.shared.archive.ArchiveBadges;
+import app.morphe.extension.shared.archive.HttpUtils;
+import app.morphe.extension.shared.cache.AutoSavingCache;
+import app.morphe.extension.shared.debug.LoggingUtils;
 import okhttp3.Interceptor;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -317,7 +317,7 @@ public class RedditSubmissionUndeleteInterceptor implements Interceptor {
         ObjectNode editableNode;
         if (dataNode == null) {
             editableNode = JsonNodeFactory.instance.objectNode();
-            editableNode.set(Emojis.EXTRA_EMOJI_CONTEXT_KEY, new TextNode(Emojis.PROHIBITED_EMOJI));
+            editableNode.put(ArchiveRecoveryState.EXTRA_EMOJI_CONTEXT_KEY, ArchiveBadges.UNAVAILABLE);
         } else {
             // A copy: the live node supplies the user's state after recovery.
             editableNode = JsonNodeFactory.instance.objectNode();
@@ -561,7 +561,7 @@ public class RedditSubmissionUndeleteInterceptor implements Interceptor {
         ObjectNode updated = original.deepCopy();
         updated.remove(ArchiveRecoveryState.RETRY_KEY);
         boolean bodyOnly = ArchiveRecoveryState.isBodyOnly(original);
-        if (!bodyOnly) updated.remove(Emojis.EXTRA_EMOJI_CONTEXT_KEY);
+        if (!bodyOnly) updated.remove(ArchiveRecoveryState.EXTRA_EMOJI_CONTEXT_KEY);
         String bodyKey = comment ? "body" : "selftext";
         for (JsonNode candidate : response) {
             JsonNode recovered = comment ? commentRecoveryFields(candidate, id)

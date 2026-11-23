@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.ksp)
 }
 
+val sharedSources = project(":extensions:shared:library").file("src/main")
+
 dependencies {
     compileOnly(libs.androidx.preference.boost)
     implementation(libs.morphe.extensions.library)
@@ -9,7 +11,7 @@ dependencies {
     compileOnly(project(":extensions:boost:stub"))
     compileOnly(libs.annotation)
     compileOnly(libs.okhttp.boost)
-    implementation(libs.jackson.databind.boost)
+    implementation(project(path = ":extensions:shared:library", configuration = "vendoredArchiveJars"))
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
@@ -18,12 +20,10 @@ dependencies {
 }
 
 android {
-    buildTypes.getByName("release") {
-        proguardFiles("proguard-json.pro")
+    sourceSets.getByName("main") {
+        java.srcDir(sharedSources.resolve("java"))
+        kotlin.srcDir(sharedSources.resolve("kotlin"))
     }
-    sourceSets.getByName("main").java.directories.add(
-        project(":extensions:shared:library").file("src/main/java").absolutePath
-    )
     defaultConfig {
         minSdk = 26
     }

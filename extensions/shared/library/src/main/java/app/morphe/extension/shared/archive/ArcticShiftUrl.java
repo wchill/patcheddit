@@ -4,28 +4,17 @@
  * See the included NOTICE file for GPLv3 section 7 terms.
  */
 
-package app.morphe.extension.boost.http.arcticshift;
+package app.morphe.extension.shared.archive;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import app.morphe.extension.shared.Utils;
-import app.morphe.extension.shared.settings.PatchSettings;
-import okhttp3.HttpUrl;
-
-public final class ArcticShiftSettings {
-    public static final String BASE_URL = "morphe_boost_arctic_shift_base_url";
+public final class ArcticShiftUrl {
     public static final String DEFAULT_BASE_URL = "https://arctic-shift.photon-reddit.com/api/";
 
-    private ArcticShiftSettings() {}
+    private ArcticShiftUrl() {}
 
-    public static String getBaseUrl() {
-        return normalizeBaseUrl(Utils.isContextSet()
-                ? PatchSettings.preferences(Utils.getContext()).getString(BASE_URL, "")
-                : "");
-    }
-
-    public static String normalizeBaseUrl(String value) {
+    public static String normalize(String value) {
         String text = value == null ? "" : value.trim();
         if (text.isEmpty()) return DEFAULT_BASE_URL;
         try {
@@ -41,12 +30,5 @@ public final class ArcticShiftSettings {
         } catch (URISyntaxException invalid) {
             throw new IllegalArgumentException("Enter a valid HTTP(S) API base URL.", invalid);
         }
-    }
-
-    static boolean isApiUrl(HttpUrl request, String baseUrl) {
-        HttpUrl base = HttpUrl.get(baseUrl);
-        return request.scheme().equals(base.scheme()) && request.host().equals(base.host())
-                && request.port() == base.port()
-                && request.encodedPath().startsWith(base.encodedPath());
     }
 }

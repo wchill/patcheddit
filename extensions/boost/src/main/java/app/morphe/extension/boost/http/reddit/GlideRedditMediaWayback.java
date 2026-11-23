@@ -16,7 +16,7 @@ import java.util.Locale;
 import app.morphe.extension.boost.http.wayback.WaybackMachine;
 import app.morphe.extension.boost.http.wayback.WaybackResponse;
 import app.morphe.extension.boost.utils.BoostUndeleteSettings;
-import app.morphe.extension.boost.utils.LoggingUtils;
+import app.morphe.extension.shared.debug.LoggingUtils;
 import okhttp3.Request;
 import okhttp3.Response;
 

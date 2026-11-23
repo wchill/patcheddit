@@ -8,8 +8,8 @@ package app.morphe.patches.reddit.customclients.boostforreddit.misc.extension
 
 import app.morphe.patcher.patch.classDefForEach
 import app.morphe.patcher.patch.patch
-import app.morphe.patcher.patch.resourceFile
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostBindings
+import app.morphe.patches.reddit.customclients.misc.extension.privateCacheLibraryType
 import app.morphe.patches.reddit.customclients.misc.extension.mapping.DexMappingRewriter
 import app.morphe.patches.reddit.customclients.misc.extension.mapping.ProguardMapping
 
@@ -23,11 +23,6 @@ import java.util.logging.Logger
 
 private const val PRIVATE_LIBRARY_PACKAGE = "app.morphe.extension.boost.libraries"
 private val privateLibraryTypePrefix = "L${PRIVATE_LIBRARY_PACKAGE.replace('.', '/')}/"
-private val coroutineServices = mapOf(
-    "kotlinx.coroutines.internal.MainDispatcherFactory" to "kotlinx.coroutines.android.AndroidDispatcherFactory",
-    "kotlinx.coroutines.CoroutineExceptionHandler" to "kotlinx.coroutines.android.AndroidExceptionPreHandler",
-)
-
 internal object BoostNativeLibraries {
     var classes: List<ClassDef> = emptyList()
 
@@ -45,34 +40,24 @@ internal val boostNativeLibrariesPatch = patch(default = false) {
     }
 }
 
-internal val boostPrivateLibraryResourcesPatch = patch(default = false) {
-    execute {
-        for ((service, provider) in coroutineServices) {
-            resourceFile("META-INF/services/$PRIVATE_LIBRARY_PACKAGE.$service", copy = false)
-                .writeText("$PRIVATE_LIBRARY_PACKAGE.$provider\n")
-        }
-    }
-}
-
 internal fun prepareBoostExtension(input: InputStream): InputStream {
     val dex = input.use { DexBackedDexFile.fromInputStream(null, it.buffered()) }
     val sourceDefinitions = dex.classes.toList()
-    val privatePrefixes = listOf(
-        "Landroidx/room/", "Landroidx/sqlite/", "Landroidx/arch/", "Landroidx/collection/",
-        "Lkotlin/", "Lkotlinx/coroutines/",
-        "Lcom/fasterxml/jackson/",
-    )
     // Keep callback interfaces and singleton values compatible with calls into Boost.
     val sharedKotlinTypes = setOf(
         "Lkotlin/Function;", "Lkotlin/Unit;", "Lkotlin/jvm/internal/DefaultConstructorMarker;",
     )
-    val privateNames = sourceDefinitions.filter { cls ->
-        privatePrefixes.any(cls.type::startsWith) && cls.type !in sharedKotlinTypes &&
-            !cls.type.startsWith("Lkotlin/jvm/functions/")
-    }
-        .associate { cls ->
-            cls.type to "$privateLibraryTypePrefix${cls.type.removePrefix("L")}"
+    val privateNames = sourceDefinitions.mapNotNull { cls ->
+        val type = cls.type
+        val target = if (type.startsWith("Lkotlin/") && type !in sharedKotlinTypes &&
+            !type.startsWith("Lkotlin/jvm/functions/")
+        ) {
+            privateLibraryTypePrefix + type.removePrefix("L")
+        } else {
+            privateCacheLibraryType(type)
         }
+        if (type == target) null else type to target
+    }.toMap()
     val isolation = DexMappingRewriter(
         ProguardMapping.classNames(privateNames), sourceDefinitions, resolveReflectiveFields = false,
     )

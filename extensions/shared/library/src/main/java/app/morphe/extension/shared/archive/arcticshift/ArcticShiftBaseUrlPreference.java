@@ -4,12 +4,14 @@
  * See the included NOTICE file for GPLv3 section 7 terms.
  */
 
-package app.morphe.extension.boost.http.arcticshift;
+package app.morphe.extension.shared.archive.arcticshift;
 
 import android.content.Context;
 import android.preference.EditTextPreference;
 import android.util.AttributeSet;
 import android.widget.Toast;
+
+import app.morphe.extension.shared.archive.ArcticShiftUrl;
 
 @SuppressWarnings("deprecation")
 public final class ArcticShiftBaseUrlPreference extends EditTextPreference {
@@ -20,7 +22,7 @@ public final class ArcticShiftBaseUrlPreference extends EditTextPreference {
     @Override
     protected boolean callChangeListener(Object value) {
         try {
-            ArcticShiftSettings.normalizeBaseUrl((String) value);
+            ArcticShiftUrl.normalize((String) value);
         } catch (IllegalArgumentException invalid) {
             Toast.makeText(getContext(), invalid.getMessage(), Toast.LENGTH_LONG).show();
             return false;
@@ -35,7 +37,7 @@ public final class ArcticShiftBaseUrlPreference extends EditTextPreference {
 
     @Override
     public CharSequence getSummary() {
-        return ArcticShiftSettings.normalizeBaseUrl(getText())
-                + "\nLeave empty to use the default. Restart Boost after changing the URL.";
+        return ArcticShiftUrl.normalize(getText())
+                + "\nLeave empty to use the default. Restart the app after changing the URL.";
     }
 }

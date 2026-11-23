@@ -8,21 +8,16 @@
  * Adapted from https://github.com/brealorg/breal-morphe-patches (0226c2e).
  */
 
-package app.morphe.extension.boost.http;
+package app.morphe.extension.shared.cache;
 
 import android.util.LruCache;
 
 import java.util.Optional;
 
-import app.morphe.extension.boost.http.cache.CacheDao;
-import app.morphe.extension.boost.http.cache.CacheDatabase;
-import app.morphe.extension.boost.http.cache.CacheEntry;
-import app.morphe.extension.boost.utils.LoggingUtils;
+import app.morphe.extension.shared.debug.LoggingUtils;
 
 /**
- * Memory LRU in front of a Room table. The database is opened on first use and any database
- * failure degrades to memory only: interceptors holding these caches are installed in Boost's own
- * OkHttp clients, so construction and lookups must never throw.
+ * Memory LRU backed by a lazily opened Room database. Storage failures leave the in-memory cache usable.
  */
 public class AutoSavingCache {
     // Eviction counts rows, so it only needs to run now and then.
@@ -31,8 +26,8 @@ public class AutoSavingCache {
     private final String cacheName;
     private final int maxSize;
     private final LruCache<String, String> memoryCache;
-    private volatile CacheDao cacheDao;
-    private volatile boolean databaseFailed;
+    private volatile CacheDao backingStore;
+    private volatile boolean storeFailed;
     private int putsSinceEviction = EVICT_EVERY_PUTS;
 
     public AutoSavingCache(String name, int maxSize) {
@@ -41,25 +36,28 @@ public class AutoSavingCache {
         this.memoryCache = new LruCache<>(maxSize);
     }
 
-    private CacheDao dao() {
-        if (databaseFailed) {
+    private CacheDao store() {
+        if (storeFailed) {
             return null;
         }
-        CacheDao dao = cacheDao;
-        if (dao == null) {
-            try {
-                dao = CacheDatabase.getInstance().cacheDao();
-                cacheDao = dao;
-            } catch (Throwable failure) {
-                disableDatabase(failure);
+        CacheDao store = backingStore;
+        if (store != null) return store;
+        synchronized (this) {
+            if (storeFailed) return null;
+            if (backingStore == null) {
+                try {
+                    backingStore = CacheDatabase.getInstance().cacheDao();
+                } catch (RuntimeException | LinkageError failure) {
+                    disableStore(failure);
+                }
             }
+            return backingStore;
         }
-        return dao;
     }
 
-    private void disableDatabase(Throwable failure) {
-        databaseFailed = true;
-        LoggingUtils.logInfo(false, () -> "morphe_boost_undelete_cache_memory_only: " + cacheName
+    private void disableStore(Throwable failure) {
+        storeFailed = true;
+        LoggingUtils.logInfo(false, () -> "morphe_cache_memory_only: " + cacheName
                 + " " + failure.getClass().getSimpleName());
     }
 
@@ -71,19 +69,19 @@ public class AutoSavingCache {
             return Optional.of(memoryValue);
         }
 
-        CacheDao dao = dao();
-        if (dao == null) {
+        CacheDao store = store();
+        if (store == null) {
             return Optional.empty();
         }
         try {
-            String dbValue = dao.get(cacheName, key);
-            if (dbValue != null) {
-                memoryCache.put(key, dbValue);
-                dao.updateLastAccessed(cacheName, key, System.currentTimeMillis());
-                return Optional.of(dbValue);
+            String storedValue = store.get(cacheName, key);
+            if (storedValue != null) {
+                memoryCache.put(key, storedValue);
+                store.updateLastAccessed(cacheName, key, System.currentTimeMillis());
+                return Optional.of(storedValue);
             }
-        } catch (Throwable failure) {
-            disableDatabase(failure);
+        } catch (RuntimeException | LinkageError failure) {
+            disableStore(failure);
         }
         return Optional.empty();
     }
@@ -94,24 +92,22 @@ public class AutoSavingCache {
         }
         memoryCache.put(key, value);
 
-        CacheDao dao = dao();
-        if (dao == null) {
+        CacheDao store = store();
+        if (store == null) {
             return;
         }
         try {
-            dao.put(new CacheEntry(cacheName, key, value, System.currentTimeMillis()));
+            store.put(new CacheEntry(cacheName, key, value, System.currentTimeMillis()));
             synchronized (this) {
                 if (++putsSinceEviction < EVICT_EVERY_PUTS) {
                     return;
                 }
                 putsSinceEviction = 0;
             }
-            int count = dao.getCount(cacheName);
-            if (count > maxSize) {
-                dao.evictOldest(cacheName, count - maxSize);
-            }
-        } catch (Throwable failure) {
-            disableDatabase(failure);
+            int excess = store.getCount(cacheName) - maxSize;
+            if (excess > 0) store.evictOldest(cacheName, excess);
+        } catch (RuntimeException | LinkageError failure) {
+            disableStore(failure);
         }
     }
 }

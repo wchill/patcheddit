@@ -10,11 +10,11 @@
 
 package app.morphe.extension.boost.http.arcticshift;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.JsonNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.ArrayNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.ObjectNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.TextNode;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -23,9 +23,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import app.morphe.extension.boost.http.HttpUtils;
-import app.morphe.extension.boost.utils.LoggingUtils;
 import app.morphe.extension.boost.utils.MarkdownRenderer;
+import app.morphe.extension.shared.archive.HttpUtils;
+import app.morphe.extension.shared.archive.arcticshift.ArcticShiftSettings;
+import app.morphe.extension.shared.debug.LoggingUtils;
 
 public class ArcticShift {
     public enum SubmissionType {
@@ -193,7 +194,7 @@ public class ArcticShift {
                 + ": non-array data for "
                 + context
                 + ", skipping Arctic Shift fallback");
-        return new ArrayNode(com.fasterxml.jackson.databind.node.JsonNodeFactory.instance);
+        return new ArrayNode(app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.JsonNodeFactory.instance);
     }
 
     public static void updateSubmissionNode(ObjectNode oldNode, JsonNode newNode) {

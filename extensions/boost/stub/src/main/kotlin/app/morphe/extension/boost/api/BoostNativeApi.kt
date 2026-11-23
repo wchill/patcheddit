@@ -222,30 +222,6 @@ abstract class Navigation protected constructor(stub: Unit) {
     }
 }
 
-open class NativeComment protected constructor(stub: Unit) {
-    constructor(p0: app.morphe.extension.boost.api.NativeJsonNode?) : this(Unit) { boostApiStub<Unit>() }
-}
-
-open class NativeJsonMapper protected constructor(stub: Unit) {
-    constructor() : this(Unit) { boostApiStub<Unit>() }
-    fun readTree(p0: String?): app.morphe.extension.boost.api.NativeJsonNode? = boostApiStub()
-}
-
-abstract class NativeJsonModel protected constructor(stub: Unit) :
-    net.dean.jraw.models.JsonModel(boostApiStub<com.fasterxml.jackson.databind.JsonNode>()) {
-    fun dataNode(): app.morphe.extension.boost.api.NativeJsonNode = boostApiStub()
-}
-
-abstract class NativeJsonNode protected constructor(stub: Unit) {
-    fun fields(): Iterator<Map.Entry<String, NativeJsonNode>> = boostApiStub()
-    fun get(p0: String): app.morphe.extension.boost.api.NativeJsonNode? = boostApiStub()
-    fun asBoolean(): Boolean = boostApiStub()
-}
-
-open class NativeSubmission protected constructor(stub: Unit) {
-    constructor(p0: app.morphe.extension.boost.api.NativeJsonNode?) : this(Unit) { boostApiStub<Unit>() }
-}
-
 interface NestedScrollingChild {
 }
 

@@ -11,6 +11,9 @@ import app.morphe.patcher.patch.classDefBy
 import app.morphe.patcher.patch.patch
 import app.morphe.patches.all.misc.extension.SHARED_UTILS_EXTENSION_CLASS
 import app.morphe.patches.all.misc.extension.activityOnCreateExtensionHook
+import app.morphe.patches.reddit.customclients.http.privateSharedLibraryType
+import app.morphe.patches.reddit.customclients.misc.extension.mapping.DexMappingRewriter
+import app.morphe.patches.reddit.customclients.misc.extension.mapping.ProguardMapping
 import com.android.tools.smali.dexlib2.dexbacked.DexBackedDexFile
 import com.android.tools.smali.dexlib2.writer.io.MemoryDataStore
 import com.android.tools.smali.dexlib2.writer.pool.DexPool
@@ -24,6 +27,7 @@ internal fun clientExtensionPatch(
     hookedClasses: Array<out String>,
     prepareShared: (InputStream) -> InputStream = ::withoutHttpLibraries,
 ) = patch(default = false) {
+    dependsOn(cacheLibraryResourcesPatch)
     extendWith {
         val input = checkNotNull(object {}.javaClass.classLoader.getResourceAsStream("extensions/shared.mpe")) {
             "Shared extension payload was not found"
@@ -62,10 +66,18 @@ internal fun setExtensionReleaseVersion() {
 
 private fun withoutHttpLibraries(input: InputStream): InputStream {
     val dex = input.use { DexBackedDexFile.fromInputStream(null, it.buffered()) }
-    val pool = DexPool(dex.opcodes)
-    dex.classes.filterNot {
+    val definitions = dex.classes.filterNot {
         it.type.startsWith("Lokhttp3/") || it.type.startsWith("Lokio/")
-    }.forEach(pool::internClass)
+    }
+    val names = definitions.mapNotNull { cls ->
+        val target = privateSharedLibraryType(cls.type)
+        if (target == cls.type) null else cls.type to target
+    }.toMap()
+    val rewritten = DexMappingRewriter(
+        ProguardMapping.classNames(names), definitions, resolveReflectiveFields = false,
+    ).rewrite(definitions)
+    val pool = DexPool(dex.opcodes)
+    rewritten.forEach(pool::internClass)
     val output = MemoryDataStore()
     pool.writeTo(output)
     return ByteArrayInputStream(output.data)

@@ -15,9 +15,9 @@ import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
-import app.morphe.extension.boost.http.HttpUtils;
 import app.morphe.extension.boost.utils.BoostUndeleteSettings;
-import app.morphe.extension.boost.utils.LoggingUtils;
+import app.morphe.extension.shared.archive.HttpUtils;
+import app.morphe.extension.shared.debug.LoggingUtils;
 import app.morphe.extension.boost.http.wayback.WaybackMachine;
 import app.morphe.extension.boost.http.wayback.WaybackResponse;
 import okhttp3.Interceptor;

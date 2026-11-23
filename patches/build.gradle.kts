@@ -76,10 +76,11 @@ val prepareYoutubePlayerResources by tasks.registering(Sync::class) {
 val bundledExtensionLibraries = provider {
     rootProject.subprojects.filter { it.path.startsWith(":extensions:") && !it.path.endsWith(":stub") }
         .flatMap { project ->
-            project.configurations.findByName("releaseRuntimeClasspath")
-                ?.incoming?.artifactView {
+            listOf("releaseRuntimeClasspath", "vendoredGuava", "vendoredJackson").flatMap { name ->
+                project.configurations.findByName(name)?.incoming?.artifactView {
                     componentFilter { it is ModuleComponentIdentifier }
                 }?.artifacts?.artifacts.orEmpty()
+            }
         }
         .map { (it.id.componentIdentifier as ModuleComponentIdentifier) to it.file }
         .distinctBy { it.first.displayName }
@@ -130,7 +131,7 @@ val prepareAboutLicenses by tasks.registering {
             if (id.group == "app.morphe") continue
             check(id.group.startsWith("androidx.") ||
                 id.group in setOf("org.jetbrains", "org.jetbrains.kotlin", "org.jetbrains.kotlinx",
-                    "com.google.code.gson", "com.google.errorprone", "com.squareup.okhttp3",
+                    "com.google.code.gson", "com.google.errorprone", "com.google.guava", "com.squareup.okhttp3",
                     "com.squareup.okio", "com.fasterxml.jackson.core", "org.jspecify",
                     "com.pierfrancescosoffritti.androidyoutubeplayer")) {
                 "Review the license for the new bundled dependency $id"

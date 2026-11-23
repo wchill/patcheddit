@@ -5,7 +5,7 @@
  * See the included NOTICE file for GPLv3 §7(b) and §7(c) terms that apply to this code.
  */
 
-package app.morphe.extension.boost.http.cache
+package app.morphe.extension.shared.cache
 
 import androidx.room.Database
 import androidx.room.Room

@@ -15,10 +15,11 @@ import app.morphe.patches.all.misc.extension.SHARED_UTILS_EXTENSION_CLASS
 import app.morphe.patches.all.misc.extension.activityOnCreateExtensionHook
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.extension.mapping.verifyBoostLibraryReferences
 import app.morphe.patches.reddit.customclients.http.installOkHttpInterceptors
+import app.morphe.patches.reddit.customclients.misc.extension.cacheLibraryResourcesPatch
 import app.morphe.patches.reddit.customclients.misc.extension.setExtensionReleaseVersion
 
 internal val boostExtensionPatch = patch {
-    dependsOn(boostNativeLibrariesPatch, boostPrivateLibraryResourcesPatch)
+    dependsOn(boostNativeLibrariesPatch, cacheLibraryResourcesPatch)
     extendWith {
         val input = checkNotNull(object {}.javaClass.classLoader.getResourceAsStream("extensions/boost.mpe")) {
             "Boost extension payload was not found"

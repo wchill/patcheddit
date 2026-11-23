@@ -6,11 +6,13 @@
 
 package app.morphe.extension.boost.http.reddit;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.ObjectMapper;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.ObjectNode;
 import org.junit.Test;
 
-import app.morphe.extension.boost.utils.Emojis;
+import app.morphe.extension.shared.archive.ArchiveBadges;
+
+import static app.morphe.extension.boost.http.reddit.ArchiveRecoveryState.EXTRA_EMOJI_CONTEXT_KEY;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -23,7 +25,7 @@ public class ArchiveRecoveryStateTest {
     public void failureOnlyAddsWarning() throws Exception {
         ObjectNode data = (ObjectNode) mapper.readTree(
                 "{\"id\":\"abc\",\"body\":\"[removed]\",\"likes\":true}");
-        ObjectNode expected = data.deepCopy().put(Emojis.EXTRA_EMOJI_CONTEXT_KEY, ArchiveRecoveryState.WARNING);
+        ObjectNode expected = data.deepCopy().put(EXTRA_EMOJI_CONTEXT_KEY, ArchiveBadges.WARNING);
         ArchiveRecoveryState.failed(data);
         ArchiveRecoveryState.failed(data);
 
@@ -43,11 +45,12 @@ public class ArchiveRecoveryStateTest {
         ObjectNode live = mapper.createObjectNode().put("body", "text");
         ArchiveRecoveryState.loaded(live);
         assertTrue(live.path(ArchiveRecoveryState.LOADED_KEY).asBoolean());
-        assertEquals(Emojis.CLOCK_EMOJI, live.path(Emojis.EXTRA_EMOJI_CONTEXT_KEY).asText());
+        assertEquals(ArchiveBadges.ARCHIVED, live.path(EXTRA_EMOJI_CONTEXT_KEY).asText());
 
-        ObjectNode removed = mapper.createObjectNode().put(Emojis.EXTRA_EMOJI_CONTEXT_KEY, Emojis.BROOM_EMOJI);
+        String moderator = ArchiveBadges.RemovalReason.MODERATOR.emoji;
+        ObjectNode removed = mapper.createObjectNode().put(EXTRA_EMOJI_CONTEXT_KEY, moderator);
         ArchiveRecoveryState.loaded(removed);
-        assertEquals(Emojis.BROOM_EMOJI, removed.path(Emojis.EXTRA_EMOJI_CONTEXT_KEY).asText());
+        assertEquals(moderator, removed.path(EXTRA_EMOJI_CONTEXT_KEY).asText());
     }
 
     @Test

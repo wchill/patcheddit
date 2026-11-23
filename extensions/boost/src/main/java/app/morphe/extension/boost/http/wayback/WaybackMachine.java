@@ -9,16 +9,16 @@
 
 package app.morphe.extension.boost.http.wayback;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.JsonNode;
 
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
-import app.morphe.extension.boost.http.AutoSavingCache;
-import app.morphe.extension.boost.http.HttpUtils;
-import app.morphe.extension.boost.utils.LoggingUtils;
+import app.morphe.extension.shared.archive.HttpUtils;
+import app.morphe.extension.shared.cache.AutoSavingCache;
+import app.morphe.extension.shared.debug.LoggingUtils;
 import okhttp3.Request;
 import okhttp3.Response;
 

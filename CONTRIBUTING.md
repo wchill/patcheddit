@@ -34,6 +34,20 @@ In `execute` and `finalize`, call patcher functions such as `document()`,
 `resourceFile()`, and `mutableClassDefBy()` directly rather than passing a
 patch context to helpers.
 
+## Vendoring extension dependencies
+
+Shade bundled third-party code under `app.morphe.extension.vendored` and shrink only the vendored input in that pass.
+The shared extension runs isolated R8 passes for Guava and Jackson. Keep their entry points in
+`proguard-vendored-guava.pro` and `proguard-vendored-jackson.pro`; the normal extension keep rules stay unchanged.
+Use the original artifact configurations `vendoredGuava` and `vendoredJackson` for offline license notices.
+
+The archive HTTP helpers, throttles, and Arctic Shift preference live in `:extensions:shared:library`.
+Boost uses the same vendored jars and retains its native OkHttp and Reddit bindings.
+
+The Room-backed archive cache is part of `:extensions:shared:library`. Extension preparation relocates
+Room, SQLite, and coroutines under `app.morphe.extension.vendored` to avoid host-library conflicts.
+Keep the existing `undelete_cache.db` name and schema compatible when changing cache code.
+
 ## Updating Boost's library mapping
 
 `scripts/update_boost_mapping.py` transfers the previous vetted `mapping.txt`

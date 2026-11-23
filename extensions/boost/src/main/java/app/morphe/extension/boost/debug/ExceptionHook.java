@@ -11,8 +11,8 @@ import android.app.Application;
 import android.content.Context;
 import java.io.IOException;
 
-import app.morphe.extension.boost.utils.LoggingUtils;
 import app.morphe.extension.shared.debug.ExceptionLogStore;
+import app.morphe.extension.shared.debug.LoggingUtils;
 
 /**
  * @noinspection unused
