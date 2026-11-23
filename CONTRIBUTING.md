@@ -133,7 +133,9 @@ Run `ShareLinksDeviceTest` against a disposable, package-renamed APK with
 requires an `app.patcheddit.rollout.*` package because it replaces HTTPS
 transport in that process. It covers shared post/comment routing, user links,
 redirect chains, tracking removal, comment context, and failure fallback.
-Joey adds wrapper and permalink cases.
+Joey adds wrapper and permalink cases; RIF checks its external image link
+filters and exercises image routing through the in-app router and WebView,
+including the Matrix redirect cache.
 
 ```sh
 python3 -B test/run_device_tests.py \
@@ -145,7 +147,9 @@ python3 -B test/run_device_tests.py \
 
 Use `stock=baconreader`, `boost`, `joey`, `relay` (including Pro), `rif`,
 `platinum`, or `syncforreddit` as appropriate. The resolver uses synthetic
-responses, not a Reddit account.
+responses, not a Reddit account. The RIF fixture checks external intent matching
+without launching MainActivity because a package-renamed build still refers to
+stock content providers at startup.
 
 `BaconReaderSyncCommentVideoDeviceTest` exercises the native player handoff
 with **Fix comment video links** applied. Pass `--arg stock=baconreader` for a

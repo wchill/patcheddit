@@ -85,6 +85,7 @@ In addition, patches for some apps contain additional features that were not pre
 * **Fix Reddit media link handling** opens Reddit-hosted images, GIFs, and videos in Relay's native media viewer, including signed preview links, thumbnails, avatars, emoji, and Reddit videos linked in comments. It defaults to on under **Patcheddit > Media**.
 
 ### reddit is fun
+* **Reddit API fixes** opens wrapped Reddit images and Matrix-hosted Reddit images in the built-in viewer, even without **Inline media**.
 * **Inline media** displays images, animated images, albums, and videos in comments and text posts, with sizing and playback controls under **Patcheddit > Media**. URLs are kept above previews by default; turn off **Keep inline media URLs** to hide bare URLs.
 * Restores Imgur album and gallery loading in the built-in viewer, album thumbnails, and links that include a title.
 * Restores native Redgifs playback and returns safely when a video is unavailable.

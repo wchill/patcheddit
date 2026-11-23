@@ -15,6 +15,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
@@ -37,6 +39,9 @@ public final class ShareLinksDeviceTest {
     private static final String ROOT = WEB + "/r/Example";
     private static final String POST_PATH = "/r/Example/comments/abc123/example";
     private static final String COMMENT_PATH = POST_PATH + "/def456";
+    private static final String IMAGE = "https://i.redd.it/fixtureimage.png";
+    private static final String MATRIX = "https://matrix.redditspace.com/_matrix/media/v3/download/reddit.com/fixtureasset";
+    private static final String MATRIX_WEBVIEW = MATRIX + "WebView";
     private static final String BACON = "com.onelouder.baconreader.LinkDispatcher";
     private static final String JOEY = "o.o.joey.Activities.OpenInApp";
     private static final String RIF = "com.andrewshu.android.reddit.MainActivity";
@@ -140,6 +145,7 @@ public final class ShareLinksDeviceTest {
             assertRequests("/r/Example/s/FixtureLoop");
 
             if ("joey".equals(flavor)) verifyJoey();
+            if (rif()) verifyRif();
         } finally {
             instrumentation.removeMonitor(monitor);
         }
@@ -186,12 +192,50 @@ public final class ShareLinksDeviceTest {
                 "Joey lost native profile-comment routing");
     }
 
+    private void verifyRif() throws Exception {
+        String imageWrapper = WEB + "/media?url=" + Uri.encode(IMAGE);
+        assertExternalRoute(imageWrapper, RIF);
+        assertExternalRoute("https://np.reddit.com/media/?url=" + Uri.encode(IMAGE), RIF);
+        assertExternalRoute(MATRIX, RIF);
+        assertImage(follow(imageWrapper, true));
+        check(exchanges.isEmpty(), "Unwrapping a direct image made a network request");
+        assertImage(follow(MATRIX, true));
+        check(List.of(new Exchange("HEAD", "matrix.redditspace.com", Uri.parse(MATRIX).getPath()))
+                .equals(exchanges), "Unexpected Matrix lookup: " + exchanges);
+        assertImage(follow(WEB + "/media?url=" + Uri.encode(MATRIX), true));
+        check(exchanges.isEmpty(), "RIF repeated a successful public Matrix lookup");
+
+        assertImage(followRifWebView(imageWrapper));
+        check(exchanges.isEmpty(), "RIF's WebView fetched the direct image wrapper");
+        assertImage(followRifWebView(MATRIX_WEBVIEW));
+        check(List.of(new Exchange("HEAD", "matrix.redditspace.com", Uri.parse(MATRIX_WEBVIEW).getPath()))
+                .equals(exchanges), "Unexpected Matrix lookup from RIF WebView: " + exchanges);
+    }
+
     private void assertExternalRoute(String link, String expectedActivity) {
         Intent external = new Intent(Intent.ACTION_VIEW, Uri.parse(link))
                 .addCategory(Intent.CATEGORY_BROWSABLE).setPackage(context.getPackageName());
         check(context.getPackageManager().queryIntentActivities(external, 0).stream()
                         .anyMatch(target -> expectedActivity.equals(target.activityInfo.name)),
                 "No external link route to " + expectedActivity + " for " + link);
+    }
+
+    private Intent followRifWebView(String link) throws Exception {
+        resetHandoff();
+        Class<?> type = context.getClassLoader().loadClass("rif".equals(flavor) ? "v1.z" : "w1.z");
+        var view = new AtomicReference<WebView>();
+        try {
+            onMain(() -> {
+                WebView webView = new WebView(context);
+                view.set(webView);
+                WebViewClient client = (WebViewClient) type.getConstructor(Context.class).newInstance(context);
+                webView.setWebViewClient(client);
+                check(client.shouldOverrideUrlLoading(webView, link), "RIF's WebView did not handle " + link);
+            });
+            return awaitHandoff(link);
+        } finally {
+            if (view.get() != null) onMain(() -> view.get().destroy());
+        }
     }
 
     private void share(String input, String path, String depth, boolean inApp) throws Exception {
@@ -338,6 +382,14 @@ public final class ShareLinksDeviceTest {
                 "RIF did not return to its native dispatcher");
     }
 
+    private static void assertImage(Intent intent) {
+        check(intent.getComponent() != null && RIF.equals(intent.getComponent().getClassName())
+                        && Intent.ACTION_VIEW.equals(intent.getAction()),
+                "RIF image did not reach the stock browser entry point: " + intent);
+        check(IMAGE.equals(intent.getDataString()),
+                "RIF lost the unwrapped native image: " + intent);
+    }
+
     private static String readFallback(Intent intent) {
         String url = intent.getDataString();
         if (url == null) url = intent.getStringExtra("url");
@@ -349,15 +401,24 @@ public final class ShareLinksDeviceTest {
     private static boolean isFixtureHandoff(Intent intent) {
         String data = intent.getDataString();
         return data != null && (data.contains("/comments/abc123") || isFixtureFallback(data)
-                || data.contains("/gallery/abc123"))
+                || data.equals(IMAGE) || data.contains("/gallery/abc123"))
                 || "abc123".equals(intent.getStringExtra("submission"))
-                || isFixtureFallback(intent.getStringExtra("url"))
+                || hasExtra(intent, IMAGE) || isFixtureFallback(intent.getStringExtra("url"))
                 || isFixtureFallback(intent.getStringExtra(" Url"));
     }
 
     private static boolean isFixtureFallback(String url) {
         return url != null && url.contains("/s/Fixture")
                 && (url.endsWith("#bypass") || url.endsWith("#morphe-share-fallback"));
+    }
+
+    private static boolean hasExtra(Intent intent, String expected) {
+        Bundle extras = intent.getExtras();
+        if (extras == null) return false;
+        for (String key : extras.keySet()) {
+            if (extras.get(key) instanceof String value && value.contains(expected)) return true;
+        }
+        return false;
     }
 
     private void assertRequests(String... paths) {
@@ -369,7 +430,8 @@ public final class ShareLinksDeviceTest {
         URL.setURLStreamHandlerFactory(protocol -> !"https".equals(protocol) ? null : new URLStreamHandler() {
             @Override protected HttpsURLConnection openConnection(URL url) throws IOException {
                 String path = url.getPath();
-                if (!path.contains("Fixture")) {
+                if (!path.contains("Fixture") && !url.toString().startsWith(MATRIX)
+                        && !url.toString().equals(IMAGE)) {
                     throw new IOException("Not an offline fixture URL");
                 }
                 return new HttpsURLConnection(url) {
@@ -409,6 +471,7 @@ public final class ShareLinksDeviceTest {
     private static Reply reply(String method, String path) {
         String leaf = path.substring(path.lastIndexOf('/') + 1);
         return switch (leaf) {
+            case "fixtureasset", "fixtureassetWebView" -> new Reply(IMAGE, 302);
             case "FixtureMissing" -> new Reply(null, 404);
             case "FixtureForeign" -> new Reply("https://" + FOREIGN_HOST + "/r/Example/s/FixtureOutside", 302);
             case "FixtureLoop" -> new Reply(path, 302);
