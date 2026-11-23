@@ -411,7 +411,7 @@ public final class InlineMedia {
             loading = false;
             stopAnimation();
             if (decoded != null) { decoded.close(); decoded = null; }
-            if (video != null) { video.release(); video = null; }
+            if (video != null) { video.release(true); video = null; }
         }
 
         void stopAnimation() {
