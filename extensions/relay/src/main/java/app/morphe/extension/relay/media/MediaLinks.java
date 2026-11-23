@@ -55,7 +55,9 @@ public final class MediaLinks {
             return id.matches("[A-Za-z0-9]{1,64}") && path.startsWith("/gifs/")
                     ? "https://media.giphy.com/media/" + id + "/giphy.gif" : null;
         }
-        if (!(host.equals("i.imgur.com") || host.equals("media.giphy.com") || host.equals("i.giphy.com"))) return null;
+        // Relay rewrites embedded Giphy links to the image's CDN URL.
+        if (!(host.equals("i.imgur.com") || host.equals("i.giphy.com")
+                || host.matches("media[0-9]?\\.giphy\\.com"))) return null;
         String format = format(uri);
         String suffix = format.isEmpty() ? path.substring(path.lastIndexOf('.') + 1).toLowerCase(Locale.ROOT) : format;
         return suffix.matches("jpe?g|pjpg|png|gif|webp|avif|bmp") ? link : null;

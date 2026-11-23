@@ -11,6 +11,7 @@ import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.replaceInstruction
 import app.morphe.patcher.patch.mutableClassDefBy
+import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
 import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.patches.reddit.customclients.AppCompatibility
@@ -30,6 +31,7 @@ private const val INLINE = "Lapp/morphe/extension/relay/media/InlineMedia;"
 private const val BRIDGE = "Lapp/morphe/extension/relay/media/NativeInlineMedia;"
 private const val TEXT = "Landroid/widget/TextView;"
 private const val CHAR_SEQUENCE = "Ljava/lang/CharSequence;"
+private const val SET_TEXT = "$TEXT->setText($CHAR_SEQUENCE)V"
 private const val BUILDER = "Lcom/bumptech/glide/RequestBuilder;"
 private const val MANAGER = "Lcom/bumptech/glide/RequestManager;"
 private const val TARGET = "Lcom/bumptech/glide/request/target/Target;"
@@ -46,11 +48,24 @@ private val commentBodies = Fingerprint(
         } == true
     },
 )
+private val threadCommentBody = Fingerprint(
+    definingClass = "Lreddit/news/adapters/CommentsAdapter;",
+    name = "getView",
+    parameters = listOf("I", "Landroid/view/View;", "Landroid/view/ViewGroup;"),
+    returnType = "Landroid/view/View;",
+)
 private val postBody = Fingerprint(
     definingClass = "Lreddit/news/WebAndCommentsFragment;",
     parameters = listOf(CHAR_SEQUENCE), returnType = "V",
     custom = { method, _ -> AccessFlags.PROTECTED.isSet(method.accessFlags) },
 )
+
+private fun MutableMethod.hookBodyText(index: Int, opcode: Opcode) {
+    val call = getInstruction<FiveRegisterInstruction>(index)
+    require(call.opcode == opcode && call.registerCount == 2) { "Unsupported Relay body setter" }
+    replaceInstruction(index,
+        "invoke-static {v${call.registerC}, v${call.registerD}}, $INLINE->setText($TEXT$CHAR_SEQUENCE)V")
+}
 
 @Suppress("unused")
 val inlineMediaPatch = morpheBytecodePatch(
@@ -149,19 +164,26 @@ val inlineMediaPatch = morpheBytecodePatch(
                 field?.name == "htmlBodySpanned" && field.definingClass == "Lreddit/news/oauth/reddit/model/RedditComment;"
             }
             for (site in sites) {
-                val call = match.method.getInstruction<FiveRegisterInstruction>(site + 1)
-                require(call.opcode == Opcode.INVOKE_STATIC && call.registerCount == 2) { "Unsupported Relay comment body setter" }
-                match.method.replaceInstruction(site + 1,
-                    "invoke-static {v${call.registerC}, v${call.registerD}}, $INLINE->setText($TEXT$CHAR_SEQUENCE)V")
+                match.method.hookBodyText(site + 1, Opcode.INVOKE_STATIC)
             }
+        }
+        // Thread comments use the ListView adapter, not the comment listing delegates.
+        threadCommentBody.method.apply {
+            val code = implementation!!.instructions.toList()
+            val site = (1 until code.size).single { index ->
+                val body = (code[index - 1] as? ReferenceInstruction)?.reference as? FieldReference
+                code[index - 1].opcode == Opcode.IGET_OBJECT &&
+                    body?.definingClass == "Lreddit/news/data/DataComment;" &&
+                    body.type == "Landroid/text/Spanned;" &&
+                    (code[index] as? ReferenceInstruction)?.reference.toString() == SET_TEXT
+            }
+            hookBodyText(site, Opcode.INVOKE_VIRTUAL)
         }
         postBody.method.apply {
             val site = implementation!!.instructions.withIndex().single {
-                (it.value as? ReferenceInstruction)?.reference.toString() == "$TEXT->setText($CHAR_SEQUENCE)V"
+                (it.value as? ReferenceInstruction)?.reference.toString() == SET_TEXT
             }.index
-            val call = getInstruction<FiveRegisterInstruction>(site)
-            replaceInstruction(site,
-                "invoke-static {v${call.registerC}, v${call.registerD}}, $INLINE->setText($TEXT$CHAR_SEQUENCE)V")
+            hookBodyText(site, Opcode.INVOKE_VIRTUAL)
         }
     }
 }

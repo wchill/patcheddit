@@ -15,7 +15,9 @@ import android.text.Spanned;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -138,6 +140,14 @@ public final class RelayInlineMediaDeviceTest {
                         "Code example was converted into media");
                 return null;
             });
+            String embeddedGif = "https://media2.giphy.com/media/PatchedditFixture/giphy.gif" + QUERY;
+            onMain(() -> {
+                bind("<p>" + link("https://giphy.com/gifs/fixture-PatchedditFixture",
+                        "<img src=\"" + embeddedGif.replace("&", "&amp;") + "\">") + "</p>");
+                return null;
+            });
+            await(() -> onMain(() -> loaded(comment) == 1 && animation(previews(comment).get(0)).isRunning()),
+                    "Relay's rewritten Giphy embed did not animate");
             String corrupt = URL + "corrupt.png" + QUERY;
             onMain(() -> { bind("<p>" + link(corrupt, corrupt) + "</p>"); return null; });
             await(() -> onMain(() -> previews(comment).isEmpty() && comment.getText().toString().contains(corrupt)),
@@ -151,9 +161,17 @@ public final class RelayInlineMediaDeviceTest {
                 check(!animation.isRunning(), "Detached preview kept animating");
                 return null;
             });
+            String threadImage = URL + "thread.png" + QUERY + "&width=911&format=png&auto=webp";
+            ListView thread = onMain(() -> thread(threadImage, prefs, context));
+            int bodyId = context.getResources().getIdentifier("body", "id", context.getPackageName());
+            await(() -> onMain(() -> {
+                TextView body = thread.findViewById(bodyId);
+                return body != null && loaded(body) == 1;
+            }), "Native comment thread did not render a signed Reddit image");
             TextView post = onMain(() -> {
                 TextView view = (TextView) type("reddit.news.listings.common.views.ActiveTextView2")
                         .getConstructor(Context.class, android.util.AttributeSet.class).newInstance(activity, null);
+                activity.setContentView((View) rows.getParent());
                 rows.addView(view);
                 Object fragment = type("reddit.news.WebAndCommentsFragment").getConstructor().newInstance();
                 Object manager = host.getClass().getMethod("getSupportFragmentManager").invoke(host);
@@ -189,6 +207,34 @@ public final class RelayInlineMediaDeviceTest {
             restore(prefs, before);
             check(backup.edit().clear().commit(), "Could not clear inline preference backup");
         }
+    }
+
+    private static ListView thread(String url, SharedPreferences prefs, Context context) throws Exception {
+        Object fragment = type("reddit.news.WebAndCommentsFragment").getConstructor().newInstance();
+        Object manager = activity.getClass().getMethod("getSupportFragmentManager").invoke(activity);
+        set(fragment, "mHost", field(manager, "mHost"));
+        Class<?> commentType = type("reddit.news.oauth.reddit.model.RedditComment");
+        Object model = commentType.getConstructor().newInstance();
+        set(model, "body", url);
+        set(model, "bodyHtml", "<div class=\"md\"><p>" + link(url, url) + "</p></div>");
+        set(model, "author", "fixture");
+        set(model, "id", "fixture");
+        set(model, "name", "t1_fixture");
+        set(model, "subreddit", "fixture");
+        set(model, "edited", 0L);
+        set(model, "linkId", "t3_fixture");
+        set(model, "parentId", "t3_fixture");
+        Object comment = type("reddit.news.data.DataComment").getConstructor(commentType, int.class)
+                .newInstance(model, 0);
+        ArrayList<Object> comments = new ArrayList<>(List.of(comment));
+        var constructor = type("reddit.news.adapters.CommentsAdapter").getConstructors()[0];
+        var adapter = (ArrayAdapter<?>) constructor.newInstance(fragment, null, null,
+                context.getResources().getIdentifier("commentsrow", "layout", context.getPackageName()),
+                comments, prefs, false, null);
+        ListView list = new ListView(activity);
+        list.setAdapter(adapter);
+        activity.setContentView(list);
+        return list;
     }
 
     private static String link(String url, String text) {
