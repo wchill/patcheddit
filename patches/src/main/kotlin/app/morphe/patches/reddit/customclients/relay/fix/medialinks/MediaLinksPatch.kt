@@ -19,6 +19,8 @@ import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.currentMethod
 import app.morphe.patches.reddit.customclients.morpheBytecodePatch
+import app.morphe.patches.reddit.customclients.relay.fix.slink.urlLinkClickManagerFingerprint
+import app.morphe.patches.reddit.customclients.relay.fix.slink.webAndCommentsFragmentLinkFingerprint
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.MutableMethodImplementation
@@ -48,7 +50,7 @@ private fun target(owner: String, name: String, parameters: List<String>, return
 @Suppress("unused")
 val mediaLinksPatch = morpheBytecodePatch(
     name = "Fix Reddit media link handling",
-    description = "Opens Reddit-hosted images, GIFs, and videos in Relay's native media viewer.",
+    description = "Opens Reddit-hosted images, GIFs, and videos, including videos linked in comments, in Relay's native media viewer.",
     extensionPatch = ExtensionPatches.Relay,
     category = PatchCategory.MEDIA,
     preferenceKey = "morphe_patch_open_reddit_media_links",
@@ -122,6 +124,19 @@ val mediaLinksPatch = morpheBytecodePatch(
         }
         setting.guardHook(LINKS, "canHandle")
         setting.guardHook(VIEWER, "resolve")
+
+        // A reddit.com player link otherwise reaches Relay's Reddit page router before its media matcher.
+        for (router in listOf(urlLinkClickManagerFingerprint, webAndCommentsFragmentLinkFingerprint)) {
+            router.method.apply {
+                addInstructionsWithLabels(0, """
+                    invoke-static/range {p1 .. p1}, $LINKS->commentVideoBase($STRING)$STRING
+                    move-result-object v0
+                    if-eqz v0, :native
+                    move-object/from16 p1, v0
+                """, ExternalLabel("native", getInstruction(0)))
+            }
+        }
+        setting.guardHook(LINKS, "commentVideoBase")
 
         // Native DASH parsing previously assumed every manifest lived directly under v.redd.it.
         val parser = currentMethod(mutableClassDefBy(FETCHER), parse)

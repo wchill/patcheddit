@@ -12,6 +12,8 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
+import app.morphe.extension.shared.fixes.media.CommentVideoLinks;
+
 public final class MediaLinks {
     static final int NONE = 0, IMAGE = 1, VIDEO = 2, ANIMATED = 3, DASH = 4;
 
@@ -86,6 +88,7 @@ public final class MediaLinks {
     }
 
     static int kind(String link) {
+        if (CommentVideoLinks.baseUrl(link) != null) return DASH;
         URI uri = uri(link);
         if (uri == null || uri.getRawPath().isEmpty() || uri.getRawPath().equals("/")) return NONE;
         if (videoRoot(uri)) return DASH;
@@ -114,6 +117,10 @@ public final class MediaLinks {
         return kind(link) != NONE;
     }
 
+    public static String commentVideoBase(String link) {
+        return CommentVideoLinks.baseUrl(link);
+    }
+
     public static boolean isHls(String link) {
         URI uri = uri(link);
         if (uri == null) return false;
@@ -123,6 +130,8 @@ public final class MediaLinks {
     }
 
     public static String manifestUrl(String link) {
+        String commentManifest = CommentVideoLinks.dashUrl(link);
+        if (commentManifest != null) return commentManifest;
         URI uri = uri(link);
         if (uri == null || !videoRoot(uri)) return link;
         int query = link.indexOf('?'), fragment = link.indexOf('#');

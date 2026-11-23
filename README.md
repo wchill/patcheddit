@@ -15,7 +15,7 @@ In addition, patches for some apps contain additional features that were not pre
     * Includes missing gallery image repairs when opening posts in BaconReader, Boost, Joey, Relay, RIF, and Sync. Relay's repair is limited to still images. If a previously opened gallery still fails after patching, clear the app's cache (not its storage).
     * Relay's subreddit sidebars remain usable when Reddit omits activity counters.
 * **Fix Redgifs API** restores playback in BaconReader, Joey, Relay, RIF, and Sync. Relay uses native media with sound instead of silent Reddit previews.
-* **Fix comment video links** restores native playback of Reddit comment videos in Boost, Joey, and RIF without relying on post metadata to contain the video.
+* **Fix comment video links** restores native playback of Reddit comment videos in BaconReader, Boost, Joey, RIF, and Sync without relying on post metadata to contain the video. Relay provides this through **Fix Reddit media link handling**.
 * **Fix escaped URLs** repairs links broken by backslashes in posts and comments in BaconReader, Boost, Infinity, Joey, Relay, RIF, and Sync. It is separate from **Reddit API fixes** and can be switched off under **Patcheddit > Links**.
 * **Fix broken markdown links** repairs user and subreddit links displayed with stray Markdown brackets in those clients, without changing code examples or ordinary links. It can be switched off under **Patcheddit > Links**.
 * **Fix swipe back transparency** shows the previous screen during swipe-back gestures in Sync and Joey on Android 11 and newer.
@@ -79,7 +79,7 @@ In addition, patches for some apps contain additional features that were not pre
 
 ### Relay
 * **Inline media** shows Reddit, Imgur, and Giphy images and GIFs in comment threads, comment listings, and text posts, including embedded Giphy GIFs. **Patcheddit > Media > Keep inline media URLs** defaults to on; turning it off hides bare URLs without removing descriptive labels.
-* **Fix Reddit media link handling** opens Reddit-hosted images, GIFs, and videos in Relay's native media viewer, including signed preview links, thumbnails, avatars, and emoji. It defaults to on under **Patcheddit > Media**.
+* **Fix Reddit media link handling** opens Reddit-hosted images, GIFs, and videos in Relay's native media viewer, including signed preview links, thumbnails, avatars, emoji, and Reddit videos linked in comments. It defaults to on under **Patcheddit > Media**.
 
 ### reddit is fun
 * **Inline media** displays images, animated images, albums, and videos in comments and text posts, with sizing and playback controls under **Patcheddit > Media**. URLs are kept above previews by default; turn off **Keep inline media URLs** to hide bare URLs.

@@ -99,6 +99,15 @@ public final class RelayMediaLinksDeviceTest {
                 check(((String) field(descriptor, "audioUrl")).endsWith("/audio" + run + ".m4a"),
                         "DASH audio was not retained");
             }
+            String commentVideo = "https://www.reddit.com/link/post123/video/PatchedditFixture/player";
+            check((Boolean) fetchType.getMethod("k", String.class).invoke(fetcher, commentVideo),
+                    "Native router rejected the comment video");
+            Object commentPreview = resolved(commentVideo);
+            String commentBase = "https://v.redd.it/link/post123/asset/PatchedditFixture/";
+            check((commentBase + "video" + run + ".mp4").equals(field(commentPreview, "mediaUrl")),
+                    "Comment video lost its asset directory");
+            check((commentBase + "audio" + run + ".m4a").equals(field(commentPreview, "audioUrl")),
+                    "Comment video lost its audio track");
             try {
                 resolved("https://v.redd.it/PatchedditFixture/broken.mpd" + query);
                 throw new AssertionError("Malformed manifest returned success");
@@ -136,6 +145,7 @@ public final class RelayMediaLinksDeviceTest {
             for (String url : new String[]{"https://v.redd.it/PatchedditFixture/video.mp4" + query,
                     "https://v.redd.it/PatchedditFixture/HLSPlaylist.m3u8" + query,
                     "https://v.redd.it/PatchedditFixture/DASHPlaylist.mpd" + query,
+                    commentVideo,
                     "https://vcf.redd.it/PatchedditFixture/DASHPlaylist.mpd" + query,
                     "https://packaged-media.redd.it/PatchedditFixture/DASHPlaylist.mpd" + query,
                     "https://external-preview.redd.it/PatchedditFixture/test.gif?format=mp4&" + query.substring(1)}) {
@@ -149,6 +159,12 @@ public final class RelayMediaLinksDeviceTest {
                 }), "Native video/HLS/DASH playback did not advance");
                 closePreview();
             }
+            show(commentVideo, true);
+            await(() -> onMain(() -> {
+                Object fragment = currentFragment();
+                return fragment != null && fragment.getClass().getName().endsWith("FragmentVideoPreview");
+            }), "The comment link handler did not open the native video viewer");
+            closePreview();
             check(requests.stream().anyMatch(still::equals), "Native loader dropped signing parameters");
             for (String domain : new String[]{"v.redd.it", "vcf.redd.it", "packaged-media.redd.it"}) {
                 check(requests.stream().anyMatch(url -> url.startsWith("https://" + domain + "/")
@@ -170,6 +186,9 @@ public final class RelayMediaLinksDeviceTest {
             check(preferences.edit().putBoolean(KEY, false).commit(), "Could not disable the patch");
             check(!(Boolean) fetchType.getMethod("k", String.class).invoke(fetcher, still),
                     "Disabled patch still intercepted JPEG previews");
+            check(type("app.morphe.extension.relay.media.MediaLinks")
+                    .getMethod("commentVideoBase", String.class).invoke(null, commentVideo) == null,
+                    "Disabled patch still normalized comment player URLs");
             check(type("app.morphe.extension.relay.media.MediaViewer")
                     .getMethod("resolve", Object.class, String.class).invoke(null, fetcher, still) == null,
                     "Disabled resolver did not fall through");

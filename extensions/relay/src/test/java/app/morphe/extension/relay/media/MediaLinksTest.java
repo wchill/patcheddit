@@ -69,6 +69,13 @@ public class MediaLinksTest {
                 MediaLinks.manifestUrl("https://v.redd.it/abc#fragment?not-a-query"));
     }
 
+    @Test public void commentPlayerLinksUseTheirNativeDashDirectory() {
+        String link = "https://www.reddit.com/link/post123/video/asset456/player?share_id=abc";
+        assertEquals(MediaLinks.DASH, MediaLinks.kind(link));
+        assertEquals("https://v.redd.it/link/post123/asset/asset456/DASHPlaylist.mpd", MediaLinks.manifestUrl(link));
+        assertEquals(MediaLinks.NONE, MediaLinks.kind(link.replace("www.reddit.com", "reddit.com.example.org")));
+    }
+
     @Test public void leavesPagesAndUnrelatedResourcesAlone() {
         for (String url : new String[]{null, "", "https://redd.it/abc", "https://www.reddit.com/media?url=x",
                 "https://preview.redd.it.attacker.test/image.jpeg", "https://attacker.test/preview.redd.it/image.jpeg",

@@ -112,6 +112,12 @@ those mappings.
 Both complete and review-required results are supported.
 Its report is saved to `build/boost-mapping-tests/recovery.json`.
 
+## Native media device tests
+
+`BaconReaderSyncCommentVideoDeviceTest` exercises the native player handoff
+with **Fix comment video links** applied. Pass `--arg stock=baconreader` for a
+package-renamed BaconReader fixture.
+
 ## RIF inline-media device tests
 
 Install the patched free and Platinum APKs, signed with the matching test keys.
