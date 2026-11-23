@@ -44,6 +44,7 @@ Shade bundled third-party code under `app.morphe.extension.vendored` and shrink 
 The shared extension runs isolated R8 passes for Guava and Jackson. Keep their entry points in
 `proguard-vendored-guava.pro` and `proguard-vendored-jackson.pro`; the normal extension keep rules stay unchanged.
 Use the original artifact configurations `vendoredGuava` and `vendoredJackson` for offline license notices.
+JVM-side patch code and tools use the unshaded Jackson dependency. Do not add a second JSON library to the Android payload.
 
 The archive HTTP helpers, Arctic Shift and Wayback clients, throttles, and Arctic Shift preference
 live in `:extensions:shared:library`. Clients pass their own Markdown renderer when merging Arctic
@@ -127,10 +128,24 @@ switch on, off, and back on. For Boost, pass
 
 ## Share links and native media device tests
 
-`ShareLinksDeviceTest` requires a disposable APK with **Reddit API fixes** applied.
-Pass `--arg stock=baconreader`, `joey`, `rif`, or `platinum` as appropriate. It
-replaces HTTPS transport for its process and checks native post/comment
-dispatch and fallback without using a Reddit account.
+Run `ShareLinksDeviceTest` against a disposable, package-renamed APK with
+**Reddit API fixes** applied and the same signing key as the fixture. The suite
+requires an `app.patcheddit.rollout.*` package because it replaces HTTPS
+transport in that process. It covers shared post/comment routing, user links,
+redirect chains, tracking removal, comment context, and failure fallback.
+Joey adds wrapper and permalink cases.
+
+```sh
+python3 -B test/run_device_tests.py \
+  --sdk "$ANDROID_HOME" --serial "$ANDROID_SERIAL" \
+  --package "$DISPOSABLE_PACKAGE" --keystore "$FIXTURE_KEYSTORE" \
+  --suite app.patcheddit.fixture.ShareLinksDeviceTest \
+  --source test/device/ShareLinksDeviceTest.java --arg stock=joey
+```
+
+Use `stock=baconreader`, `boost`, `joey`, `relay` (including Pro), `rif`,
+`platinum`, or `syncforreddit` as appropriate. The resolver uses synthetic
+responses, not a Reddit account.
 
 `BaconReaderSyncCommentVideoDeviceTest` exercises the native player handoff
 with **Fix comment video links** applied. Pass `--arg stock=baconreader` for a

@@ -26,6 +26,7 @@ import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstructio
 import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstruction35c
 import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstruction3rc
 import com.android.tools.smali.dexlib2.immutable.reference.ImmutableMethodReference
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import javax.xml.parsers.DocumentBuilderFactory
@@ -69,8 +70,8 @@ class MorpheSettingsPatchTest {
     @Test
     fun bundlesCompleteLicenseNoticesForOfflineReading() {
         val input = assertNotNull(javaClass.classLoader.getResourceAsStream("settings/raw/patcheddit_licenses.json"))
-        val notices = input.bufferedReader().use { com.google.gson.JsonParser.parseReader(it).asJsonArray }
-            .associate { it.asJsonObject["name"].asString to it.asJsonObject["text"].asString }
+        val notices = input.use { ObjectMapper().readTree(it) }
+            .associate { it["name"].asText() to it["text"].asText() }
         val patcheddit = assertNotNull(notices["Patcheddit"])
         assertTrue(patcheddit.contains("GNU GENERAL PUBLIC LICENSE"))
         assertTrue(patcheddit.contains("Patcheddit NOTICE"))
@@ -79,14 +80,15 @@ class MorpheSettingsPatchTest {
         assertTrue(assertNotNull(notices["Google Material Design icons"]).contains("Apache License"))
         assertTrue(assertNotNull(notices["Public Suffix List"]).contains("Mozilla Public License"))
         assertTrue(assertNotNull(notices["OpenJDK desugaring libraries"]).contains("Classpath Exception"))
-        assertTrue(notices.keys.any { it.startsWith("com.google.code.gson:gson:") })
+        assertFalse(notices.keys.any { it.startsWith("com.google.code.gson:gson:") })
         assertTrue(notices.any { (name, text) ->
             name.startsWith("com.google.guava:guava:") && text.contains("Apache License")
         })
         assertTrue(notices.keys.any { it.startsWith("androidx.room:") })
         assertTrue(notices.keys.any { it.startsWith("com.squareup.okhttp3:") })
-        assertTrue(notices.filterKeys { it.startsWith("com.fasterxml.jackson.core:") }.values
-            .all { it.contains("Apache License") && it.contains("Jackson") })
+        val jackson = notices.filterKeys { it.startsWith("com.fasterxml.jackson.core:") }
+        assertTrue(jackson.keys.any { it.startsWith("com.fasterxml.jackson.core:jackson-databind:") })
+        assertTrue(jackson.values.all { it.contains("Apache License") && it.contains("Jackson") })
     }
 
     @Test

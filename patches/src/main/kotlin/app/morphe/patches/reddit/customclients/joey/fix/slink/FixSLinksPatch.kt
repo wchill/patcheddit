@@ -3,17 +3,20 @@ package app.morphe.patches.reddit.customclients.joey.fix.slink
 import app.morphe.patcher.Fingerprint
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
-import app.morphe.patches.reddit.customclients.OPEN_SHARE
 import app.morphe.patches.reddit.customclients.SHARE_NAV
+import app.morphe.patches.reddit.customclients.ShareViewFilter
 import app.morphe.patches.reddit.customclients.bindShareLinkAccessToken
 import app.morphe.patches.reddit.customclients.fixSLinksPatch
+import app.morphe.patches.reddit.customclients.shareViewFilters
 import app.morphe.patches.reddit.customclients.wrapMorpheHook
 
 private const val STRING = "Ljava/lang/String;"
 private const val OAUTH = "Lnet/dean/jraw/http/oauth/OAuthData;"
-
 internal val fixSLinksPatch = fixSLinksPatch(ExtensionPatches.Joey) {
     compatibleWith(*AppCompatibility.JoeyForReddit)
+    // Stock already declares *.reddit.com and *.redditmail.com.
+    dependsOn(shareViewFilters(setOf("o.o.joey.Activities.OpenInApp"),
+        ShareViewFilter("reddit.onelink.me", "pathPrefix", "/")))
     execute {
         // Both OpenInApp and link spans invoke this dispatcher.
         Fingerprint(
@@ -23,8 +26,7 @@ internal val fixSLinksPatch = fixSLinksPatch(ExtensionPatches.Joey) {
             parameters = listOf("Landroid/content/Context;", STRING, STRING, STRING, "Z", "Ljava/lang/Boolean;"),
         ).apply {
             wrapMorpheHook(classDef, method, before = """
-                const-string v1, "o.o.joey.Activities.OpenInApp"
-                invoke-static {p0, p1, v1}, $SHARE_NAV->$OPEN_SHARE
+                invoke-static {p0, p1}, $SHARE_NAV->openJoey(Landroid/content/Context;$STRING)Z
                 move-result v0
                 if-eqz v0, :morphe_skip_before
                 return-void

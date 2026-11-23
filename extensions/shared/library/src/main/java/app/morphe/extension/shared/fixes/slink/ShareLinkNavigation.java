@@ -15,6 +15,8 @@ public final class ShareLinkNavigation {
     private static final String FALLBACK = "morphe-share-fallback";
     private static final String BACON_DISPATCHER = "com.onelouder.baconreader.LinkDispatcher";
     private static final String BACON_FORCE_BROWSER = "EXTRA_FORCE_BROWSER";
+    private static final String JOEY_OPEN = "o.o.joey.Activities.OpenInApp";
+    private static final String JOEY_COMMENT = "o.o.joey.Activities.CommentActivity";
 
     private ShareLinkNavigation() {}
 
@@ -44,8 +46,80 @@ public final class ShareLinkNavigation {
         return open(context, link, targetClass, null, false);
     }
 
+    public static boolean openJoey(Context context, String link) {
+        if (context == null || link == null || isFallback(link)) return false;
+        if (context instanceof Activity && JOEY_OPEN.equals(context.getClass().getName())) {
+            Intent incoming = ((Activity) context).getIntent();
+            if (incoming != null && link.equals(incoming.getDataString())
+                    && !Intent.ACTION_VIEW.equals(incoming.getAction())) return false;
+        }
+        Context app = context.getApplicationContext();
+        if (app == null) return false;
+        if (ShareLinkResolver.isJoeyShare(link)) {
+            Utils.runOnBackgroundThread(() -> {
+                String resolved = resolve(app, link, true);
+                Utils.runOnMainThread(() -> {
+                    if (resolved == null) start(app, viewIntent(app, fallback(link), JOEY_OPEN));
+                    else openJoeyDestination(app, resolved);
+                });
+            });
+            return true;
+        }
+        String normalized = ShareLinkResolver.joeyNormalization(link);
+        if (normalized == null || normalized.equals(link)) return false;
+        openJoeyDestination(app, normalized);
+        return true;
+    }
+
+    private static void openJoeyDestination(Context app, String link) {
+        ShareLinkResolver.CommentRoute comment = ShareLinkResolver.joeyComment(link);
+        if (comment == null) {
+            start(app, viewIntent(app, link, JOEY_OPEN));
+            return;
+        }
+        Intent intent = new Intent().setClassName(app.getPackageName(), JOEY_COMMENT)
+                .putExtra("submission", comment.submission)
+                .putExtra("highlight_context", comment.comment)
+                .putExtra("np", comment.nonParticipation);
+        String subreddit = comment.subreddit();
+        if (subreddit != null) intent.putExtra("subreddit", subreddit);
+        if (comment.context >= 0) intent.putExtra("EXTRA_HIGHLIGHT_CONTEXT_COUNT", comment.context);
+        start(app, intent);
+    }
+
     static boolean isShareLink(String link) {
-        return ShareLinkResolver.shareUri(link) != null && !FALLBACK.equals(Uri.parse(link).getFragment());
+        return ShareLinkResolver.shareUri(link) != null && !isFallback(link);
+    }
+
+    private static boolean isFallback(String link) {
+        return FALLBACK.equals(Uri.parse(link).getFragment());
+    }
+
+    private static String fallback(String link) {
+        return Uri.parse(link).buildUpon().fragment(FALLBACK).build().toString();
+    }
+
+    private static void start(Context app, Intent intent) {
+        try {
+            app.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        } catch (ActivityNotFoundException ignored) {
+            Logger.printDebug(() -> "Reddit share link activity unavailable");
+        }
+    }
+
+    private static String resolve(Context app, String link, boolean joey) {
+        String token = null;
+        try {
+            token = getAccessToken(app);
+        } catch (RuntimeException ignored) {
+            // The native account may not have been initialized on a cold launch.
+        }
+        try {
+            return joey ? ShareLinkResolver.resolveJoey(link, token) : ShareLinkResolver.resolve(link, token);
+        } catch (Exception ignored) {
+            Logger.printDebug(() -> "Could not resolve Reddit share link");
+            return null;
+        }
     }
 
     private static boolean open(Context context, String link, String targetClass,
@@ -54,23 +128,11 @@ public final class ShareLinkNavigation {
         Context app = context == null ? Utils.getContext() : context.getApplicationContext();
         if (app == null) return false;
         Utils.runOnBackgroundThread(() -> {
-            String destination = null;
-            try {
-                String token = null;
-                try {
-                    token = getAccessToken(app);
-                } catch (RuntimeException ignored) {
-                    // The native account may not have been initialized on a cold launch.
-                }
-                destination = ShareLinkResolver.resolve(link, token);
-            } catch (Exception ignored) {
-                Logger.printDebug(() -> "Could not resolve Reddit share link");
-            }
-
+            String destination = resolve(app, link, false);
             boolean failed = destination == null;
             String route;
             if (failed) {
-                route = Uri.parse(link).buildUpon().fragment(FALLBACK).build().toString();
+                route = fallback(link);
             } else {
                 route = baconReader ? ShareLinkResolver.baconReaderPermalink(link, destination) : destination;
             }

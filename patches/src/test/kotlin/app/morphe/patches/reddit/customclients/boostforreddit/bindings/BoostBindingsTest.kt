@@ -25,7 +25,7 @@ import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstructio
 import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstruction35c
 import com.android.tools.smali.dexlib2.immutable.reference.ImmutableFieldReference
 import com.android.tools.smali.dexlib2.immutable.reference.ImmutableMethodReference
-import com.google.gson.Gson
+import com.fasterxml.jackson.databind.ObjectMapper
 import java.io.StringReader
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -36,6 +36,7 @@ class BoostBindingsTest {
     private val public = AccessFlags.PUBLIC.value
     private val static = public or AccessFlags.STATIC.value
     private val libraries = ProguardMapping.classNames(emptyMap())
+    private val json = ObjectMapper()
 
     private fun table(
         classes: Map<String, String> = mapOf("Lapi/Preferences;" to "Lp;"),
@@ -44,7 +45,7 @@ class BoostBindingsTest {
         staticMethods: List<String> = emptyList(),
         staticFields: List<String> = emptyList(),
         injectedMethods: Map<String, String> = emptyMap(),
-    ): BoostBindingTable = BoostBindingTable.read(StringReader(Gson().toJson(mapOf(
+    ): BoostBindingTable = BoostBindingTable.read(StringReader(json.writeValueAsString(mapOf(
         "version" to "test", "classes" to classes, "methods" to methods, "fields" to fields,
         "staticMethods" to staticMethods, "staticFields" to staticFields,
         "injectedMethods" to injectedMethods,
@@ -265,7 +266,9 @@ class BoostBindingsTest {
             json.replace("\"version\":\"test\"", "\"version\":\"first\",\"version\":\"second\""),
             json.replace("\"Lp;\"", "\"Lp;\",\"Lapi/Preferences;\":\"Lother;\""),
             json.replace("\"methods\":{}", "\"methods\":{\"Lapi/Preferences;->refresh()V\":false}"),
+            json.replace("\"staticMethods\":[]", "\"staticMethods\":[null]"),
             json.replace("\"injectedMethods\":{}", "\"unknown\":{}"),
+            json.dropLast(1),
             json + "{}",
         )
         for (value in invalid) assertFails { BoostBindingTable.read(StringReader(value)) }

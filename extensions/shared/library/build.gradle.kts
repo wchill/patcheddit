@@ -84,13 +84,12 @@ android {
 
 dependencies {
     implementation(libs.morphe.extensions.library)
-    implementation(libs.gson)
     compileOnly(libs.annotation)
     compileOnly(libs.okhttp)
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
     vendoredGuava(libs.guava.android)
-    vendoredJackson(libs.jackson.databind.boost)
+    vendoredJackson(libs.jackson.databind)
     vendoringR8(libs.r8.vendoring)
     implementation(files(vendoredGuavaJar).builtBy(vendorGuava))
     api(files(vendoredJacksonJar).builtBy(vendorJackson))

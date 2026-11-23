@@ -26,8 +26,7 @@ dependencies {
     youtubePlayerResources(variantOf(libs.youtube.player) { artifactType("aar") }) {
         isTransitive = false
     }
-    // Used by JsonGenerator.
-    implementation(libs.gson)
+    implementation(libs.jackson.databind)
 
     // Required due to smali, or build fails. Can be removed once smali is bumped.
     implementation(libs.guava)
@@ -131,7 +130,7 @@ val prepareAboutLicenses by tasks.registering {
             if (id.group == "app.morphe") continue
             check(id.group.startsWith("androidx.") ||
                 id.group in setOf("org.jetbrains", "org.jetbrains.kotlin", "org.jetbrains.kotlinx",
-                    "com.google.code.gson", "com.google.errorprone", "com.google.guava", "com.squareup.okhttp3",
+                    "com.google.errorprone", "com.google.guava", "com.squareup.okhttp3",
                     "com.squareup.okio", "com.fasterxml.jackson.core", "org.jspecify",
                     "com.pierfrancescosoffritti.androidyoutubeplayer")) {
                 "Review the license for the new bundled dependency $id"

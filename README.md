@@ -15,7 +15,7 @@ In addition, patches for some apps contain additional features that were not pre
     * Includes missing gallery image repairs when opening posts in BaconReader, Boost, Joey, Relay, RIF, and Sync, including recoverable GIFs in Relay. If a previously opened gallery still fails after patching, clear the app's cache (not its storage).
     * Relay's subreddit sidebars remain usable when Reddit omits activity counters.
     * BaconReader, Boost, Joey, Relay, RIF, and Sync use Reddit's JSON endpoint for `r/all` feeds.
-    * Opens Reddit subreddit share links (`/r/.../s/...`) in BaconReader, Boost, Joey, Relay, RIF, and Sync.
+    * Opens Reddit subreddit and profile share links in BaconReader, Boost, Joey, Relay, RIF, and Sync. Joey also handles Reddit app and email links.
 * **Fix Redgifs API** restores playback in BaconReader, Joey, Relay, RIF, and Sync. Relay uses native media with sound instead of silent Reddit previews.
 * **Fix comment video links** restores native playback of Reddit comment videos in BaconReader, Boost, Joey, RIF, and Sync without relying on post metadata to contain the video. Relay provides this through **Fix Reddit media link handling**.
 * **Prefer high refresh rate** requests a higher display refresh rate in BaconReader, Boost, Joey, Relay, RIF, and Sync. The display and Android still determine the actual refresh rate.
@@ -213,7 +213,7 @@ Gate void/boolean extension hooks with `guardHook`; identity transforms can use 
 
 Infinity's JNI client-ID getter is kept intact. Managed call sites use a gated bridge so disabling spoofing still calls the original native method without changing its JNI symbol.
 
-The extension uses Jackson for all JSON processing, bundled and shadowed under `app.morphe.extension.boost.libraries`, with its APIs preserved during shrinking. It does not depend on Boost's R8-reduced JSON libraries or bundle Gson. Native JRAW JSON objects remain behind the `NativeJsonModel` / `NativeJsonNode` adapters; they are not cast to the private Jackson tree types. Boost's own JSON libraries and callers, and the patcher's build-time Gson dependency, are left unchanged.
+The shared extension ships Jackson under `app.morphe.extension.vendored` for its own JSON processing. Boost's native JRAW model conversions still use the app's original parser behind narrow bridges; the extension does not cast between native and vendored JSON types.
 
 Boost's compile-only Kotlin API is in `extensions/boost/stub/src/main/kotlin`. Feature code uses stable class and member names; patches use the matching typed `BoostApi` catalog rather than loading Android stub classes on the patcher JVM:
 

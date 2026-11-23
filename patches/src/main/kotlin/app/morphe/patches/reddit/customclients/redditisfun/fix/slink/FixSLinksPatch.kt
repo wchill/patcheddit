@@ -5,8 +5,10 @@ import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.OPEN_SHARE
 import app.morphe.patches.reddit.customclients.SHARE_NAV
+import app.morphe.patches.reddit.customclients.ShareViewFilter
 import app.morphe.patches.reddit.customclients.bindShareLinkAccessToken
 import app.morphe.patches.reddit.customclients.fixSLinksPatch
+import app.morphe.patches.reddit.customclients.shareViewFilters
 import app.morphe.patches.reddit.customclients.wrapMorpheHook
 
 private const val MAIN = "com.andrewshu.android.reddit.MainActivity"
@@ -16,6 +18,10 @@ private const val ACCOUNT = "Landroid/accounts/Account;"
 
 internal val fixSLinksPatch = fixSLinksPatch(ExtensionPatches.RIF) {
     compatibleWith(*AppCompatibility.RedditIsFun)
+    dependsOn(shareViewFilters(setOf(MAIN, ".MainActivity"),
+        ShareViewFilter("np.reddit.com", "pathPrefix", "/u/"),
+        ShareViewFilter("np.reddit.com", "pathPrefix", "/user/"),
+    ))
     execute {
         Fingerprint(
             definingClass = "Lcom/andrewshu/android/reddit/MainActivity;",
