@@ -1,6 +1,6 @@
 {
   "NOTE": "Do NOT manually edit this file. This file is automatically updated when semantic release (release.yml) runs. Manually editing this file can break your releases and break third party tools that use this file.",
-  "version": "2.5.1",
+  "version": "2.5.2-dev.1",
   "patches": [
     {
       "name": "Add Boost Search bottom navigation",
@@ -425,33 +425,6 @@
         {
           "packageName": "o.o.joey",
           "name": "Joey for Reddit",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": null,
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Disable ads",
-      "description": null,
-      "default": true,
-      "category": null,
-      "compatiblePackages": [
-        {
-          "packageName": "io.syncapps.lemmy_sync",
-          "name": "Sync for Lemmy",
           "description": null,
           "apkFileType": null,
           "appIconColor": null,
@@ -2763,33 +2736,6 @@
       "category": "Diagnostics",
       "compatiblePackages": [
         {
-          "packageName": "io.syncapps.lemmy_sync",
-          "name": "Sync for Lemmy",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": null,
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Log exceptions",
-      "description": "Logs reported errors and fatal crashes, viewable in Morphe settings.",
-      "default": true,
-      "category": "Diagnostics",
-      "compatiblePackages": [
-        {
           "packageName": "com.laurencedawson.reddit_sync",
           "name": "Sync for Reddit",
           "description": null,
@@ -4821,33 +4767,6 @@
           "targets": [
             {
               "version": "v23.06.30-13:39",
-              "versionCodes": null,
-              "isExperimental": false,
-              "minSdk": null,
-              "description": null
-            }
-          ]
-        }
-      ],
-      "options": []
-    },
-    {
-      "name": "Sync for Lemmy Morphe settings",
-      "description": "Adds a Morphe settings menu for included patches, with exception and fatal crash log viewers.",
-      "default": true,
-      "category": "Interface",
-      "compatiblePackages": [
-        {
-          "packageName": "io.syncapps.lemmy_sync",
-          "name": "Sync for Lemmy",
-          "description": null,
-          "apkFileType": null,
-          "appIconColor": null,
-          "signatures": null,
-          "formFactor": "MOBILE",
-          "targets": [
-            {
-              "version": null,
               "versionCodes": null,
               "isExperimental": false,
               "minSdk": null,

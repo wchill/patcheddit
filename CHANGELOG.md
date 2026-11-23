@@ -1,3 +1,11 @@
+## [2.5.2-dev.1](https://github.com/wchill/patcheddit/compare/v2.5.1...v2.5.2-dev.1) (2026-11-23)
+
+
+### Bug Fixes
+
+* **relay:** Hook additional comment renderers for inline media ([c21e1b1](https://github.com/wchill/patcheddit/commit/c21e1b1e5445ded665e760e4c200bfe4d6aa8cbb))
+* Remove Sync for Lemmy support ([0e39e4a](https://github.com/wchill/patcheddit/commit/0e39e4a6d30a2b820151f1e5907053c052fc79fc))
+
 ## [2.5.1](https://github.com/wchill/patcheddit/compare/v2.5.0...v2.5.1) (2026-11-23)
 
 
