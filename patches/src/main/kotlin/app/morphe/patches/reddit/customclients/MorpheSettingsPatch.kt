@@ -30,6 +30,7 @@ import org.w3c.dom.Element
 internal const val MORPHE_SETTINGS_ACTIVITY = "app.morphe.extension.shared.settings.MorpheSettingsActivity"
 internal const val MORPHE_SETTINGS_HOOK = "Lapp/morphe/extension/shared/settings/MorpheSettings;"
 internal const val MORPHE_SETTINGS_ENTRY = "morphe_settings_entry"
+private const val MORPHE_FRAMEWORK_OVERLAY = "MorpheSettingsFrameworkOverlay"
 internal const val MORPHE_SETTINGS_DESCRIPTION =
     "Adds a Morphe settings menu for included patches, with exception and fatal crash log viewers."
 
@@ -129,6 +130,7 @@ internal fun morphePreferencesPatch(
     compatible: Array<Compatibility>,
     resourceName: String,
     nativeStyle: Boolean = false,
+    nativeSettingsBackground: String? = null,
 ) = patch(
     name = "$name Morphe settings",
     description = MORPHE_SETTINGS_DESCRIPTION,
@@ -139,6 +141,18 @@ internal fun morphePreferencesPatch(
     dependsOn(extensionPatch, morpheSettingsResourcesPatch, morpheSettingsContextPatch)
 
     execute {
+        if (nativeSettingsBackground != null) {
+            document("res/values/styles.xml").use { styles ->
+                val overlay = styles.documentElement.childElements()
+                    .single { it.tagName == "style" && it.getAttribute("name") == MORPHE_FRAMEWORK_OVERLAY }
+                for (attribute in listOf("android:windowBackground", "colorSurface")) {
+                    overlay.appendChild(styles.createElement("item").apply {
+                        setAttribute("name", attribute)
+                        textContent = nativeSettingsBackground
+                    })
+                }
+            }
+        }
         val packageName = document("AndroidManifest.xml").use {
             it.documentElement.getAttribute("package").also { name ->
                 require(name.isNotBlank()) { "AndroidManifest.xml has no package name." }

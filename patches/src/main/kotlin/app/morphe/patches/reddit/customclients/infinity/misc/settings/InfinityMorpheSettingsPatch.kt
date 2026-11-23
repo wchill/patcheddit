@@ -14,4 +14,6 @@ import app.morphe.patches.reddit.customclients.morphePreferencesPatch
 val infinityMorpheSettingsPatch = morphePreferencesPatch(
     "Infinity", ExtensionPatches.Infinity, AppCompatibility.Infinity,
     "main_preferences", nativeStyle = true,
+    // Infinity's palette can omit the framework background and leave Material's surface unchanged.
+    nativeSettingsBackground = "?attr/backgroundColor",
 )
