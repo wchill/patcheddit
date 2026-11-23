@@ -39,6 +39,7 @@ import app.morphe.patches.reddit.customclients.joey.fix.apilookups.fixRedditApiL
 import app.morphe.patches.reddit.customclients.joey.fix.gallery.fixFailedGalleryImagesPatch as joeyGallery
 import app.morphe.patches.reddit.customclients.joey.fix.login.modifyLoginWebView as joeyLogin
 import app.morphe.patches.reddit.customclients.joey.fix.morecomments.fixMoreComments as joeyComments
+import app.morphe.patches.reddit.customclients.redditisfun.api.guestListingsPatch as rifGuestListings
 import app.morphe.patches.reddit.customclients.redditisfun.api.redditApiPatch as rifApi
 import app.morphe.patches.reddit.customclients.redditisfun.api.legacySpoofClientPatch as rifLegacy
 import app.morphe.patches.reddit.customclients.redditisfun.api.spoofClientPatch as rifSpoof
@@ -83,7 +84,7 @@ class RedditApiPatchTest {
             boostApi to setOf(boostSpoof, boostLogin, boostLookups, boostGallery, boostRAll, boostLinks),
             infinityApi to setOf(infinitySpoof, infinityLogin),
             joeyApi to setOf(joeySpoof, joeyLogin, joeyLookups, joeyGallery, joeyComments),
-            rifApi to setOf(rifSpoof, rifLogin, rifLookups, rifGallery, rifComments),
+            rifApi to setOf(rifSpoof, rifLogin, rifGuestListings, rifLookups, rifGallery, rifComments),
             relayApi to setOf(relaySpoof, relayLogin, relayLookups, relayGallery, relayComments, relayLinks, relaySidebar),
             syncApi to setOf(syncSpoof, syncLogin, syncLookups, syncGallery, syncComments, syncLinks, useUserEndpointPatch),
         )
