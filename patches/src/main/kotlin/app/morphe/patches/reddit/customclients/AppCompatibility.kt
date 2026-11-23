@@ -98,12 +98,6 @@ object AppCompatibility {
         targets = listOf(AppTarget(version = "v23.06.30-13:39"))
     )
 
-    internal val SyncForLemmy = Compatibility(
-        name = "Sync for Lemmy",
-        packageName = "io.syncapps.lemmy_sync",
-        targets = listOf(AppTarget(version = null))
-    )
-
     internal val SyncForReddit = arrayOf(
         SyncForRedditFree,
         Compatibility(

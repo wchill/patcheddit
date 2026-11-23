@@ -12,7 +12,6 @@ import app.morphe.patches.reddit.customclients.infinity.misc.settings.infinityMo
 import app.morphe.patches.reddit.customclients.joey.misc.settings.joeyMorpheSettingsPatch
 import app.morphe.patches.reddit.customclients.redditisfun.misc.settings.rifMorpheSettingsPatch
 import app.morphe.patches.reddit.customclients.relay.misc.settings.relayMorpheSettingsPatch
-import app.morphe.patches.reddit.customclients.sync.syncforlemmy.misc.settings.syncMorpheSettingsPatch as lemmySettings
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.misc.settings.syncMorpheSettingsPatch as syncSettings
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
@@ -116,7 +115,7 @@ class MorpheSettingsPatchTest {
     }
 
     @Test
-    fun coversAllFifteenPackagesWithoutReplacingBoostSettings() {
+    fun coversNonBoostPackagesWithoutReplacingBoostSettings() {
         val clients = listOf(
             baconReaderMorpheSettingsPatch to AppCompatibility.BaconReader,
             infinityMorpheSettingsPatch to AppCompatibility.Infinity,
@@ -124,7 +123,6 @@ class MorpheSettingsPatchTest {
             rifMorpheSettingsPatch to AppCompatibility.RedditIsFun,
             relayMorpheSettingsPatch to AppCompatibility.Relay,
             syncSettings to AppCompatibility.SyncForReddit,
-            lemmySettings to arrayOf(AppCompatibility.SyncForLemmy),
         )
         val packages = mutableSetOf<String>()
         for ((patch, compatible) in clients) {
@@ -133,9 +131,8 @@ class MorpheSettingsPatchTest {
             assertEquals(compatible.toList(), patch.compatibility)
             for (app in compatible) assertTrue(packages.add(assertNotNull(app.packageName)))
         }
-        assertEquals(15, packages.size)
+        assertEquals(14, packages.size)
         assertFalse(packages.contains("com.rubenmayayo.reddit"))
-        assertFalse(ExtensionPatches.Sync in lemmySettings.dependencies)
     }
 
     @Test
@@ -202,8 +199,7 @@ class MorpheSettingsPatchTest {
 
     @Test
     fun addsAnExplicitIntentToPlainAndQualifiedPreferenceScreensForEveryPackageVariant() {
-        val packages = AppCompatibility.RedditIsFun + AppCompatibility.Infinity + AppCompatibility.SyncForReddit +
-                arrayOf(AppCompatibility.SyncForLemmy)
+        val packages = AppCompatibility.RedditIsFun + AppCompatibility.Infinity + AppCompatibility.SyncForReddit
         for (namespaceAware in listOf(false, true)) {
             for (root in listOf("PreferenceScreen", "androidx.preference.PreferenceScreen")) {
                 for (app in packages) {

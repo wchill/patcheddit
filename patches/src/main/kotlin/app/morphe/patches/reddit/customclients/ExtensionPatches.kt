@@ -25,5 +25,4 @@ object ExtensionPatches {
     }
     internal val Relay = httpHook("relay", "Lreddit/news/RelayApplication;")
     internal val Sync = httpHook("syncforreddit", "Lcom/laurencedawson/reddit_sync/RedditApplication;")
-    internal val SyncForLemmy = clientExtensionPatch(null, emptyArray())
 }
