@@ -8,14 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import androidx.annotation.NonNull;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.util.Objects;
-
 import app.morphe.extension.shared.Logger;
 import app.morphe.extension.shared.Utils;
 
@@ -85,7 +77,7 @@ public abstract class BaseFixSLinksPatch {
     /**
      * The access token used to resolve the /s/ link.
      */
-    protected String accessToken;
+    protected volatile String accessToken;
 
     /**
      * The URL that was trying to be resolved before the access token was set.
@@ -112,8 +104,8 @@ public abstract class BaseFixSLinksPatch {
     }
 
     private ResolveResult resolveLink(String link) {
-        Context context = getContext();
-        if (link.matches(".*reddit\\.com/r/[^/]+/s/[^/]+")) {
+        if (ShareLinkResolver.shareUri(link) != null) {
+            Context context = getContext();
             // A link ends with #bypass if it failed to resolve below.
             // resolveLink is called with the same link again but this time with #bypass
             // so that the link is opened in the app browser instead of trying to resolve it again.
@@ -123,13 +115,13 @@ public abstract class BaseFixSLinksPatch {
                 return ResolveResult.DO_NOTHING;
             }
 
-            Logger.printDebug(() -> "Resolving " + link);
-
             if (accessToken == null) {
                 // This is not optimal.
                 // However, an accessToken is necessary to make an authenticated request to Reddit.
                 // in case Reddit has banned the IP - e.g. VPN.
                 Intent startIntent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+                if (startIntent == null) return ResolveResult.CONTINUE;
+                startIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(startIntent);
 
                 return ResolveResult.ACCESS_TOKEN_START;
@@ -137,31 +129,17 @@ public abstract class BaseFixSLinksPatch {
 
 
             Utils.runOnBackgroundThread(() -> {
-                String bypassLink = link + "#bypass";
-
-                String finalLocation = bypassLink;
+                String bypassLink = Uri.parse(link).buildUpon().fragment("bypass").build().toString();
+                String location = null;
                 try {
-                    HttpURLConnection connection = getHttpURLConnection(link, accessToken);
-                    connection.connect();
-                    String location = connection.getHeaderField("location");
-                    connection.disconnect();
-
-                    Objects.requireNonNull(location, "Location is null");
-
-                    finalLocation = location;
-                    Logger.printDebug(() -> "Resolved " + link + " to " + location);
-                } catch (SocketTimeoutException e) {
-                    Logger.printException(() -> "Timeout when trying to resolve " + link, e);
-                    finalLocation = bypassLink;
+                    location = ShareLinkResolver.resolve(link, accessToken);
                 } catch (Exception e) {
-                    Logger.printException(() -> "Failed to resolve " + link, e);
-                    finalLocation = bypassLink;
-                } finally {
-                    Intent startIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(finalLocation));
-                    startIntent.setPackage(context.getPackageName());
-                    startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startActivity(startIntent);
+                    Logger.printDebug(() -> "Could not resolve Reddit share link");
                 }
+                Intent startIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(location == null ? bypassLink : location));
+                startIntent.setPackage(context.getPackageName());
+                startIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(startIntent);
             });
 
             return ResolveResult.DO_NOTHING;
@@ -190,27 +168,7 @@ public abstract class BaseFixSLinksPatch {
     private void openInAppBrowser(Context context, String link) {
         Intent intent = new Intent(context, webViewActivityClass);
         intent.putExtra(webViewActivityExtraKey, link);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
-    }
-
-    @NonNull
-    private HttpURLConnection getHttpURLConnection(String link, String accessToken) throws IOException {
-        URL url = new URL(link);
-
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setInstanceFollowRedirects(false);
-        connection.setRequestMethod("HEAD");
-        connection.setConnectTimeout(2000);
-        connection.setReadTimeout(2000);
-
-        if (accessToken != null) {
-            Logger.printDebug(() -> "Setting access token to make /s/ request");
-
-            connection.setRequestProperty("Authorization", "Bearer " + accessToken);
-        } else {
-            Logger.printDebug(() -> "Not setting access token to make /s/ request, because it is null");
-        }
-
-        return connection;
     }
 }

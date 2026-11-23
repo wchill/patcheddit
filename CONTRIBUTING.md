@@ -112,7 +112,12 @@ those mappings.
 Both complete and review-required results are supported.
 Its report is saved to `build/boost-mapping-tests/recovery.json`.
 
-## Native media device tests
+## Share links and native media device tests
+
+`ShareLinksDeviceTest` requires a disposable APK with **Reddit API fixes** applied.
+Pass `--arg stock=baconreader`, `joey`, `rif`, or `platinum` as appropriate. It
+replaces HTTPS transport for its process and checks native post/comment
+dispatch and fallback without using a Reddit account.
 
 `BaconReaderSyncCommentVideoDeviceTest` exercises the native player handoff
 with **Fix comment video links** applied. Pass `--arg stock=baconreader` for a

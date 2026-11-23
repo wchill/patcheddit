@@ -1,0 +1,111 @@
+package app.morphe.extension.shared.fixes.slink;
+
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+
+import app.morphe.extension.shared.Logger;
+import app.morphe.extension.shared.Utils;
+
+public final class ShareLinkNavigation {
+    private static final String FALLBACK = "morphe-share-fallback";
+    private static final String BACON_DISPATCHER = "com.onelouder.baconreader.LinkDispatcher";
+    private static final String BACON_FORCE_BROWSER = "EXTRA_FORCE_BROWSER";
+
+    private ShareLinkNavigation() {}
+
+    public static Intent baconReaderIntent(Context context, String rawLink) {
+        return context != null && isShareLink(rawLink)
+                ? viewIntent(context, rawLink, BACON_DISPATCHER) : null;
+    }
+
+    public static boolean openBaconReader(Activity activity, Intent intent) {
+        if (intent == null || intent.getBooleanExtra(BACON_FORCE_BROWSER, false)) return false;
+        String link = intent.getDataString();
+        // BaconReader marks HTTPS URLs in its own rendered URLSpans with this exact scheme.
+        if (link != null && link.startsWith("browser-activity-https://")) {
+            link = "https:" + link.substring("browser-activity-https:".length());
+        }
+        return open(activity, link, BACON_DISPATCHER, activity, true);
+    }
+
+    public static boolean openActivity(Activity activity) {
+        Intent intent = activity.getIntent();
+        if (intent == null || !(Intent.ACTION_VIEW.equals(intent.getAction())
+                || "android.nfc.action.NDEF_DISCOVERED".equals(intent.getAction()))) return false;
+        return open(activity, intent.getDataString(), activity.getClass().getName(), activity, false);
+    }
+
+    public static boolean open(Context context, String link, String targetClass) {
+        return open(context, link, targetClass, null, false);
+    }
+
+    static boolean isShareLink(String link) {
+        return ShareLinkResolver.shareUri(link) != null && !FALLBACK.equals(Uri.parse(link).getFragment());
+    }
+
+    private static boolean open(Context context, String link, String targetClass,
+                                Activity dispatcher, boolean baconReader) {
+        if (!isShareLink(link)) return false;
+        Context app = context == null ? Utils.getContext() : context.getApplicationContext();
+        if (app == null) return false;
+        Utils.runOnBackgroundThread(() -> {
+            String destination = null;
+            try {
+                String token = null;
+                try {
+                    token = getAccessToken(app);
+                } catch (RuntimeException ignored) {
+                    // The native account may not have been initialized on a cold launch.
+                }
+                destination = ShareLinkResolver.resolve(link, token);
+            } catch (Exception ignored) {
+                Logger.printDebug(() -> "Could not resolve Reddit share link");
+            }
+
+            boolean failed = destination == null;
+            String route;
+            if (failed) {
+                route = Uri.parse(link).buildUpon().fragment(FALLBACK).build().toString();
+            } else {
+                route = baconReader ? ShareLinkResolver.baconReaderPermalink(link, destination) : destination;
+            }
+            Intent replay = viewIntent(app, route, targetClass);
+            if (failed && baconReader) replay.putExtra(BACON_FORCE_BROWSER, true);
+            Utils.runOnMainThread(() -> {
+                if (dispatcher != null && dispatcher.isFinishing()) return;
+                try {
+                    if (dispatcher == null) {
+                        app.startActivity(replay.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    } else {
+                        dispatcher.startActivity(replay);
+                        // BaconReader's singleTask LinkDispatcher receives the replay as onNewIntent.
+                        // Its original processing method finishes it after starting the target.
+                        if (!baconReader) dispatcher.finish();
+                    }
+                } catch (ActivityNotFoundException ignored) {
+                    Logger.printDebug(() -> "Reddit share link activity unavailable");
+                }
+            });
+        });
+        return true;
+    }
+
+    private static Intent viewIntent(Context context, String link, String targetClass) {
+        return new Intent(Intent.ACTION_VIEW, Uri.parse(link))
+                .setClassName(context.getPackageName(), targetClass);
+    }
+
+    // Substituted by each app's patch. Read the current session on demand instead of retaining tokens.
+    private static String getAccessToken(Context context) {
+        return null;
+    }
+
+    private static String getRifCachedToken(Context context, Account account) {
+        return AccountManager.get(context).peekAuthToken(account, "redditisfun_oauth2");
+    }
+}
