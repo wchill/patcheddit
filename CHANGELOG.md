@@ -1,3 +1,12 @@
+## [2.5.1-dev.1](https://github.com/wchill/patcheddit/compare/v2.5.0...v2.5.1-dev.1) (2026-11-23)
+
+
+### Bug Fixes
+
+* **infinity:** Resolve crash due to unspecified color when opening Patcheddit settings ([f615b97](https://github.com/wchill/patcheddit/commit/f615b97d3f3870989e17a8d1cb36a3dc2d3e1d8f))
+* **rif:** Resolved crashing from inline video handling ([4cf9bb0](https://github.com/wchill/patcheddit/commit/4cf9bb0772f8c65ae328f434ec9b63167f2c5b42))
+* **rif:** Resolved HTTP 403 Forbidden on anonymous mode browsing ([4e8441a](https://github.com/wchill/patcheddit/commit/4e8441a2ae10f10a62e8e21a90c54c32162744d1))
+
 # [2.5.0](https://github.com/wchill/patcheddit/compare/v2.4.0...v2.5.0) (2026-11-22)
 
 
