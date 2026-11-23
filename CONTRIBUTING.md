@@ -112,13 +112,18 @@ those mappings.
 Both complete and review-required results are supported.
 Its report is saved to `build/boost-mapping-tests/recovery.json`.
 
-## Listing device tests
+## Listing and refresh-rate device tests
 
 On a disposable APK signed with the fixture key, run `RAllDeviceTest` with
 **Reddit API fixes** applied. Pass `--arg stock=baconreader` for BaconReader to
 exercise its Apache request path as well as OkHttp. The fixture preserves the
 query and headers and checks that unrelated routes are left alone without using
 the live Reddit service.
+
+Run `AdaptiveRefreshRateDeviceTest` with **Prefer high refresh rate** applied.
+It checks the settings switch and the Android window and view hints with the
+switch on, off, and back on. For Boost, pass
+`--arg preference=morphe_boost_prefer_high_refresh_rate`.
 
 ## Share links and native media device tests
 

@@ -18,6 +18,7 @@ In addition, patches for some apps contain additional features that were not pre
     * Opens Reddit subreddit share links (`/r/.../s/...`) in BaconReader, Boost, Joey, Relay, RIF, and Sync.
 * **Fix Redgifs API** restores playback in BaconReader, Joey, Relay, RIF, and Sync. Relay uses native media with sound instead of silent Reddit previews.
 * **Fix comment video links** restores native playback of Reddit comment videos in BaconReader, Boost, Joey, RIF, and Sync without relying on post metadata to contain the video. Relay provides this through **Fix Reddit media link handling**.
+* **Prefer high refresh rate** requests a higher display refresh rate in BaconReader, Boost, Joey, Relay, RIF, and Sync. The display and Android still determine the actual refresh rate.
 * **Fix escaped URLs** repairs links broken by backslashes in posts and comments in BaconReader, Boost, Infinity, Joey, Relay, RIF, and Sync. It is separate from **Reddit API fixes** and can be switched off under **Patcheddit > Links**.
 * **Fix broken markdown links** repairs user and subreddit links displayed with stray Markdown brackets in those clients, without changing code examples or ordinary links. It can be switched off under **Patcheddit > Links**.
 * **Fix swipe back transparency** shows the previous screen during swipe-back gestures in Sync and Joey on Android 11 and newer.

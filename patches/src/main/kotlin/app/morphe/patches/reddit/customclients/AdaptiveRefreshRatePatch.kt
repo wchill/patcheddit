@@ -55,3 +55,36 @@ internal fun adaptiveRefreshRatePatch(
         }
     }
 }
+
+private fun clientRefreshRatePatch(
+    extensionPatch: Patch,
+    compatible: Array<Compatibility>,
+    applicationType: String,
+) = adaptiveRefreshRatePatch(
+    extensionPatch = extensionPatch,
+    compatible = compatible,
+    applicationOnCreate = Fingerprint(
+        definingClass = applicationType,
+        name = "onCreate",
+        parameters = emptyList(),
+        returnType = "V",
+    ),
+    preferenceKey = "morphe_patch_prefer_high_refresh_rate",
+    description = "Requests a high display refresh rate on adaptive-refresh devices.",
+)
+
+val baconReaderRefreshRatePatch = clientRefreshRatePatch(
+    ExtensionPatches.BaconReader, AppCompatibility.BaconReader, "Lcom/onelouder/baconreader/BaconReader;",
+)
+val joeyRefreshRatePatch = clientRefreshRatePatch(
+    ExtensionPatches.Joey, AppCompatibility.JoeyForReddit, "Lo/o/joey/MyApplication;",
+)
+val relayRefreshRatePatch = clientRefreshRatePatch(
+    ExtensionPatches.Relay, AppCompatibility.Relay, "Lreddit/news/RelayApplication;",
+)
+val rifRefreshRatePatch = clientRefreshRatePatch(
+    ExtensionPatches.RIF, AppCompatibility.RedditIsFun, "Lcom/andrewshu/android/reddit/RedditIsFunApplication;",
+)
+val syncRefreshRatePatch = clientRefreshRatePatch(
+    ExtensionPatches.Sync, AppCompatibility.SyncForReddit, "Lcom/laurencedawson/reddit_sync/RedditApplication;",
+)
