@@ -17,6 +17,7 @@ import app.morphe.patches.reddit.customclients.legacySpoofClientPatch
 val redditApiPatch = redditApiPatch(
     spoofClientPatch,
     modifyLoginWebView,
+    guestListingsPatch,
     fixRedditApiLookups,
     fixFailedGalleryImagesPatch,
     fixMoreComments,

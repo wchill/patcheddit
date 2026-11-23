@@ -124,6 +124,10 @@ For another client's credentials, enter its client ID and matching redirect URI 
 
 ### Resolving login problems
 
+RIF shows `Forbidden` on the feed before I sign in
+
+* Repatch RIF with the latest **Reddit API fixes**. The patch lets RIF load public feeds and comment threads without signing in. You still need an account to vote, post, or access account-specific content.
+
 I am unable to select the username/password fields on the login page - my keyboard pops up and then disappears quickly
 
 * Switch your phone to landscape mode. There is a cookie banner that needs to be dismissed, but it is bugged and only shows up on landscape mode.

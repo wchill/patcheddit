@@ -114,6 +114,11 @@ By default, matching PKCS12 test keys are read from
 `test/.cache/device-signers/PACKAGE.p12`; use `--keystore` to override.
 These fixtures do not establish live-host availability or older Android decoder behavior.
 
+The signed-out feed regression uses the same runner and APKs with
+`--suite app.patcheddit.fixture.RifGuestListingsDeviceTest` and
+`--source test/device/RifGuestListingsDeviceTest.java`; no media assets are
+needed. It uses synthetic responses unless you pass `--arg live=true`.
+
 ## Boost inline-media device tests
 
 With the patched Boost 1.14.4 APK installed and its matching test key available:
