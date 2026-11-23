@@ -77,6 +77,7 @@ public final class RifInlineMediaDeviceTest {
                 return null;
             });
             transport(context);
+            videoRowDetach();
             contracts();
             nativeBodies();
             linksAndLayout();
@@ -509,6 +510,37 @@ public final class RifInlineMediaDeviceTest {
         set("morphe_inline_keep_urls", true);
     }
 
+    private static void videoRowDetach() throws Exception {
+        LinearLayout host = onMain(() -> {
+            LinearLayout container = new LinearLayout(activity);
+            container.setOrientation(LinearLayout.VERTICAL);
+            rows.addView(container);
+            return container;
+        });
+        TextView body = row(host, link("https://v.redd.it/fixture"), 320, false);
+        await(() -> onMain(() -> get(firstSlot(body), "video") != null), "Video row did not bind");
+        onMain(() -> { invoke(get(firstSlot(body), "video"), "tap"); return null; });
+        await(() -> onMain(() -> {
+            Object player = get(get(firstSlot(body), "video"), "player");
+            return player != null && (Integer) nativeCall("state", player) == 3
+                    && (Long) nativeCall("position", player) > 100;
+        }), "Video row did not play before detaching");
+
+        onMain(() -> {
+            Object video = get(firstSlot(body), "video");
+            check(host.getChildCount() == 2, "Video overlay was not attached alongside its body");
+            // RecyclerView detaches the containing row, not the body on its own.
+            rows.removeView(host);
+            check(get(video, "player") == null, "Row detach did not release playback immediately");
+            check(!((java.util.Set<?>) getStatic("InlineVideo", "PLAYERS")).contains(video),
+                    "Detached player still counts towards the decoder limit");
+            rows.addView(host);
+            return null;
+        });
+        await(() -> onMain(() -> host.getChildCount() == 1), "Reattached row retained a stale overlay");
+        onMain(() -> { rows.removeView(host); return null; });
+    }
+
     private static void settings(Context context) throws Exception {
         Activity settings = PatchedditInstrumentation.instance.startActivitySync(new Intent()
                 .setClassName(context, "app.morphe.extension.shared.settings.MorpheSettingsActivity")
@@ -557,12 +589,15 @@ public final class RifInlineMediaDeviceTest {
         return text;
     }
     private static TextView row(CharSequence text, int width, boolean selectable) throws Exception {
+        return row(rows, text, width, selectable);
+    }
+    private static TextView row(LinearLayout container, CharSequence text, int width, boolean selectable) throws Exception {
         return onMain(() -> {
             TextView view = new TextView(activity);
             view.setTextSize(16);
             view.setTextIsSelectable(selectable);
             view.setOnClickListener(ignored -> selections++);
-            rows.addView(view, new LinearLayout.LayoutParams(width, -2));
+            container.addView(view, new LinearLayout.LayoutParams(width, -2));
             bind(view, text);
             view.setMovementMethod((android.text.method.MovementMethod) loader.loadClass(
                     activity.getPackageName().endsWith("donation") ? "o2.j0" : "n2.j0")

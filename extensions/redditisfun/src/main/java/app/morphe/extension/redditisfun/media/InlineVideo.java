@@ -11,6 +11,8 @@ import android.graphics.Bitmap;
 import android.graphics.RectF;
 import android.media.AudioManager;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 import android.util.LruCache;
@@ -26,6 +28,7 @@ import android.widget.TextView;
 import java.util.LinkedHashSet;
 
 public final class InlineVideo implements AudioManager.OnAudioFocusChangeListener {
+    private static final Handler MAIN = new Handler(Looper.getMainLooper());
     private static final LinkedHashSet<InlineVideo> PLAYERS = new LinkedHashSet<>();
     private static final LruCache<String, State> STATES = new LruCache<>(128);
     private static final LruCache<String, Frame> FRAMES = new LruCache<String, Frame>(2 * 1024 * 1024) {
@@ -271,6 +274,10 @@ public final class InlineVideo implements AudioManager.OnAudioFocusChangeListene
     }
 
     void release() {
+        release(false);
+    }
+
+    void release(boolean deferOverlayRemoval) {
         if (player == null) return;
         TextView owner = slot.binding.owner.get();
         if (owner != null) owner.removeCallbacks(tick);
@@ -292,11 +299,25 @@ public final class InlineVideo implements AudioManager.OnAudioFocusChangeListene
         mute();
         NativePlayer.release(player);
         player = null;
-        if (parent != null && overlay != null) parent.removeView(overlay);
+        ViewGroup oldParent = parent;
+        View oldOverlay = overlay;
+        parent = null;
         overlay = null;
         controls = actions = null;
         texture = null;
+        sound = null;
         PLAYERS.remove(this);
+        if (oldParent != null && oldOverlay != null) {
+            if (deferOverlayRemoval) {
+                // Detach dispatch is still iterating the parent's children. Use the main looper
+                // rather than View.post so cleanup runs even if the parent never reattaches.
+                MAIN.post(() -> {
+                    if (oldOverlay.getParent() == oldParent) oldParent.removeView(oldOverlay);
+                });
+            } else {
+                oldParent.removeView(oldOverlay);
+            }
+        }
     }
 
     static Bitmap frame(String key) {
