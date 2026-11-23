@@ -123,6 +123,11 @@ dispatch and fallback without using a Reddit account.
 with **Fix comment video links** applied. Pass `--arg stock=baconreader` for a
 package-renamed BaconReader fixture.
 
+With **Reddit API fixes** applied to Relay, run `RelayMediaLinksDeviceTest`
+with `--arg stock=gallery` for Free or `--arg stock=gallery-pro` for Pro and
+the media assets under `test/device/media/`. This checks gallery repair and
+native GIF decoding without requiring **Fix Reddit media link handling**.
+
 ## RIF inline-media device tests
 
 Install the patched free and Platinum APKs, signed with the matching test keys.

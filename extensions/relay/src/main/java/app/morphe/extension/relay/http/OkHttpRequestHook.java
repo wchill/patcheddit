@@ -28,8 +28,7 @@ public final class OkHttpRequestHook extends BaseOkHttpRequestHook {
 
     @Override
     protected List<Interceptor> getInterceptors() {
-        // Relay's GIF viewer requires an MP4 source that failed metadata cannot provide.
-        return Arrays.asList(new EscapedUrlsPatch(), new SubredditAboutResponsePatch(), new FailedGalleryMetadataPatch(false),
+        return Arrays.asList(new EscapedUrlsPatch(), new SubredditAboutResponsePatch(), new FailedGalleryMetadataPatch(),
                 new RedditInfoResponsePatch(),
                 new MoreChildrenResponsePatch(), new FixRedgifsApiPatch());
     }
