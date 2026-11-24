@@ -216,6 +216,9 @@ With **Reddit API fixes** applied to Relay, run `RelayMediaLinksDeviceTest`
 with `--arg stock=gallery` for Free or `--arg stock=gallery-pro` for Pro and
 the media assets under `test/device/media/`. This checks gallery repair and
 native GIF decoding without requiring **Fix Reddit media link handling**.
+With **Inline media** applied, include `--source test/device/RelayInlineMediaDeviceTest.java`
+and pass `--arg inline=true` (without `stock=gallery` or `stock=gallery-pro`)
+to check preview sizing, comment taps, and scroll anchoring.
 
 ## RIF inline-media device tests
 

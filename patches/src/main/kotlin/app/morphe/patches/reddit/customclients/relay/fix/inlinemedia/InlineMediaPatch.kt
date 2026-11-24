@@ -18,6 +18,7 @@ import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patches.reddit.customclients.relay.fix.medialinks.mediaLinksPatch
+import app.morphe.patches.reddit.customclients.wrapMorpheHook
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.MutableMethodImplementation
@@ -37,6 +38,8 @@ private const val MANAGER = "Lcom/bumptech/glide/RequestManager;"
 private const val TARGET = "Lcom/bumptech/glide/request/target/Target;"
 private const val OPTIONS = "Lcom/bumptech/glide/request/BaseRequestOptions;"
 private const val DRAWABLE = "Landroid/graphics/drawable/Drawable;"
+private const val ACTIVE_TEXT = "Lreddit/news/listings/common/views/ActiveTextView2;"
+private const val MOTION = "Landroid/view/MotionEvent;"
 
 private val commentBodies = Fingerprint(
     definingClass = "Lreddit/news/listings/comments/delegates/base/CommentAdapterDelegateBase;",
@@ -155,6 +158,23 @@ val inlineMediaPatch = morpheBytecodePatch(
             (it as? ReferenceInstruction)?.reference as? MethodReference
         }.single { it.definingClass == TARGET }
         mutableClassDefBy(INLINE.dropLast(1) + "\$PreviewTarget;").methods.single { it.name == "failed" }.name = failure.name
+
+        // Leave Relay's GestureDetector in charge of distinguishing a tap from a scroll.
+        Fingerprint(definingClass = ACTIVE_TEXT, parameters = listOf(MOTION), returnType = "Z",
+            strings = listOf("isOverLink: x-")).wrapMorpheHook(before = """
+                invoke-static {p0, p1}, $INLINE->outsidePreviewTarget($TEXT$MOTION)Z
+                move-result v0
+                if-eqz v0, :morphe_skip_before
+                const/4 v0, 0x0
+                return v0
+            """)
+        Fingerprint(definingClass = ACTIVE_TEXT,
+            parameters = listOf("Landroid/text/Spanned;", "Landroid/text/style/ClickableSpan;"),
+            returnType = "V", strings = listOf("onDraw: ")).wrapMorpheHook(before = """
+                instance-of v0, p2, ${INLINE.dropLast(1)}${'$'}PreviewLink;
+                if-eqz v0, :morphe_skip_before
+                return-void
+            """)
 
         // Only body setters are hooked; titles, author flair, and award spans stay native.
         for (match in commentBodies.matchAll()) {

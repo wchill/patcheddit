@@ -14,6 +14,7 @@ import android.graphics.drawable.Animatable;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.text.Spanned;
+import android.text.style.URLSpan;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,7 @@ public final class RelayInlineMediaDeviceTest {
     private static Object adapter, holder;
     private static TextView comment;
 
-    private record RowLayout(TextView body, CharSequence text, int height, int top) {}
+    private record RowLayout(TextView body, int height, int top) {}
 
     public static void verify(Context context, Activity host) throws Exception {
         loader = context.getClassLoader();
@@ -123,15 +124,20 @@ public final class RelayInlineMediaDeviceTest {
                     clicked[0] = (String) args[0]; return null;
                 });
                 comment.getClass().getMethod("setLinkClickedListener", listener).invoke(comment, capture);
-                int position = rendered.getSpanStart(previews.get(0));
-                int line = comment.getLayout().getLineForOffset(position);
-                float y = comment.getLayout().getLineBottom(line) - 10 + comment.getTotalPaddingTop();
+                Rect imageBounds = previewBounds(comment, previews.get(0));
+                Field highlight = Arrays.stream(type("reddit.news.listings.common.views.ActiveTextView2").getDeclaredFields())
+                        .filter(field -> field.getType() == ArrayList.class).findFirst().orElseThrow();
+                highlight.setAccessible(true);
                 long now = SystemClock.uptimeMillis();
-                for (int action : new int[]{MotionEvent.ACTION_DOWN, MotionEvent.ACTION_UP}) {
-                    MotionEvent event = MotionEvent.obtain(now, now + 30, action, comment.getTotalPaddingLeft() + 10, y, 0);
-                    comment.dispatchTouchEvent(event);
-                    event.recycle();
-                }
+                touch(comment, now, MotionEvent.ACTION_DOWN, imageBounds.centerX(), imageBounds.centerY());
+                check(clicked[0] == null && ((List<?>) highlight.get(comment)).isEmpty(),
+                        "Starting a scroll on the preview opened or highlighted it");
+                touch(comment, now, MotionEvent.ACTION_MOVE, imageBounds.centerX(), imageBounds.top);
+                touch(comment, now, MotionEvent.ACTION_UP, imageBounds.centerX(), imageBounds.top);
+                check(clicked[0] == null, "Dragging across a preview opened the viewer");
+                tap(comment, imageBounds.left + imageBounds.width() / 8, imageBounds.centerY());
+                check(clicked[0] == null, "Tapping the image edge opened the viewer");
+                tap(comment, imageBounds.centerX(), imageBounds.centerY());
                 check(image.equals(clicked[0]), "Inline image did not retain native link taps");
                 check(prefs.edit().putBoolean(KEEP, false).commit(), "Could not change URL visibility");
                 return null;
@@ -175,10 +181,10 @@ public final class RelayInlineMediaDeviceTest {
             String corrupt = URL + "corrupt.png" + QUERY;
             onMain(() -> { bind("<p>" + link(corrupt, corrupt) + "</p>"); return null; });
             await(() -> onMain(() -> {
-                List<Object> previews = previews(comment);
-                return previews.size() == 1 && (Boolean) field(previews.get(0), "failed")
-                        && comment.getText().toString().contains(corrupt);
-            }), "Failed preview did not expose a link without removing its reserved space");
+                Spanned text = (Spanned) comment.getText();
+                return previews(comment).isEmpty() && Arrays.stream(text.getSpans(0, text.length(), URLSpan.class))
+                        .anyMatch(link -> link.getURL().equals(corrupt));
+            }), "Failed preview did not become a regular link");
             onMain(() -> { bind("<p>" + link(gif, gif) + "</p>"); return null; });
             await(() -> onMain(() -> loaded(comment) == 1), "Animated preview did not reload");
             Object preview = onMain(() -> previews(comment).get(0));
@@ -260,7 +266,11 @@ public final class RelayInlineMediaDeviceTest {
         var adapter = (ArrayAdapter<?>) constructor.newInstance(fragment, null, null,
                 resource(context, "commentsrow", "layout"),
                 comments, prefs, false, null);
-        ListView list = new ListView(activity);
+        Class<?> master = type("reddit.news.views.MasterDetailView");
+        Object detail = master.getConstructor(Context.class, android.util.AttributeSet.class).newInstance(activity, null);
+        ListView list = (ListView) type("reddit.news.views.MyCommentsListView")
+                .getConstructor(Context.class, android.util.AttributeSet.class).newInstance(activity, null);
+        list.getClass().getMethod("setMasterDetailView", master).invoke(list, detail);
         list.setAdapter(adapter);
         activity.setContentView(list);
         return list;
@@ -300,18 +310,68 @@ public final class RelayInlineMediaDeviceTest {
         RowLayout before = onMain(() -> rowLayout(list, bodyId, imageRow));
         check(before != null && onMain(() -> loaded(before.body()) == 0), "Delayed image was already decoded");
         RelayMediaLinksDeviceTest.STABLE_IMAGE.countDown();
-        await(() -> onMain(() -> loaded(before.body()) == 1), "Delayed image did not decode");
-        onMain(() -> {
+        await(() -> onMain(() -> {
             RowLayout after = rowLayout(list, bodyId, imageRow);
-            check(after != null && after.height() == before.height() && after.top() == before.top()
-                            && after.text() == before.text(),
-                    "Decoding an image changed the thread anchor, row height, or comment text");
-            Drawable drawable = (Drawable) field(previews(after.body()).get(0), "drawable");
-            var bounds = drawable.getBounds();
-            check(bounds.width() > 0 && Math.abs(bounds.width() - 2 * bounds.height()) <= 2,
-                    "The stable preview frame stretched the image");
+            return after != null && after.height() < before.height() && loaded(after.body()) == 1;
+        }), "A loaded landscape image did not remove its extra space");
+        RowLayout fitted = onMain(() -> {
+            RowLayout after = rowLayout(list, bodyId, imageRow);
+            check(after.top() == before.top(), "Fitting a landscape preview moved the thread anchor");
+            Object preview = previews(after.body()).get(0);
+            Drawable drawable = (Drawable) field(preview, "drawable");
+            Rect bounds = previewBounds(after.body(), preview);
+            check(bounds.width() > 0 && Math.abs(bounds.width() - 2 * bounds.height()) <= 2
+                            && bounds.height() == drawable.getBounds().height(),
+                    "The landscape preview line was taller than the actual image");
+            return after;
+        });
+        int[] rowTaps = {0};
+        onMain(() -> {
+            list.setOnItemClickListener((parent, row, position, id) -> {
+                if (position == imageRow) rowTaps[0]++;
+            });
+            Rect bounds = previewBounds(fitted.body(), previews(fitted.body()).get(0));
+            list.offsetDescendantRectToMyCoords(fitted.body(), bounds);
+            tap(list, bounds.left + bounds.width() / 8, bounds.centerY());
             return null;
         });
+        await(() -> onMain(() -> rowTaps[0] == 1), "Tapping the image edge did not reach the comment row");
+
+        ListView rebound = onMain(() -> {
+            ListView result = thread(URL + "stable.jpeg" + QUERY, prefs, context, imageRow);
+            result.setSelectionFromTop(imageRow, offset);
+            return result;
+        });
+        await(() -> onMain(() -> rowLayout(rebound, bodyId, imageRow) != null), "Image row was not rebound");
+        RowLayout reboundRow = onMain(() -> rowLayout(rebound, bodyId, imageRow));
+        check(reboundRow.height() == fitted.height() && reboundRow.top() == fitted.top(),
+                "A rebound image forgot its fitted dimensions");
+    }
+
+    private static Rect previewBounds(TextView view, Object preview) throws Exception {
+        var layout = view.getLayout();
+        var text = (Spanned) view.getText();
+        int line = layout.getLineForOffset(text.getSpanStart(preview));
+        int left = view.getTotalPaddingLeft() + (int) layout.getLineLeft(line);
+        int top = view.getTotalPaddingTop() + layout.getLineTop(line);
+        int bottom = view.getTotalPaddingTop() + layout.getLineBaseline(line);
+        Drawable drawable = (Drawable) field(preview, "drawable");
+        return new Rect(left, top, left + drawable.getBounds().width(), bottom);
+    }
+
+    private static void tap(View view, float x, float y) {
+        long down = SystemClock.uptimeMillis();
+        touch(view, down, MotionEvent.ACTION_DOWN, x, y);
+        touch(view, down, MotionEvent.ACTION_UP, x, y);
+    }
+
+    private static void touch(View view, long down, int action, float x, float y) {
+        MotionEvent event = MotionEvent.obtain(down, SystemClock.uptimeMillis(), action, x, y, 0);
+        try {
+            view.dispatchTouchEvent(event);
+        } finally {
+            event.recycle();
+        }
     }
 
     private static RowLayout rowLayout(ListView list, int bodyId, int position) {
@@ -320,7 +380,7 @@ public final class RelayInlineMediaDeviceTest {
         View row = list.getChildAt(index);
         TextView body = row.findViewById(bodyId);
         return body == null || body.getHeight() == 0 ? null
-                : new RowLayout(body, body.getText(), row.getHeight(), row.getTop());
+                : new RowLayout(body, row.getHeight(), row.getTop());
     }
 
     private static String describeBody(TextView body) throws Exception {

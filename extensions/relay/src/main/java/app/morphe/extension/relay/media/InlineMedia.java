@@ -17,13 +17,13 @@ import android.os.SystemClock;
 import android.text.Layout;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.text.TextPaint;
-import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.TypefaceSpan;
 import android.text.style.URLSpan;
 import android.util.Log;
+import android.util.LruCache;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.TextView;
@@ -48,10 +48,40 @@ public final class InlineMedia {
     private static final Pattern GIF = Pattern.compile("!\\[gif]\\(giphy\\|([A-Za-z0-9]{1,64})\\)");
     private static final Handler MAIN = new Handler(Looper.getMainLooper());
     private static final long HIDDEN_RELEASE_MS = 250;
+    private static final LruCache<String, Aspect> ASPECTS = new LruCache<>(256);
     // Sessions and native targets hold only weak references to these view keys.
     private static final Map<TextView, Session> SESSIONS = new WeakHashMap<>();
 
     private InlineMedia() {}
+
+    private record Aspect(int width, int height) {}
+
+    @Keep
+    public static final class PreviewLink extends URLSpan {
+        PreviewLink(String url) { super(url); }
+    }
+
+    public static boolean outsidePreviewTarget(TextView view, MotionEvent event) {
+        Session session = SESSIONS.get(view);
+        Layout layout = view.getLayout();
+        if (session == null || !session.current() || !session.enabled || layout == null) return false;
+        float x = event.getX() - view.getTotalPaddingLeft() + view.getScrollX();
+        float y = event.getY() - view.getTotalPaddingTop() + view.getScrollY();
+        int line = layout.getLineForVertical((int) y);
+        Spanned text = (Spanned) session.rendered;
+        int start = layout.getLineStart(line), end = layout.getLineEnd(line);
+        for (Preview preview : text.getSpans(start, end, Preview.class)) {
+            int position = text.getSpanStart(preview);
+            if (position < start || position >= end) continue;
+            float localX = x - layout.getLineLeft(line);
+            int height = preview.height(), width = preview.displayWidth();
+            float localY = y - (layout.getLineBaseline(line) - height);
+            // Reserve the outside of the preview for the comment, not the image viewer.
+            return preview.drawable == null || localX < width * 0.25f || localX >= width * 0.75f
+                    || localY < height * 0.25f || localY >= height * 0.75f;
+        }
+        return false;
+    }
 
     public static void setText(TextView view, CharSequence text) {
         boolean enabled = NativeInlineMedia.isIncluded();
@@ -105,16 +135,16 @@ public final class InlineMedia {
         final int frameHeight;
         final Rect visible = new Rect();
         final Runnable release = this::releaseImages;
+        final Runnable resize = this::applyMediaSizes;
         CharSequence rendered;
         ViewTreeObserver observer;
-        boolean closed, rendering, keep, releasePending, enabled = true;
+        boolean closed, rendering, keep, releasePending, resizePending, enabled = true;
         int width;
 
         Session(TextView view, Spanned original) {
             owner = new WeakReference<>(view);
             this.original = original;
             source = source(original);
-            // A stable slot keeps ListView's scroll anchor even before the drawable is decoded.
             frameHeight = Math.round(320 * view.getResources().getDisplayMetrics().density);
             width = Math.max(1, availableWidth(view));
             URLSpan[] links = source.getSpans(0, source.length(), URLSpan.class);
@@ -160,15 +190,41 @@ public final class InlineMedia {
                 if (result.length() > 0 && result.charAt(result.length() - 1) != '\n') result.append('\n');
                 int position = result.length();
                 result.append(image.failed ? image.link : "\uFFFC");
-                result.setSpan(image, position, result.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                result.setSpan(new URLSpan(image.url), position, result.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                result.append('\n');
+                if (!image.failed) {
+                    result.setSpan(image, position, result.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+                result.setSpan(image.failed ? new URLSpan(image.url) : new PreviewLink(image.url),
+                        position, result.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                if (image.end < source.length() && source.charAt(image.end) != '\n') result.append('\n');
                 cursor = image.end;
             }
             result.append(source, cursor, source.length());
             view.setText(result, TextView.BufferType.SPANNABLE);
             rendered = view.getText();
             rendering = false;
+        }
+
+        void requestMediaResize() {
+            TextView view = owner.get();
+            if (view == null || resizePending) return;
+            resizePending = true;
+            view.postOnAnimation(resize);
+        }
+
+        private void applyMediaSizes() {
+            resizePending = false;
+            if (!current() || !enabled) return;
+            boolean changed = false;
+            for (Preview image : images) {
+                if (image.failed) {
+                    changed |= ((Spanned) rendered).getSpanStart(image) >= 0;
+                } else if (image.aspect == null) {
+                    int oldHeight = image.height();
+                    image.aspect = ASPECTS.get(image.url);
+                    changed |= image.height() != oldHeight;
+                }
+            }
+            if (changed) render();
         }
 
         @Override public void onViewAttachedToWindow(View view) {
@@ -234,9 +290,9 @@ public final class InlineMedia {
             for (Preview image : images) {
                 int position = ((Spanned) rendered).getSpanStart(image);
                 if (position < 0) continue;
-                int top = view.getTotalPaddingTop()
-                        + layout.getLineTop(layout.getLineForOffset(position));
-                int bottom = top + frameHeight;
+                int bottom = view.getTotalPaddingTop()
+                        + layout.getLineBaseline(layout.getLineForOffset(position));
+                int top = bottom - image.height();
                 image.setVisible(top < visible.bottom && bottom > visible.top);
                 if (top < visible.bottom + frameHeight && bottom > visible.top - frameHeight) {
                     if (!image.active && !image.failed) image.load(view);
@@ -253,6 +309,7 @@ public final class InlineMedia {
             TextView view = owner.get();
             if (view != null) {
                 view.removeOnAttachStateChangeListener(this);
+                view.removeCallbacks(resize);
                 if (SESSIONS.get(view) == this) SESSIONS.remove(view);
             }
             if (observer != null && observer.isAlive()) observer.removeOnPreDrawListener(this);
@@ -267,12 +324,14 @@ public final class InlineMedia {
         final Session session;
         final int start, end;
         final String link, url;
+        Aspect aspect;
         Drawable drawable;
         PreviewTarget target;
         boolean active, failed, visible;
 
         Preview(Session session, int start, int end, String link, String url) {
             this.session = session; this.start = start; this.end = end; this.link = link; this.url = url;
+            aspect = ASPECTS.get(url);
         }
 
         int width() {
@@ -281,6 +340,16 @@ public final class InlineMedia {
                 margin += span.getLeadingMargin(true);
             }
             return Math.max(1, session.width - margin);
+        }
+
+        int height() {
+            return aspect == null ? session.frameHeight : Math.max(1, Math.min(session.frameHeight,
+                    Math.round(width() * ((float) aspect.height / aspect.width))));
+        }
+
+        int displayWidth() {
+            return aspect == null ? width() : Math.max(1, Math.min(width(),
+                    Math.round(height() * ((float) aspect.width / aspect.height))));
         }
 
         void load(TextView view) {
@@ -321,12 +390,18 @@ public final class InlineMedia {
             drop();
             drawable = value;
             value.setCallback(this);
+            if (aspect == null && value.getIntrinsicWidth() > 0 && value.getIntrinsicHeight() > 0) {
+                if (ASPECTS.get(url) == null) {
+                    ASPECTS.put(url, new Aspect(value.getIntrinsicWidth(), value.getIntrinsicHeight()));
+                }
+                session.requestMediaResize();
+            }
             updateAnimation();
             invalidateDrawable(value);
         }
         @Override public int getSize(Paint paint, CharSequence text, int start, int end, Paint.FontMetricsInt metrics) {
             if (metrics != null) {
-                metrics.top = metrics.ascent = -session.frameHeight;
+                metrics.top = metrics.ascent = -height();
                 metrics.bottom = metrics.descent = 0;
             }
             return width();
@@ -334,19 +409,11 @@ public final class InlineMedia {
         @Override public void draw(Canvas canvas, CharSequence text, int start, int end,
                                    float x, int top, int y, int bottom, Paint paint) {
             int save = canvas.save();
-            int width = width(), height = session.frameHeight;
+            int width = displayWidth(), height = height();
             canvas.translate(x, y - height);
-            if (drawable != null) {
-                int w = Math.max(1, drawable.getIntrinsicWidth()), h = Math.max(1, drawable.getIntrinsicHeight());
-                float scale = Math.min((float) width / w, (float) height / h);
-                drawable.setBounds(0, 0, Math.max(1, Math.round(w * scale)), Math.max(1, Math.round(h * scale)));
+            if (drawable != null && aspect != null) {
+                drawable.setBounds(0, 0, width, height);
                 drawable.draw(canvas);
-            } else if (failed) {
-                TextPaint linkPaint = new TextPaint(paint);
-                TextView view = session.owner.get();
-                if (view != null) linkPaint.setColor(view.getLinkTextColors().getDefaultColor());
-                CharSequence label = TextUtils.ellipsize(link, linkPaint, width, TextUtils.TruncateAt.END);
-                canvas.drawText(label, 0, label.length(), 0, -linkPaint.ascent(), linkPaint);
             } else {
                 int color = paint.getColor();
                 paint.setColor(0x22808080);
@@ -379,7 +446,7 @@ public final class InlineMedia {
             if (preview.target != this || !preview.active || !preview.session.current()) return;
             preview.failed = true;
             Log.w("RelayInlineMedia", "Could not load inline media");
-            preview.session.render();
+            preview.session.requestMediaResize();
         }
     }
 }
