@@ -9,7 +9,7 @@ dependencies {
     compileOnly(project(":extensions:boost:stub"))
     compileOnly(libs.annotation)
     compileOnly(libs.okhttp.boost)
-    implementation(libs.jackson.databind.boost)
+    implementation(project(":extensions:shared:library"))
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
     coreLibraryDesugaring(libs.desugar.jdk.libs)
@@ -18,12 +18,6 @@ dependencies {
 }
 
 android {
-    buildTypes.getByName("release") {
-        proguardFiles("proguard-json.pro")
-    }
-    sourceSets.getByName("main").java.directories.add(
-        project(":extensions:shared:library").file("src/main/java").absolutePath
-    )
     defaultConfig {
         minSdk = 26
     }

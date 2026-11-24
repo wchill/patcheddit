@@ -28,6 +28,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okio.BufferedSource;
 
+import static app.morphe.extension.shared.requests.RedditRouteFixture.included;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -46,7 +47,7 @@ public class FailedGalleryMetadataPatchTest {
             return existing.contains(url)
                     ? FailedGalleryMetadataPatch.Probe.FOUND : FailedGalleryMetadataPatch.Probe.MISSING;
         });
-        return new OkHttpClient.Builder().addInterceptor(patch::doIntercept)
+        return new OkHttpClient.Builder().addInterceptor(included(patch))
                 .addInterceptor(chain -> json(chain.request(), body)).build();
     }
 
@@ -56,7 +57,7 @@ public class FailedGalleryMetadataPatchTest {
      */
     private OkHttpClient liveClient(String body, Interceptor images) {
         return new OkHttpClient.Builder()
-                .addInterceptor(new FailedGalleryMetadataPatch()::doIntercept)
+                .addInterceptor(included(new FailedGalleryMetadataPatch()))
                 .addInterceptor(chain -> {
                     Request request = chain.request();
                     if (request.url().host().equals("i.redd.it")) {
@@ -99,6 +100,21 @@ public class FailedGalleryMetadataPatchTest {
 
     private static JSONObject galleryPost(String thumbnail, JSONObject metadata, String... ids) throws Exception {
         return listing(postData(thumbnail, metadata, ids));
+    }
+
+    @Test
+    public void sizedGalleryRepairSuppliesTheVerifiedDimensionsRequiredByInfinity() throws Exception {
+        String body = galleryPost("", failedMetadata("first", "missing"), "first", "missing").toString();
+        String repaired = FailedGalleryMetadataPatch.repairSizedGallery(body, (url, deadline) ->
+                url.equals("https://i.redd.it/first.gif")
+                        ? new FailedGalleryMetadataPatch.ImageSize(640, 480) : null);
+        JSONObject metadata = new JSONObject(repaired).getJSONObject("data").getJSONArray("children")
+                .getJSONObject(0).getJSONObject("data").getJSONObject("media_metadata");
+        JSONObject source = metadata.getJSONObject("first").getJSONObject("s");
+        assertEquals(640, source.getInt("x"));
+        assertEquals(480, source.getInt("y"));
+        assertEquals("https://i.redd.it/first.gif", source.getString("gif"));
+        assertEquals("failed", metadata.getJSONObject("missing").getString("status"));
     }
 
     private static Response fetchResponse(OkHttpClient client, String path) throws Exception {
@@ -184,7 +200,7 @@ public class FailedGalleryMetadataPatchTest {
             return candidate.endsWith(".gif") ? FailedGalleryMetadataPatch.Probe.FOUND
                     : FailedGalleryMetadataPatch.Probe.MISSING;
         }, false);
-        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(patch::doIntercept)
+        OkHttpClient client = new OkHttpClient.Builder().addInterceptor(included(patch))
                 .addInterceptor(chain -> json(chain.request(), body)).build();
         JSONObject entry = meta(fetch(client, "/comments/post")).getJSONObject("aaa");
         assertEquals("failed", entry.getString("status"));
@@ -276,7 +292,7 @@ public class FailedGalleryMetadataPatchTest {
             }
         };
         OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new FailedGalleryMetadataPatch()::doIntercept)
+                .addInterceptor(included(new FailedGalleryMetadataPatch()))
                 .addInterceptor(chain -> {
                     if (chain.request().url().host().equals("i.redd.it")) {
                         assertTrue("Original network body is still open", closed.get());
@@ -292,7 +308,7 @@ public class FailedGalleryMetadataPatchTest {
     public void preservesOriginalBytesAndHeadersWhenAllProbesMiss() throws Exception {
         String body = galleryPost("default", failedMetadata("aaa"), "aaa").toString(2);
         OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new FailedGalleryMetadataPatch()::doIntercept)
+                .addInterceptor(included(new FailedGalleryMetadataPatch()))
                 .addInterceptor(chain -> {
                     if (chain.request().url().host().equals("i.redd.it")) {
                         return status(chain.request(), 404);
@@ -358,12 +374,12 @@ public class FailedGalleryMetadataPatchTest {
                 .put(new JSONObject().put("kind", "Listing").put("data",
                         new JSONObject().put("children", new JSONArray())));
         OkHttpClient client = new OkHttpClient.Builder()
-                .addInterceptor(new FailedGalleryMetadataPatch(url -> {
+                .addInterceptor(included(new FailedGalleryMetadataPatch(url -> {
                     probed.add(url);
                     return url.endsWith(".jpg")
                             ? FailedGalleryMetadataPatch.Probe.FOUND : FailedGalleryMetadataPatch.Probe.MISSING;
-                })::doIntercept)
-                .addInterceptor(new RedditInfoResponsePatch(new RedditCommentContext(100))::doIntercept)
+                })))
+                .addInterceptor(included(new RedditInfoResponsePatch(new RedditCommentContext(100))))
                 .addInterceptor(chain -> {
                     Request request = chain.request();
                     if (request.url().encodedPath().contains("/api/info")) {
@@ -394,12 +410,12 @@ public class FailedGalleryMetadataPatchTest {
                     : FailedGalleryMetadataPatch.Probe.MISSING;
         };
         long deadline = System.nanoTime() + java.util.concurrent.TimeUnit.SECONDS.toNanos(6);
-        assertEquals(body, FailedGalleryMetadataPatch.repairLegacyBody(body,
+        assertEquals(body, FailedGalleryMetadataPatch.repairApacheBody(body,
                 "https://oauth.reddit.com/best", 200, "application/json", prober, deadline));
-        assertEquals(body, FailedGalleryMetadataPatch.repairLegacyBody(body,
+        assertEquals(body, FailedGalleryMetadataPatch.repairApacheBody(body,
                 "https://oauth.reddit.com/comments/post", 403, "application/json", prober, deadline));
         assertTrue(probed.isEmpty());
-        String repaired = FailedGalleryMetadataPatch.repairLegacyBody(body,
+        String repaired = FailedGalleryMetadataPatch.repairApacheBody(body,
                 "https://oauth.reddit.com/comments/post", 200, "application/json", prober, deadline);
         assertEquals("https://i.redd.it/aaa.png", url(meta(new JSONObject(repaired)), "aaa"));
         assertEquals("https://i.redd.it/aaa.png", meta(new JSONObject(repaired)).getJSONObject("aaa")

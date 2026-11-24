@@ -13,8 +13,6 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.RequestManager;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rubenmayayo.reddit.models.reddit.CommentModel;
 import com.rubenmayayo.reddit.models.reddit.SubmissionModel;
 import com.rubenmayayo.reddit.ui.adapters.CommentViewHolder;
@@ -27,6 +25,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.IdentityHashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,17 +34,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import app.morphe.extension.boost.api.CommentMenuListener;
-import app.morphe.extension.boost.api.NativeComment;
-import app.morphe.extension.boost.api.NativeJsonMapper;
-import app.morphe.extension.boost.api.NativeJsonModel;
-import app.morphe.extension.boost.api.NativeJsonNode;
-import app.morphe.extension.boost.api.NativeSubmission;
 import app.morphe.extension.boost.api.RedditJraw;
-import app.morphe.extension.boost.http.HttpUtils;
 import app.morphe.extension.boost.navigation.BoostNativeListings;
 import app.morphe.extension.boost.utils.BoostUndeleteSettings;
-import app.morphe.extension.boost.utils.Emojis;
-import app.morphe.extension.boost.utils.LoggingUtils;
+import app.morphe.extension.shared.archive.HttpUtils;
+import app.morphe.extension.shared.debug.LoggingUtils;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.JsonNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.ObjectNode;
 
 public final class ArcticShiftRetry {
     private static final Handler main = new Handler(Looper.getMainLooper());
@@ -63,9 +58,8 @@ public final class ArcticShiftRetry {
     }
 
     public static String retryJson(Object source) {
-        NativeJsonNode data = ((NativeJsonModel) source).dataNode();
         // Do not serialize reply subtrees into every ancestor's snapshot.
-        return ArchiveRecoveryState.snapshot(data.fields());
+        return ArchiveRecoveryState.snapshot(archiveFields(source));
     }
 
     public static void addMenuOption(Object holder, List<MenuOption> options) {
@@ -162,13 +156,12 @@ public final class ArcticShiftRetry {
         if (things.isEmpty()) {
             return new Reloaded(original, false, "Reddit did not return this " + (comment ? "comment" : "post"));
         }
-        JsonNode fresh = HttpUtils.getJsonFromString(
-                String.valueOf((Object) ((NativeJsonModel) things.get(0)).dataNode()));
+        JsonNode fresh = HttpUtils.getJsonFromString(retryJson(things.get(0)));
         // Overlay, so thread-only fields absent from /api/info (such as depth) are kept.
         ObjectNode updated = original.deepCopy();
         updated.setAll((ObjectNode) fresh);
         updated.remove(List.of("replies", ArchiveRecoveryState.LOADED_KEY,
-                ArchiveRecoveryState.RETRY_KEY, Emojis.EXTRA_EMOJI_CONTEXT_KEY));
+                ArchiveRecoveryState.RETRY_KEY, ArchiveRecoveryState.EXTRA_EMOJI_CONTEXT_KEY));
         if (RedditApiUtils.isContentRemoved(updated)) RedditApiUtils.setRemovalEmoji(updated);
         return new Reloaded(updated, false, null);
     }
@@ -178,12 +171,13 @@ public final class ArcticShiftRetry {
         Toast.makeText(view.getContext(), action.failure, Toast.LENGTH_LONG).show();
     }
 
-    private static ArchiveRetryItem parseItem(String json, boolean comment) throws Exception {
-        NativeJsonNode node = new NativeJsonMapper().readTree(json);
-        Object model = comment
-                ? CommentModel.commentModelDeserialize(new NativeComment(node))
-                : SubmissionModel.fromSubmission(new NativeSubmission(node));
-        return (ArchiveRetryItem) model;
+    // The patch supplies both native model conversions, keeping stock Jackson types out of extension signatures.
+    private static Iterator<? extends Map.Entry<String, ?>> archiveFields(Object source) {
+        throw new UnsupportedOperationException("Archive snapshot bridge is not installed");
+    }
+
+    private static ArchiveRetryItem parseItem(String json, boolean comment) {
+        throw new UnsupportedOperationException("Archive model bridge is not installed");
     }
 
     private static void rebind(Object holder, Object model, boolean first, boolean second,

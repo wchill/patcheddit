@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-import app.morphe.extension.boost.utils.Emojis;
-
 /**
  * Applies a reloaded archive model to the bound model. Only deserialized fields that changed
  * during recovery are copied, so votes/saves changed while the request was in flight and
@@ -22,7 +20,7 @@ import app.morphe.extension.boost.utils.Emojis;
  */
 final class ArchiveRetryMerge {
     private static final String[] RECOVERY_STATE = {
-            Emojis.EXTRA_EMOJI_CONTEXT_KEY, ArchiveRecoveryState.RETRY_KEY,
+            ArchiveRecoveryState.EXTRA_EMOJI_CONTEXT_KEY, ArchiveRecoveryState.RETRY_KEY,
     };
     private static final Map<String, Field[]> resolved = new HashMap<>();
 

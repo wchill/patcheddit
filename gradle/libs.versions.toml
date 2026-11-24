@@ -6,7 +6,6 @@ smali = "5eaff5a2c9"
 annotation = "1.10.0"
 ksp = "2.3.6"
 room = "2.8.4"
-gson = "2.13.2"
 guava = "33.6.0-jre"
 okhttp = "5.3.2"
 androidx-preference = "1.2.1"
@@ -17,9 +16,11 @@ youtube-player = "13.1.0"
 morphe-patches-library = { module = "app.morphe:morphe-patches-library", version.ref = "morphe-patches-library" }
 morphe-extensions-library = { module = "app.morphe:morphe-extensions-library", version.ref = "morphe-patches-library" }
 annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
-gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 #noinspection SimilarGradleDependency
 guava = { module = "com.google.guava:guava", version.ref = "guava" }
+#noinspection SimilarGradleDependency
+guava-android = { module = "com.google.guava:guava", version = "33.6.0-android" }
+r8-vendoring = { module = "com.android.tools:r8", version = "9.1.31" }
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
 okhttp-transport = { module = "com.squareup.okhttp3:okhttp-jvm", version = "5.0.0-alpha.11" }
@@ -29,12 +30,14 @@ youtube-player = { module = "com.pierfrancescosoffritti.androidyoutubeplayer:cor
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 
+# Used by JVM tools and vendored separately for Android.
+#noinspection NewerVersionAvailable
+jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version = "2.6.0" }
+
 # Compile against the APIs provided by the stock Boost APK, not the shared extension versions.
 androidx-preference-boost = { module = "androidx.preference:preference", version = "1.2.0" }
 okhttp-boost = { module = "com.squareup.okhttp3:okhttp", version = "5.0.0-alpha.8" }
 
-#noinspection NewerVersionAvailable
-jackson-databind-boost = { module = "com.fasterxml.jackson.core:jackson-databind", version = "2.6.0" }
 jraw-boost = { module = "com.github.wchill:JRAW", version = "454a2f9" }
 #noinspection NewerVersionAvailable
 slf4j-boost = { module = "org.slf4j:slf4j-api", version = "1.7.13" }
@@ -46,4 +49,4 @@ android-library = { id = "com.android.library" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 [bundles]
-boost = ["jackson-databind-boost", "jraw-boost", "guava-boost", "slf4j-boost"]
+boost = ["jackson-databind", "jraw-boost", "guava-boost", "slf4j-boost"]

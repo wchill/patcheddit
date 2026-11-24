@@ -12,7 +12,6 @@ import app.morphe.patches.reddit.customclients.infinity.misc.settings.infinityMo
 import app.morphe.patches.reddit.customclients.joey.misc.settings.joeyMorpheSettingsPatch
 import app.morphe.patches.reddit.customclients.redditisfun.misc.settings.rifMorpheSettingsPatch
 import app.morphe.patches.reddit.customclients.relay.misc.settings.relayMorpheSettingsPatch
-import app.morphe.patches.reddit.customclients.sync.syncforlemmy.misc.settings.syncMorpheSettingsPatch as lemmySettings
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.misc.settings.syncMorpheSettingsPatch as syncSettings
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
@@ -27,6 +26,7 @@ import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstructio
 import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstruction35c
 import com.android.tools.smali.dexlib2.immutable.instruction.ImmutableInstruction3rc
 import com.android.tools.smali.dexlib2.immutable.reference.ImmutableMethodReference
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 import javax.xml.parsers.DocumentBuilderFactory
@@ -70,8 +70,8 @@ class MorpheSettingsPatchTest {
     @Test
     fun bundlesCompleteLicenseNoticesForOfflineReading() {
         val input = assertNotNull(javaClass.classLoader.getResourceAsStream("settings/raw/patcheddit_licenses.json"))
-        val notices = input.bufferedReader().use { com.google.gson.JsonParser.parseReader(it).asJsonArray }
-            .associate { it.asJsonObject["name"].asString to it.asJsonObject["text"].asString }
+        val notices = input.use { ObjectMapper().readTree(it) }
+            .associate { it["name"].asText() to it["text"].asText() }
         val patcheddit = assertNotNull(notices["Patcheddit"])
         assertTrue(patcheddit.contains("GNU GENERAL PUBLIC LICENSE"))
         assertTrue(patcheddit.contains("Patcheddit NOTICE"))
@@ -80,11 +80,15 @@ class MorpheSettingsPatchTest {
         assertTrue(assertNotNull(notices["Google Material Design icons"]).contains("Apache License"))
         assertTrue(assertNotNull(notices["Public Suffix List"]).contains("Mozilla Public License"))
         assertTrue(assertNotNull(notices["OpenJDK desugaring libraries"]).contains("Classpath Exception"))
-        assertTrue(notices.keys.any { it.startsWith("com.google.code.gson:gson:") })
+        assertFalse(notices.keys.any { it.startsWith("com.google.code.gson:gson:") })
+        assertTrue(notices.any { (name, text) ->
+            name.startsWith("com.google.guava:guava:") && text.contains("Apache License")
+        })
         assertTrue(notices.keys.any { it.startsWith("androidx.room:") })
         assertTrue(notices.keys.any { it.startsWith("com.squareup.okhttp3:") })
-        assertTrue(notices.filterKeys { it.startsWith("com.fasterxml.jackson.core:") }.values
-            .all { it.contains("Apache License") && it.contains("Jackson") })
+        val jackson = notices.filterKeys { it.startsWith("com.fasterxml.jackson.core:") }
+        assertTrue(jackson.keys.any { it.startsWith("com.fasterxml.jackson.core:jackson-databind:") })
+        assertTrue(jackson.values.all { it.contains("Apache License") && it.contains("Jackson") })
     }
 
     @Test
@@ -116,7 +120,7 @@ class MorpheSettingsPatchTest {
     }
 
     @Test
-    fun coversAllFifteenPackagesWithoutReplacingBoostSettings() {
+    fun coversNonBoostPackagesWithoutReplacingBoostSettings() {
         val clients = listOf(
             baconReaderMorpheSettingsPatch to AppCompatibility.BaconReader,
             infinityMorpheSettingsPatch to AppCompatibility.Infinity,
@@ -124,7 +128,6 @@ class MorpheSettingsPatchTest {
             rifMorpheSettingsPatch to AppCompatibility.RedditIsFun,
             relayMorpheSettingsPatch to AppCompatibility.Relay,
             syncSettings to AppCompatibility.SyncForReddit,
-            lemmySettings to arrayOf(AppCompatibility.SyncForLemmy),
         )
         val packages = mutableSetOf<String>()
         for ((patch, compatible) in clients) {
@@ -133,9 +136,34 @@ class MorpheSettingsPatchTest {
             assertEquals(compatible.toList(), patch.compatibility)
             for (app in compatible) assertTrue(packages.add(assertNotNull(app.packageName)))
         }
-        assertEquals(15, packages.size)
+        assertEquals(14, packages.size)
         assertFalse(packages.contains("com.rubenmayayo.reddit"))
-        assertFalse(ExtensionPatches.Sync in lemmySettings.dependencies)
+    }
+
+    @Test
+    fun restrictsMatureContentLockTestControlWithoutChangingDebuggability() {
+        for (patch in listOf(baconReaderNsfwOption, boostNsfwOption, infinityNsfwOption, joeyNsfwOption,
+            rifNsfwOption, relayNsfwOption, syncNsfwOption)) {
+            assertFalse(patch.default)
+            assertTrue(patch.options.isEmpty())
+        }
+        val manifest = parse("""
+            <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example">
+                <application android:debuggable="false">
+                    <receiver android:name=".NativeReceiver" android:exported="false" />
+                </application>
+            </manifest>
+        """)
+        registerMatureContentLockTestReceiver(manifest)
+        val application = manifest.getElementsByTagName("application").item(0) as Element
+        val receivers = application.getElementsByTagName("receiver")
+        assertEquals("false", application.getAttribute("android:debuggable"))
+        assertEquals("false", (receivers.item(0) as Element).getAttribute("android:exported"))
+        val receiver = receivers.item(1) as Element
+        assertEquals("true", receiver.getAttribute("android:exported"))
+        assertEquals("android.permission.INJECT_EVENTS", receiver.getAttribute("android:permission"))
+        assertEquals(0, receiver.getElementsByTagName("intent-filter").length)
+        assertFailsWith<IllegalArgumentException> { registerMatureContentLockTestReceiver(manifest) }
     }
 
     @Test
@@ -202,8 +230,7 @@ class MorpheSettingsPatchTest {
 
     @Test
     fun addsAnExplicitIntentToPlainAndQualifiedPreferenceScreensForEveryPackageVariant() {
-        val packages = AppCompatibility.RedditIsFun + AppCompatibility.Infinity + AppCompatibility.SyncForReddit +
-                arrayOf(AppCompatibility.SyncForLemmy)
+        val packages = AppCompatibility.RedditIsFun + AppCompatibility.Infinity + AppCompatibility.SyncForReddit
         for (namespaceAware in listOf(false, true)) {
             for (root in listOf("PreferenceScreen", "androidx.preference.PreferenceScreen")) {
                 for (app in packages) {

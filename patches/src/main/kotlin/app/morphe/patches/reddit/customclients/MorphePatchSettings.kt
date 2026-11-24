@@ -29,7 +29,6 @@ import app.morphe.patches.reddit.customclients.infinity.misc.settings.infinityMo
 import app.morphe.patches.reddit.customclients.joey.misc.settings.joeyMorpheSettingsPatch
 import app.morphe.patches.reddit.customclients.redditisfun.misc.settings.rifMorpheSettingsPatch
 import app.morphe.patches.reddit.customclients.relay.misc.settings.relayMorpheSettingsPatch
-import app.morphe.patches.reddit.customclients.sync.syncforlemmy.misc.settings.syncMorpheSettingsPatch as lemmySettingsPatch
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.misc.settings.syncMorpheSettingsPatch as syncSettingsPatch
 import app.morphe.util.ResourceGroup
 import app.morphe.util.addInstructionsAtControlFlowLabel
@@ -209,7 +208,6 @@ private fun settingsPatchFor(extensionPatch: Patch): Patch? {
             ExtensionPatches.RIF -> rifMorpheSettingsPatch
             ExtensionPatches.Relay -> relayMorpheSettingsPatch
             ExtensionPatches.Sync -> syncSettingsPatch
-            ExtensionPatches.SyncForLemmy -> lemmySettingsPatch
             else -> null
         }
         if (menu == null) pending.addAll(current.dependencies) else menus.add(menu)
@@ -552,9 +550,7 @@ internal fun Fingerprint.wrapMorpheHook(
     before: String = "",
     after: String = "",
     setting: MorphePatchSetting? = null,
-) {
-    wrapMorpheHook(classDef, method, before, after, setting)
-}
+): MutableMethod = wrapMorpheHook(classDef, method, before, after, setting)
 
 internal fun wrapMorpheHook(
     owner: MutableClass,
@@ -562,7 +558,7 @@ internal fun wrapMorpheHook(
     before: String = "",
     after: String = "",
     setting: MorphePatchSetting? = null,
-) {
+): MutableMethod {
     val target = currentMethod(owner, signature)
     require(!target.name.startsWith('<') && target.implementation != null) {
         "Morphe hooks require implemented methods other than constructors."
@@ -592,6 +588,7 @@ internal fun wrapMorpheHook(
     }
     check(owner.methods.remove(target))
     check(owner.methods.add(wrapper))
+    return wrapper
 }
 
 internal fun Fingerprint.overrideOAuthReturn(getter: String): MutableMethod {

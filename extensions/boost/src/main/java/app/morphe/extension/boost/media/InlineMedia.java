@@ -6,6 +6,7 @@
 
 package app.morphe.extension.boost.media;
 
+import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -16,6 +17,7 @@ import android.text.style.URLSpan;
 import android.text.style.ImageSpan;
 import android.text.style.TypefaceSpan;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
@@ -252,6 +254,7 @@ public final class InlineMedia {
         final TextView prefix;
         final CharSequence fallback;
         final String image, link;
+        private final RectF touchBounds = new RectF();
         boolean active, failed;
         float aspect;
 
@@ -264,6 +267,30 @@ public final class InlineMedia {
             setPadding(prefix.getPaddingLeft(), gap, prefix.getPaddingRight(), gap);
             setOnClickListener(view -> MediaNativeBindings.openInlineUrl(getContext(), link));
             setOnLongClickListener(view -> prefix.performLongClick());
+        }
+
+        private boolean isOverImage(MotionEvent event) {
+            Drawable drawable = getDrawable();
+            if (drawable == null) return false;
+            // FIT_CENTER centers tall, height-capped images inside a full-width view.
+            touchBounds.set(drawable.getBounds());
+            getImageMatrix().mapRect(touchBounds);
+            return touchBounds.contains(event.getX() - getPaddingLeft(), event.getY() - getPaddingTop());
+        }
+
+        @Override public boolean onTouchEvent(MotionEvent event) {
+            int action = event.getActionMasked();
+            if (action == MotionEvent.ACTION_DOWN && !isOverImage(event)) return false;
+            if ((action == MotionEvent.ACTION_MOVE || action == MotionEvent.ACTION_UP) && !isOverImage(event)) {
+                MotionEvent cancel = MotionEvent.obtain(event);
+                try {
+                    cancel.setAction(MotionEvent.ACTION_CANCEL);
+                    return super.onTouchEvent(cancel);
+                } finally {
+                    cancel.recycle();
+                }
+            }
+            return super.onTouchEvent(event);
         }
 
         @Override public void setImageDrawable(Drawable drawable) {

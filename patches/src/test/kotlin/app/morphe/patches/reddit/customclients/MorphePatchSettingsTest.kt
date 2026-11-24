@@ -17,7 +17,6 @@ import app.morphe.patches.all.misc.PatchCategory
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.settings.boostMorpheSettingsPatch
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.settings.addBoostSettings
 import app.morphe.patches.reddit.customclients.boostforreddit.misc.settings.groupBoostLinkSettings
-import app.morphe.patches.reddit.customclients.sync.syncforlemmy.misc.settings.syncMorpheSettingsPatch as lemmySettings
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.MutableMethodImplementation
@@ -103,8 +102,8 @@ class MorphePatchSettingsTest {
     fun usesTheCorrespondingMenuForEverySupportedPackage() {
         val clients = AppCompatibility.BaconReader + AppCompatibility.Boost + AppCompatibility.Infinity +
             AppCompatibility.JoeyForReddit + AppCompatibility.RedditIsFun + AppCompatibility.Relay +
-            AppCompatibility.SyncForReddit + arrayOf(AppCompatibility.SyncForLemmy)
-        assertEquals(16, clients.size)
+            AppCompatibility.SyncForReddit
+        assertEquals(15, clients.size)
         for (client in clients) {
             val packageName = assertNotNull(client.packageName)
             assertEquals(
@@ -223,19 +222,6 @@ class MorphePatchSettingsTest {
         assertEquals(null, patch.description)
         assertTrue(boostMorpheSettingsPatch in dependencies(patch))
         assertTrue(morpheSettingsContextPatch in dependencies(patch))
-    }
-
-    @Test
-    fun makesLemmySettingsIndependentOfTheRedditExtensionAndCrashLogging() {
-        val patch = morpheBytecodePatch(name = "Example Lemmy feature",
-            extensionPatch = ExtensionPatches.SyncForLemmy) {
-            compatibleWith(AppCompatibility.SyncForLemmy)
-        }
-        val dependencies = dependencies(patch)
-        assertTrue(lemmySettings in dependencies)
-        assertTrue(morpheSettingsContextPatch in dependencies)
-        assertFalse(ExtensionPatches.Sync in dependencies)
-        assertFalse(dependencies.any { it.name == "Log exceptions" })
     }
 
     @Test

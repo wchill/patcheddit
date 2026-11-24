@@ -16,7 +16,7 @@ import app.morphe.patches.reddit.customclients.boostforreddit.wrapHook
 import app.morphe.patches.reddit.customclients.spoofClientPatch
 import com.android.tools.smali.dexlib2.formatter.DexFormatter
 
-const val JRAW_NEW_URL_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/boost/http/HttpUtils;"
+const val JRAW_NEW_URL_EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/shared/archive/HttpUtils;"
 
 val spoofClientPatch = spoofClientPatch(
     name = null,

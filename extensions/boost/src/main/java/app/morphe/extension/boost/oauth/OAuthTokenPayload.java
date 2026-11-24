@@ -6,10 +6,10 @@
 
 package app.morphe.extension.boost.oauth;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonToken;
+import app.morphe.extension.vendored.com.fasterxml.jackson.core.JsonFactory;
+import app.morphe.extension.vendored.com.fasterxml.jackson.core.JsonGenerator;
+import app.morphe.extension.vendored.com.fasterxml.jackson.core.JsonParser;
+import app.morphe.extension.vendored.com.fasterxml.jackson.core.JsonToken;
 
 import java.io.IOException;
 import java.io.Reader;

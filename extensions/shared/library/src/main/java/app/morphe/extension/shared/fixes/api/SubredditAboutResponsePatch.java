@@ -13,10 +13,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.regex.Pattern;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import app.morphe.extension.shared.requests.PatchedditInterceptor;
 import app.morphe.extension.shared.requests.RedditRouteResponseShim;
 import okhttp3.MediaType;
 import okhttp3.Request;
@@ -24,10 +24,16 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 /** Supplies omitted display counters for strict subreddit-about parsers. */
-public final class SubredditAboutResponsePatch extends PatchedditInterceptor {
+public final class SubredditAboutResponsePatch extends RedditRouteResponseShim {
     private static final long MAX_BYTES = 512 * 1024;
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private static final Logger LOGGER = Logger.getLogger(SubredditAboutResponsePatch.class.getName());
+    private static final Pattern ABOUT = Pattern.compile("/r/[^/]+/about");
+
+    public SubredditAboutResponsePatch() {
+        super(request -> request.method().equals("GET")
+                && ABOUT.matcher(normalizePath(request.url().encodedPath())).matches());
+    }
 
     @Override
     public boolean isPatchIncluded() {
@@ -36,12 +42,9 @@ public final class SubredditAboutResponsePatch extends PatchedditInterceptor {
 
     @NonNull
     @Override
-    protected Response doIntercept(@NonNull Chain chain) throws IOException {
-        Request request = chain.request();
+    protected Response shimResponse(@NonNull Chain chain, @NonNull Request request) throws IOException {
         Response response = chain.proceed(request);
-        if (!request.method().equals("GET") || !RedditRouteResponseShim.isRedditHost(request.url().host())
-                || !RedditRouteResponseShim.normalizePath(request.url().encodedPath())
-                .matches("/r/[^/]+/about") || !response.isSuccessful()) return response;
+        if (!response.isSuccessful()) return response;
         ResponseBody body = response.body();
         MediaType type = body == null ? null : body.contentType();
         if (type == null || !(type.subtype().equals("json") || type.subtype().endsWith("+json"))

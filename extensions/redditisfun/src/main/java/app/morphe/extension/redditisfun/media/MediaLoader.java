@@ -194,8 +194,7 @@ final class MediaLoader {
     }
 
     private static boolean matrix(HttpUrl url) {
-        return url.host().equals("matrix.redditspace.com") && url.encodedPath().matches(
-                "/_matrix/media/v[0-9]+/download/reddit\\.com/[A-Za-z0-9._~-]{1,512}");
+        return url.host().equals("matrix.redditspace.com") && RifMediaLinks.isMatrixPath(url.encodedPath());
     }
 
     static boolean supported(String value, boolean videos) {

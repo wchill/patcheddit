@@ -29,7 +29,7 @@ public final class RedditRequestParameters {
 
         RequestBody body = request.body();
         if (body instanceof FormBody) {
-            FormBody form = (FormBody) body;
+            final FormBody form = (FormBody) body;
             for (int i = 0; i < form.size(); i++) {
                 parameters.put(form.name(i), form.value(i));
             }

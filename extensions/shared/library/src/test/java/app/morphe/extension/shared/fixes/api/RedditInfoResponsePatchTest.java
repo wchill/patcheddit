@@ -14,6 +14,8 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import okhttp3.FormBody;
 import okhttp3.MediaType;
@@ -23,10 +25,12 @@ import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
+import static app.morphe.extension.shared.requests.RedditRouteFixture.included;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertThrows;
+import static org.junit.Assert.assertTrue;
 
 public class RedditInfoResponsePatchTest {
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
@@ -105,6 +109,74 @@ public class RedditInfoResponsePatchTest {
         assertEquals(4, requests.size());
         assertEquals("/comments/post.json", requests.get(1).url().encodedPath());
         assertEquals("/comments/post.json", requests.get(3).url().encodedPath());
+    }
+
+    @Test
+    public void historyUsesSmallBatchedRequestsAndKeepsItsOwnCursorAndOrder() throws Exception {
+        String path = "/by_id/" + historyIds(0, 200) + "?limit=100";
+        OkHttpClient client = client(new RedditInfoResponsePatch(context, true), request -> {
+            if (request.url().encodedPath().startsWith("/by_id/")) {
+                assertEquals("/by_id/" + historyIds(requests.size() == 1 ? 0 : 10,
+                        requests.size() == 1 ? 10 : 20) + ".json", request.url().encodedPath());
+                assertNull(request.url().queryParameter("after"));
+                return blocked(request);
+            }
+            String ids = request.url().queryParameter("id");
+            assertEquals(historyIds(ids.startsWith("t3_post0,") ? 0 : 10,
+                    ids.startsWith("t3_post0,") ? 10 : 20), ids);
+            return response(request, 200, ids.startsWith("t3_post0,")
+                    ? listing(post("post8"), post("unrequested"), post("post1")).toString()
+                    : listing(post("post10")).toString());
+        });
+        String after;
+        try (Response response = client.newCall(request(path)).execute()) {
+            JSONObject data = new JSONObject(response.body().string()).getJSONObject("data");
+            JSONArray result = data.getJSONArray("children");
+            assertEquals(2, result.length());
+            assertEquals("t3_post1", result.getJSONObject(0).getJSONObject("data").getString("name"));
+            assertEquals("t3_post8", result.getJSONObject(1).getJSONObject("data").getString("name"));
+            after = data.getString("after"); // The last requested post was absent from the response.
+            assertEquals("t3_post9", after);
+        }
+        try (Response response = client.newCall(request(path + "&after=" + after)).execute()) {
+            assertEquals(1, children(response).length());
+        }
+        assertEquals(4, requests.size());
+    }
+
+    @Test
+    public void historyFocusedFallbackStaysWithinThePageAndStopsOnThrottling() throws Exception {
+        String path = "/by_id/" + historyIds(0, 200);
+        OkHttpClient client = client(new RedditInfoResponsePatch(context, true), request -> {
+            String route = request.url().encodedPath();
+            if (!route.startsWith("/comments/")) return blocked(request);
+            if (route.equals("/comments/post0.json")) return response(request, 404, "{\"error\":404}");
+            assertEquals("/comments/post1.json", route);
+            return response(request, 429, "{\"error\":429}")
+                    .newBuilder().header("Retry-After", "90").build();
+        });
+        try (Response response = client.newCall(request(path)).execute()) {
+            assertEquals(429, response.code());
+            assertEquals("90", response.header("Retry-After"));
+        }
+        assertEquals(4, requests.size());
+    }
+
+    @Test
+    public void historySkipsAnEmptyBatchAndStopsWhenThereAreNoMoreIds() throws Exception {
+        OkHttpClient client = client(new RedditInfoResponsePatch(context, true), request ->
+                response(request, 200, (request.url().encodedPath().contains("t3_post10")
+                        ? listing(post("post10")) : listing()).toString()));
+        try (Response response = client.newCall(request("/by_id/" + historyIds(0, 11))).execute()) {
+            JSONObject data = new JSONObject(response.body().string()).getJSONObject("data");
+            assertEquals(1, data.getJSONArray("children").length());
+            assertTrue(data.isNull("after"));
+        }
+        assertEquals(2, requests.size());
+    }
+
+    private static String historyIds(int start, int end) {
+        return IntStream.range(start, end).mapToObj(index -> "t3_post" + index).collect(Collectors.joining(","));
     }
 
     @Test
@@ -332,7 +404,7 @@ public class RedditInfoResponsePatchTest {
     }
 
     private OkHttpClient client(RedditInfoResponsePatch patch, Responder responder) {
-        return new OkHttpClient.Builder().addInterceptor(patch::doIntercept)
+        return new OkHttpClient.Builder().addInterceptor(included(patch))
                 .addInterceptor(chain -> {
                     requests.add(chain.request());
                     try {

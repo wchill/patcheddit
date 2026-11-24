@@ -2,7 +2,6 @@ package app.morphe.patches.reddit.customclients.relay.fix.slink
 
 import app.morphe.patcher.Fingerprint
 import app.morphe.patcher.OpcodeFilter
-import app.morphe.patcher.fieldAccess
 import app.morphe.patcher.methodCall
 import app.morphe.patcher.string
 import com.android.tools.smali.dexlib2.Opcode
@@ -61,19 +60,4 @@ internal val webAndCommentsFragmentLinkFingerprint = Fingerprint(
         "AccountFragment",
         "SubredditFragment",
     ),
-)
-
-internal val refreshTokenAccessFilter = fieldAccess(
-    definingClass = "Lreddit/news/oauth/reddit/model/RedditAccessToken;",
-    name = "refreshToken",
-    opcode = Opcode.IPUT_OBJECT,
-)
-
-internal object RefreshTokenAccessFingerprint : Fingerprint(
-    filters = listOf(
-        refreshTokenAccessFilter
-    ),
-    custom = { _, classDef ->
-        !classDef.type.startsWith("Lapp/morphe/")
-    }
 )

@@ -6,8 +6,8 @@
 
 package app.morphe.extension.boost.oauth;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.JsonNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.Test;
 

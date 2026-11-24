@@ -15,12 +15,14 @@ import app.morphe.patcher.util.returnEarly
 fun fixRedditApiLookupsPatch(
     extensionPatch: Patch,
     compatible: Array<Compatibility>,
+    extraDependency: Patch? = null,
 ) = patch(
     description = "Fixes blocked post, comment, and community info requests.",
     default = true,
 ) {
     compatibleWith(*compatible)
     dependsOn(extensionPatch)
+    extraDependency?.let { dependsOn(it) }
 
     execute {
         Fingerprint(

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceCategory xmlns:android="http://schemas.android.com/apk/res/android">
-    <app.morphe.extension.boost.http.arcticshift.ArcticShiftBaseUrlPreference
+    <app.morphe.extension.shared.archive.arcticshift.ArcticShiftBaseUrlPreference
         android:key="morphe_boost_arctic_shift_base_url"
         android:title="Arctic Shift API base URL"
         android:dialogTitle="Arctic Shift API base URL"

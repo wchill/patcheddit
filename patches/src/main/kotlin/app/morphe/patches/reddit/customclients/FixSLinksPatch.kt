@@ -14,7 +14,6 @@ import app.morphe.patcher.patch.PatchDefinition
 import app.morphe.patcher.patch.patch
 
 const val RESOLVE_S_LINK_METHOD = "patchResolveSLink(Ljava/lang/String;)Z"
-const val SET_ACCESS_TOKEN_METHOD = "patchSetAccessToken(Ljava/lang/String;)V"
 
 fun fixSLinksPatch(
     extensionPatch: Patch,

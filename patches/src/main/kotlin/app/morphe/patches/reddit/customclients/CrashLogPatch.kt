@@ -25,6 +25,7 @@ import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.MutableMethodImplementation
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction35c
 import com.android.tools.smali.dexlib2.builder.instruction.BuilderInstruction3rc
+import com.android.tools.smali.dexlib2.formatter.DexFormatter
 import com.android.tools.smali.dexlib2.iface.ClassDef
 import com.android.tools.smali.dexlib2.iface.Method
 import com.android.tools.smali.dexlib2.iface.instruction.Instruction
@@ -59,7 +60,7 @@ fun crashLogPatch(
     compatible: Array<Compatibility>,
     mainActivity: Fingerprint? = null,
     exceptionHandler: Fingerprint? = null,
-    exceptionHookDescriptor: String = EXCEPTION_HOOK_CLASS_DESCRIPTOR,
+    exceptionContext: String? = null,
     settingsPatch: Patch? = null,
     description: String = "Logs reported errors and fatal crashes, viewable in Morphe settings.",
 ) = morpheBytecodePatch(
@@ -128,8 +129,17 @@ fun crashLogPatch(
             crashActivityType = activityOnCreateOwner(mainActivityType, classes)
             onCreateMethod(mutableClassDefBy(crashActivityType), listOf("Landroid/os/Bundle;"))
         }
-        exceptionHandler?.method?.let { method ->
-            hookExceptionMethod(method, exceptionHookDescriptor)
+        exceptionHandler?.let { handler ->
+            if (exceptionContext == null) {
+                hookExceptionMethod(handler.method)
+            } else {
+                val parameter = exceptionParameterRegister(handler.method)
+                handler.wrapMorpheHook(before = """
+                    move-object/from16 v0, p$parameter
+                    const-string v1, ${DexFormatter.INSTANCE.getQuotedString(exceptionContext)}
+                    invoke-static {v0, v1}, $EXCEPTION_HOOK_CLASS_DESCRIPTOR->handleException(${THROWABLE}Ljava/lang/String;)V
+                """)
+            }
         }
     }
 }
@@ -223,11 +233,11 @@ internal fun exceptionParameterRegister(method: Method): Int {
     ) { words, type -> words + if (type == "J" || type == "D") 2 else 1 }
 }
 
-private fun hookExceptionMethod(method: MutableMethod, descriptor: String = EXCEPTION_HOOK_CLASS_DESCRIPTOR) {
+private fun hookExceptionMethod(method: MutableMethod) {
     val parameter = exceptionParameterRegister(method)
     method.addInstructions(
         0,
-        "invoke-static/range {p$parameter .. p$parameter}, $descriptor->handleException($THROWABLE)V",
+        "invoke-static/range {p$parameter .. p$parameter}, $EXCEPTION_HOOK_CLASS_DESCRIPTOR->handleException($THROWABLE)V",
     )
 }
 

@@ -26,7 +26,6 @@ import net.dean.jraw.models.JsonModel
 import net.dean.jraw.paginators.Sorting
 import net.dean.jraw.paginators.SubredditPaginator
 import app.morphe.extension.boost.api.RedditJraw
-import app.morphe.extension.boost.api.NativeJsonModel
 import app.morphe.extension.boost.api.TrendingSearch
 import org.json.JSONObject
 import java.util.Locale
@@ -115,11 +114,9 @@ object BoostNativeListings {
     }
 
     @JvmStatic
-    fun isPromoted(submission: JsonModel): Boolean {
-        val data = (submission as NativeJsonModel).dataNode()
-        return data.get("promoted")?.asBoolean() == true ||
-            data.get("is_ad")?.asBoolean() == true
-    }
+    fun isPromoted(submission: JsonModel): Boolean =
+        submission.data("promoted", Boolean::class.javaObjectType) == true ||
+            submission.data("is_ad", Boolean::class.javaObjectType) == true
 
     @JvmStatic
     fun fragmentActivity(fragment: Any?): Activity? =

@@ -22,7 +22,8 @@ import com.android.tools.smali.dexlib2.iface.reference.MethodReference;
 import com.android.tools.smali.dexlib2.iface.reference.Reference;
 import com.android.tools.smali.dexlib2.iface.reference.StringReference;
 import com.android.tools.smali.dexlib2.iface.reference.TypeReference;
-import com.google.gson.Gson;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -64,7 +65,7 @@ public final class BoostDexFingerprintDump {
             throw new IllegalArgumentException("Expected APK, output, and metadata paths");
         }
         var container = DexFileFactory.loadDexContainer(new File(args[0]), null);
-        var gson = new Gson();
+        var json = new ObjectMapper().disable(SerializationFeature.WRITE_NULL_MAP_VALUES);
         int count = 0;
         try (var writer = new BufferedWriter(new OutputStreamWriter(
                 new GZIPOutputStream(Files.newOutputStream(Path.of(args[1]))), StandardCharsets.UTF_8))) {
@@ -166,7 +167,7 @@ public final class BoostDexFingerprintDump {
                         methods.add(item);
                     }
                     record.put("methods", methods);
-                    writer.write(gson.toJson(record));
+                    writer.write(json.writeValueAsString(record));
                     writer.newLine();
                     count++;
                 }

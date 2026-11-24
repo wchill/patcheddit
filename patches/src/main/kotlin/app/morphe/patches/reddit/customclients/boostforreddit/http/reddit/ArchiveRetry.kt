@@ -16,6 +16,7 @@ import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 
 internal const val ARCHIVE_RETRY_ITEM = "Lapp/morphe/extension/boost/http/reddit/ArchiveRetryItem;"
 private const val RETRY = "Lapp/morphe/extension/boost/http/reddit/ArcticShiftRetry;"
+private const val STOCK_JSON_NODE = "Lcom/fasterxml/jackson/databind/JsonNode;"
 
 /** Space-separated descriptors of the model fields assigned by a native deserializer. */
 internal fun archiveRetryFields(fields: List<FieldReference>) =
@@ -39,7 +40,49 @@ internal fun installArchiveRetry() {
         archiveRetryFields(fields)
     }
 
-    mutableClassDefBy(RETRY).methods.single { it.name == "deserializedFields" }.apply {
+    val retry = mutableClassDefBy(RETRY)
+    val jsonModel = BoostApi.JsonModel.type
+    val comment = BoostApi.CommentModel.commentModelDeserialize
+    val submission = BoostApi.SubmissionModel.fromSubmission
+    // Cross the stock model boundary using field iteration and JSON text, never a vendored node.
+    retry.methods.single { it.name == "archiveFields" }.apply {
+        val code = implementation!!
+        code.instructions.indices.reversed().forEach(code::removeInstruction)
+        addInstructions(0, """
+            check-cast p0, $jsonModel
+            invoke-virtual {p0}, $jsonModel->getDataNode()$STOCK_JSON_NODE
+            move-result-object v0
+            invoke-virtual {v0}, $STOCK_JSON_NODE->fields()Ljava/util/Iterator;
+            move-result-object v0
+            return-object v0
+        """)
+    }
+    retry.methods.single { it.name == "parseItem" }.apply {
+        val code = implementation!!
+        code.instructions.indices.reversed().forEach(code::removeInstruction)
+        val commentType = comment.parameters.single()
+        val submissionType = submission.parameters.single()
+        addInstructions(0, """
+            invoke-static {p0}, ${BoostApi.JrawUtils.type}->fromString(Ljava/lang/String;)$STOCK_JSON_NODE
+            move-result-object v0
+            if-eqz p1, :submission
+            new-instance v1, $commentType
+            invoke-direct {v1, v0}, $commentType-><init>($STOCK_JSON_NODE)V
+            invoke-static {v1}, $comment
+            move-result-object v0
+            goto :done
+            :submission
+            new-instance v1, $submissionType
+            invoke-direct {v1, v0}, $submissionType-><init>($STOCK_JSON_NODE)V
+            invoke-static {v1}, $submission
+            move-result-object v0
+            :done
+            check-cast v0, $ARCHIVE_RETRY_ITEM
+            return-object v0
+        """)
+    }
+
+    retry.methods.single { it.name == "deserializedFields" }.apply {
         val commentBody = "${BoostApi.CommentModel.body} ${BoostApi.CommentModel.bodyHtml}"
         val submissionBody = "${BoostApi.SubmissionModel.selftext} ${BoostApi.SubmissionModel.selftextHtml}"
         val code = implementation!!

@@ -34,6 +34,27 @@ In `execute` and `finalize`, call patcher functions such as `document()`,
 `resourceFile()`, and `mutableClassDefBy()` directly rather than passing a
 patch context to helpers.
 
+Use `RedditRouteResponseShim` for Reddit API interceptors that match the outgoing request.
+Use a predicate for dynamic routes; filters that inspect the final response URL after redirects
+should keep that check on the response.
+
+## Vendoring extension dependencies
+
+Shade bundled third-party code under `app.morphe.extension.vendored` and shrink only the vendored input in that pass.
+The shared extension runs isolated R8 passes for Guava and Jackson. Keep their entry points in
+`proguard-vendored-guava.pro` and `proguard-vendored-jackson.pro`; the normal extension keep rules stay unchanged.
+Use the original artifact configurations `vendoredGuava` and `vendoredJackson` for offline license notices.
+JVM-side patch code and tools use the unshaded Jackson dependency. Do not add a second JSON library to the Android payload.
+
+The archive HTTP helpers, Arctic Shift and Wayback clients, throttles, and Arctic Shift preference
+live in `:extensions:shared:library`. Clients pass their own Markdown renderer when merging Arctic
+Shift content into a Reddit response. Boost depends on the compiled shared library rather than
+adding its source directories to Boost. It retains its native OkHttp and Reddit bindings.
+
+The Room-backed archive cache is part of `:extensions:shared:library`. Extension preparation relocates
+Room, SQLite, and coroutines under `app.morphe.extension.vendored` to avoid host-library conflicts.
+Keep the existing `undelete_cache.db` name and schema compatible when changing cache code.
+
 ## Updating Boost's library mapping
 
 `scripts/update_boost_mapping.py` transfers the previous vetted `mapping.txt`
@@ -67,6 +88,9 @@ A match identifies a symbol, not unchanged
 behavior. APK resources, reflection, native code, and patch behavior still need
 their usual audits.
 
+When using Boost's existing resources in injected bytecode, look up their IDs
+by type and name with `resourceId` rather than copying numeric IDs from an APK.
+
 Exit status `0` means the mapping is complete with no body differences; `2`
 means review is required; `1` means an input/extraction error or a mismatch
 against an optional benchmark. An incomplete/conflicting mapping is not
@@ -91,6 +115,117 @@ against the supplied new mapping and derives counts and recovery rates from
 those mappings.
 Both complete and review-required results are supported.
 Its report is saved to `build/boost-mapping-tests/recovery.json`.
+
+## Listing and refresh-rate device tests
+
+On a disposable APK signed with the fixture key, run `RAllDeviceTest` with
+**Reddit API fixes** applied. Pass `--arg stock=baconreader` for BaconReader to
+exercise its Apache request path as well as OkHttp. The fixture preserves the
+query and headers and checks that unrelated routes are left alone without using
+the live Reddit service.
+
+Run `AdaptiveRefreshRateDeviceTest` with **Prefer high refresh rate** applied.
+It checks the settings switch and the Android window and view hints with the
+switch on, off, and back on. For Boost, pass
+`--arg preference=morphe_boost_prefer_high_refresh_rate`.
+
+## Share links and native media device tests
+
+Run `ShareLinksDeviceTest` against a disposable, package-renamed APK with
+**Reddit API fixes** applied and the same signing key as the fixture. The suite
+requires an `app.patcheddit.rollout.*` package because it replaces HTTPS
+transport in that process. It covers shared post/comment routing, user links,
+redirect chains, tracking removal, comment context, and failure fallback.
+It seeds fake tokens in each client's native session and checks that direct
+and wrapped `/s/` links resolve when anonymous requests are blocked, without
+sending the bearer to the public web host or to link wrappers.
+Boost also exercises direct Android app links through its external activity.
+Infinity checks that share links use the native guest OAuth session when signed out.
+Joey adds permalink cases; RIF checks its external image link
+filters and exercises image routing through the in-app router and WebView,
+including the Matrix redirect cache.
+
+```sh
+python3 -B test/run_device_tests.py \
+  --sdk "$ANDROID_HOME" --serial "$ANDROID_SERIAL" \
+  --package "$DISPOSABLE_PACKAGE" --keystore "$FIXTURE_KEYSTORE" \
+  --suite app.patcheddit.fixture.ShareLinksDeviceTest \
+  --source test/device/ShareLinksDeviceTest.java --arg stock=joey
+```
+
+Use `stock=baconreader`, `boost`, `joey`, `relay` (including Pro), `rif`,
+`platinum`, `syncforreddit`, or `infinity` as appropriate. The resolver uses synthetic
+responses, not a Reddit account. The RIF fixture checks external intent matching
+without launching MainActivity because a package-renamed build still refers to
+stock content providers at startup.
+
+On a disposable Boost APK with **Reddit API fixes**, run `BoostHistoryDeviceTest`
+with `--suite app.patcheddit.fixture.BoostHistoryDeviceTest` and
+`--source test/device/BoostHistoryDeviceTest.java` (no `stock` argument).
+It checks native History pagination and that other requests still complete
+while a History page is waiting for a response.
+
+On a disposable Infinity APK with **Reddit API fixes**, run
+`--suite app.patcheddit.fixture.InfinityApiLookupsDeviceTest` with
+`--source test/device/InfinityApiLookupsDeviceTest.java`. Use `--arg stock=plus`
+or `--arg stock=patreon` for 8.4.0, or `--arg stock=legacy-plus` for Plus 8.1.4.
+The fixture exercises the native HTTP call path with fake Reddit replies, including
+gallery repair with a bounded image header request.
+
+`BaconReaderSyncCommentVideoDeviceTest` exercises the native player handoff
+with **Fix comment video links** applied. Pass `--arg stock=baconreader` for a
+package-renamed BaconReader fixture.
+
+With **Fix Redgifs API** applied to Joey or BaconReader, the Redgifs fixture
+checks native playback with a synthetic H.264/AAC clip and scripted metadata.
+Run it on a disposable install signed with the matching fixture key:
+
+```sh
+ffmpeg -i test/device/media/inline-video.mp4 -stream_loop -1 \
+  -i test/device/media/inline-audio.m4a -map 0:v:0 -map 1:a:0 \
+  -c copy -shortest -movflags +faststart /tmp/redgifs-clip.mp4
+python3 -B test/run_device_tests.py \
+  --sdk "$ANDROID_HOME" --serial "$ANDROID_SERIAL" \
+  --package "$DISPOSABLE_PACKAGE" --keystore "$FIXTURE_KEYSTORE" \
+  --suite app.patcheddit.fixture.RedgifsPlaybackDeviceTest \
+  --source test/device/RedgifsPlaybackDeviceTest.java \
+  --asset /tmp/redgifs-clip.mp4 --asset test/device/media/inline-video.mp4 \
+  --arg stock=joey
+```
+
+Use `stock=baconreader` for BaconReader. The fixture does not contact Redgifs.
+
+With **Fix random subreddit** applied, use `RandomSubredditDeviceTest` on a
+disposable, package-renamed APK. The fixture checks the compiled provider
+preference and both request paths without a Reddit account:
+
+```sh
+python3 -B test/run_device_tests.py \
+  --sdk "$ANDROID_HOME" --serial "$ANDROID_SERIAL" \
+  --package "$DISPOSABLE_PACKAGE" --keystore "$FIXTURE_KEYSTORE" \
+  --suite app.patcheddit.fixture.RandomSubredditDeviceTest \
+  --source test/device/RandomSubredditDeviceTest.java --arg stock=joey
+```
+
+Use the appropriate `stock` value: `boost`, `infinity` (Infinity+ 8.4.0),
+`joey`, `relay`, `rif`, `platinum`, or `sync`. With **Log exceptions** applied,
+add `--arg verifyExceptionLog=true` to check that a failed lookup is reported
+without sending any request to the retired Random feed.
+
+With **Reddit API fixes** applied to Relay, run `RelayMediaLinksDeviceTest`
+with `--arg stock=gallery` for Free or `--arg stock=gallery-pro` for Pro and
+the media assets under `test/device/media/`. This checks gallery repair and
+native GIF decoding without requiring **Fix Reddit media link handling**.
+With **Inline media** applied, include `--source test/device/RelayInlineMediaDeviceTest.java`
+and pass `--arg inline=true` (without `stock=gallery` or `stock=gallery-pro`)
+to check preview sizing, comment taps, and scroll anchoring.
+
+## Joey ad-banner device test
+
+On a disposable, package-renamed Joey 2.1.6.5 APK with **Disable ads** applied,
+run `JoeyAdsDeviceTest` with `--suite app.patcheddit.fixture.JoeyAdsDeviceTest`
+and `--source test/device/JoeyAdsDeviceTest.java`. The fixture simulates the
+billing result after the grace period expires without changing the device clock.
 
 ## RIF inline-media device tests
 
@@ -133,9 +268,10 @@ python3 -B test/run_device_tests.py \
 adb -s "$ANDROID_SERIAL" shell am force-stop com.rubenmayayo.reddit
 ```
 
-The fixture uses native Glide with synthetic responses and restores its test
-preferences, including recovery after an interrupted run. Force-stop clears the
-temporary transport before returning to normal use.
+The fixture uses native Glide with synthetic responses, checks taps inside and
+outside portrait previews, and restores its test preferences, including after an
+interrupted run. Force-stop clears the temporary transport before normal use.
+Use `--arg touch-only=true` to run just the touch regression without a focused window.
 
 ## Boost navigation device tests
 

@@ -46,6 +46,19 @@ public abstract class BaseFixRedgifsApiPatch extends PatchedditInterceptor {
 
     public abstract String getDefaultUserAgent();
 
+    protected boolean preferAudioSources() {
+        return false;
+    }
+
+    private Response playbackResponse(Response response) throws IOException {
+        return preferAudioSources() ? RedgifsPlayback.preferAudioMetadata(response) : response;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
     public boolean isPatchIncluded() {
         // Overridden by patch.
         return false;
@@ -75,7 +88,7 @@ public abstract class BaseFixRedgifsApiPatch extends PatchedditInterceptor {
         if (!path.equals("/v2/oauth/client") && request.header("Authorization") != null) {
             Response response = chain.proceed(request.newBuilder().header("User-Agent", userAgent).build());
             if (response.code() != 401 && response.code() != 403) {
-                return response;
+                return playbackResponse(response);
             }
             String sentUserAgent = response.request().header("User-Agent");
             if (sentUserAgent != null && !sentUserAgent.isEmpty()) userAgent = sentUserAgent;
@@ -96,7 +109,7 @@ public abstract class BaseFixRedgifsApiPatch extends PatchedditInterceptor {
                     .header("Authorization", "Bearer " + token.getAccessToken())
                     .header("User-Agent", userAgent)
                     .build();
-            return chain.proceed(modifiedRequest);
+            return playbackResponse(chain.proceed(modifiedRequest));
         } catch (JSONException ex) {
             Logger.printException(() -> "Could not parse Redgifs response", ex);
             throw new IOException(ex);

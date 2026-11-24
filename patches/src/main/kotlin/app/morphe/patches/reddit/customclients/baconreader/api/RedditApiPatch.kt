@@ -6,10 +6,12 @@
 
 package app.morphe.patches.reddit.customclients.baconreader.api
 
+import app.morphe.patches.reddit.customclients.baconReaderRAllPatch
 import app.morphe.patches.reddit.customclients.baconreader.fix.apilookups.fixRedditApiLookups
 import app.morphe.patches.reddit.customclients.baconreader.fix.gallery.fixFailedGalleryImagesPatch
 import app.morphe.patches.reddit.customclients.baconreader.fix.login.modifyLoginWebView
 import app.morphe.patches.reddit.customclients.baconreader.fix.morecomments.fixMoreComments
+import app.morphe.patches.reddit.customclients.baconreader.fix.slink.fixSLinksPatch
 import app.morphe.patches.reddit.customclients.redditApiPatch
 import app.morphe.patches.reddit.customclients.legacySpoofClientPatch
 
@@ -20,6 +22,8 @@ val redditApiPatch = redditApiPatch(
     fixRedditApiLookups,
     fixFailedGalleryImagesPatch,
     fixMoreComments,
+    fixSLinksPatch,
+    baconReaderRAllPatch,
 )
 
 @Suppress("unused")

@@ -44,7 +44,6 @@ private const val BACON_SETTING_ID = "Lcom/onelouder/baconreader/adapters/Settin
 private const val SHARED_PREFERENCES = "Landroid/content/SharedPreferences;"
 
 internal fun installMatureContentEnforcement(packageName: String) {
-    if (packageName == AppCompatibility.SyncForLemmy.packageName) return
     hookNativePreferences()
     when {
         packageName == AppCompatibility.Boost.single().packageName -> {

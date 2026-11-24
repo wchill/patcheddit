@@ -8,9 +8,7 @@ import okhttp3.Interceptor;
 import okhttp3.Response;
 
 public abstract class PatchedditInterceptor implements Interceptor {
-    public boolean isEnabled() {
-        return isPatchIncluded();
-    }
+    public abstract boolean isEnabled();
     public abstract boolean isPatchIncluded();
 
     @NonNull
@@ -19,7 +17,7 @@ public abstract class PatchedditInterceptor implements Interceptor {
     @NonNull
     @Override
     public final Response intercept(@NonNull Chain chain) throws IOException {
-        if (isEnabled()) {
+        if (isPatchIncluded() && isEnabled()) {
             return doIntercept(chain);
         } else {
             return chain.proceed(chain.request());

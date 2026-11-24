@@ -19,8 +19,9 @@ import com.android.tools.smali.dexlib2.immutable.ImmutableClassDef
 import com.android.tools.smali.dexlib2.immutable.ImmutableField
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethod
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethodParameter
-import com.google.gson.stream.JsonReader
-import com.google.gson.stream.JsonToken
+import com.fasterxml.jackson.core.JsonFactory
+import com.fasterxml.jackson.core.JsonParser
+import com.fasterxml.jackson.core.JsonToken
 import java.io.Reader
 
 internal class BoostMethodBinding internal constructor(
@@ -187,6 +188,7 @@ internal class BoostBindingTable private constructor(
     }
 
     companion object {
+        private val jsonFactory = JsonFactory().disable(JsonParser.Feature.AUTO_CLOSE_SOURCE)
         private val methodPattern = Regex("""(L[^;\s]+;)->([^\s(:]+)\(([^)]*)\)(.+)""")
         private val fieldPattern = Regex("""(L[^;\s]+;)->([^\s(:]+):(.+)""")
         private val typePattern = Regex("""\[*(?:[ZBSCIJFD]|L[^;\s\[\]().:]+;)""")
@@ -222,28 +224,32 @@ internal class BoostBindingTable private constructor(
         private fun Method.id() =
             MethodId(definingClass, name, parameterTypes.map(CharSequence::toString), returnType)
 
-        fun read(reader: Reader): BoostBindingTable {
-            val input = JsonReader(reader)
+        fun read(reader: Reader): BoostBindingTable = jsonFactory.createParser(reader).use { input ->
+            fun expect(token: JsonToken) {
+                require(input.currentToken == token) {
+                    "Expected $token in Boost adapter bindings at ${input.tokenLocation}"
+                }
+            }
             fun string(): String {
-                require(input.peek() == JsonToken.STRING) { "Expected a Boost adapter string at ${input.path}" }
-                return input.nextString()
+                expect(JsonToken.VALUE_STRING)
+                return input.text
             }
             fun strings(): Map<String, String> {
+                expect(JsonToken.START_OBJECT)
                 val result = linkedMapOf<String, String>()
-                input.beginObject()
-                while (input.hasNext()) {
-                    val name = input.nextName()
-                    require(name !in result) { "Duplicate Boost adapter key at ${input.path}: $name" }
+                while (input.nextToken() != JsonToken.END_OBJECT) {
+                    expect(JsonToken.FIELD_NAME)
+                    val name = input.currentName
+                    require(name !in result) { "Duplicate Boost adapter key at ${input.tokenLocation}: $name" }
+                    input.nextToken()
                     result[name] = string()
                 }
-                input.endObject()
                 return result
             }
             fun list(): List<String> {
+                expect(JsonToken.START_ARRAY)
                 val result = mutableListOf<String>()
-                input.beginArray()
-                while (input.hasNext()) result += string()
-                input.endArray()
+                while (input.nextToken() != JsonToken.END_ARRAY) result += string()
                 require(result.size == result.toSet().size) { "Duplicate Boost adapter dispatch entries" }
                 return result
             }
@@ -251,10 +257,13 @@ internal class BoostBindingTable private constructor(
             val objects = mutableMapOf<String, Map<String, String>>()
             val lists = mutableMapOf<String, List<String>>()
             var version: String? = null
-            input.beginObject()
-            while (input.hasNext()) {
-                val name = input.nextName()
+            input.nextToken()
+            expect(JsonToken.START_OBJECT)
+            while (input.nextToken() != JsonToken.END_OBJECT) {
+                expect(JsonToken.FIELD_NAME)
+                val name = input.currentName
                 require(sections.add(name)) { "Duplicate Boost adapter section: $name" }
+                input.nextToken()
                 when (name) {
                     "version" -> version = string()
                     "classes", "methods", "fields", "injectedMethods" -> objects[name] = strings()
@@ -262,8 +271,7 @@ internal class BoostBindingTable private constructor(
                     else -> error("Unknown Boost adapter section: $name")
                 }
             }
-            input.endObject()
-            require(input.peek() == JsonToken.END_DOCUMENT) { "Trailing data after Boost adapter bindings" }
+            require(input.nextToken() == null) { "Trailing data after Boost adapter bindings" }
             require(sections == setOf("version", "classes", "methods", "fields", "staticMethods", "staticFields", "injectedMethods")) {
                 "Invalid Boost adapter binding sections"
             }
@@ -299,7 +307,7 @@ internal class BoostBindingTable private constructor(
             }
             val declaredVersion = checkNotNull(version)
             require(declaredVersion.isNotBlank()) { "Boost adapter version is empty" }
-            return BoostBindingTable(declaredVersion, classes, methods, fields, staticMethods, staticFields, injected)
+            BoostBindingTable(declaredVersion, classes, methods, fields, staticMethods, staticFields, injected)
         }
     }
 }

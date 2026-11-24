@@ -12,16 +12,20 @@ In addition, patches for some apps contain additional features that were not pre
 
 ### All clients
 * **Reddit API fixes** combines the applicable Reddit API and login repairs into one patch for BaconReader, Boost, Infinity, Joey, Relay (including Pro), RIF (free and paid), and Sync (including Pro). These repairs are always active when included.
-    * Includes missing gallery image repairs when opening posts in BaconReader, Boost, Joey, Relay, RIF, and Sync. Relay's repair is limited to still images. If a previously opened gallery still fails after patching, clear the app's cache (not its storage).
+    * Repairs missing gallery images when opening posts, including recoverable GIFs in Relay. If a previously opened gallery still fails after patching, clear the app's cache (not its storage).
     * Relay's subreddit sidebars remain usable when Reddit omits activity counters.
-* **Fix Redgifs API** restores playback in BaconReader, Joey, Relay, RIF, and Sync. Relay uses native media with sound instead of silent Reddit previews.
-* **Fix comment video links** restores native playback of Reddit comment videos in Boost, Joey, and RIF without relying on post metadata to contain the video.
+    * BaconReader, Boost, Joey, Relay, RIF, and Sync use Reddit's JSON endpoint for `r/all` feeds.
+    * Opens Reddit app links, email links, and `/s/` share links in all supported clients. Share resolution uses the active Reddit session when available and never sends its token to the email or app-link host.
+* **Fix Redgifs API** restores playback in BaconReader, Joey, Relay, RIF, and Sync. BaconReader, Joey, and Relay prefer the original video with sound over silent previews.
+* **Fix random subreddit** restores Random in Boost, Infinity, Joey, Relay, RIF, and Sync. **RedditRand** (a third-party service) is the default. You can switch to **Reddit search** under **Patcheddit > Feed > Random subreddit source**. If the lookup fails, the app reports an error instead of loading the retired `r/random` feed.
+* **Fix comment video links** restores native playback of Reddit comment videos in BaconReader, Boost, Joey, RIF, and Sync without relying on post metadata to contain the video. Relay provides this through **Fix Reddit media link handling**.
+* **Prefer high refresh rate** requests a higher display refresh rate in BaconReader, Boost, Joey, Relay, RIF, and Sync. The display and Android still determine the actual refresh rate.
 * **Fix escaped URLs** repairs links broken by backslashes in posts and comments in BaconReader, Boost, Infinity, Joey, Relay, RIF, and Sync. It is separate from **Reddit API fixes** and can be switched off under **Patcheddit > Links**.
 * **Fix broken markdown links** repairs user and subreddit links displayed with stray Markdown brackets in those clients, without changing code examples or ordinary links. It can be switched off under **Patcheddit > Links**.
 * **Fix swipe back transparency** shows the previous screen during swipe-back gestures in Sync and Joey on Android 11 and newer.
 * **Fix Sync toolbar menu crashes** keeps Sort and More options working on feeds and comment threads in Sync for Reddit Free and Pro.
 * **Fix embedded YouTube playback** plays YouTube videos and Shorts in RIF and Sync for Reddit without requiring the YouTube app. Your existing external link settings still apply.
-* **Log exceptions** saves fatal crashes for every supported client, including Sync for Lemmy, using morphe-patches-library's shared crash logger. BaconReader and Boost hook their native error-reporting handlers; other clients capture exceptions reported through Android error/warning logging, stack traces, and Crashlytics when present, without removing the original logging.
+* **Log exceptions** saves fatal crashes for every supported client using morphe-patches-library's shared crash logger. BaconReader and Boost hook their native error-reporting handlers; other clients capture exceptions reported through Android error/warning logging, stack traces, and Crashlytics when present, without removing the original logging.
 * **Permanently disable NSFW** is an opt-in patch for the Reddit clients. It adds a checkbox under **Patcheddit > Content filtering**. Once confirmed, the checkbox stays checked and cannot be changed, and the lock hides content Reddit marks as NSFW from feeds, community search, and subscriptions. Boost hides cached subreddit names in the subscription sidebar until Reddit confirms they aren't marked NSFW. Removing the control by repatching does not turn off an active lock. A Boost backup made with the lock enabled carries it to a new install.
     * In **Diagnostics**, open a saved report to delete it, or use **Clear all** on either report screen. This does not affect other apps or copies saved outside the report folders.
     * **Diagnostics > Fatal crash logs > Debug logging** lets you opt in to Debug or Verbose Morphe messages in future crash reports. It is off by default; review reports before sharing.
@@ -34,8 +38,9 @@ In addition, patches for some apps contain additional features that were not pre
     * Changing OAuth credentials requires restarting and signing in again.
 
 ### Boost for Reddit
+* **Reddit API fixes** loads History in small pages so it doesn't hold up other Reddit requests.
 * Boost patches target the official [Boost 1.14.4 APK](https://github.com/rubenmayayo/boost-for-reddit/releases/tag/v1.14.4).
-* **Load all inline media** shows linked images and GIFs immediately after their corresponding links in comments and text-post bodies, respecting Boost's inline-media setting. **Patcheddit > Media > Keep inline media URLs** defaults to on; turning it off hides bare URLs without removing descriptive labels.
+* **Load all inline media** shows linked images and GIFs immediately after their corresponding links in comments and text-post bodies, respecting Boost's inline-media setting. Only taps on the image itself open the preview. **Patcheddit > Media > Keep inline media URLs** defaults to on; turning it off hides bare URLs without removing descriptive labels.
 * **Fix image search** updates Google's image search to Google Lens while keeping Yandex and TinEye in the image-search submenu.
 * Boost 1.14.3 also handles the image-post submission kind, search callback lifecycle checks and media-viewer insets natively, so those overrides are no longer injected. The remaining navigation patches still support Patcheddit's custom navigation hosts and layout behavior.
 * Boost handles cached Redgifs playback without a separate fix.
@@ -78,10 +83,11 @@ In addition, patches for some apps contain additional features that were not pre
 * Links with query parameters offer an unchecked **Strip query parameters** checkbox for **Share link** and **Copy link**. Hide it using **Show strip query parameters option** in Patcheddit settings.
 
 ### Relay
-* **Inline media** shows Reddit, Imgur, and Giphy images and GIFs in comments and text posts. **Patcheddit > Media > Keep inline media URLs** defaults to on; turning it off hides bare URLs without removing descriptive labels.
-* **Fix Reddit media link handling** opens Reddit-hosted images, GIFs, and videos in Relay's native media viewer, including signed preview links, thumbnails, avatars, and emoji. It defaults to on under **Patcheddit > Media**.
+* **Inline media** shows Reddit, Imgur, and Giphy images and GIFs in comment threads, comment listings, and text posts, including embedded Giphy GIFs. Tap the center of a preview to open it; the edges still work for scrolling and collapsing comments. **Patcheddit > Media > Keep inline media URLs** defaults to on; turning it off hides bare URLs without removing descriptive labels.
+* **Fix Reddit media link handling** opens Reddit-hosted images, GIFs, and videos in Relay's native media viewer, including signed preview links, thumbnails, avatars, emoji, and Reddit videos linked in comments. It defaults to on under **Patcheddit > Media**.
 
 ### reddit is fun
+* **Reddit API fixes** opens wrapped Reddit images and Matrix-hosted Reddit images in the built-in viewer, even without **Inline media**.
 * **Inline media** displays images, animated images, albums, and videos in comments and text posts, with sizing and playback controls under **Patcheddit > Media**. URLs are kept above previews by default; turn off **Keep inline media URLs** to hide bare URLs.
 * Restores Imgur album and gallery loading in the built-in viewer, album thumbnails, and links that include a title.
 * Restores native Redgifs playback and returns safely when a video is unavailable.
@@ -93,7 +99,7 @@ In addition, patches for some apps contain additional features that were not pre
 
 ### Infinity for Reddit
 * Supports Infinity+, Infinity++, and the Patreon variant.
-* **Reddit API fixes** applies the configured OAuth values to login callbacks and API requests, including obfuscated code, and updates the browser-login callback intent filter.
+* **Reddit API fixes** applies configured OAuth values to API requests and browser login, and repairs blocked child-comment, post, comment, and community lookups.
 
 ## 🚀 Get started
 
@@ -210,7 +216,7 @@ Gate void/boolean extension hooks with `guardHook`; identity transforms can use 
 
 Infinity's JNI client-ID getter is kept intact. Managed call sites use a gated bridge so disabling spoofing still calls the original native method without changing its JNI symbol.
 
-The extension uses Jackson for all JSON processing, bundled and shadowed under `app.morphe.extension.boost.libraries`, with its APIs preserved during shrinking. It does not depend on Boost's R8-reduced JSON libraries or bundle Gson. Native JRAW JSON objects remain behind the `NativeJsonModel` / `NativeJsonNode` adapters; they are not cast to the private Jackson tree types. Boost's own JSON libraries and callers, and the patcher's build-time Gson dependency, are left unchanged.
+The shared extension ships Jackson under `app.morphe.extension.vendored` for its own JSON processing. Boost's native JRAW model conversions still use the app's original parser behind narrow bridges; the extension does not cast between native and vendored JSON types.
 
 Boost's compile-only Kotlin API is in `extensions/boost/stub/src/main/kotlin`. Feature code uses stable class and member names; patches use the matching typed `BoostApi` catalog rather than loading Android stub classes on the patcher JVM:
 

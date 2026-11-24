@@ -18,6 +18,7 @@ import app.morphe.patches.all.misc.PatchCategory
 internal const val INSTALL_NEW_CLIENT_METHOD =
     $$"install(Lokhttp3/OkHttpClient$Builder;)Lokhttp3/OkHttpClient;"
 internal const val CREATE_NEW_CLIENT_METHOD = "createClient()Lokhttp3/OkHttpClient;"
+internal const val REDGIFS_PLAYBACK = "Lapp/morphe/extension/shared/fixes/redgifs/RedgifsPlayback;"
 internal val redgifsSetting = MorphePatchSetting("morphe_patch_fix_redgifs_api")
 
 fun fixRedgifsApiPatch(

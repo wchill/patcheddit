@@ -6,20 +6,20 @@
 
 package app.morphe.extension.boost.http.reddit;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.JsonNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.ObjectNode;
+import app.morphe.extension.vendored.com.fasterxml.jackson.databind.node.JsonNodeFactory;
 
 import java.util.Iterator;
 import java.util.Map;
 import java.util.StringJoiner;
 
-import app.morphe.extension.boost.utils.Emojis;
+import app.morphe.extension.shared.archive.ArchiveBadges;
 
 final class ArchiveRecoveryState {
     static final String RETRY_KEY = "morpheArchiveRetry";
     static final String LOADED_KEY = "morpheArchiveLoaded";
-    static final String WARNING = "\u26A0\uFE0F";
+    static final String EXTRA_EMOJI_CONTEXT_KEY = "extraEmoji";
 
     private ArchiveRecoveryState() {}
 
@@ -46,12 +46,12 @@ final class ArchiveRecoveryState {
     /** Marks data as loaded from the archive; shows a clock unless another icon already explains it. */
     static void loaded(ObjectNode data) {
         data.put(LOADED_KEY, true);
-        if (data.path(Emojis.EXTRA_EMOJI_CONTEXT_KEY).asText().isEmpty()) {
-            data.put(Emojis.EXTRA_EMOJI_CONTEXT_KEY, Emojis.CLOCK_EMOJI);
+        if (data.path(EXTRA_EMOJI_CONTEXT_KEY).asText().isEmpty()) {
+            data.put(EXTRA_EMOJI_CONTEXT_KEY, ArchiveBadges.ARCHIVED);
         }
     }
 
     static void failed(ObjectNode data) {
-        data.put(Emojis.EXTRA_EMOJI_CONTEXT_KEY, WARNING);
+        data.put(EXTRA_EMOJI_CONTEXT_KEY, ArchiveBadges.WARNING);
     }
 }

@@ -31,7 +31,7 @@ val fixEscapedUrlsPatch = fixEscapedUrlsPatch(
             iget-object v1, p0, $REST_CLIENT->url:Ljava/lang/String;
             iget v2, p0, $REST_CLIENT->responseCode:I
             iget-object p1, p0, $REST_CLIENT->contentType:Ljava/lang/String;
-            invoke-static {v0, v1, v2, p1}, $ESCAPED_URLS_PATCH->repairLegacyResponse(Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;
+            invoke-static {v0, v1, v2, p1}, $ESCAPED_URLS_PATCH->repairApacheResponse(Ljava/lang/String;Ljava/lang/String;ILjava/lang/String;)Ljava/lang/String;
             move-result-object v0
             iput-object v0, p0, $REST_CLIENT->response:Ljava/lang/String;
         """.trimIndent(),

@@ -32,6 +32,13 @@ public class MediaLinksTest {
         assertEquals(MediaLinks.IMAGE, MediaLinks.kind("https://PREVIEW.REDD.IT/image%2Ejpeg?s=a"));
     }
 
+    @Test public void inlineGiphyCdnKeepsTheOriginalUrl() {
+        String cdn = "https://media2.giphy.com/media/AbC123/giphy.gif?cid=a%2Fb&rid=giphy.gif";
+        assertEquals(cdn, MediaLinks.inlineImage(cdn));
+        assertNull(MediaLinks.inlineImage("https://media2.giphy.com.example.org/media/AbC123/giphy.gif"));
+        assertNull(MediaLinks.inlineImage("https://media2.giphy.com/media/AbC123/giphy.mp4"));
+    }
+
     @Test public void requestedFormatOverridesFilename() {
         assertEquals(MediaLinks.IMAGE, MediaLinks.kind("https://preview.redd.it/image.gif?format=pjpg&s=x"));
         assertEquals(MediaLinks.ANIMATED, MediaLinks.kind("https://preview.redd.it/image.gif?format=webp&s=x"));
@@ -60,6 +67,13 @@ public class MediaLinksTest {
         assertEquals(direct, MediaLinks.manifestUrl(direct));
         assertEquals("https://v.redd.it/abc/DASHPlaylist.mpd#fragment?not-a-query",
                 MediaLinks.manifestUrl("https://v.redd.it/abc#fragment?not-a-query"));
+    }
+
+    @Test public void commentPlayerLinksUseTheirNativeDashDirectory() {
+        String link = "https://www.reddit.com/link/post123/video/asset456/player?share_id=abc";
+        assertEquals(MediaLinks.DASH, MediaLinks.kind(link));
+        assertEquals("https://v.redd.it/link/post123/asset/asset456/DASHPlaylist.mpd", MediaLinks.manifestUrl(link));
+        assertEquals(MediaLinks.NONE, MediaLinks.kind(link.replace("www.reddit.com", "reddit.com.example.org")));
     }
 
     @Test public void leavesPagesAndUnrelatedResourcesAlone() {

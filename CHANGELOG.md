@@ -1,3 +1,58 @@
+# [2.6.0-dev.4](https://github.com/wchill/patcheddit/compare/v2.6.0-dev.3...v2.6.0-dev.4) (2026-11-24)
+
+
+### Bug Fixes
+
+* **boost:** Ignore touches outside of inline images ([2b16d7c](https://github.com/wchill/patcheddit/commit/2b16d7c3b70e2bb5b42a84bc5e704d665e969d87))
+* **boost:** Look up removal strings from resource XML ([b1959a6](https://github.com/wchill/patcheddit/commit/b1959a6d26bf467d1a5208ea96851df9125418e1))
+* **joey:** Remove ad banners ([f73907c](https://github.com/wchill/patcheddit/commit/f73907cdda7a8b3d7854165d37c773fa66adfc87))
+* **relay:** Resolve inline media layout issues ([d32a639](https://github.com/wchill/patcheddit/commit/d32a63997e04281fcada013f351673c36a2c70c3))
+
+# [2.6.0-dev.3](https://github.com/wchill/patcheddit/compare/v2.6.0-dev.2...v2.6.0-dev.3) (2026-11-24)
+
+
+### Bug Fixes
+
+* Hook additional link resolvers for authenticated /s/ link resolving ([c84920b](https://github.com/wchill/patcheddit/commit/c84920b8f8553cc1ae95e2a1387c92833c7a1978))
+
+# [2.6.0-dev.2](https://github.com/wchill/patcheddit/compare/v2.6.0-dev.1...v2.6.0-dev.2) (2026-11-24)
+
+
+### Bug Fixes
+
+* Handle email and app links in all clients ([2fd41af](https://github.com/wchill/patcheddit/commit/2fd41af850fc241d225667f8cfaf5ec8d3bad27d))
+* **infinity:** API fixes ([f7054cd](https://github.com/wchill/patcheddit/commit/f7054cddbb60adb12fa3e62b41dce525ecb60520))
+
+# [2.6.0-dev.1](https://github.com/wchill/patcheddit/compare/v2.5.2-dev.1...v2.6.0-dev.1) (2026-11-24)
+
+
+### Bug Fixes
+
+* /s/ links now resolve when logged in on blocked IP ranges ([f20eda2](https://github.com/wchill/patcheddit/commit/f20eda2027161b88e5eb252902476962964376d4))
+* **boost:** Paginate loading of history view ([3a1d665](https://github.com/wchill/patcheddit/commit/3a1d665c72d75851f7c6768c17cc0599f7b31421))
+* Do not use silent previews for redgifs media in BaconReader/Joey and prefer HD videos ([5c4381f](https://github.com/wchill/patcheddit/commit/5c4381f17050ab915dd32d9defadca1d78253990))
+* Handle /s/ links in BaconReader, Joey, RIF ([c5a3a65](https://github.com/wchill/patcheddit/commit/c5a3a6505bcb74349dc2cdb17aed9bcc7f92e952))
+* Handle share links in Joey, plus handle more link schemas ([8c32f10](https://github.com/wchill/patcheddit/commit/8c32f10f35d7ece93fdaaf357f45c202bf45ac7f))
+* Handle video links in comments in BaconReader, Sync, and Relay ([e1ec23a](https://github.com/wchill/patcheddit/commit/e1ec23a93c2d6fb7159d8dec5a545d880da1aaf6))
+* Random subreddit feed works for all clients ([1d5eea8](https://github.com/wchill/patcheddit/commit/1d5eea82d44dbfb0c2e3f5ac625f1424b62531c1))
+* **relay:** Reserve space for inline media to prevent flickering/jumping ([dfac1ff](https://github.com/wchill/patcheddit/commit/dfac1ff788fa199440a44b8653669e97fe03e10d))
+* Repair gallery metadata in Relay ([395d44d](https://github.com/wchill/patcheddit/commit/395d44d5c1e79fa674d54bb132d075c3802023bb))
+* **rif:** Handle wrapped media links ([300b2e4](https://github.com/wchill/patcheddit/commit/300b2e4ad255fda40f96a330f02a8065edfae250))
+* Use /r/all workaround for BaconReader, Joey, Relay, RIF, and Sync ([16922e4](https://github.com/wchill/patcheddit/commit/16922e4ee104db01fa0fcb785b479d81dd72279b))
+
+
+### Features
+
+* Add high refresh rate support for BaconReader, Joey, Relay, RIF, and Sync ([a34487d](https://github.com/wchill/patcheddit/commit/a34487dbf965bce5050e446fe2ff98208f460e82))
+
+## [2.5.2-dev.1](https://github.com/wchill/patcheddit/compare/v2.5.1...v2.5.2-dev.1) (2026-11-23)
+
+
+### Bug Fixes
+
+* **relay:** Hook additional comment renderers for inline media ([c21e1b1](https://github.com/wchill/patcheddit/commit/c21e1b1e5445ded665e760e4c200bfe4d6aa8cbb))
+* Remove Sync for Lemmy support ([0e39e4a](https://github.com/wchill/patcheddit/commit/0e39e4a6d30a2b820151f1e5907053c052fc79fc))
+
 ## [2.5.1](https://github.com/wchill/patcheddit/compare/v2.5.0...v2.5.1) (2026-11-23)
 
 

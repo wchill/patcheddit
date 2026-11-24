@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceCategory xmlns:android="http://schemas.android.com/apk/res/android">
+    <app.morphe.extension.shared.fixes.feed.RandomSubredditProviderPreference
+        android:key="morphe_random_subreddit_provider"
+        android:title="Random subreddit source"
+        android:dialogTitle="Random subreddit source" />
+</PreferenceCategory>

@@ -149,11 +149,11 @@ public class EscapedUrlsPatchTest {
     public void legacyTransportUsesTheSameRepairAndResponseGuards() throws Exception {
         String body = new JSONObject().put("selftext", BROKEN).toString();
         String url = "https://oauth.reddit.com/best";
-        assertEquals(FIXED, new JSONObject(EscapedUrlsPatch.repairLegacyResponse(
+        assertEquals(FIXED, new JSONObject(EscapedUrlsPatch.repairApacheResponse(
                 body, url, 200, "application/json")).getString("selftext"));
-        assertEquals(body, EscapedUrlsPatch.repairLegacyResponse(body, url, 403, "application/json"));
-        assertEquals(body, EscapedUrlsPatch.repairLegacyResponse(body, url, 200, "text/html"));
-        assertEquals(body, EscapedUrlsPatch.repairLegacyResponse(
+        assertEquals(body, EscapedUrlsPatch.repairApacheResponse(body, url, 403, "application/json"));
+        assertEquals(body, EscapedUrlsPatch.repairApacheResponse(body, url, 200, "text/html"));
+        assertEquals(body, EscapedUrlsPatch.repairApacheResponse(
                 body, "https://example.com/best", 200, "application/json"));
     }
 

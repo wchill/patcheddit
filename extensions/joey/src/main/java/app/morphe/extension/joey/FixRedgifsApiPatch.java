@@ -14,4 +14,9 @@ public final class FixRedgifsApiPatch extends BaseFixRedgifsApiPatch {
     public String getDefaultUserAgent() {
         return "Joey";
     }
+
+    @Override
+    protected boolean preferAudioSources() {
+        return true;
+    }
 }

@@ -9,6 +9,7 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit.http.reddit
 
+import app.morphe.patcher.Fingerprint
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostFieldBinding
 
@@ -16,8 +17,11 @@ import app.morphe.patcher.extensions.InstructionExtensions.addInstructions
 import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
 import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.extensions.InstructionExtensions.instructions
+import app.morphe.patcher.resource.ResourceType.STRING
+import app.morphe.patcher.resource.resourceId
 import app.morphe.patches.reddit.customclients.morpheBytecodePatch
 import app.morphe.patcher.util.proxy.mutableTypes.MutableField.Companion.toMutable
+import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod
 import app.morphe.patcher.util.proxy.mutableTypes.MutableMethod.Companion.toMutable
 import app.morphe.patcher.util.smali.ExternalLabel
 import app.morphe.patches.reddit.customclients.AppCompatibility
@@ -26,6 +30,7 @@ import app.morphe.patches.reddit.customclients.boostforreddit.http.REDDIT_UNDELE
 import app.morphe.patches.reddit.customclients.boostforreddit.http.undeleteAppliedMarkerPatch
 import app.morphe.patches.reddit.customclients.boostforreddit.wrapHook
 import app.morphe.patcher.util.getReference
+import app.morphe.patcher.util.returnEarly
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
 import com.android.tools.smali.dexlib2.builder.MutableMethodImplementation
@@ -95,6 +100,12 @@ val undeleteRedditPatch = morpheBytecodePatch(
     compatibleWith(*AppCompatibility.Boost)
 
     execute {
+        for (interceptor in listOf("RedditSubmission", "RedditSubreddit", "RedditMedia")) {
+            Fingerprint(
+                definingClass = "Lapp/morphe/extension/boost/http/reddit/${interceptor}UndeleteInterceptor;",
+                name = "isPatchIncluded",
+            ).method.returnEarly(true)
+        }
         // Glide uses HttpURLConnection directly, bypassing the OkHttp interceptors.
         GlideHttpUrlFetcherFetchFingerprint.method.apply {
             val nativeInstructions = implementation!!.instructions
@@ -255,38 +266,40 @@ val undeleteRedditPatch = morpheBytecodePatch(
         // endregion
 
         // region Fix the deletion reason detection
-        setting.patchMethod(StateSubmissionViewSetStateFingerprint) {
-            addInstructionsWithLabels(
-                0,
-                """
-                    iget-object v0, p1, ${BoostApi.SubmissionModel.removalCategory}
-                    const-string v1, "copyright_takedown"
-                    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-                    move-result v1
-                    if-eqz v1, :morphe_check_content_takedown
-                    const v1, 0x7f13057c
-                    const v2, 0x7f13057d
-                    goto :morphe_show_removal_reason
-                    :morphe_check_content_takedown
-                    const-string v1, "content_takedown"
-                    invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
-                    move-result v1
-                    if-eqz v1, :morphe_native_removal_reason
-                    const v1, 0x7f130578
-                    const v2, 0x7f130579
-                    :morphe_show_removal_reason
-                    iget-object v0, p0, ${BoostApi.StateSubmissionView.headerText}
-                    invoke-virtual {v0, v1}, Landroid/widget/TextView;->setText(I)V
-                    iget-object v0, p0, ${BoostApi.StateSubmissionView.summaryText}
-                    invoke-virtual {v0, v2}, Landroid/widget/TextView;->setText(I)V
-                    const/4 v0, 0x0
-                    invoke-virtual {p0, v0}, Landroid/view/View;->setVisibility(I)V
-                    return-void
-                """,
-                ExternalLabel("morphe_native_removal_reason", getInstruction(0)),
-            )
-        }
+        setting.patchMethod(StateSubmissionViewSetStateFingerprint) { overrideRemovalReasonStrings() }
         // endregion
         installArchiveRetry()
     }
+}
+
+internal fun MutableMethod.overrideRemovalReasonStrings() {
+    addInstructionsWithLabels(
+        0,
+        """
+            iget-object v0, p1, ${BoostApi.SubmissionModel.removalCategory}
+            const-string v1, "copyright_takedown"
+            invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+            move-result v1
+            if-eqz v1, :morphe_check_content_takedown
+            const v1, ${resourceId(STRING, "removed_by_copyright_takedown_header")}
+            const v2, ${resourceId(STRING, "removed_by_copyright_takedown_summary")}
+            goto :morphe_show_removal_reason
+            :morphe_check_content_takedown
+            const-string v1, "content_takedown"
+            invoke-virtual {v1, v0}, Ljava/lang/String;->equals(Ljava/lang/Object;)Z
+            move-result v1
+            if-eqz v1, :morphe_native_removal_reason
+            const v1, ${resourceId(STRING, "removed_by_anti_evil_ops_header")}
+            const v2, ${resourceId(STRING, "removed_by_anti_evil_ops_summary")}
+            :morphe_show_removal_reason
+            iget-object v0, p0, ${BoostApi.StateSubmissionView.headerText}
+            invoke-virtual {v0, v1}, Landroid/widget/TextView;->setText(I)V
+            iget-object v0, p0, ${BoostApi.StateSubmissionView.summaryText}
+            invoke-virtual {v0, v2}, Landroid/widget/TextView;->setText(I)V
+            const/4 v0, 0x0
+            invoke-virtual {p0, v0}, Landroid/view/View;->setVisibility(I)V
+            return-void
+        """,
+        ExternalLabel("morphe_native_removal_reason", getInstruction(0)),
+    )
 }

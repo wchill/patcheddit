@@ -10,14 +10,39 @@ package app.morphe.extension.shared.fixes.feed;
 import androidx.annotation.NonNull;
 
 import java.io.IOException;
+import java.net.URI;
+import java.util.regex.Pattern;
 
-import app.morphe.extension.shared.requests.PatchedditInterceptor;
+import app.morphe.extension.shared.requests.RedditRouteResponseShim;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.Response;
 
 
-public class RAllPatch extends PatchedditInterceptor {
+public class RAllPatch extends RedditRouteResponseShim {
+    private static final Pattern LISTING_PATH = Pattern.compile(
+            "/r/all(?:-[a-z0-9_]+)*(?:/(?:best|hot|new|rising|top|controversial))?/?",
+            Pattern.CASE_INSENSITIVE);
+
+    public RAllPatch() {
+        super(request -> shouldRewrite(request.method(), request.url()));
+    }
+
+    private static boolean shouldRewrite(String method, HttpUrl url) {
+        return "GET".equals(method) && isRedditHost(url.host()) && LISTING_PATH.matcher(url.encodedPath()).matches();
+    }
+
+    private static HttpUrl listingJsonUrl(HttpUrl url) {
+        return url.newBuilder().addEncodedPathSegment(".json").build();
+    }
+
+    /** For BaconReader's Apache request path, which bypasses the OkHttp shim. */
+    public static URI rewriteLegacyListing(String method, URI original) {
+        if (!"GET".equals(method) || original == null) return null;
+        HttpUrl url = HttpUrl.parse(original.toString());
+        return url != null && shouldRewrite(method, url) ? listingJsonUrl(url).uri() : null;
+    }
+
     @Override
     public boolean isPatchIncluded() {
         // Overridden by patch.
@@ -26,23 +51,9 @@ public class RAllPatch extends PatchedditInterceptor {
 
     @NonNull
     @Override
-    public Response doIntercept(@NonNull Chain chain) throws IOException {
-        Request request = chain.request();
-        HttpUrl url = request.url();
-        if (!url.host().endsWith("reddit.com")) {
-            return chain.proceed(request);
-        }
-
-        if (!url.encodedPath().contains("/r/all")) {
-            return chain.proceed(request);
-        }
-
-        if (url.encodedPath().endsWith("/.json")) {
-            return chain.proceed(request);
-        }
-
+    protected Response shimResponse(@NonNull Chain chain, @NonNull Request request) throws IOException {
         Request newRequest = request.newBuilder()
-                .url(url.newBuilder().addEncodedPathSegment(".json").build())
+                .url(listingJsonUrl(request.url()))
                 .build();
         return chain.proceed(newRequest);
     }

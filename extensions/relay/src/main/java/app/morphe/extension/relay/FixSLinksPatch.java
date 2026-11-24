@@ -33,8 +33,4 @@ public class FixSLinksPatch extends BaseFixSLinksPatch {
 
         return INSTANCE.resolveSLink(data);
     }
-
-    public static void patchSetAccessToken(String accessToken) {
-        INSTANCE.setAccessToken(accessToken);
-    }
 }

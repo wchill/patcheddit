@@ -12,6 +12,8 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
+import app.morphe.extension.shared.fixes.media.CommentVideoLinks;
+
 public final class MediaLinks {
     static final int NONE = 0, IMAGE = 1, VIDEO = 2, ANIMATED = 3, DASH = 4;
 
@@ -55,7 +57,9 @@ public final class MediaLinks {
             return id.matches("[A-Za-z0-9]{1,64}") && path.startsWith("/gifs/")
                     ? "https://media.giphy.com/media/" + id + "/giphy.gif" : null;
         }
-        if (!(host.equals("i.imgur.com") || host.equals("media.giphy.com") || host.equals("i.giphy.com"))) return null;
+        // Relay rewrites embedded Giphy links to the image's CDN URL.
+        if (!(host.equals("i.imgur.com") || host.equals("i.giphy.com")
+                || host.matches("media[0-9]?\\.giphy\\.com"))) return null;
         String format = format(uri);
         String suffix = format.isEmpty() ? path.substring(path.lastIndexOf('.') + 1).toLowerCase(Locale.ROOT) : format;
         return suffix.matches("jpe?g|pjpg|png|gif|webp|avif|bmp") ? link : null;
@@ -84,6 +88,7 @@ public final class MediaLinks {
     }
 
     static int kind(String link) {
+        if (CommentVideoLinks.baseUrl(link) != null) return DASH;
         URI uri = uri(link);
         if (uri == null || uri.getRawPath().isEmpty() || uri.getRawPath().equals("/")) return NONE;
         if (videoRoot(uri)) return DASH;
@@ -112,6 +117,10 @@ public final class MediaLinks {
         return kind(link) != NONE;
     }
 
+    public static String commentVideoBase(String link) {
+        return CommentVideoLinks.baseUrl(link);
+    }
+
     public static boolean isHls(String link) {
         URI uri = uri(link);
         if (uri == null) return false;
@@ -121,6 +130,8 @@ public final class MediaLinks {
     }
 
     public static String manifestUrl(String link) {
+        String commentManifest = CommentVideoLinks.dashUrl(link);
+        if (commentManifest != null) return commentManifest;
         URI uri = uri(link);
         if (uri == null || !videoRoot(uri)) return link;
         int query = link.indexOf('?'), fragment = link.indexOf('#');

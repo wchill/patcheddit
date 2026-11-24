@@ -9,15 +9,20 @@
 
 package app.morphe.extension.boost;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
+import app.morphe.extension.boost.api.RedditJraw;
 import app.morphe.extension.shared.Utils;
 import app.morphe.extension.shared.fixes.slink.BaseFixSLinksPatch;
+import app.morphe.extension.shared.fixes.slink.ShareLinkNavigation;
 
 import com.rubenmayayo.reddit.ui.activities.WebViewActivity;
+
+import net.dean.jraw.http.oauth.OAuthData;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,6 +53,16 @@ public class FixSLinksPatch extends BaseFixSLinksPatch {
         webViewActivityClass = WebViewActivity.class;
     }
 
+    public static boolean openExternalLink(Activity activity, String targetClass) {
+        if (ShareLinkNavigation.openWrapperActivity(activity, targetClass)) return true;
+        Intent intent = activity.getIntent();
+        // DeepLinkingActivity tries its anonymous shortener before the patched in-app router.
+        if (intent == null || !Intent.ACTION_VIEW.equals(intent.getAction())
+                || !INSTANCE.resolveSLink(intent.getDataString())) return false;
+        activity.finish();
+        return true;
+    }
+
     public static boolean patchResolveSLink(String link) {
         if (openRedditPollLink(link)) {
             return true;
@@ -60,8 +75,12 @@ public class FixSLinksPatch extends BaseFixSLinksPatch {
         return INSTANCE.resolveSLink(link);
     }
 
-    public static void patchSetAccessToken(String accessToken) {
-        INSTANCE.setAccessToken(accessToken);
+    public static String getActiveAccessToken() {
+        RedditJraw session = RedditJraw.instance;
+        if (session == null) return null;
+        session.ensureAuthenticated();
+        OAuthData data = session.client.getOAuthData();
+        return session == RedditJraw.instance && data != null ? data.getAccessToken() : null;
     }
 
     private static boolean openRedditPollLink(String link) {

@@ -10,32 +10,40 @@
 
 package app.morphe.extension.boost.http.reddit;
 
-import org.jetbrains.annotations.NotNull;
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
-import app.morphe.extension.boost.http.HttpUtils;
 import app.morphe.extension.boost.utils.BoostUndeleteSettings;
-import app.morphe.extension.boost.utils.LoggingUtils;
-import app.morphe.extension.boost.http.wayback.WaybackMachine;
-import app.morphe.extension.boost.http.wayback.WaybackResponse;
-import okhttp3.Interceptor;
+import app.morphe.extension.shared.archive.HttpUtils;
+import app.morphe.extension.shared.archive.wayback.WaybackMachine;
+import app.morphe.extension.shared.archive.wayback.WaybackResponse;
+import app.morphe.extension.shared.debug.LoggingUtils;
+import app.morphe.extension.shared.requests.PatchedditInterceptor;
 import okhttp3.Response;
 import okhttp3.Request;
 
 
-public class RedditMediaUndeleteInterceptor implements Interceptor {
+public class RedditMediaUndeleteInterceptor extends PatchedditInterceptor {
 
     private static final String FAIL_OPEN_MARKER = "morphe_boost_undelete_media_fail_open";
 
-    @NotNull
     @Override
-    public Response intercept(Chain chain) throws IOException {
+    public boolean isEnabled() {
+        return BoostUndeleteSettings.isRedditUndeleteEnabled();
+    }
+
+    @Override
+    public boolean isPatchIncluded() {
+        // To be overridden by patch.
+        return false;
+    }
+
+    @NonNull
+    @Override
+    protected Response doIntercept(@NonNull Chain chain) throws IOException {
         Request request = chain.request();
-        if (!BoostUndeleteSettings.isRedditUndeleteEnabled()) {
-            return chain.proceed(request);
-        }
 
         String host = request.url().host();
 

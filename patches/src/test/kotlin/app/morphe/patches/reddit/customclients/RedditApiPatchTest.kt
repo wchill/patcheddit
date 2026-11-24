@@ -20,6 +20,7 @@ import app.morphe.patches.reddit.customclients.baconreader.fix.apilookups.fixRed
 import app.morphe.patches.reddit.customclients.baconreader.fix.gallery.fixFailedGalleryImagesPatch as baconReaderGallery
 import app.morphe.patches.reddit.customclients.baconreader.fix.login.modifyLoginWebView as baconReaderLogin
 import app.morphe.patches.reddit.customclients.baconreader.fix.morecomments.fixMoreComments as baconReaderComments
+import app.morphe.patches.reddit.customclients.baconreader.fix.slink.fixSLinksPatch as baconReaderLinks
 import app.morphe.patches.reddit.customclients.boostforreddit.api.redditApiPatch as boostApi
 import app.morphe.patches.reddit.customclients.boostforreddit.api.legacySpoofClientPatch as boostLegacy
 import app.morphe.patches.reddit.customclients.boostforreddit.api.spoofClientPatch as boostSpoof
@@ -29,6 +30,10 @@ import app.morphe.patches.reddit.customclients.boostforreddit.fix.gallery.fixFai
 import app.morphe.patches.reddit.customclients.boostforreddit.fix.login.modifyLoginWebView as boostLogin
 import app.morphe.patches.reddit.customclients.boostforreddit.fix.slink.fixSlinksPatch as boostLinks
 import app.morphe.patches.reddit.customclients.infinity.api.redditApiPatch as infinityApi
+import app.morphe.patches.reddit.customclients.infinity.api.infinityApiLookups
+import app.morphe.patches.reddit.customclients.infinity.api.infinityGallery
+import app.morphe.patches.reddit.customclients.infinity.api.infinityMoreComments
+import app.morphe.patches.reddit.customclients.infinity.api.infinityShareLinks
 import app.morphe.patches.reddit.customclients.infinity.api.legacySpoofClientPatch as infinityLegacy
 import app.morphe.patches.reddit.customclients.infinity.api.spoofClientPatch as infinitySpoof
 import app.morphe.patches.reddit.customclients.infinity.fix.login.modifyLoginWebView as infinityLogin
@@ -39,6 +44,7 @@ import app.morphe.patches.reddit.customclients.joey.fix.apilookups.fixRedditApiL
 import app.morphe.patches.reddit.customclients.joey.fix.gallery.fixFailedGalleryImagesPatch as joeyGallery
 import app.morphe.patches.reddit.customclients.joey.fix.login.modifyLoginWebView as joeyLogin
 import app.morphe.patches.reddit.customclients.joey.fix.morecomments.fixMoreComments as joeyComments
+import app.morphe.patches.reddit.customclients.joey.fix.slink.fixSLinksPatch as joeyLinks
 import app.morphe.patches.reddit.customclients.redditisfun.api.guestListingsPatch as rifGuestListings
 import app.morphe.patches.reddit.customclients.redditisfun.api.redditApiPatch as rifApi
 import app.morphe.patches.reddit.customclients.redditisfun.api.legacySpoofClientPatch as rifLegacy
@@ -47,6 +53,7 @@ import app.morphe.patches.reddit.customclients.redditisfun.fix.apilookups.fixRed
 import app.morphe.patches.reddit.customclients.redditisfun.fix.gallery.fixFailedGalleryImagesPatch as rifGallery
 import app.morphe.patches.reddit.customclients.redditisfun.fix.login.modifyLoginWebView as rifLogin
 import app.morphe.patches.reddit.customclients.redditisfun.fix.morecomments.fixMoreComments as rifComments
+import app.morphe.patches.reddit.customclients.redditisfun.fix.slink.fixSLinksPatch as rifLinks
 import app.morphe.patches.reddit.customclients.relay.api.redditApiPatch as relayApi
 import app.morphe.patches.reddit.customclients.relay.api.legacySpoofClientPatch as relayLegacy
 import app.morphe.patches.reddit.customclients.relay.api.spoofClientPatch as relaySpoof
@@ -78,15 +85,26 @@ class RedditApiPatchTest {
     )
 
     @Test
-    fun bundlesExactlyTheApplicableFixesIncludingGalleryRepairsExceptForInfinity() {
+    fun bundlesExactlyTheApplicableFixes() {
         val expected = mapOf(
-            baconReaderApi to setOf(baconReaderSpoof, baconReaderLogin, baconReaderLookups, baconReaderGallery, baconReaderComments),
+            baconReaderApi to setOf(
+                baconReaderSpoof, baconReaderLogin, baconReaderLookups, baconReaderGallery, baconReaderComments,
+                baconReaderLinks, baconReaderRAllPatch,
+            ),
             boostApi to setOf(boostSpoof, boostLogin, boostLookups, boostGallery, boostRAll, boostLinks),
-            infinityApi to setOf(infinitySpoof, infinityLogin),
-            joeyApi to setOf(joeySpoof, joeyLogin, joeyLookups, joeyGallery, joeyComments),
-            rifApi to setOf(rifSpoof, rifLogin, rifGuestListings, rifLookups, rifGallery, rifComments),
-            relayApi to setOf(relaySpoof, relayLogin, relayLookups, relayGallery, relayComments, relayLinks, relaySidebar),
-            syncApi to setOf(syncSpoof, syncLogin, syncLookups, syncGallery, syncComments, syncLinks, useUserEndpointPatch),
+            infinityApi to setOf(
+                infinitySpoof, infinityLogin, infinityMoreComments, infinityApiLookups, infinityShareLinks, infinityGallery,
+            ),
+            joeyApi to setOf(joeySpoof, joeyLogin, joeyLookups, joeyGallery, joeyComments, joeyLinks, joeyRAllPatch),
+            rifApi to setOf(
+                rifSpoof, rifLogin, rifGuestListings, rifLookups, rifGallery, rifComments, rifLinks, rifRAllPatch,
+            ),
+            relayApi to setOf(
+                relaySpoof, relayLogin, relayLookups, relayGallery, relayComments, relayRAllPatch, relayLinks, relaySidebar,
+            ),
+            syncApi to setOf(
+                syncSpoof, syncLogin, syncLookups, syncGallery, syncComments, syncRAllPatch, syncLinks, useUserEndpointPatch,
+            ),
         )
         for ((meta, spoof) in clients) {
             assertEquals(expected.getValue(meta), meta.dependencies)
