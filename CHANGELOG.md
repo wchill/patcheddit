@@ -1,3 +1,10 @@
+# [2.6.0-dev.3](https://github.com/wchill/patcheddit/compare/v2.6.0-dev.2...v2.6.0-dev.3) (2026-11-24)
+
+
+### Bug Fixes
+
+* Hook additional link resolvers for authenticated /s/ link resolving ([c84920b](https://github.com/wchill/patcheddit/commit/c84920b8f8553cc1ae95e2a1387c92833c7a1978))
+
 # [2.6.0-dev.2](https://github.com/wchill/patcheddit/compare/v2.6.0-dev.1...v2.6.0-dev.2) (2026-11-24)
 
 
