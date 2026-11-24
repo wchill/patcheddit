@@ -1,3 +1,11 @@
+# [2.6.0-dev.2](https://github.com/wchill/patcheddit/compare/v2.6.0-dev.1...v2.6.0-dev.2) (2026-11-24)
+
+
+### Bug Fixes
+
+* Handle email and app links in all clients ([2fd41af](https://github.com/wchill/patcheddit/commit/2fd41af850fc241d225667f8cfaf5ec8d3bad27d))
+* **infinity:** API fixes ([f7054cd](https://github.com/wchill/patcheddit/commit/f7054cddbb60adb12fa3e62b41dce525ecb60520))
+
 # [2.6.0-dev.1](https://github.com/wchill/patcheddit/compare/v2.5.2-dev.1...v2.6.0-dev.1) (2026-11-24)
 
 
