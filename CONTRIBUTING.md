@@ -154,6 +154,12 @@ responses, not a Reddit account. The RIF fixture checks external intent matching
 without launching MainActivity because a package-renamed build still refers to
 stock content providers at startup.
 
+On a disposable Boost APK with **Reddit API fixes**, run `BoostHistoryDeviceTest`
+with `--suite app.patcheddit.fixture.BoostHistoryDeviceTest` and
+`--source test/device/BoostHistoryDeviceTest.java` (no `stock` argument).
+It checks native History pagination and that other requests still complete
+while a History page is waiting for a response.
+
 `BaconReaderSyncCommentVideoDeviceTest` exercises the native player handoff
 with **Fix comment video links** applied. Pass `--arg stock=baconreader` for a
 package-renamed BaconReader fixture.

@@ -50,7 +50,7 @@ public class OkHttpRequestHook extends BaseOkHttpRequestHook {
                 new ImgurUndeleteInterceptor(),
                 new RAllPatch(),
                 new RandomSubredditInterceptor(),
-                new RedditInfoResponsePatch()
+                new RedditInfoResponsePatch(true)
         );
     }
 

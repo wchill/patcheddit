@@ -16,10 +16,12 @@ import org.json.JSONTokener;
 import java.io.IOException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import app.morphe.extension.shared.requests.RedditRequestParameters;
 import app.morphe.extension.shared.requests.RedditRouteResponseShim;
@@ -32,16 +34,27 @@ import okhttp3.ResponseBody;
 public final class RedditInfoResponsePatch extends RedditRouteResponseShim {
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private static final long MAX_CONTEXT_BYTES = 8L * 1024 * 1024;
+    private static final int POST_PAGE_SIZE = 10;
     private static final RedditCommentContext SHARED_CONTEXT = new RedditCommentContext(10_000);
     private final RedditCommentContext context;
+    private final boolean pagePostById;
 
     public RedditInfoResponsePatch() {
-        this(SHARED_CONTEXT);
+        this(false);
     }
 
     RedditInfoResponsePatch(RedditCommentContext context) {
+        this(context, false);
+    }
+
+    public RedditInfoResponsePatch(boolean pagePostById) {
+        this(SHARED_CONTEXT, pagePostById);
+    }
+
+    RedditInfoResponsePatch(RedditCommentContext context, boolean pagePostById) {
         super(request -> shouldIndex(request, normalizePath(request.url().encodedPath())));
         this.context = context;
+        this.pagePostById = pagePostById;
     }
 
     @Override
@@ -57,10 +70,16 @@ public final class RedditInfoResponsePatch extends RedditRouteResponseShim {
         boolean info = path.equals("/api/info")
                 && (request.method().equals("GET") || request.method().equals("POST"));
         boolean byId = path.startsWith("/by_id/") && request.method().equals("GET");
+        if (pagePostById && byId) {
+            Map<String, String> parameters = RedditRequestParameters.read(request);
+            List<Lookup> lookups = plan(request, path, parameters);
+            if (lookups != null && lookups.stream().allMatch(lookup -> lookup.kind.equals("t3"))) {
+                return lookupPostPage(chain, request, parameters, lookups);
+            }
+        }
         Response response = chain.proceed(request);
 
-        if ((info || byId) && response.code() == 403
-                && response.header("Content-Type", "").toLowerCase(Locale.ROOT).contains("text/html")) {
+        if ((info || byId) && isBlocked(response)) {
             final Map<String, String> parameters;
             final List<Lookup> lookups;
             try {
@@ -74,10 +93,79 @@ public final class RedditInfoResponsePatch extends RedditRouteResponseShim {
                 return response;
             }
             response.close();
-            return lookup(chain, request, parameters, lookups);
+            return lookup(chain, request, parameters, lookups, null);
         }
         indexResponse(response, request);
         return response;
+    }
+
+    private static boolean isBlocked(Response response) {
+        return response.code() == 403 && response.header("WWW-Authenticate") == null
+                && response.header("Content-Type", "").toLowerCase(Locale.ROOT).contains("text/html");
+    }
+
+    private Response lookupPostPage(Chain chain, Request original, Map<String, String> parameters,
+                                    List<Lookup> lookups) throws IOException {
+        List<String> names = new ArrayList<>(lookups.size());
+        for (Lookup lookup : lookups) names.add("t3_" + lookup.id);
+        String after = parameters.get("after");
+        int start = after == null ? 0 : names.indexOf(after) + 1;
+        if (after != null && (start == 0 || start == names.size())) {
+            throw new IOException("Invalid Reddit post lookup cursor");
+        }
+        PageBudget budget = new PageBudget();
+        while (true) {
+            int end = Math.min(start + POST_PAGE_SIZE, names.size());
+            List<String> page = names.subList(start, end);
+            String ids = String.join(",", page);
+            HttpUrl.Builder url = original.url().newBuilder()
+                    .encodedPath("/by_id/" + ids + ".json")
+                    .removeAllQueryParameters("after")
+                    .removeAllQueryParameters("before")
+                    .setQueryParameter("limit", Integer.toString(page.size()));
+            Response response = budget.proceed(chain, lookupRequest(original, url.build()));
+            if (isBlocked(response)) {
+                response.close();
+                url.encodedPath("/api/info.json").setQueryParameter("id", ids);
+                response = budget.proceed(chain, lookupRequest(original, url.build()));
+                if (isBlocked(response)) {
+                    response.close();
+                    response = lookup(chain, original, parameters, lookups.subList(start, end), budget);
+                }
+            }
+            if (!response.isSuccessful()) return response;
+            try (Response pageResponse = response) {
+                JSONArray ordered = orderedPosts(pageResponse, page);
+                if (ordered.length() != 0 || end == names.size()) {
+                    return listingResponse(original, pageResponse.newBuilder(), ordered,
+                            end == names.size() ? null : names.get(end - 1));
+                }
+            }
+            // Boost cannot scroll a completely empty page to ask for the next one.
+            start = end;
+        }
+    }
+
+    private static JSONArray orderedPosts(Response response, List<String> page) throws IOException {
+        Map<String, JSONObject> found = new HashMap<>();
+        try {
+            JSONArray children = new JSONObject(response.body().string())
+                    .getJSONObject("data").getJSONArray("children");
+            for (int i = 0; i < children.length(); i++) {
+                JSONObject post = children.getJSONObject(i);
+                if (post.getString("kind").equals("t3")) {
+                    found.put(post.getJSONObject("data").getString("name").toLowerCase(Locale.ROOT), post);
+                }
+            }
+        } catch (JSONException exception) {
+            throw new IOException("Could not read Reddit post lookup listing", exception);
+        }
+        JSONArray ordered = new JSONArray();
+        for (String id : page) {
+            JSONObject post = found.get(id);
+            if (post != null) ordered.put(post);
+        }
+        return ordered;
     }
 
     private List<Lookup> plan(Request request, String path, Map<String, String> parameters)
@@ -131,7 +219,7 @@ public final class RedditInfoResponsePatch extends RedditRouteResponseShim {
     }
 
     private Response lookup(Chain chain, Request original, Map<String, String> parameters,
-                            List<Lookup> lookups) throws IOException {
+                            List<Lookup> lookups, PageBudget budget) throws IOException {
         JSONArray things = new JSONArray();
         Response.Builder result = null;
         for (Lookup lookup : lookups) {
@@ -140,26 +228,15 @@ public final class RedditInfoResponsePatch extends RedditRouteResponseShim {
                     .query(null);
             copyParameter(parameters, url, "raw_json");
             copyParameter(parameters, url, "profile_img");
+            if (budget != null) copyParameter(parameters, url, "sr_detail");
             if (!lookup.kind.equals("t5")) {
                 url.addQueryParameter("limit", "1").addQueryParameter("depth", "1");
             }
             if (lookup.kind.equals("t1")) url.addQueryParameter("context", "0");
-            Request focused = original.newBuilder()
-                    .url(url.build())
-                    .header("Accept-Encoding", "identity")
-                    .removeHeader("Content-Type")
-                    .removeHeader("Content-Length")
-                    .removeHeader("Content-Encoding")
-                    .removeHeader("Transfer-Encoding")
-                    .removeHeader("If-None-Match")
-                    .removeHeader("If-Modified-Since")
-                    .removeHeader("If-Match")
-                    .removeHeader("If-Unmodified-Since")
-                    .removeHeader("Range")
-                    .removeHeader("If-Range")
-                    .get().build();
-            Response response = chain.proceed(focused);
+            Request focused = lookupRequest(original, url.build());
+            Response response = budget == null ? chain.proceed(focused) : budget.proceed(chain, focused);
             boolean missing = response.code() == 404 && isJson(response);
+            if (budget != null && !missing && isUnavailablePost(response)) missing = true;
             if (!response.isSuccessful() && !missing) return response;
             result = response.newBuilder().code(200).message("OK");
             try {
@@ -179,15 +256,52 @@ public final class RedditInfoResponsePatch extends RedditRouteResponseShim {
             }
         }
         if (result == null) throw new IOException("Reddit lookup returned no responses");
+        return listingResponse(original, result, things, null);
+    }
+
+    private static boolean isUnavailablePost(Response response) throws IOException {
+        if (response.code() != 403 || response.header("WWW-Authenticate") != null || !isJson(response)) {
+            return false;
+        }
+        try (ResponseBody peek = response.peekBody(4096)) {
+            String reason = new JSONObject(peek.string()).optString("reason");
+            return reason.equals("private") || reason.equals("banned") || reason.equals("quarantined");
+        } catch (JSONException ignored) {
+            return false; // Preserve the original HTTP error.
+        } catch (IOException failure) {
+            response.close();
+            throw failure;
+        }
+    }
+
+    private static Request lookupRequest(Request original, HttpUrl url) {
+        return original.newBuilder()
+                .url(url)
+                .header("Accept-Encoding", "identity")
+                .removeHeader("Content-Type")
+                .removeHeader("Content-Length")
+                .removeHeader("Content-Encoding")
+                .removeHeader("Transfer-Encoding")
+                .removeHeader("If-None-Match")
+                .removeHeader("If-Modified-Since")
+                .removeHeader("If-Match")
+                .removeHeader("If-Unmodified-Since")
+                .removeHeader("Range")
+                .removeHeader("If-Range")
+                .get().build();
+    }
+
+    private static Response listingResponse(Request original, Response.Builder result,
+                                            JSONArray things, String after) throws IOException {
         try {
             JSONObject data = new JSONObject()
                     .put("children", things)
                     .put("before", JSONObject.NULL)
-                    .put("after", JSONObject.NULL)
+                    .put("after", after == null ? JSONObject.NULL : after)
                     .put("dist", things.length())
                     .put("modhash", "");
             String json = new JSONObject().put("kind", "Listing").put("data", data).toString();
-            return result.request(original)
+            return result.request(original).code(200).message("OK")
                     .removeHeader("Content-Length")
                     .removeHeader("Content-Encoding")
                     .removeHeader("Transfer-Encoding")
@@ -197,6 +311,25 @@ public final class RedditInfoResponsePatch extends RedditRouteResponseShim {
                     .body(ResponseBody.create(json, JSON)).build();
         } catch (JSONException exception) {
             throw new IOException("Could not build Reddit info listing", exception);
+        }
+    }
+
+    private static final class PageBudget {
+        private final long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(8);
+        private int remainingRequests = 2 * (POST_PAGE_SIZE + 2);
+
+        Response proceed(Chain chain, Request request) throws IOException {
+            if (chain.call().isCanceled() || Thread.currentThread().isInterrupted()) {
+                throw new IOException("Reddit post lookup canceled");
+            }
+            long remainingMillis = TimeUnit.NANOSECONDS.toMillis(deadline - System.nanoTime());
+            if (remainingMillis < 2 || remainingRequests-- == 0) {
+                throw new IOException("Reddit post lookup page exceeded its request budget");
+            }
+            int timeout = (int) Math.min(2500, remainingMillis / 2);
+            return chain.withConnectTimeout(timeout, TimeUnit.MILLISECONDS)
+                    .withReadTimeout(timeout, TimeUnit.MILLISECONDS)
+                    .proceed(request);
         }
     }
 

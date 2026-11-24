@@ -38,6 +38,7 @@ In addition, patches for some apps contain additional features that were not pre
     * Changing OAuth credentials requires restarting and signing in again.
 
 ### Boost for Reddit
+* **Reddit API fixes** loads History in small pages so it doesn't hold up other Reddit requests.
 * Boost patches target the official [Boost 1.14.4 APK](https://github.com/rubenmayayo/boost-for-reddit/releases/tag/v1.14.4).
 * **Load all inline media** shows linked images and GIFs immediately after their corresponding links in comments and text-post bodies, respecting Boost's inline-media setting. **Patcheddit > Media > Keep inline media URLs** defaults to on; turning it off hides bare URLs without removing descriptive labels.
 * **Fix image search** updates Google's image search to Google Lens while keeping Yandex and TinEye in the image-search submenu.
