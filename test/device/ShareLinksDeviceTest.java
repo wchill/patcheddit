@@ -107,10 +107,6 @@ public final class ShareLinksDeviceTest {
         };
         instrumentation.addMonitor(monitor);
         try {
-            if ("infinity".equals(flavor)) {
-                verifySharedWrappers();
-                return;
-            }
             share(ROOT + "/s/FixturePost?utm_source=ignored", POST_PATH, null, false);
             share(ROOT + "/s/FixtureComment", COMMENT_PATH, "3", "baconreader".equals(flavor));
             share(WEB + "/u/example/s/FixtureUser", POST_PATH, null, false);

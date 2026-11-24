@@ -59,9 +59,7 @@ public final class ShareLinkNavigation {
     }
 
     public static boolean openInfinity(Activity activity, Uri uri) {
-        if (uri == null) return false;
-        String link = uri.toString();
-        if (!ShareLinkResolver.isWrapper(link) || !open(activity, link, activity.getClass().getName())) return false;
+        if (uri == null || !open(activity, uri.toString(), activity.getClass().getName())) return false;
         activity.finish();
         return true;
     }

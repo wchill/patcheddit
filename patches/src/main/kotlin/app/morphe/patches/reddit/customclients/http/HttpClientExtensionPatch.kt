@@ -79,8 +79,12 @@ internal fun installOkHttpInterceptors(client: String, clientType: String) {
 internal fun privateHttpExtensionPatch(
     client: String,
     vararg hookedClasses: String,
+    relocateClientHttp: Boolean = false,
 ) = patch(default = false) {
-    dependsOn(httpLibraryResourcesPatch, clientExtensionPatch(client, hookedClasses, ::preparePrivateHttp))
+    dependsOn(httpLibraryResourcesPatch, clientExtensionPatch(
+        client, hookedClasses, ::preparePrivateHttp,
+        prepareClient = if (relocateClientHttp) ::prepareClientHttpReferences else null,
+    ))
 }
 
 private fun preparePrivateHttp(input: InputStream): InputStream {
@@ -91,6 +95,27 @@ private fun preparePrivateHttp(input: InputStream): InputStream {
     check(names.keys.any { it.startsWith("Lokhttp3/") } && names.keys.any { it.startsWith("Lokio/") }) {
         "HTTP library payload is missing OkHttp or Okio"
     }
+    return rewriteHttpDex(dex, definitions, names)
+}
+
+private fun prepareClientHttpReferences(input: InputStream): InputStream {
+    val dex = input.use { DexBackedDexFile.fromInputStream(null, it.buffered()) }
+    val definitions = dex.classes.toList()
+    val names = buildMap {
+        for (definition in definitions) definition.forEachReference { reference ->
+            if (reference is TypeReference) {
+                val type = reference.type.trimStart('[')
+                val privateType = privateHttpType(type)
+                if (privateType != type) put(type, privateType)
+            }
+        }
+    }
+    return rewriteHttpDex(dex, definitions, names)
+}
+
+private fun rewriteHttpDex(
+    dex: DexBackedDexFile, definitions: List<ClassDef>, names: Map<String, String>,
+): InputStream {
     val rewritten = DexMappingRewriter(
         ProguardMapping.classNames(names), definitions, resolveReflectiveFields = false,
     ).rewrite(definitions)

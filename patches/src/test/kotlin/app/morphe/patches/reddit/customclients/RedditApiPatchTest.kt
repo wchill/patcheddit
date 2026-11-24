@@ -30,6 +30,9 @@ import app.morphe.patches.reddit.customclients.boostforreddit.fix.gallery.fixFai
 import app.morphe.patches.reddit.customclients.boostforreddit.fix.login.modifyLoginWebView as boostLogin
 import app.morphe.patches.reddit.customclients.boostforreddit.fix.slink.fixSlinksPatch as boostLinks
 import app.morphe.patches.reddit.customclients.infinity.api.redditApiPatch as infinityApi
+import app.morphe.patches.reddit.customclients.infinity.api.infinityApiLookups
+import app.morphe.patches.reddit.customclients.infinity.api.infinityGallery
+import app.morphe.patches.reddit.customclients.infinity.api.infinityMoreComments
 import app.morphe.patches.reddit.customclients.infinity.api.infinityShareLinks
 import app.morphe.patches.reddit.customclients.infinity.api.legacySpoofClientPatch as infinityLegacy
 import app.morphe.patches.reddit.customclients.infinity.api.spoofClientPatch as infinitySpoof
@@ -82,14 +85,16 @@ class RedditApiPatchTest {
     )
 
     @Test
-    fun bundlesExactlyTheApplicableFixesIncludingGalleryRepairsExceptForInfinity() {
+    fun bundlesExactlyTheApplicableFixes() {
         val expected = mapOf(
             baconReaderApi to setOf(
                 baconReaderSpoof, baconReaderLogin, baconReaderLookups, baconReaderGallery, baconReaderComments,
                 baconReaderLinks, baconReaderRAllPatch,
             ),
             boostApi to setOf(boostSpoof, boostLogin, boostLookups, boostGallery, boostRAll, boostLinks),
-            infinityApi to setOf(infinitySpoof, infinityLogin, infinityShareLinks),
+            infinityApi to setOf(
+                infinitySpoof, infinityLogin, infinityMoreComments, infinityApiLookups, infinityShareLinks, infinityGallery,
+            ),
             joeyApi to setOf(joeySpoof, joeyLogin, joeyLookups, joeyGallery, joeyComments, joeyLinks, joeyRAllPatch),
             rifApi to setOf(
                 rifSpoof, rifLogin, rifGuestListings, rifLookups, rifGallery, rifComments, rifLinks, rifRAllPatch,

@@ -33,7 +33,7 @@ import okhttp3.ResponseBody;
 
 public final class RedditInfoResponsePatch extends RedditRouteResponseShim {
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    private static final long MAX_CONTEXT_BYTES = 8L * 1024 * 1024;
+    public static final long MAX_CONTEXT_BYTES = 8L * 1024 * 1024;
     private static final int POST_PAGE_SIZE = 10;
     private static final RedditCommentContext SHARED_CONTEXT = new RedditCommentContext(10_000);
     private final RedditCommentContext context;
@@ -99,7 +99,7 @@ public final class RedditInfoResponsePatch extends RedditRouteResponseShim {
         return response;
     }
 
-    private static boolean isBlocked(Response response) {
+    public static boolean isBlocked(Response response) {
         return response.code() == 403 && response.header("WWW-Authenticate") == null
                 && response.header("Content-Type", "").toLowerCase(Locale.ROOT).contains("text/html");
     }

@@ -26,6 +26,7 @@ internal fun clientExtensionPatch(
     extensionName: String?,
     hookedClasses: Array<out String>,
     prepareShared: (InputStream) -> InputStream = ::withoutHttpLibraries,
+    prepareClient: ((InputStream) -> InputStream)? = null,
 ) = patch(default = false) {
     dependsOn(cacheLibraryResourcesPatch)
     extendWith {
@@ -34,7 +35,15 @@ internal fun clientExtensionPatch(
         }
         prepareShared(input)
     }
-    if (extensionName != null) extendWith("extensions/$extensionName.mpe")
+    if (extensionName != null) {
+        val resource = "extensions/$extensionName.mpe"
+        if (prepareClient == null) extendWith(resource)
+        else extendWith {
+            prepareClient(checkNotNull(object {}.javaClass.classLoader.getResourceAsStream(resource)) {
+                "Client extension payload was not found: $resource"
+            })
+        }
+    }
     execute {
         classDefBy(SHARED_UTILS_EXTENSION_CLASS)
     }

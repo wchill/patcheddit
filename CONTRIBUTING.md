@@ -160,6 +160,13 @@ with `--suite app.patcheddit.fixture.BoostHistoryDeviceTest` and
 It checks native History pagination and that other requests still complete
 while a History page is waiting for a response.
 
+On a disposable Infinity APK with **Reddit API fixes**, run
+`--suite app.patcheddit.fixture.InfinityApiLookupsDeviceTest` with
+`--source test/device/InfinityApiLookupsDeviceTest.java`. Use `--arg stock=plus`
+or `--arg stock=patreon` for 8.4.0, or `--arg stock=legacy-plus` for Plus 8.1.4.
+The fixture exercises the native HTTP call path with fake Reddit replies, including
+gallery repair with a bounded image header request.
+
 `BaconReaderSyncCommentVideoDeviceTest` exercises the native player handoff
 with **Fix comment video links** applied. Pass `--arg stock=baconreader` for a
 package-renamed BaconReader fixture.

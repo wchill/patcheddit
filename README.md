@@ -12,10 +12,10 @@ In addition, patches for some apps contain additional features that were not pre
 
 ### All clients
 * **Reddit API fixes** combines the applicable Reddit API and login repairs into one patch for BaconReader, Boost, Infinity, Joey, Relay (including Pro), RIF (free and paid), and Sync (including Pro). These repairs are always active when included.
-    * Includes missing gallery image repairs when opening posts in BaconReader, Boost, Joey, Relay, RIF, and Sync, including recoverable GIFs in Relay. If a previously opened gallery still fails after patching, clear the app's cache (not its storage).
+    * Repairs missing gallery images when opening posts, including recoverable GIFs in Relay. If a previously opened gallery still fails after patching, clear the app's cache (not its storage).
     * Relay's subreddit sidebars remain usable when Reddit omits activity counters.
     * BaconReader, Boost, Joey, Relay, RIF, and Sync use Reddit's JSON endpoint for `r/all` feeds.
-    * Opens Reddit app and email links in all supported clients, and direct `/s/` links in BaconReader, Boost, Joey, Relay, RIF, and Sync. Share resolution uses the active Reddit session when available and never sends its token to the email or app-link host.
+    * Opens Reddit app links, email links, and `/s/` share links in all supported clients. Share resolution uses the active Reddit session when available and never sends its token to the email or app-link host.
 * **Fix Redgifs API** restores playback in BaconReader, Joey, Relay, RIF, and Sync. BaconReader, Joey, and Relay prefer the original video with sound over silent previews.
 * **Fix random subreddit** restores Random in Boost, Infinity, Joey, Relay, RIF, and Sync. **RedditRand** (a third-party service) is the default. You can switch to **Reddit search** under **Patcheddit > Feed > Random subreddit source**. If the lookup fails, the app reports an error instead of loading the retired `r/random` feed.
 * **Fix comment video links** restores native playback of Reddit comment videos in BaconReader, Boost, Joey, RIF, and Sync without relying on post metadata to contain the video. Relay provides this through **Fix Reddit media link handling**.
@@ -99,7 +99,7 @@ In addition, patches for some apps contain additional features that were not pre
 
 ### Infinity for Reddit
 * Supports Infinity+, Infinity++, and the Patreon variant.
-* **Reddit API fixes** applies the configured OAuth values to login callbacks and API requests, including obfuscated code, and updates the browser-login callback intent filter.
+* **Reddit API fixes** applies configured OAuth values to API requests and browser login, and repairs blocked child-comment, post, comment, and community lookups.
 
 ## 🚀 Get started
 

@@ -14,7 +14,7 @@ object ExtensionPatches {
     internal val BaconReader = httpHook("baconreader", "Lcom/onelouder/baconreader/BaconReader;")
     internal val Boost = boostExtensionPatch
     internal val Infinity = privateHttpExtensionPatch(
-        "infinity", "Lml/docilealligator/infinityforreddit/Infinity;",
+        "infinity", "Lml/docilealligator/infinityforreddit/Infinity;", relocateClientHttp = true,
     )
     internal val Joey = httpHook("joey", "Lo/o/joey/MyApplication;")
     internal val RIF = patch(default = false) {

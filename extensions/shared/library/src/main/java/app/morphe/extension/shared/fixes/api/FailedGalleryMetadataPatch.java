@@ -13,6 +13,8 @@
 
 package app.morphe.extension.shared.fixes.api;
 
+import android.graphics.BitmapFactory;
+
 import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
@@ -21,11 +23,14 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -78,6 +83,21 @@ public final class FailedGalleryMetadataPatch extends RedditRouteResponseShim {
      */
     interface Prober {
         Probe probe(String url) throws IOException;
+    }
+
+    static final class ImageSize {
+        final int width;
+        final int height;
+
+        ImageSize(int width, int height) {
+            this.width = width;
+            this.height = height;
+        }
+    }
+
+    @FunctionalInterface
+    interface SizeProbe {
+        ImageSize probe(String url, long deadline) throws IOException;
     }
 
     private final Prober prober;
@@ -166,6 +186,41 @@ public final class FailedGalleryMetadataPatch extends RedditRouteResponseShim {
                 candidate -> legacyHead(candidate, deadline), deadline);
     }
 
+    /** For Infinity's native transport, which cannot make CDN probes through the Reddit chain. */
+    public String repairNativeResponse(Response response, Request request) throws IOException {
+        if (!isPatchIncluded() || !response.isSuccessful()
+                || !isPostLookupPath(normalizePath(request.url().encodedPath()))) return null;
+        ResponseBody body = response.body();
+        MediaType type = body == null ? null : body.contentType();
+        if (type == null || !type.toString().toLowerCase(Locale.ROOT).contains("json")
+                || body.contentLength() > MAX_BODY_BYTES
+                || !"identity".equalsIgnoreCase(response.header("Content-Encoding", "identity"))) return null;
+        try (ResponseBody peek = response.peekBody(MAX_BODY_BYTES + 1)) {
+            if (peek.contentLength() > MAX_BODY_BYTES) return null;
+            return repairSizedGallery(peek.string(), FailedGalleryMetadataPatch::probeImageSize);
+        }
+    }
+
+    static String repairSizedGallery(String text, SizeProbe sizes) throws IOException {
+        Object json = galleryJson(text);
+        if (json == null) return null;
+        long deadline = System.nanoTime() + REPAIR_BUDGET_NANOS;
+        Map<String, ImageSize> dimensions = new HashMap<>();
+        Prober prober = url -> {
+            try {
+                ImageSize size = sizes.probe(url, deadline);
+                if (size == null || size.width <= 0 || size.height <= 0) return Probe.MISSING;
+                dimensions.put(url, size);
+                return Probe.FOUND;
+            } catch (IOException failure) {
+                if (Thread.currentThread().isInterrupted()) throw failure;
+                LOGGER.log(Level.FINE, "Could not read gallery image dimensions", failure);
+                return Probe.FAILED;
+            }
+        };
+        return repair(json, prober, deadline, false, true, dimensions);
+    }
+
     static String repairApacheBody(String body, String url, int code, String contentType,
                                    Prober prober, long deadline) throws IOException {
         if (body == null || url == null || code < 200 || code >= 300 || contentType == null
@@ -206,8 +261,13 @@ public final class FailedGalleryMetadataPatch extends RedditRouteResponseShim {
     private static String repair(Object json, Prober prober, long deadline, boolean previewUrls,
                                  boolean repairGifs)
             throws IOException {
+        return repair(json, prober, deadline, previewUrls, repairGifs, Map.of());
+    }
+
+    private static String repair(Object json, Prober prober, long deadline, boolean previewUrls,
+                                 boolean repairGifs, Map<String, ImageSize> dimensions) throws IOException {
         try {
-            Repairer repairer = new Repairer(prober, deadline, previewUrls, repairGifs);
+            Repairer repairer = new Repairer(prober, deadline, previewUrls, repairGifs, dimensions);
             repairer.walk(json);
             return repairer.changed == 0 ? null : json.toString();
         } catch (JSONException exception) {
@@ -221,16 +281,19 @@ public final class FailedGalleryMetadataPatch extends RedditRouteResponseShim {
         final long deadline;
         final boolean previewUrls;
         final boolean repairGifs;
+        final Map<String, ImageSize> dimensions;
         int probes;
         int changed;
         boolean stopped;
         String lastExtension;
 
-        Repairer(Prober prober, long deadline, boolean previewUrls, boolean repairGifs) {
+        Repairer(Prober prober, long deadline, boolean previewUrls, boolean repairGifs,
+                 Map<String, ImageSize> dimensions) {
             this.prober = prober;
             this.deadline = deadline;
             this.previewUrls = previewUrls;
             this.repairGifs = repairGifs;
+            this.dimensions = dimensions;
         }
 
         // Handles info listings, comment-thread arrays, and crossposts.
@@ -287,6 +350,9 @@ public final class FailedGalleryMetadataPatch extends RedditRouteResponseShim {
                 String url = "https://i.redd.it/" + id + "." + extension;
                 JSONObject source = new JSONObject().put("u", url);
                 if (extension.equals("gif")) source.put("gif", url);
+                ImageSize size = dimensions.get(url);
+                // Infinity discards gallery sources without both dimensions.
+                if (size != null) source.put("x", size.width).put("y", size.height);
                 // BaconReader's legacy gallery reads thumbnail URLs only from p.
                 JSONArray previews = new JSONArray();
                 if (previewUrls) previews.put(new JSONObject().put("u", url));
@@ -380,15 +446,38 @@ public final class FailedGalleryMetadataPatch extends RedditRouteResponseShim {
                 .build();
     }
 
+    private static ImageSize probeImageSize(String url, long deadline) throws IOException {
+        if (Thread.currentThread().isInterrupted()) throw new InterruptedIOException("Gallery repair interrupted");
+        int headerLimit = 64 * 1024;
+        Request request = new Request.Builder().url(url)
+                .header("Range", "bytes=0-" + (headerLimit - 1))
+                .header("Accept-Encoding", "identity")
+                .header("User-Agent", OAuthSettings.getUserAgent("Mozilla/5.0")).build();
+        try (Response response = boundedProbe(request, deadline).execute()) {
+            if (response.code() == 404) return null;
+            if (!response.isSuccessful()) throw new IOException("Gallery metadata probe returned " + response.code());
+            try (ResponseBody prefix = response.peekBody(headerLimit)) {
+                byte[] bytes = prefix.bytes();
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inJustDecodeBounds = true;
+                BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+                return new ImageSize(options.outWidth, options.outHeight);
+            }
+        }
+    }
+
+    private static Call boundedProbe(Request request, long deadline) {
+        Call call = LegacyClient.INSTANCE.newCall(request);
+        call.timeout().timeout(Math.max(1, Math.min(TimeUnit.SECONDS.toNanos(PROBE_TIMEOUT_SECONDS),
+                deadline - System.nanoTime())), TimeUnit.NANOSECONDS);
+        return call;
+    }
+
     private static Probe legacyHead(String url, long deadline) throws IOException {
         if (Thread.currentThread().isInterrupted()) throw new IOException("Gallery repair interrupted");
         Request request = new Request.Builder().url(url).head()
                 .header("User-Agent", OAuthSettings.getUserAgent("Mozilla/5.0")).build();
-        Call call = LegacyClient.INSTANCE.newCall(request);
-        // Cap the whole call at the remaining response budget.
-        call.timeout().timeout(Math.max(1, Math.min(TimeUnit.SECONDS.toNanos(PROBE_TIMEOUT_SECONDS),
-                deadline - System.nanoTime())), TimeUnit.NANOSECONDS);
-        try (Response response = call.execute()) {
+        try (Response response = boundedProbe(request, deadline).execute()) {
             if (response.code() == 200) return Probe.FOUND;
             return response.code() == 404 ? Probe.MISSING : Probe.FAILED;
         } catch (IOException exception) {

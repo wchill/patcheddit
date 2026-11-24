@@ -102,6 +102,21 @@ public class FailedGalleryMetadataPatchTest {
         return listing(postData(thumbnail, metadata, ids));
     }
 
+    @Test
+    public void sizedGalleryRepairSuppliesTheVerifiedDimensionsRequiredByInfinity() throws Exception {
+        String body = galleryPost("", failedMetadata("first", "missing"), "first", "missing").toString();
+        String repaired = FailedGalleryMetadataPatch.repairSizedGallery(body, (url, deadline) ->
+                url.equals("https://i.redd.it/first.gif")
+                        ? new FailedGalleryMetadataPatch.ImageSize(640, 480) : null);
+        JSONObject metadata = new JSONObject(repaired).getJSONObject("data").getJSONArray("children")
+                .getJSONObject(0).getJSONObject("data").getJSONObject("media_metadata");
+        JSONObject source = metadata.getJSONObject("first").getJSONObject("s");
+        assertEquals(640, source.getInt("x"));
+        assertEquals(480, source.getInt("y"));
+        assertEquals("https://i.redd.it/first.gif", source.getString("gif"));
+        assertEquals("failed", metadata.getJSONObject("missing").getString("status"));
+    }
+
     private static Response fetchResponse(OkHttpClient client, String path) throws Exception {
         return client.newCall(new Request.Builder().url("https://oauth.reddit.com" + path)
                 .header("User-Agent", "fixture-agent").build()).execute();
