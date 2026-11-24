@@ -20,6 +20,7 @@ import app.morphe.extension.shared.archive.wayback.WaybackThrottlingInterceptor;
 import app.morphe.extension.shared.fixes.api.FailedGalleryMetadataPatch;
 import app.morphe.extension.shared.fixes.api.RedditInfoResponsePatch;
 import app.morphe.extension.shared.fixes.feed.RAllPatch;
+import app.morphe.extension.shared.fixes.feed.RandomSubredditInterceptor;
 import app.morphe.extension.shared.fixes.links.EscapedUrlsPatch;
 import app.morphe.extension.shared.requests.BaseOkHttpRequestHook;
 import okhttp3.Interceptor;
@@ -48,6 +49,7 @@ public class OkHttpRequestHook extends BaseOkHttpRequestHook {
                 new RedditSubredditUndeleteInterceptor(),
                 new ImgurUndeleteInterceptor(),
                 new RAllPatch(),
+                new RandomSubredditInterceptor(),
                 new RedditInfoResponsePatch()
         );
     }

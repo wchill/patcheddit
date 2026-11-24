@@ -141,6 +141,32 @@ class MorpheSettingsPatchTest {
     }
 
     @Test
+    fun restrictsMatureContentLockTestControlWithoutChangingDebuggability() {
+        for (patch in listOf(baconReaderNsfwOption, boostNsfwOption, infinityNsfwOption, joeyNsfwOption,
+            rifNsfwOption, relayNsfwOption, syncNsfwOption)) {
+            assertFalse(patch.default)
+            assertTrue(patch.options.isEmpty())
+        }
+        val manifest = parse("""
+            <manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.example">
+                <application android:debuggable="false">
+                    <receiver android:name=".NativeReceiver" android:exported="false" />
+                </application>
+            </manifest>
+        """)
+        registerMatureContentLockTestReceiver(manifest)
+        val application = manifest.getElementsByTagName("application").item(0) as Element
+        val receivers = application.getElementsByTagName("receiver")
+        assertEquals("false", application.getAttribute("android:debuggable"))
+        assertEquals("false", (receivers.item(0) as Element).getAttribute("android:exported"))
+        val receiver = receivers.item(1) as Element
+        assertEquals("true", receiver.getAttribute("android:exported"))
+        assertEquals("android.permission.INJECT_EVENTS", receiver.getAttribute("android:permission"))
+        assertEquals(0, receiver.getElementsByTagName("intent-filter").length)
+        assertFailsWith<IllegalArgumentException> { registerMatureContentLockTestReceiver(manifest) }
+    }
+
+    @Test
     fun registersAPrivateActivityWithoutChangingNativeComponents() {
         for (namespaceAware in listOf(false, true)) {
             val manifest = parse("""

@@ -17,13 +17,15 @@ import app.morphe.patches.reddit.customclients.joey.misc.settings.joeyMorpheSett
 import app.morphe.patches.reddit.customclients.redditisfun.misc.settings.rifMorpheSettingsPatch
 import app.morphe.patches.reddit.customclients.relay.misc.settings.relayMorpheSettingsPatch
 import app.morphe.patches.reddit.customclients.sync.syncforreddit.misc.settings.syncMorpheSettingsPatch
+import org.w3c.dom.Document
 import org.w3c.dom.Element
 
 private const val CATEGORY = "Content filtering"
+private const val TEST_RECEIVER = "app.morphe.extension.shared.settings.MatureContentLockTestReceiver"
 
 private fun permanentNsfwOption(menu: Patch, compatible: Array<Compatibility>) = patch(
     name = "Permanently disable NSFW",
-    description = "Adds a one-way NSFW lock to Patcheddit settings. Does not activate it automatically.",
+    description = "Adds an NSFW lock that cannot be turned off in app settings. Does not activate it automatically.",
     default = false,
 ) {
     dependsOn(menu)
@@ -31,7 +33,10 @@ private fun permanentNsfwOption(menu: Patch, compatible: Array<Compatibility>) =
     compatibleWith(*compatible)
 
     execute {
-        val packageName = document("AndroidManifest.xml").use { it.documentElement.getAttribute("package") }
+        val packageName = document("AndroidManifest.xml").use { manifest ->
+            registerMatureContentLockTestReceiver(manifest)
+            manifest.documentElement.getAttribute("package")
+        }
         document("res/xml/${morpheMenuResource(packageName)}.xml").use { target ->
             val root = target.documentElement
             val sections = root.getElementsByTagName("PreferenceScreen")
@@ -51,6 +56,22 @@ private fun permanentNsfwOption(menu: Patch, compatible: Array<Compatibility>) =
             })
         }
     }
+}
+
+internal fun registerMatureContentLockTestReceiver(manifest: Document) {
+    val application = checkNotNull(manifest.getElementsByTagName("application").item(0) as? Element) {
+        "AndroidManifest.xml has no application element."
+    }
+    val receivers = application.getElementsByTagName("receiver")
+    require((0 until receivers.length).none {
+        (receivers.item(it) as Element).getAttribute("android:name") == TEST_RECEIVER
+    }) { "The app already declares the mature content lock test receiver." }
+    application.appendChild(manifest.createElement("receiver").apply {
+        setAttribute("android:name", TEST_RECEIVER)
+        setAttribute("android:exported", "true")
+        // ADB shell holds this signature-only permission; ordinary apps cannot obtain it.
+        setAttribute("android:permission", "android.permission.INJECT_EVENTS")
+    })
 }
 
 val baconReaderNsfwOption = permanentNsfwOption(baconReaderMorpheSettingsPatch, AppCompatibility.BaconReader)

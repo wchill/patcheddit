@@ -174,6 +174,23 @@ python3 -B test/run_device_tests.py \
 
 Use `stock=baconreader` for BaconReader. The fixture does not contact Redgifs.
 
+With **Fix random subreddit** applied, use `RandomSubredditDeviceTest` on a
+disposable, package-renamed APK. The fixture checks the compiled provider
+preference and both request paths without a Reddit account:
+
+```sh
+python3 -B test/run_device_tests.py \
+  --sdk "$ANDROID_HOME" --serial "$ANDROID_SERIAL" \
+  --package "$DISPOSABLE_PACKAGE" --keystore "$FIXTURE_KEYSTORE" \
+  --suite app.patcheddit.fixture.RandomSubredditDeviceTest \
+  --source test/device/RandomSubredditDeviceTest.java --arg stock=joey
+```
+
+Use the appropriate `stock` value: `boost`, `infinity` (Infinity+ 8.4.0),
+`joey`, `relay`, `rif`, `platinum`, or `sync`. With **Log exceptions** applied,
+add `--arg verifyExceptionLog=true` to check that a failed lookup is reported
+without sending any request to the retired Random feed.
+
 With **Reddit API fixes** applied to Relay, run `RelayMediaLinksDeviceTest`
 with `--arg stock=gallery` for Free or `--arg stock=gallery-pro` for Pro and
 the media assets under `test/device/media/`. This checks gallery repair and

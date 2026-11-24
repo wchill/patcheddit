@@ -33,7 +33,8 @@ public final class SafeRedirects {
         this.factory = factory;
     }
 
-    static HttpURLConnection openConnection(URI uri) throws IOException {
+    /** Opens a validated URI without an ambient cookie store. Callers must disable redirects. */
+    public static HttpURLConnection openConnection(URI uri) throws IOException {
         // Android snapshots the default CookieHandler when opening the connection. getDefault
         // and setDefault synchronize on this same class, so none can be installed in between.
         synchronized (CookieHandler.class) {

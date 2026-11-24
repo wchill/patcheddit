@@ -30,14 +30,15 @@ public final class ExceptionHook {
     }
 
     public static void handleException(Throwable error, String context) {
-        if (!PatchSettings.isEnabled("morphe_patch_log_exceptions", true)) return;
+        Application app = application;
+        if (app == null || !PatchSettings.isEnabled("morphe_patch_log_exceptions", true)) return;
         if (Boolean.TRUE.equals(RECORDING.get())) {
             Log.e(TAG, "Recursive exception logging was suppressed.");
             return;
         }
         RECORDING.set(true);
         try {
-            getLogStore(application).append(error, context);
+            getLogStore(app).append(error, context);
         } catch (IOException | SecurityException | IllegalStateException failure) {
             Log.e(TAG, "Could not write the private exception log.", failure);
         } finally {
