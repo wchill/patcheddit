@@ -26,7 +26,9 @@ internal fun redditWrapperViewFilters(
 ) = shareViewFilters(setOf(activity, activity.substringAfterLast('.', "").let { ".$it" }),
     *hosts.map { ShareViewFilter(it, "pathPrefix", "/") }.toTypedArray())
 
-internal fun hookWrapperActivity(activity: String, target: String? = activity) {
+internal fun hookWrapperActivity(
+    activity: String, target: String? = activity, handler: String = "$SHARE_NAV->openWrapperActivity",
+) {
     val method = Fingerprint(definingClass = "L${activity.replace('.', '/')};",
         name = "onCreate", parameters = listOf("Landroid/os/Bundle;"), returnType = "V").method
     val code = checkNotNull(method.implementation)
@@ -37,7 +39,7 @@ internal fun hookWrapperActivity(activity: String, target: String? = activity) {
     val targetName = if (target == null) "const/4 v0, 0x0" else "const-string v0, \"$target\""
     method.addInstructionsWithLabels(index, """
         $targetName
-        invoke-static {p0, v0}, $SHARE_NAV->openWrapperActivity(Landroid/app/Activity;Ljava/lang/String;)Z
+        invoke-static {p0, v0}, $handler(Landroid/app/Activity;Ljava/lang/String;)Z
         move-result v0
         if-eqz v0, :open_native
         return-void

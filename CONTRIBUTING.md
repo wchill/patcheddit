@@ -136,6 +136,8 @@ redirect chains, tracking removal, comment context, and failure fallback.
 It seeds fake tokens in each client's native session and checks that direct
 and wrapped `/s/` links resolve when anonymous requests are blocked, without
 sending the bearer to the public web host or to link wrappers.
+Boost also exercises direct Android app links through its external activity.
+Infinity checks that share links use the native guest OAuth session when signed out.
 Joey adds permalink cases; RIF checks its external image link
 filters and exercises image routing through the in-app router and WebView,
 including the Matrix redirect cache.

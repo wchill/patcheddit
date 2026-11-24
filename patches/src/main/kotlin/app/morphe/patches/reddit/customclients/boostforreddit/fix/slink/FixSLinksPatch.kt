@@ -20,7 +20,7 @@ val fixSlinksPatch = fixSLinksPatch(
     dependsOn(redditWrapperViewFilters(LINK_ACTIVITY))
 
     execute {
-        hookWrapperActivity(LINK_ACTIVITY)
+        hookWrapperActivity(LINK_ACTIVITY, handler = "$EXTENSION_CLASS_DESCRIPTOR->openExternalLink")
         // region Patch navigation handler.
 
         HandleNavigationFingerprint.wrapHook(

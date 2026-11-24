@@ -27,6 +27,7 @@ import java.net.URLStreamHandler;
 import java.nio.charset.StandardCharsets;
 import java.security.cert.Certificate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -157,7 +158,9 @@ public final class ShareLinksDeviceTest {
                 share(ROOT + "/s/FixtureBlockedWeb", POST_PATH, null, false);
                 assertRequests("/r/Example/s/FixtureBlockedWeb");
             }
+            if ("boost".equals(flavor)) verifyBoostExternalShares();
             verifySharedWrappers();
+            if ("infinity".equals(flavor)) verifyInfinityGuestShares();
             if ("joey".equals(flavor)) verifyJoey();
             if (rif()) verifyRif();
         } finally {
@@ -211,7 +214,7 @@ public final class ShareLinksDeviceTest {
                 field(manager, "current").set(null, selected);
             } else if ("infinity".equals(flavor)) {
                 context.getSharedPreferences("ml.docilealligator.infinityforreddit.current_account", Context.MODE_PRIVATE)
-                        .edit().putString("access_token", accessToken).commit();
+                        .edit().putString("account_name", "Fixture").putString("access_token", accessToken).commit();
             } else {
                 Object app = context.getApplicationContext();
                 Object component = app.getClass().getMethod("b").invoke(app);
@@ -354,6 +357,47 @@ public final class ShareLinksDeviceTest {
                 "No external link route to " + expectedActivity + " for " + link);
     }
 
+    private void verifyBoostExternalShares() throws Exception {
+        String post = ROOT + "/s/FixtureBlockedWeb";
+        assertExternalRoute(post, "com.rubenmayayo.reddit.ui.activities.DeepLinkingActivity");
+        assertPost(followExternal(post), POST_PATH, null);
+        assertRequests("/r/Example/s/FixtureBlockedWeb");
+
+        String missing = ROOT + "/s/FixtureMissing";
+        check((missing + "#bypass").equals(readFallback(followExternal(missing))),
+                "Boost external share did not fall back to the original link");
+        assertRequests("/r/Example/s/FixtureMissing", "/r/Example/s/FixtureMissing");
+    }
+
+    @SuppressWarnings("unchecked")
+    private void verifyInfinityGuestShares() throws Exception {
+        Class<?> session = context.getClassLoader().loadClass("app.morphe.extension.infinity.http.ShareLinkSession");
+        Object guestProvider = field(session, "guestProvider").get(null);
+        check(guestProvider != null, "Infinity did not initialize its guest OAuth provider");
+        Field cache = Arrays.stream(guestProvider.getClass().getDeclaredFields())
+                .filter(candidate -> candidate.getType() == AtomicReference.class).findFirst().orElseThrow();
+        cache.setAccessible(true);
+        ((AtomicReference<String>) cache.get(guestProvider)).set("fixture-guest-token");
+        // While signed in, the populated guest cache must not take precedence.
+        String link = ROOT + "/s/FixtureBlockedWeb";
+        assertPost(followExternal(link), POST_PATH, null);
+        assertRequests("/r/Example/s/FixtureBlockedWeb");
+
+        context.getSharedPreferences("ml.docilealligator.infinityforreddit.current_account", Context.MODE_PRIVATE)
+                .edit().clear().commit();
+        expectedToken = "fixture-guest-token";
+        assertPost(followExternal(link), POST_PATH, null);
+        assertRequests("/r/Example/s/FixtureBlockedWeb");
+    }
+
+    private Intent followExternal(String link) throws Exception {
+        resetHandoff();
+        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(link))
+                .addCategory(Intent.CATEGORY_BROWSABLE).setPackage(context.getPackageName())
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+        return awaitHandoff(link);
+    }
+
     private void verifySharedWrappers() throws Exception {
         String mail = "https://click.redditmail.com/CL0/"
                 + Uri.encode(ROOT + "/s/FixtureBlockedWeb") + "/1";
@@ -372,11 +416,7 @@ public final class ShareLinksDeviceTest {
         assertExternalRoute(appLink, rif()
                 ? "com.andrewshu.android.reddit.intentfilter.RedditTrackingLinkDummyActivity" : target);
         for (String wrapper : List.of(mail, appLink)) {
-            resetHandoff();
-            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(wrapper))
-                    .addCategory(Intent.CATEGORY_BROWSABLE).setPackage(context.getPackageName())
-                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-            Intent handoff = awaitHandoff(wrapper);
+            Intent handoff = followExternal(wrapper);
             if (rif()) {
                 check(handoff.getDataString() != null && Uri.parse(handoff.getDataString()).getPath().startsWith(POST_PATH),
                         "RIF did not replay the resolved post");

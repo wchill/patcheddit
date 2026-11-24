@@ -9,6 +9,7 @@
 
 package app.morphe.extension.boost;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import android.util.Log;
 import app.morphe.extension.boost.api.RedditJraw;
 import app.morphe.extension.shared.Utils;
 import app.morphe.extension.shared.fixes.slink.BaseFixSLinksPatch;
+import app.morphe.extension.shared.fixes.slink.ShareLinkNavigation;
 
 import com.rubenmayayo.reddit.ui.activities.WebViewActivity;
 
@@ -49,6 +51,16 @@ public class FixSLinksPatch extends BaseFixSLinksPatch {
 
     private FixSLinksPatch() {
         webViewActivityClass = WebViewActivity.class;
+    }
+
+    public static boolean openExternalLink(Activity activity, String targetClass) {
+        if (ShareLinkNavigation.openWrapperActivity(activity, targetClass)) return true;
+        Intent intent = activity.getIntent();
+        // DeepLinkingActivity tries its anonymous shortener before the patched in-app router.
+        if (intent == null || !Intent.ACTION_VIEW.equals(intent.getAction())
+                || !INSTANCE.resolveSLink(intent.getDataString())) return false;
+        activity.finish();
+        return true;
     }
 
     public static boolean patchResolveSLink(String link) {
