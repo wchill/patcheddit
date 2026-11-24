@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ShareLinkResolverTest {
     private static final String SHARE = "https://www.reddit.com/r/Android/s/AbCd123";
+    private static final String OAUTH_SHARE = "https://oauth.reddit.com/r/Android/s/AbCd123";
     private static final String POST = "https://www.reddit.com/r/Android/comments/abc123/example/";
     private static final String COMMENT = POST + "def456/";
 
@@ -54,7 +55,7 @@ public class ShareLinkResolverTest {
         AtomicInteger requests = new AtomicInteger();
         assertEquals(COMMENT, ShareLinkResolver.resolve(
                 "HTTPS://Reddit.com/r/Android/s/AbCd123?tracking=123#app", "fixture-token", uri -> {
-                    assertEquals(SHARE, uri.toString());
+                    assertEquals(OAUTH_SHARE, uri.toString());
                     requests.incrementAndGet();
                     return response;
                 }));
@@ -73,7 +74,7 @@ public class ShareLinkResolverTest {
         assertEquals("https://www.reddit.com/comments/abc123",
                 ShareLinkResolver.permalink("https://old.reddit.com/comments/abc123"));
         for (String location : new String[]{
-                null, "https://example.com/r/Android/comments/abc123/",
+                "https://example.com/r/Android/comments/abc123/",
                 "//www.reddit.com/r/Android/comments/abc123/",
                 "http://www.reddit.com/comments/abc123/",
                 "https://www.reddit.com@evil.example/comments/abc123/",
@@ -108,19 +109,19 @@ public class ShareLinkResolverTest {
         assertEquals("https://np.reddit.com/user/Alice/comments/abc123/example/def456/?context=4&depth=1&sort=top",
                 ShareLinkResolver.resolve("https://np.reddit.com/u/Alice/s/First?context=1", "fixture-token", uri -> {
                     if (responses.size() == 2) {
-                        assertEquals("https://np.reddit.com/u/Alice/s/First", uri.toString());
+                        assertEquals("https://oauth.reddit.com/u/Alice/s/First", uri.toString());
                     } else {
-                        assertEquals("https://www.reddit.com/user/Alice/s/Second", uri.toString());
+                        assertEquals("https://oauth.reddit.com/user/Alice/s/Second", uri.toString());
                     }
                     return responses.remove();
                 }));
-        assertNull(first.getRequestProperty("Authorization"));
-        assertNull(second.getRequestProperty("Authorization"));
+        assertEquals("Bearer fixture-token", first.getRequestProperty("Authorization"));
+        assertEquals("Bearer fixture-token", second.getRequestProperty("Authorization"));
         assertTrue(responses.isEmpty());
     }
 
     @Test
-    public void fallsBackToGetWithoutForwardingCredentialsToRedirects() throws IOException {
+    public void fallsBackToGetAndAuthenticatesOnlyValidatedShareHops() throws IOException {
         FixtureConnection first = new FixtureConnection(405, null);
         FixtureConnection second = new FixtureConnection(307, "/r/Android/s/Next");
         FixtureConnection third = new FixtureConnection(302, POST);
@@ -131,12 +132,34 @@ public class ShareLinkResolverTest {
         assertEquals("HEAD", third.getRequestMethod());
         assertEquals("Bearer fixture-token", first.getRequestProperty("Authorization"));
         assertEquals("Bearer fixture-token", second.getRequestProperty("Authorization"));
-        assertNull(third.getRequestProperty("Authorization"));
+        assertEquals("Bearer fixture-token", third.getRequestProperty("Authorization"));
         for (FixtureConnection connection : List.of(first, second, third)) {
             assertNull(connection.getRequestProperty("Cookie"));
             assertFalse(connection.getInstanceFollowRedirects());
             assertTrue(connection.disconnected);
         }
+    }
+
+    @Test
+    public void resolvesOnOAuthWhenThePublicEndpointBlocksAnonymousRequests() throws IOException {
+        SafeRedirects.ConnectionFactory reddit = uri -> new FixtureConnection(
+                "oauth.reddit.com".equals(uri.getHost()) ? 302 : 403,
+                "https://oauth.reddit.com/r/Android/comments/abc123/example/def456/");
+        assertNull(ShareLinkResolver.resolve(SHARE, null, reddit));
+        assertEquals(COMMENT, ShareLinkResolver.resolve(SHARE, "fixture-token", reddit));
+    }
+
+    @Test
+    public void publicFallbackDoesNotSendTheBearer() throws IOException {
+        FixtureConnection oauth = new FixtureConnection(404, null);
+        FixtureConnection web = new FixtureConnection(302, POST);
+        var responses = new ArrayDeque<>(List.of(oauth, web));
+        assertEquals(POST, ShareLinkResolver.resolve(SHARE, "fixture-token", uri -> {
+            assertEquals(responses.size() == 2 ? OAUTH_SHARE : SHARE, uri.toString());
+            return responses.remove();
+        }));
+        assertEquals("Bearer fixture-token", oauth.getRequestProperty("Authorization"));
+        assertNull(web.getRequestProperty("Authorization"));
     }
 
     @Test
@@ -196,14 +219,16 @@ public class ShareLinkResolverTest {
     }
 
     @Test
-    public void neverSendsRedditCredentialsOnWrapperChains() throws IOException {
+    public void authenticatesRedditShareReachedFromWrapperButNotWrapperItself() throws IOException {
         FixtureConnection wrapper = new FixtureConnection(302, "https://www.reddit.com/s/Bare");
         FixtureConnection share = new FixtureConnection(302, POST);
         var responses = new ArrayDeque<>(List.of(wrapper, share));
-        assertEquals(POST, ShareLinkResolver.resolve("https://s.reddit.com/Fixture", "fixture-token", true, uri ->
-                responses.remove()));
+        assertEquals(POST, ShareLinkResolver.resolve("https://s.reddit.com/Fixture", "fixture-token", true, uri -> {
+            assertEquals(responses.size() == 2 ? "s.reddit.com" : "oauth.reddit.com", uri.getHost());
+            return responses.remove();
+        }));
         assertNull(wrapper.getRequestProperty("Authorization"));
-        assertNull(share.getRequestProperty("Authorization"));
+        assertEquals("Bearer fixture-token", share.getRequestProperty("Authorization"));
         for (String bad : List.of("https://notreddit.onelink.me/Fixture", "https://applink.reddit.com:443/Fixture",
                 "https://reddit.onelink.me/r%2Fa%2Fsecret", "http://click.redditmail.com/Fixture")) {
             assertNull(ShareLinkResolver.resolve(bad, null, true, uri -> { throw new AssertionError(uri); }));

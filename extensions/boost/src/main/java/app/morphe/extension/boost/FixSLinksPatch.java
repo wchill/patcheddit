@@ -14,10 +14,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
+import app.morphe.extension.boost.api.RedditJraw;
 import app.morphe.extension.shared.Utils;
 import app.morphe.extension.shared.fixes.slink.BaseFixSLinksPatch;
 
 import com.rubenmayayo.reddit.ui.activities.WebViewActivity;
+
+import net.dean.jraw.http.oauth.OAuthData;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -60,8 +63,12 @@ public class FixSLinksPatch extends BaseFixSLinksPatch {
         return INSTANCE.resolveSLink(link);
     }
 
-    public static void patchSetAccessToken(String accessToken) {
-        INSTANCE.setAccessToken(accessToken);
+    public static String getActiveAccessToken() {
+        RedditJraw session = RedditJraw.instance;
+        if (session == null) return null;
+        session.ensureAuthenticated();
+        OAuthData data = session.client.getOAuthData();
+        return session == RedditJraw.instance && data != null ? data.getAccessToken() : null;
     }
 
     private static boolean openRedditPollLink(String link) {

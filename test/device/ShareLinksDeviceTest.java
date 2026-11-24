@@ -20,11 +20,14 @@ import android.webkit.WebViewClient;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLStreamHandler;
+import java.nio.charset.StandardCharsets;
 import java.security.cert.Certificate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.FutureTask;
@@ -36,6 +39,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public final class ShareLinksDeviceTest {
     private static final String WEB = "https://www.reddit.com";
+    private static final String OAUTH = "oauth.reddit.com";
     private static final String ROOT = WEB + "/r/Example";
     private static final String POST_PATH = "/r/Example/comments/abc123/example";
     private static final String COMMENT_PATH = POST_PATH + "/def456";
@@ -66,6 +70,7 @@ public final class ShareLinksDeviceTest {
     private final LinkedBlockingQueue<Intent> handoffs = new LinkedBlockingQueue<>();
     private final AtomicReference<String> transportFailure = new AtomicReference<>();
     private final List<Exchange> exchanges = java.util.Collections.synchronizedList(new ArrayList<>());
+    private volatile String expectedToken;
 
     private ShareLinksDeviceTest(Context context, String flavor) throws Exception {
         this.context = context;
@@ -86,9 +91,9 @@ public final class ShareLinksDeviceTest {
     private void run() throws Exception {
         interceptHttps();
         if (legacy != null) {
-            legacy.getMethod("patchSetAccessToken", String.class).invoke(null, TOKEN);
             check(!openLegacy("https://example.com/r/Example/s/FixturePost"), "Unrelated link intercepted");
         }
+        seedNativeToken(TOKEN);
         var monitor = new Instrumentation.ActivityMonitor() {
             @Override public Instrumentation.ActivityResult onStartActivity(Intent intent) {
                 boolean rifReplay = rif() && intent.getComponent() != null
@@ -111,8 +116,8 @@ public final class ShareLinksDeviceTest {
                             || nonParticipating.getData() != null
                             && "np.reddit.com".equals(nonParticipating.getData().getHost()),
                     "Lost no-participation semantics");
-            check(List.of(new Exchange("HEAD", "np.reddit.com", "/r/Example/s/FixtureNp")).equals(exchanges),
-                    "Request lost the non-participation host: " + exchanges);
+            check(List.of(new Exchange("HEAD", expectedToken == null ? "np.reddit.com" : OAUTH,
+                    "/r/Example/s/FixtureNp")).equals(exchanges), "Wrong /s/ request host: " + exchanges);
             Intent chained = follow(ROOT + "/s/FixtureChain", false);
             assertPost(chained, POST_PATH, null);
             assertRequests("/r/Example/s/FixtureChain", "/r/Example/s/FixtureHop");
@@ -133,7 +138,8 @@ public final class ShareLinksDeviceTest {
                 check(fallback.getBooleanExtra("EXTRA_FORCE_BROWSER", false),
                         "BaconReader lost its browser fallback");
             }
-            assertRequests("/r/Example/s/FixtureMissing");
+            if (expectedToken == null) assertRequests("/r/Example/s/FixtureMissing");
+            else assertRequests("/r/Example/s/FixtureMissing", "/r/Example/s/FixtureMissing");
 
             Uri foreign = Uri.parse(readFallback(follow(ROOT + "/s/FixtureForeign", false)));
             check(("/r/Example/s/FixtureForeign").equals(foreign.getPath())
@@ -144,11 +150,134 @@ public final class ShareLinksDeviceTest {
                             && isFixtureFallback(loop.toString()), "Did not stop a redirect loop: " + loop);
             assertRequests("/r/Example/s/FixtureLoop");
 
+            if (expectedToken != null) {
+                share(ROOT + "/s/FixtureBlockedWeb", POST_PATH, null, false);
+                seedNativeToken("morphe-rotated-token");
+                share(ROOT + "/s/FixtureBlockedWeb", POST_PATH, null, false);
+                assertRequests("/r/Example/s/FixtureBlockedWeb");
+            }
             if ("joey".equals(flavor)) verifyJoey();
             if (rif()) verifyRif();
         } finally {
             instrumentation.removeMonitor(monitor);
         }
+    }
+
+    private void seedNativeToken(String accessToken) throws Exception {
+        onMain(() -> {
+            ClassLoader loader = context.getClassLoader();
+            if (rif()) {
+                Class<?> preferences = loader.loadClass("rif".equals(flavor) ? "k4.v" : "l4.v");
+                Object settings = preferences.getMethod("C").invoke(null);
+                field(preferences, "Z0").set(settings, null);
+                field(preferences, "e1").set(settings, accessToken);
+                field(preferences, "f1").setLong(settings, Long.MAX_VALUE);
+            } else if ("boost".equals(flavor)) {
+                Class<?> sessionType = loader.loadClass("xd2");
+                sessionType.getMethod("D").invoke(null);
+                Object session = field(sessionType, "r").get(null);
+                Object client = field(sessionType, "e").get(session);
+                Class<?> clientType = loader.loadClass("net.dean.jraw.RedditClient");
+                Class<?> authType = loader.loadClass("net.dean.jraw.http.AuthenticationMethod");
+                Object scheme = authType.getField("USERLESS_APP").get(null);
+                Class<?> json = loader.loadClass("com.fasterxml.jackson.databind.JsonNode");
+                Class<?> oauth = loader.loadClass("net.dean.jraw.http.oauth.OAuthData");
+                Object auth = oauth.getConstructor(authType, json).newInstance(scheme, tokenJson(loader, accessToken));
+                field(clientType, "authData").set(client, auth);
+                field(clientType, "authMethod").set(client, scheme);
+                field(sessionType, "f").set(session, new Date(Long.MAX_VALUE));
+            } else if ("syncforreddit".equals(flavor)) {
+                seedSyncToken(loader, accessToken);
+            } else if ("joey".equals(flavor)) {
+                Class<?> singleton = loader.loadClass("d9.c");
+                Object session = singleton.getMethod("q").invoke(null);
+                Object client = singleton.getMethod("v").invoke(session);
+                Class<?> scheme = loader.loadClass("net.dean.jraw.http.a");
+                Class<?> json = loader.loadClass("com.fasterxml.jackson.databind.JsonNode");
+                Class<?> oauth = loader.loadClass("net.dean.jraw.http.oauth.OAuthData");
+                Object auth = oauth.getConstructor(scheme, json)
+                        .newInstance(field(scheme, "h").get(null), tokenJson(loader, accessToken));
+                field(loader.loadClass("q7.e"), "n").set(client, auth);
+            } else if ("baconreader".equals(flavor)) {
+                Class<?> manager = loader.loadClass("com.onelouder.baconreader.data.SessionManager");
+                Class<?> session = loader.loadClass("com.onelouder.baconreader.data.Session");
+                Object selected = session.getConstructor().newInstance();
+                field(session, "name").set(selected, "Patcheddit fixture");
+                field(session, "accessToken").set(selected, accessToken);
+                field(session, "expires").setLong(selected, Long.MAX_VALUE);
+                field(manager, "sessions").set(null, new ArrayList<>(List.of(selected)));
+                field(manager, "current").set(null, selected);
+            } else {
+                Object app = context.getApplicationContext();
+                Object component = app.getClass().getMethod("b").invoke(app);
+                Class<?> managerType = loader.loadClass("reddit.news.oauth.RedditAccountManager");
+                Class<?> componentType = loader.loadClass("reddit.news.oauth.dagger.components.RelayApplicationComponent");
+                Method selectedManager = List.of(componentType.getMethods()).stream()
+                        .filter(method -> method.getParameterCount() == 0 && method.getReturnType() == managerType)
+                        .filter(method -> method.getName().equals("a") || method.getName().equals("d"))
+                        .findFirst().orElseThrow();
+                Object manager = selectedManager.invoke(component);
+                Class<?> account = loader.loadClass("reddit.news.oauth.reddit.model.RedditAccount");
+                Class<?> token = loader.loadClass("reddit.news.oauth.reddit.model.RedditAccessToken");
+                Object selected = account.getConstructor().newInstance();
+                Object auth = token.getConstructor().newInstance();
+                field(token, "accessToken").set(auth, accessToken);
+                field(token, "refreshToken").set(auth, "fixture-not-an-access-token");
+                field(token, "expireTime").setLong(auth, Long.MAX_VALUE);
+                field(account, "accessToken").set(selected, auth);
+                field(managerType, "b").set(manager, new ArrayList<>(List.of(selected)));
+                field(managerType, "a").setInt(manager, 0);
+            }
+            expectedToken = accessToken;
+        });
+    }
+
+    private void seedSyncToken(ClassLoader loader, String accessToken) throws Exception {
+        Class<?> account = loader.loadClass("com.laurencedawson.reddit_sync.singleton.a");
+        Object singleton = account.getMethod("d").invoke(null);
+        Field refresh = field(account, "b");
+        String oldRefresh = (String) refresh.get(singleton);
+        String newRefresh = accessToken + "-refresh";
+        refresh.set(singleton, newRefresh);
+        Class<?> base = loader.loadClass("x8.a");
+        Class<?> authCode = loader.loadClass("b9.a");
+        Object chained = authCode.getConstructor(Context.class, String.class,
+                        loader.loadClass("com.android.volley.Response$Listener"),
+                        loader.loadClass("com.android.volley.Response$ErrorListener"))
+                .newInstance(context, "fixture", null, null);
+        Class<?> requestType = loader.loadClass("b9.d");
+        Object request = requestType.getConstructor(Context.class, base).newInstance(context, chained);
+        Method getCacheKey = requestType.getMethod("getCacheKey");
+        String key = (String) getCacheKey.invoke(request);
+        refresh.set(singleton, oldRefresh);
+        check(key.equals(getCacheKey.invoke(request)), "Sync changed the key of a queued request");
+        byte[] body = (byte[]) requestType.getMethod("getBody").invoke(request);
+        check(new String(body, StandardCharsets.UTF_8).endsWith("=" + newRefresh),
+                "Sync changed the credentials of a queued request");
+        refresh.set(singleton, newRefresh);
+
+        Class<?> queueType = loader.loadClass("com.android.volley.RequestQueue");
+        Class<?> application = loader.loadClass("com.laurencedawson.reddit_sync.RedditApplication");
+        Object cache = queueType.getMethod("getCache").invoke(field(application, "b").get(null));
+        Class<?> cacheType = loader.loadClass("com.android.volley.Cache");
+        Class<?> entryType = loader.loadClass("com.android.volley.Cache$Entry");
+        Object entry = entryType.getConstructor().newInstance();
+        field(entryType, "data").set(entry, ("{\"access_token\":\"" + accessToken + "\"}")
+                .getBytes(StandardCharsets.UTF_8));
+        field(entryType, "ttl").setLong(entry, Long.MAX_VALUE);
+        cacheType.getMethod("put", String.class, entryType).invoke(cache, key, entry);
+    }
+
+    private static Object tokenJson(ClassLoader loader, String accessToken) throws Exception {
+        Class<?> mapper = loader.loadClass("com.fasterxml.jackson.databind.ObjectMapper");
+        return mapper.getMethod("readTree", String.class).invoke(mapper.getConstructor().newInstance(),
+                "{\"access_token\":\"" + accessToken + "\"}");
+    }
+
+    private static Field field(Class<?> owner, String name) throws ReflectiveOperationException {
+        Field field = owner.getDeclaredField(name);
+        field.setAccessible(true);
+        return field;
     }
 
     private void verifyJoey() throws Exception {
@@ -168,7 +297,7 @@ public final class ShareLinksDeviceTest {
         assertRequests("/r/Example/s/FixtureMailEmbedded");
         share("https://reddit.onelink.me/FixtureEmbedded?deep_link_value="
                 + Uri.encode(ROOT + "/s/FixtureEmbeddedTarget"), POST_PATH, null, false);
-        check(List.of(new Exchange("HEAD", "www.reddit.com", "/r/Example/s/FixtureEmbeddedTarget"))
+        check(List.of(new Exchange("HEAD", OAUTH, "/r/Example/s/FixtureEmbeddedTarget"))
                 .equals(exchanges), "Joey fetched the wrapper despite a recognized embedded target: " + exchanges);
         Intent gallery = follow(ROOT + "/s/FixtureGallery", false);
         Uri galleryUri = gallery.getData();
@@ -243,6 +372,8 @@ public final class ShareLinksDeviceTest {
     }
 
     private Intent follow(String link, boolean inApp) throws Exception {
+        // Native Joey startup may refresh its guest session between activity launches.
+        if ("joey".equals(flavor)) seedNativeToken(expectedToken);
         resetHandoff();
         Activity original = null;
         try {
@@ -438,19 +569,16 @@ public final class ShareLinksDeviceTest {
                     @Override public int getResponseCode() {
                         String host = url.getHost().toLowerCase(Locale.ROOT);
                         String auth = getRequestProperty("Authorization");
-                        boolean redirect = path.endsWith("/FixtureHop")
-                                || path.endsWith("/FixtureEmbeddedTarget")
-                                || path.endsWith("/FixtureMailEmbedded");
-                        boolean legacyOriginal = legacy != null && path.endsWith("/FixtureChain")
-                                && "www.reddit.com".equals(host);
+                        boolean oauth = OAUTH.equals(host);
                         if (Looper.myLooper() == Looper.getMainLooper() || getInstanceFollowRedirects()
-                                || (auth != null && (redirect || !"www.reddit.com".equals(host)))
-                                || (legacyOriginal && !("Bearer " + TOKEN).equals(auth))
+                                || (oauth ? expectedToken == null || !("Bearer " + expectedToken).equals(auth)
+                                        : auth != null)
                                 || getRequestProperty("Cookie") != null) {
-                            transportFailure.set("Unsafe fixture request to " + host + path);
+                            transportFailure.set("Unsafe fixture request: " + getRequestMethod() + " " + host + path);
                             return 400;
                         }
                         exchanges.add(new Exchange(getRequestMethod(), host, path));
+                        if (path.endsWith("/FixtureBlockedWeb") && !oauth) return 403;
                         return reply(getRequestMethod(), path).code();
                     }
 

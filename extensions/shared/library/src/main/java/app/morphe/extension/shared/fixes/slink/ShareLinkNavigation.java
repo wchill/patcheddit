@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
+import java.io.IOException;
+
 import app.morphe.extension.shared.Logger;
 import app.morphe.extension.shared.Utils;
 
@@ -107,16 +109,16 @@ public final class ShareLinkNavigation {
         }
     }
 
-    private static String resolve(Context app, String link, boolean joey) {
+    static String resolve(Context app, String link, boolean joey) {
         String token = null;
         try {
             token = getAccessToken(app);
         } catch (RuntimeException ignored) {
-            // The native account may not have been initialized on a cold launch.
+            Logger.printDebug(() -> "Reddit share link session unavailable");
         }
         try {
-            return joey ? ShareLinkResolver.resolveJoey(link, token) : ShareLinkResolver.resolve(link, token);
-        } catch (Exception ignored) {
+            return ShareLinkResolver.resolve(link, token, joey, null);
+        } catch (IOException ignored) {
             Logger.printDebug(() -> "Could not resolve Reddit share link");
             return null;
         }

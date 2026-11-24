@@ -133,6 +133,9 @@ Run `ShareLinksDeviceTest` against a disposable, package-renamed APK with
 requires an `app.patcheddit.rollout.*` package because it replaces HTTPS
 transport in that process. It covers shared post/comment routing, user links,
 redirect chains, tracking removal, comment context, and failure fallback.
+It seeds fake tokens in each client's native session and checks that `/s/`
+links still resolve when anonymous requests are blocked, without sending
+the bearer to the public web host or to link wrappers.
 Joey adds wrapper and permalink cases; RIF checks its external image link
 filters and exercises image routing through the in-app router and WebView,
 including the Matrix redirect cache.

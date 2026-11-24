@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 public final class ShareLinkResolver {
     private static final String WWW = "www.reddit.com";
     private static final String NP = "np.reddit.com";
+    private static final String OAUTH = "oauth.reddit.com";
     private static final Pattern SHARE_PATH = Pattern.compile(
             "/(?:r|u|user)/[A-Za-z0-9_-]+/s/[A-Za-z0-9_-]+/?", Pattern.CASE_INSENSITIVE);
     private static final Pattern BARE_SHARE = Pattern.compile("/s/[A-Za-z0-9_-]+/?", Pattern.CASE_INSENSITIVE);
@@ -113,14 +114,6 @@ public final class ShareLinkResolver {
                 + querySuffix(target);
     }
 
-    static String resolve(String link, String token) throws IOException {
-        return resolve(link, token, false, null);
-    }
-
-    public static String resolveJoey(String link, String token) throws IOException {
-        return resolve(link, token, true, null);
-    }
-
     static String resolve(String link, String token, SafeRedirects.ConnectionFactory factory) throws IOException {
         return resolve(link, token, false, factory);
     }
@@ -130,18 +123,17 @@ public final class ShareLinkResolver {
         URI source = SafeRedirects.httpsUri(link);
         URI current = requestUri(source, joey);
         if (current == null) return null;
-        // Only a direct Reddit share may use the app's existing token, and only on its canonical origin.
-        boolean authenticatedOrigin = SafeRedirects.hasHost(current, WWW)
-                && token != null && BEARER.matcher(token).matches();
+        String authorization = token != null && BEARER.matcher(token).matches() ? "Bearer " + token : null;
         boolean np = SafeRedirects.hasHost(source, NP);
         Set<URI> visited = new HashSet<>();
         SafeRedirects requests = factory == null ? new SafeRedirects() : new SafeRedirects(factory);
         for (int hop = 0; hop < MAX_HOPS && visited.add(current); hop++) {
-            boolean wrapped = !isRedditWeb(current);
-            URI next = wrapped ? embedded(current) : null;
-            if (next == null) {
-                next = requests.redirect(current, authenticatedOrigin && SafeRedirects.hasHost(current, WWW)
-                        ? "Bearer " + token : null);
+            URI next;
+            if (isRedditWeb(current)) {
+                next = redirectShare(requests, current, authorization, joey);
+            } else {
+                next = embedded(current);
+                if (next == null) next = requests.redirect(current, null);
             }
             if (next == null) return null;
             np |= SafeRedirects.hasHost(next, NP);
@@ -149,9 +141,30 @@ public final class ShareLinkResolver {
             if (destination != null) return destination;
             current = requestUri(next, joey);
             if (current == null) return null;
-            authenticatedOrigin = false;
         }
         return null;
+    }
+
+    private static URI redirectShare(SafeRedirects requests, URI web, String authorization, boolean joey)
+            throws IOException {
+        if (authorization != null) {
+            // Only requestUri's validated share paths reach here. Never forward a bearer to the web
+            // host or follow a Location with the HTTP client's own redirect handling.
+            URI oauth = URI.create("https://" + OAUTH + web.getRawPath());
+            URI next = null;
+            try {
+                next = requests.redirect(oauth, authorization);
+            } catch (IOException ignored) {
+                // The public share endpoint can still work when the OAuth endpoint is unavailable.
+            }
+            if (SafeRedirects.hasHost(next, OAUTH)) {
+                // An API-relative Location inherits the OAuth host, but native navigation is web-based.
+                String host = SafeRedirects.hasHost(web, NP) ? NP : WWW;
+                return URI.create("https://" + host + next.getRawPath() + querySuffix(next));
+            }
+            if (next != null && !web.equals(requestUri(next, joey))) return next;
+        }
+        return requests.redirect(web, null);
     }
 
     private static URI requestUri(URI uri, boolean joey) {

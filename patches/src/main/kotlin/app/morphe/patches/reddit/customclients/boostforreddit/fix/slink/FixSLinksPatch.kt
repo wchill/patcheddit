@@ -2,8 +2,8 @@ package app.morphe.patches.reddit.customclients.boostforreddit.fix.slink
 
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.RESOLVE_S_LINK_METHOD
-import app.morphe.patches.reddit.customclients.SET_ACCESS_TOKEN_METHOD
 import app.morphe.patches.reddit.customclients.ExtensionPatches
+import app.morphe.patches.reddit.customclients.bindShareLinkAccessToken
 import app.morphe.patches.reddit.customclients.fixSLinksPatch
 import app.morphe.patches.reddit.customclients.boostforreddit.wrapHook
 
@@ -30,12 +30,10 @@ val fixSlinksPatch = fixSLinksPatch(
 
         // endregion
 
-        // region Patch set access token.
-
-        GetOAuthAccessTokenFingerprint.wrapHook(
-            after = "invoke-static {v0}, $EXTENSION_CLASS_DESCRIPTOR->$SET_ACCESS_TOKEN_METHOD",
-        )
-
-        // endregion
+        bindShareLinkAccessToken("""
+            invoke-static {}, $EXTENSION_CLASS_DESCRIPTOR->getActiveAccessToken()Ljava/lang/String;
+            move-result-object v0
+            return-object v0
+        """)
     }
 }
