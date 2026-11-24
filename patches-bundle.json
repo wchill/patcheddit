@@ -1,7 +1,7 @@
 {
-  "created_at": "2026-11-24T21:43:34",
-  "description": "# [2.6.0-dev.3](https://github.com/wchill/patcheddit/compare/v2.6.0-dev.2...v2.6.0-dev.3) (2026-11-24)\n\n\n### Bug Fixes\n\n* Hook additional link resolvers for authenticated /s/ link resolving ([c84920b](https://github.com/wchill/patcheddit/commit/c84920b8f8553cc1ae95e2a1387c92833c7a1978))",
-  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.6.0-dev.3/patches-2.6.0-dev.3.mpp",
-  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.6.0-dev.3/patches-2.6.0-dev.3.mpp.asc",
-  "version": "2.6.0-dev.3"
+  "created_at": "2026-11-24T23:51:47",
+  "description": "# [2.6.0-dev.4](https://github.com/wchill/patcheddit/compare/v2.6.0-dev.3...v2.6.0-dev.4) (2026-11-24)\n\n\n### Bug Fixes\n\n* **boost:** Ignore touches outside of inline images ([2b16d7c](https://github.com/wchill/patcheddit/commit/2b16d7c3b70e2bb5b42a84bc5e704d665e969d87))\n* **boost:** Look up removal strings from resource XML ([b1959a6](https://github.com/wchill/patcheddit/commit/b1959a6d26bf467d1a5208ea96851df9125418e1))\n* **joey:** Remove ad banners ([f73907c](https://github.com/wchill/patcheddit/commit/f73907cdda7a8b3d7854165d37c773fa66adfc87))\n* **relay:** Resolve inline media layout issues ([d32a639](https://github.com/wchill/patcheddit/commit/d32a63997e04281fcada013f351673c36a2c70c3))",
+  "download_url": "https://github.com/wchill/patcheddit/releases/download/v2.6.0-dev.4/patches-2.6.0-dev.4.mpp",
+  "signature_download_url": "https://github.com/wchill/patcheddit/releases/download/v2.6.0-dev.4/patches-2.6.0-dev.4.mpp.asc",
+  "version": "2.6.0-dev.4"
 }

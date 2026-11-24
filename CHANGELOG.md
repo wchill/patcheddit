@@ -1,3 +1,13 @@
+# [2.6.0-dev.4](https://github.com/wchill/patcheddit/compare/v2.6.0-dev.3...v2.6.0-dev.4) (2026-11-24)
+
+
+### Bug Fixes
+
+* **boost:** Ignore touches outside of inline images ([2b16d7c](https://github.com/wchill/patcheddit/commit/2b16d7c3b70e2bb5b42a84bc5e704d665e969d87))
+* **boost:** Look up removal strings from resource XML ([b1959a6](https://github.com/wchill/patcheddit/commit/b1959a6d26bf467d1a5208ea96851df9125418e1))
+* **joey:** Remove ad banners ([f73907c](https://github.com/wchill/patcheddit/commit/f73907cdda7a8b3d7854165d37c773fa66adfc87))
+* **relay:** Resolve inline media layout issues ([d32a639](https://github.com/wchill/patcheddit/commit/d32a63997e04281fcada013f351673c36a2c70c3))
+
 # [2.6.0-dev.3](https://github.com/wchill/patcheddit/compare/v2.6.0-dev.2...v2.6.0-dev.3) (2026-11-24)
 
 
