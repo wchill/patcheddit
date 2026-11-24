@@ -1,3 +1,25 @@
+# [2.6.0-dev.1](https://github.com/wchill/patcheddit/compare/v2.5.2-dev.1...v2.6.0-dev.1) (2026-11-24)
+
+
+### Bug Fixes
+
+* /s/ links now resolve when logged in on blocked IP ranges ([f20eda2](https://github.com/wchill/patcheddit/commit/f20eda2027161b88e5eb252902476962964376d4))
+* **boost:** Paginate loading of history view ([3a1d665](https://github.com/wchill/patcheddit/commit/3a1d665c72d75851f7c6768c17cc0599f7b31421))
+* Do not use silent previews for redgifs media in BaconReader/Joey and prefer HD videos ([5c4381f](https://github.com/wchill/patcheddit/commit/5c4381f17050ab915dd32d9defadca1d78253990))
+* Handle /s/ links in BaconReader, Joey, RIF ([c5a3a65](https://github.com/wchill/patcheddit/commit/c5a3a6505bcb74349dc2cdb17aed9bcc7f92e952))
+* Handle share links in Joey, plus handle more link schemas ([8c32f10](https://github.com/wchill/patcheddit/commit/8c32f10f35d7ece93fdaaf357f45c202bf45ac7f))
+* Handle video links in comments in BaconReader, Sync, and Relay ([e1ec23a](https://github.com/wchill/patcheddit/commit/e1ec23a93c2d6fb7159d8dec5a545d880da1aaf6))
+* Random subreddit feed works for all clients ([1d5eea8](https://github.com/wchill/patcheddit/commit/1d5eea82d44dbfb0c2e3f5ac625f1424b62531c1))
+* **relay:** Reserve space for inline media to prevent flickering/jumping ([dfac1ff](https://github.com/wchill/patcheddit/commit/dfac1ff788fa199440a44b8653669e97fe03e10d))
+* Repair gallery metadata in Relay ([395d44d](https://github.com/wchill/patcheddit/commit/395d44d5c1e79fa674d54bb132d075c3802023bb))
+* **rif:** Handle wrapped media links ([300b2e4](https://github.com/wchill/patcheddit/commit/300b2e4ad255fda40f96a330f02a8065edfae250))
+* Use /r/all workaround for BaconReader, Joey, Relay, RIF, and Sync ([16922e4](https://github.com/wchill/patcheddit/commit/16922e4ee104db01fa0fcb785b479d81dd72279b))
+
+
+### Features
+
+* Add high refresh rate support for BaconReader, Joey, Relay, RIF, and Sync ([a34487d](https://github.com/wchill/patcheddit/commit/a34487dbf965bce5050e446fe2ff98208f460e82))
+
 ## [2.5.2-dev.1](https://github.com/wchill/patcheddit/compare/v2.5.1...v2.5.2-dev.1) (2026-11-23)
 
 
