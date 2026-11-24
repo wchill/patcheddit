@@ -16,6 +16,7 @@ import app.morphe.patcher.util.returnEarly
 @Suppress("unused")
 val disableAdsPatch = morpheBytecodePatch(
     name = "Disable ads",
+    description = "Prevents ads and their loading placeholders in Joey.",
     default = true,
     extensionPatch = ExtensionPatches.Joey,
 ) { setting ->
@@ -25,5 +26,7 @@ val disableAdsPatch = morpheBytecodePatch(
 
     execute {
         setting.patchMethod(IsAdFreeUserFingerprint) { returnEarly(true) }
+        // The ad-free flag only starts a grace period; banners check a separate gate.
+        setting.patchMethod(AreAdsDisabledFingerprint) { returnEarly(true) }
     }
 }

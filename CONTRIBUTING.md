@@ -220,6 +220,13 @@ With **Inline media** applied, include `--source test/device/RelayInlineMediaDev
 and pass `--arg inline=true` (without `stock=gallery` or `stock=gallery-pro`)
 to check preview sizing, comment taps, and scroll anchoring.
 
+## Joey ad-banner device test
+
+On a disposable, package-renamed Joey 2.1.6.5 APK with **Disable ads** applied,
+run `JoeyAdsDeviceTest` with `--suite app.patcheddit.fixture.JoeyAdsDeviceTest`
+and `--source test/device/JoeyAdsDeviceTest.java`. The fixture simulates the
+billing result after the grace period expires without changing the device clock.
+
 ## RIF inline-media device tests
 
 Install the patched free and Platinum APKs, signed with the matching test keys.
