@@ -14,6 +14,8 @@ import app.morphe.patches.reddit.customclients.RESOLVE_S_LINK_METHOD
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.bindShareLinkAccessToken
+import app.morphe.patches.reddit.customclients.hookWrapperActivity
+import app.morphe.patches.reddit.customclients.redditWrapperViewFilters
 import app.morphe.patches.reddit.customclients.fixSLinksPatch
 import com.android.tools.smali.dexlib2.AccessFlags
 import com.android.tools.smali.dexlib2.Opcode
@@ -25,6 +27,7 @@ import com.android.tools.smali.dexlib2.immutable.ImmutableField
 import com.android.tools.smali.dexlib2.immutable.ImmutableMethod
 
 const val EXTENSION_CLASS_DESCRIPTOR = "Lapp/morphe/extension/syncforreddit/FixSLinksPatch;"
+private const val LINK_ACTIVITY = "com.laurencedawson.reddit_sync.ui.activities.IntentActivity"
 private const val ACCOUNT = "Lcom/laurencedawson/reddit_sync/singleton/a;"
 private const val QUEUE = "Lcom/android/volley/RequestQueue;"
 private const val CACHE = "Lcom/android/volley/Cache;"
@@ -38,8 +41,10 @@ val fixSLinksPatch = fixSLinksPatch(
     extensionPatch = ExtensionPatches.Sync,
 ) {
     compatibleWith(*AppCompatibility.SyncForReddit)
+    dependsOn(redditWrapperViewFilters(LINK_ACTIVITY))
 
     execute {
+        hookWrapperActivity(LINK_ACTIVITY)
         // region Patch navigation handler.
 
         LinkHelperOpenLinkFingerprint.method.apply {

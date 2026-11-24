@@ -48,6 +48,24 @@ public final class ShareLinkNavigation {
         return open(context, link, targetClass, null, false);
     }
 
+    public static boolean openWrapperActivity(Activity activity, String targetClass) {
+        Intent intent = activity.getIntent();
+        if (intent == null || !Intent.ACTION_VIEW.equals(intent.getAction())) return false;
+        String link = intent.getDataString();
+        if (!ShareLinkResolver.isWrapper(link) || link.endsWith("#bypass")
+                || !open(activity, link, targetClass)) return false;
+        activity.finish();
+        return true;
+    }
+
+    public static boolean openInfinity(Activity activity, Uri uri) {
+        if (uri == null) return false;
+        String link = uri.toString();
+        if (!ShareLinkResolver.isWrapper(link) || !open(activity, link, activity.getClass().getName())) return false;
+        activity.finish();
+        return true;
+    }
+
     public static boolean openJoey(Context context, String link) {
         if (context == null || link == null || isFallback(link)) return false;
         if (context instanceof Activity && JOEY_OPEN.equals(context.getClass().getName())) {
@@ -57,7 +75,7 @@ public final class ShareLinkNavigation {
         }
         Context app = context.getApplicationContext();
         if (app == null) return false;
-        if (ShareLinkResolver.isJoeyShare(link)) {
+        if (ShareLinkResolver.canResolve(link)) {
             Utils.runOnBackgroundThread(() -> {
                 String resolved = resolve(app, link, true);
                 Utils.runOnMainThread(() -> {
@@ -90,11 +108,11 @@ public final class ShareLinkNavigation {
     }
 
     static boolean isShareLink(String link) {
-        return ShareLinkResolver.shareUri(link) != null && !isFallback(link);
+        return ShareLinkResolver.canResolve(link) && !isFallback(link);
     }
 
-    private static boolean isFallback(String link) {
-        return FALLBACK.equals(Uri.parse(link).getFragment());
+    static boolean isFallback(String link) {
+        return link != null && FALLBACK.equals(Uri.parse(link).getFragment());
     }
 
     private static String fallback(String link) {
@@ -138,7 +156,8 @@ public final class ShareLinkNavigation {
             } else {
                 route = baconReader ? ShareLinkResolver.baconReaderPermalink(link, destination) : destination;
             }
-            Intent replay = viewIntent(app, route, targetClass);
+            Intent replay = viewIntent(app, route, failed && dispatcher != null
+                    ? dispatcher.getClass().getName() : targetClass);
             if (failed && baconReader) replay.putExtra(BACON_FORCE_BROWSER, true);
             Utils.runOnMainThread(() -> {
                 if (dispatcher != null && dispatcher.isFinishing()) return;
@@ -160,8 +179,9 @@ public final class ShareLinkNavigation {
     }
 
     private static Intent viewIntent(Context context, String link, String targetClass) {
-        return new Intent(Intent.ACTION_VIEW, Uri.parse(link))
-                .setClassName(context.getPackageName(), targetClass);
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
+        return targetClass == null ? intent.setPackage(context.getPackageName())
+                : intent.setClassName(context.getPackageName(), targetClass);
     }
 
     // Substituted by each app's patch. Read the current session on demand instead of retaining tokens.

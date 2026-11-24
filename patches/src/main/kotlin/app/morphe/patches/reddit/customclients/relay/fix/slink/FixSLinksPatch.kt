@@ -9,6 +9,7 @@ import app.morphe.patches.reddit.customclients.RESOLVE_S_LINK_METHOD
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.bindShareLinkAccessToken
+import app.morphe.patches.reddit.customclients.redditWrapperViewFilters
 import app.morphe.patches.reddit.customclients.fixSLinksPatch
 import com.android.tools.smali.dexlib2.iface.instruction.OneRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.reference.MethodReference
@@ -25,6 +26,7 @@ val fixSLinksPatch = fixSLinksPatch(
     extensionPatch = ExtensionPatches.Relay,
 ) {
     compatibleWith(*AppCompatibility.Relay)
+    dependsOn(redditWrapperViewFilters("reddit.news.IntentFilterActivity"))
 
     execute {
         val application = Fingerprint(definingClass = APPLICATION, returnType = COMPONENT, parameters = emptyList()).method

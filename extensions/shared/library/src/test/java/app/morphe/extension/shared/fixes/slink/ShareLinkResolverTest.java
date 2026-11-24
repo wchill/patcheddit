@@ -213,9 +213,8 @@ public class ShareLinkResolverTest {
                         null, true, uri -> { throw new AssertionError(uri); }));
         assertEquals("https://www.reddit.com/user/Alice/", ShareLinkResolver.joeyNormalization("https://reddit.com/u/Alice/"));
         assertNull(ShareLinkResolver.joeyNormalization(POST));
-        assertNull(ShareLinkResolver.resolve("https://www.reddit.com/s/Bare", null, uri -> {
-            throw new AssertionError("Bare share support is Joey-only");
-        }));
+        assertEquals(POST, ShareLinkResolver.resolve("https://www.reddit.com/s/Bare", null,
+                uri -> new FixtureConnection(302, POST)));
     }
 
     @Test
@@ -223,7 +222,7 @@ public class ShareLinkResolverTest {
         FixtureConnection wrapper = new FixtureConnection(302, "https://www.reddit.com/s/Bare");
         FixtureConnection share = new FixtureConnection(302, POST);
         var responses = new ArrayDeque<>(List.of(wrapper, share));
-        assertEquals(POST, ShareLinkResolver.resolve("https://s.reddit.com/Fixture", "fixture-token", true, uri -> {
+        assertEquals(POST, ShareLinkResolver.resolve("https://s.reddit.com/Fixture", "fixture-token", uri -> {
             assertEquals(responses.size() == 2 ? "s.reddit.com" : "oauth.reddit.com", uri.getHost());
             return responses.remove();
         }));
@@ -231,8 +230,21 @@ public class ShareLinkResolverTest {
         assertEquals("Bearer fixture-token", share.getRequestProperty("Authorization"));
         for (String bad : List.of("https://notreddit.onelink.me/Fixture", "https://applink.reddit.com:443/Fixture",
                 "https://reddit.onelink.me/r%2Fa%2Fsecret", "http://click.redditmail.com/Fixture")) {
-            assertNull(ShareLinkResolver.resolve(bad, null, true, uri -> { throw new AssertionError(uri); }));
+            assertNull(ShareLinkResolver.resolve(bad, null, uri -> { throw new AssertionError(uri); }));
         }
+    }
+
+    @Test
+    public void unwrapsMailForNativeClientsAndKeepsTheInnerShareContext() throws IOException {
+        String mail = "https://click.redditmail.com/CL0/https%3A%2F%2Fnp.reddit.com%2Fr%2FAndroid%2Fs%2F"
+                + "Shared%3Fcontext%3D7%26utm_source%3Demail/123";
+        FixtureConnection response = new FixtureConnection(302, "/comments/abc123/example/def456/");
+        assertEquals("https://np.reddit.com/r/Android/comments/abc123/example/def456/?context=7",
+                ShareLinkResolver.resolve(mail, "fixture-token", uri -> {
+                    assertEquals("https://oauth.reddit.com/r/Android/s/Shared", uri.toString());
+                    return response;
+                }));
+        assertEquals("Bearer fixture-token", response.getRequestProperty("Authorization"));
     }
 
     @Test

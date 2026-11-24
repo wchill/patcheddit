@@ -30,6 +30,7 @@ import com.android.tools.smali.dexlib2.util.MethodUtil
 import com.android.tools.smali.dexlib2.writer.io.MemoryDataStore
 import com.android.tools.smali.dexlib2.writer.pool.DexPool
 import java.io.ByteArrayInputStream
+import java.io.InputStream
 import java.util.logging.Logger
 
 private val httpLibraryResourcesPatch = patch(default = false) {
@@ -74,6 +75,32 @@ internal fun installOkHttpInterceptors(client: String, clientType: String) {
     )
 }
 
+// Keep the extension transport isolated without replacing the client's own HTTP stack.
+internal fun privateHttpExtensionPatch(
+    client: String,
+    vararg hookedClasses: String,
+) = patch(default = false) {
+    dependsOn(httpLibraryResourcesPatch, clientExtensionPatch(client, hookedClasses, ::preparePrivateHttp))
+}
+
+private fun preparePrivateHttp(input: InputStream): InputStream {
+    val dex = input.use { DexBackedDexFile.fromInputStream(null, it.buffered()) }
+    val definitions = dex.classes.toList()
+    val names = definitions.filter { privateSharedLibraryType(it.type) != it.type }
+        .associate { it.type to privateSharedLibraryType(it.type) }
+    check(names.keys.any { it.startsWith("Lokhttp3/") } && names.keys.any { it.startsWith("Lokio/") }) {
+        "HTTP library payload is missing OkHttp or Okio"
+    }
+    val rewritten = DexMappingRewriter(
+        ProguardMapping.classNames(names), definitions, resolveReflectiveFields = false,
+    ).rewrite(definitions)
+    val pool = DexPool(dex.opcodes)
+    rewritten.forEach(pool::internClass)
+    val output = MemoryDataStore()
+    pool.writeTo(output)
+    return ByteArrayInputStream(output.data)
+}
+
 internal fun httpClientExtensionPatch(
     client: String,
     vararg hookedClasses: String,
@@ -99,25 +126,9 @@ internal fun httpClientExtensionPatch(
             profile = input.reader().use(HttpLibraryProfile::read)
         }
     }
-    val extension = clientExtensionPatch(client, hookedClasses) { input ->
-        val dex = input.use { DexBackedDexFile.fromInputStream(null, it.buffered()) }
-        val definitions = dex.classes.toList()
-        val names = definitions.filter { privateSharedLibraryType(it.type) != it.type }
-            .associate { it.type to privateSharedLibraryType(it.type) }
-        check(names.keys.any { it.startsWith("Lokhttp3/") } && names.keys.any { it.startsWith("Lokio/") }) {
-            "HTTP library payload is missing OkHttp or Okio"
-        }
-        val rewritten = DexMappingRewriter(
-            ProguardMapping.classNames(names), definitions, resolveReflectiveFields = false,
-        ).rewrite(definitions)
-        val pool = DexPool(dex.opcodes)
-        rewritten.forEach(pool::internClass)
-        val output = MemoryDataStore()
-        pool.writeTo(output)
-        ByteArrayInputStream(output.data)
-    }
+    val extension = privateHttpExtensionPatch(client, *hookedClasses)
     return patch(default = false) {
-        dependsOn(native, httpLibraryResourcesPatch, extension)
+        dependsOn(native, extension)
         execute {
             installOkHttpInterceptors(client, privateHttpType("Lokhttp3/OkHttpClient;"))
         }

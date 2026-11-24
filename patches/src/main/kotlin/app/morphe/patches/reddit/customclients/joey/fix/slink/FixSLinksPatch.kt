@@ -4,19 +4,16 @@ import app.morphe.patcher.Fingerprint
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.SHARE_NAV
-import app.morphe.patches.reddit.customclients.ShareViewFilter
 import app.morphe.patches.reddit.customclients.bindShareLinkAccessToken
 import app.morphe.patches.reddit.customclients.fixSLinksPatch
-import app.morphe.patches.reddit.customclients.shareViewFilters
+import app.morphe.patches.reddit.customclients.redditWrapperViewFilters
 import app.morphe.patches.reddit.customclients.wrapMorpheHook
 
 private const val STRING = "Ljava/lang/String;"
 private const val OAUTH = "Lnet/dean/jraw/http/oauth/OAuthData;"
 internal val fixSLinksPatch = fixSLinksPatch(ExtensionPatches.Joey) {
     compatibleWith(*AppCompatibility.JoeyForReddit)
-    // Stock already declares *.reddit.com and *.redditmail.com.
-    dependsOn(shareViewFilters(setOf("o.o.joey.Activities.OpenInApp"),
-        ShareViewFilter("reddit.onelink.me", "pathPrefix", "/")))
+    dependsOn(redditWrapperViewFilters("o.o.joey.Activities.OpenInApp"))
     execute {
         // Both OpenInApp and link spans invoke this dispatcher.
         Fingerprint(

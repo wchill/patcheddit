@@ -8,6 +8,7 @@ import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.ExtensionPatches
 import app.morphe.patches.reddit.customclients.SHARE_NAV
 import app.morphe.patches.reddit.customclients.bindShareLinkAccessToken
+import app.morphe.patches.reddit.customclients.redditWrapperViewFilters
 import app.morphe.patches.reddit.customclients.fixSLinksPatch
 import app.morphe.patches.reddit.customclients.wrapMorpheHook
 import app.morphe.util.indexOfFirstInstructionOrThrow
@@ -27,6 +28,7 @@ private const val CONTEXT = "Landroid/content/Context;"
 
 internal val fixSLinksPatch = fixSLinksPatch(ExtensionPatches.BaconReader) {
     compatibleWith(*AppCompatibility.BaconReader)
+    dependsOn(redditWrapperViewFilters("com.onelouder.baconreader.LinkDispatcher"))
     execute {
         Fingerprint(
             definingClass = DISPATCHER,

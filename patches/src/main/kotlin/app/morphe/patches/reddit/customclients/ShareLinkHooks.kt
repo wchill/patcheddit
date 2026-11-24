@@ -1,8 +1,14 @@
 package app.morphe.patches.reddit.customclients
 
 import app.morphe.patcher.Fingerprint
+import app.morphe.patcher.extensions.InstructionExtensions.addInstructionsWithLabels
+import app.morphe.patcher.extensions.InstructionExtensions.getInstruction
 import app.morphe.patcher.patch.document
 import app.morphe.patcher.patch.patch
+import app.morphe.patcher.util.getReference
+import app.morphe.patcher.util.smali.ExternalLabel
+import com.android.tools.smali.dexlib2.Opcode
+import com.android.tools.smali.dexlib2.iface.reference.MethodReference
 import org.w3c.dom.Document
 import org.w3c.dom.Element
 
@@ -11,6 +17,32 @@ internal const val OPEN_SHARE = "open(Landroid/content/Context;Ljava/lang/String
 private const val ANDROID = "http://schemas.android.com/apk/res/android"
 
 internal data class ShareViewFilter(val host: String, val pathAttribute: String, val path: String)
+
+internal val redditMailHosts = listOf("click.redditmail.com", "c.redditmail.com")
+internal val redditAppLinkHosts = listOf("s.reddit.com", "applink.reddit.com", "reddit.onelink.me", "reddit.app.link")
+
+internal fun redditWrapperViewFilters(
+    activity: String, hosts: List<String> = redditMailHosts + redditAppLinkHosts,
+) = shareViewFilters(setOf(activity, activity.substringAfterLast('.', "").let { ".$it" }),
+    *hosts.map { ShareViewFilter(it, "pathPrefix", "/") }.toTypedArray())
+
+internal fun hookWrapperActivity(activity: String, target: String? = activity) {
+    val method = Fingerprint(definingClass = "L${activity.replace('.', '/')};",
+        name = "onCreate", parameters = listOf("Landroid/os/Bundle;"), returnType = "V").method
+    val code = checkNotNull(method.implementation)
+    val index = code.instructions.indexOfFirst {
+        it.opcode == Opcode.INVOKE_SUPER && it.getReference<MethodReference>()?.name == "onCreate"
+    } + 1
+    check(index == 1 && code.registerCount in 3..16) { "Unexpected link activity initialization in $activity" }
+    val targetName = if (target == null) "const/4 v0, 0x0" else "const-string v0, \"$target\""
+    method.addInstructionsWithLabels(index, """
+        $targetName
+        invoke-static {p0, v0}, $SHARE_NAV->openWrapperActivity(Landroid/app/Activity;Ljava/lang/String;)Z
+        move-result v0
+        if-eqz v0, :open_native
+        return-void
+    """, ExternalLabel("open_native", method.getInstruction(index)))
+}
 
 internal fun shareViewFilters(activityNames: Set<String>, vararg filters: ShareViewFilter) = patch(default = false) {
     execute {

@@ -28,19 +28,21 @@ public final class ShareLinkResolver {
     private static final Pattern WRAPPER_PATH = Pattern.compile("/(?:[A-Za-z0-9._~+%=-]+/)*[A-Za-z0-9._~+%=-]+/?");
     private static final Pattern MAIL_EMBEDDED = Pattern.compile("/CL0/([^/]+)(?:/.*)?", Pattern.CASE_INSENSITIVE);
     private static final String[] EMBEDDED_TARGETS = {
-            "deep_link_value", "$canonical_url", "$deeplink_path", "af_dp", "url", "rdt_cid"
+            "deep_link_value", "$canonical_url", "$deeplink_path", "$android_deeplink_path",
+            "$og_redirect", "af_dp", "url", "rdt_cid"
     };
     private static final Pattern BEARER = Pattern.compile("[A-Za-z0-9._~+/-]+=*");
     private static final int MAX_HOPS = 5;
 
     private ShareLinkResolver() {}
 
-    static URI shareUri(String link) {
-        return requestUri(SafeRedirects.httpsUri(link), false);
+    public static boolean canResolve(String link) {
+        return requestUri(SafeRedirects.httpsUri(link)) != null;
     }
 
-    public static boolean isJoeyShare(String link) {
-        return requestUri(SafeRedirects.httpsUri(link), true) != null;
+    static boolean isWrapper(String link) {
+        URI uri = requestUri(SafeRedirects.httpsUri(link));
+        return uri != null && isWrapperHost(uri);
     }
 
     /** A canonical comment and the fields expected by Joey's native CommentActivity. */
@@ -100,13 +102,8 @@ public final class ShareLinkResolver {
         URI target = SafeRedirects.httpsUri(destination);
         Matcher comment = target == null ? null : POST.matcher(target.getRawPath());
         if (comment == null || !comment.matches()) return destination;
-        String scope = comment.group(1);
-        if (scope == null) {
-            URI source = shareUri(share);
-            if (source == null) return destination;
-            String path = source.getRawPath();
-            scope = path.substring(0, path.toLowerCase(Locale.ROOT).lastIndexOf("/s/"));
-        }
+        String scope = comment.group(1) == null ? shareScope(SafeRedirects.httpsUri(share)) : comment.group(1);
+        if (scope == null) return destination;
         String subreddit = scope.regionMatches(true, 0, "/r/", 0, 3)
                 ? scope.substring(3) : "u_" + scope.substring(scope.indexOf('/', 1) + 1);
         return "https://" + target.getHost() + "/r/" + subreddit
@@ -121,31 +118,49 @@ public final class ShareLinkResolver {
     static String resolve(String link, String token, boolean joey, SafeRedirects.ConnectionFactory factory)
             throws IOException {
         URI source = SafeRedirects.httpsUri(link);
-        URI current = requestUri(source, joey);
+        URI current = requestUri(source);
         if (current == null) return null;
         String authorization = token != null && BEARER.matcher(token).matches() ? "Bearer " + token : null;
         boolean np = SafeRedirects.hasHost(source, NP);
+        URI routeContext = source;
         Set<URI> visited = new HashSet<>();
         SafeRedirects requests = factory == null ? new SafeRedirects() : new SafeRedirects(factory);
         for (int hop = 0; hop < MAX_HOPS && visited.add(current); hop++) {
             URI next;
             if (isRedditWeb(current)) {
-                next = redirectShare(requests, current, authorization, joey);
+                next = redirectShare(requests, current, authorization);
             } else {
                 next = embedded(current);
                 if (next == null) next = requests.redirect(current, null);
             }
             if (next == null) return null;
             np |= SafeRedirects.hasHost(next, NP);
-            String destination = destination(next, source, np, joey);
-            if (destination != null) return destination;
-            current = requestUri(next, joey);
+            String destination = destination(next, routeContext, np, joey);
+            if (destination != null) {
+                String scope = routeContext != source ? shareScope(routeContext) : null;
+                URI target = scope == null ? null : URI.create(destination);
+                if (target != null && target.getRawPath().startsWith("/comments/")) {
+                    if (!scope.regionMatches(true, 0, "/r/", 0, 3)) {
+                        scope = (joey ? "/r/u_" : "/user/") + scope.substring(scope.indexOf('/', 1) + 1);
+                    }
+                    return "https://" + target.getHost() + scope + target.getRawPath() + querySuffix(target);
+                }
+                return destination;
+            }
+            current = requestUri(next);
             if (current == null) return null;
+            if (isWrapperHost(source) && isRedditWeb(current)) routeContext = next;
         }
         return null;
     }
 
-    private static URI redirectShare(SafeRedirects requests, URI web, String authorization, boolean joey)
+    private static String shareScope(URI uri) {
+        if (!isRedditWeb(uri) || !SHARE_PATH.matcher(uri.getRawPath()).matches()) return null;
+        String path = uri.getRawPath();
+        return path.substring(0, path.toLowerCase(Locale.ROOT).lastIndexOf("/s/"));
+    }
+
+    private static URI redirectShare(SafeRedirects requests, URI web, String authorization)
             throws IOException {
         if (authorization != null) {
             // Only requestUri's validated share paths reach here. Never forward a bearer to the web
@@ -162,19 +177,18 @@ public final class ShareLinkResolver {
                 String host = SafeRedirects.hasHost(web, NP) ? NP : WWW;
                 return URI.create("https://" + host + next.getRawPath() + querySuffix(next));
             }
-            if (next != null && !web.equals(requestUri(next, joey))) return next;
+            if (next != null && !web.equals(requestUri(next))) return next;
         }
         return requests.redirect(web, null);
     }
 
-    private static URI requestUri(URI uri, boolean joey) {
+    private static URI requestUri(URI uri) {
         if (uri == null) return null;
         String path = uri.getRawPath();
-        if (isRedditWeb(uri) && (SHARE_PATH.matcher(path).matches() || joey && BARE_SHARE.matcher(path).matches())) {
+        if (isRedditWeb(uri) && (SHARE_PATH.matcher(path).matches() || BARE_SHARE.matcher(path).matches())) {
             return URI.create("https://" + (SafeRedirects.hasHost(uri, NP) ? NP : WWW) + path);
         }
-        if (!joey || !SafeRedirects.hasHost(uri, "s.reddit.com", "applink.reddit.com", "reddit.onelink.me",
-                "c.redditmail.com", "click.redditmail.com")) return null;
+        if (!isWrapperHost(uri)) return null;
         if (path.isEmpty() || "/".equals(path)) {
             if (uri.getRawQuery() == null) return null;
             path = "/";
@@ -211,7 +225,7 @@ public final class ShareLinkResolver {
         URI base = URI.create("https://" + WWW);
         URI candidate = SafeRedirects.location(value.startsWith("/") ? base : wrapper, value);
         if (candidate == null || (!value.startsWith("/") && SafeRedirects.httpsUri(value) == null)) return null;
-        return requestUri(candidate, true) != null || destination(candidate, base, false, true) != null
+        return requestUri(candidate) != null || destination(candidate, base, false, false) != null
                 ? candidate : null;
     }
 
@@ -286,6 +300,11 @@ public final class ShareLinkResolver {
     private static boolean isRedditWeb(URI uri) {
         return SafeRedirects.hasHost(uri, WWW, NP, "reddit.com", "old.reddit.com",
                 "new.reddit.com", "sh.reddit.com", "m.reddit.com");
+    }
+
+    private static boolean isWrapperHost(URI uri) {
+        return SafeRedirects.hasHost(uri, "s.reddit.com", "applink.reddit.com", "reddit.onelink.me",
+                "reddit.app.link", "c.redditmail.com", "click.redditmail.com");
     }
 
     private static String querySuffix(URI uri) {

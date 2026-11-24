@@ -11,7 +11,7 @@ import app.morphe.patches.reddit.customclients.redditApiPatch
 import app.morphe.patches.reddit.customclients.legacySpoofClientPatch
 
 @Suppress("unused")
-val redditApiPatch = redditApiPatch(spoofClientPatch, modifyLoginWebView)
+val redditApiPatch = redditApiPatch(spoofClientPatch, modifyLoginWebView, infinityShareLinks)
 
 @Suppress("unused")
 val legacySpoofClientPatch = legacySpoofClientPatch(redditApiPatch)

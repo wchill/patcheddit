@@ -11,10 +11,16 @@ import app.morphe.patches.reddit.customclients.SHARE_NAV
 import app.morphe.patches.reddit.customclients.ShareViewFilter
 import app.morphe.patches.reddit.customclients.bindShareLinkAccessToken
 import app.morphe.patches.reddit.customclients.fixSLinksPatch
+import app.morphe.patches.reddit.customclients.hookWrapperActivity
+import app.morphe.patches.reddit.customclients.redditAppLinkHosts
+import app.morphe.patches.reddit.customclients.redditMailHosts
+import app.morphe.patches.reddit.customclients.redditWrapperViewFilters
 import app.morphe.patches.reddit.customclients.shareViewFilters
 import app.morphe.patches.reddit.customclients.wrapMorpheHook
 
 private const val MAIN = "com.andrewshu.android.reddit.MainActivity"
+private const val MAIL_LINKS = "com.andrewshu.android.reddit.intentfilter.RedditMailClickDummyActivity"
+private const val APP_LINKS = "com.andrewshu.android.reddit.intentfilter.RedditTrackingLinkDummyActivity"
 private const val STRING = "Ljava/lang/String;"
 private const val CONTEXT = "Landroid/content/Context;"
 private const val ACCOUNT = "Landroid/accounts/Account;"
@@ -26,6 +32,7 @@ private const val MEDIA = "Lapp/morphe/extension/redditisfun/media/OpenMediaLink
 
 internal val fixSLinksPatch = fixSLinksPatch(ExtensionPatches.RIF) {
     compatibleWith(*AppCompatibility.RedditIsFun)
+    dependsOn(redditWrapperViewFilters(MAIL_LINKS, redditMailHosts), redditWrapperViewFilters(APP_LINKS, redditAppLinkHosts))
     dependsOn(shareViewFilters(setOf(MAIN, ".MainActivity"),
         *listOf("reddit.com", "www.reddit.com", "np.reddit.com").flatMap { host ->
             listOf(ShareViewFilter(host, "path", "/media"), ShareViewFilter(host, "path", "/media/"))
@@ -35,6 +42,8 @@ internal val fixSLinksPatch = fixSLinksPatch(ExtensionPatches.RIF) {
         ShareViewFilter("np.reddit.com", "pathPrefix", "/user/"),
     ))
     execute {
+        hookWrapperActivity(MAIL_LINKS, target = null)
+        hookWrapperActivity(APP_LINKS, target = null)
         Fingerprint(
             definingClass = "Lcom/andrewshu/android/reddit/MainActivity;",
             name = "l1",

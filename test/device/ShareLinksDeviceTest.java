@@ -49,6 +49,7 @@ public final class ShareLinksDeviceTest {
     private static final String BACON = "com.onelouder.baconreader.LinkDispatcher";
     private static final String JOEY = "o.o.joey.Activities.OpenInApp";
     private static final String RIF = "com.andrewshu.android.reddit.MainActivity";
+    private static final String INFINITY = "ml.docilealligator.infinityforreddit.activities.LinkResolverActivity";
     private static final String TOKEN = "morphe-fixture-token";
     private static final String FOREIGN_HOST = "share-fixture.invalid";
 
@@ -77,7 +78,7 @@ public final class ShareLinksDeviceTest {
         this.flavor = flavor;
         String extensionClient = switch (flavor) {
             case "boost", "relay", "syncforreddit" -> flavor;
-            case "baconreader", "joey", "rif", "platinum" -> null;
+            case "baconreader", "joey", "rif", "platinum", "infinity" -> null;
             default -> throw new AssertionError("Unknown client: " + flavor);
         };
         legacy = extensionClient == null ? null : context.getClassLoader().loadClass(
@@ -106,6 +107,10 @@ public final class ShareLinksDeviceTest {
         };
         instrumentation.addMonitor(monitor);
         try {
+            if ("infinity".equals(flavor)) {
+                verifySharedWrappers();
+                return;
+            }
             share(ROOT + "/s/FixturePost?utm_source=ignored", POST_PATH, null, false);
             share(ROOT + "/s/FixtureComment", COMMENT_PATH, "3", "baconreader".equals(flavor));
             share(WEB + "/u/example/s/FixtureUser", POST_PATH, null, false);
@@ -156,6 +161,7 @@ public final class ShareLinksDeviceTest {
                 share(ROOT + "/s/FixtureBlockedWeb", POST_PATH, null, false);
                 assertRequests("/r/Example/s/FixtureBlockedWeb");
             }
+            verifySharedWrappers();
             if ("joey".equals(flavor)) verifyJoey();
             if (rif()) verifyRif();
         } finally {
@@ -207,6 +213,9 @@ public final class ShareLinksDeviceTest {
                 field(session, "expires").setLong(selected, Long.MAX_VALUE);
                 field(manager, "sessions").set(null, new ArrayList<>(List.of(selected)));
                 field(manager, "current").set(null, selected);
+            } else if ("infinity".equals(flavor)) {
+                context.getSharedPreferences("ml.docilealligator.infinityforreddit.current_account", Context.MODE_PRIVATE)
+                        .edit().putString("access_token", accessToken).commit();
             } else {
                 Object app = context.getApplicationContext();
                 Object component = app.getClass().getMethod("b").invoke(app);
@@ -349,6 +358,42 @@ public final class ShareLinksDeviceTest {
                 "No external link route to " + expectedActivity + " for " + link);
     }
 
+    private void verifySharedWrappers() throws Exception {
+        String mail = "https://click.redditmail.com/CL0/"
+                + Uri.encode(ROOT + "/s/FixtureBlockedWeb") + "/1";
+        String appLink = "https://reddit.onelink.me/FixtureWrappedShare";
+        String target = switch (flavor) {
+            case "boost" -> "com.rubenmayayo.reddit.ui.activities.DeepLinkingActivity";
+            case "relay" -> "reddit.news.IntentFilterActivity";
+            case "syncforreddit" -> "com.laurencedawson.reddit_sync.ui.activities.IntentActivity";
+            case "baconreader" -> BACON;
+            case "joey" -> JOEY;
+            case "infinity" -> INFINITY;
+            case "rif", "platinum" -> "com.andrewshu.android.reddit.intentfilter.RedditMailClickDummyActivity";
+            default -> throw new AssertionError(flavor);
+        };
+        assertExternalRoute(mail, target);
+        assertExternalRoute(appLink, rif()
+                ? "com.andrewshu.android.reddit.intentfilter.RedditTrackingLinkDummyActivity" : target);
+        for (String wrapper : List.of(mail, appLink)) {
+            resetHandoff();
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(wrapper))
+                    .addCategory(Intent.CATEGORY_BROWSABLE).setPackage(context.getPackageName())
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+            Intent handoff = awaitHandoff(wrapper);
+            if (rif()) {
+                check(handoff.getDataString() != null && Uri.parse(handoff.getDataString()).getPath().startsWith(POST_PATH),
+                        "RIF did not replay the resolved post");
+            } else {
+                assertPost(handoff, POST_PATH, null);
+            }
+            if (wrapper.equals(mail)) assertRequests("/r/Example/s/FixtureBlockedWeb");
+            else assertRequests("/FixtureWrappedShare", "/r/Example/s/FixtureBlockedWeb");
+        }
+        share(appLink, POST_PATH, null, !flavor.equals("infinity"));
+        assertRequests("/FixtureWrappedShare", "/r/Example/s/FixtureBlockedWeb");
+    }
+
     private Intent followRifWebView(String link) throws Exception {
         resetHandoff();
         Class<?> type = context.getClassLoader().loadClass("rif".equals(flavor) ? "v1.z" : "w1.z");
@@ -375,38 +420,36 @@ public final class ShareLinksDeviceTest {
         // Native Joey startup may refresh its guest session between activity launches.
         if ("joey".equals(flavor)) seedNativeToken(expectedToken);
         resetHandoff();
-        Activity original = null;
-        try {
-            if (legacy != null) {
-                onMain(() -> openNativeLegacy(link));
-            } else if (rif()) {
-                onMain(() -> openRifInApp(link));
-            } else if ("joey".equals(flavor) && inApp) {
-                onMain(() -> {
-                    Class<?> router = context.getClassLoader().loadClass("eb.a");
-                    Method dispatch = router.getDeclaredMethod("F", Context.class, String.class, String.class,
-                            String.class, boolean.class, Boolean.class);
-                    dispatch.setAccessible(true);
-                    dispatch.invoke(null, context, link, null, null, false, false);
-                });
-            } else {
-                String activity = "baconreader".equals(flavor) ? BACON : JOEY;
-                Intent input = new Intent(Intent.ACTION_VIEW, Uri.parse(link))
-                        .setClassName(context.getPackageName(), activity);
-                if (inApp) {
-                    Class<?> type = context.getClassLoader().loadClass("com.onelouder.baconreader.LinkProcessor");
-                    Object processor = type.getConstructor(Context.class, String.class).newInstance(context, link);
-                    input = (Intent) type.getMethod("getIntent").invoke(processor);
-                    check(input.getComponent() != null && BACON.equals(input.getComponent().getClassName()),
-                            "BaconReader in-app link bypassed the native dispatcher");
-                }
-                original = instrumentation.startActivitySync(input.addFlags(
-                        Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_MULTIPLE_TASK));
+        if (legacy != null) {
+            onMain(() -> openNativeLegacy(link));
+        } else if (rif()) {
+            onMain(() -> openRifInApp(link));
+        } else if ("joey".equals(flavor) && inApp) {
+            onMain(() -> {
+                Class<?> router = context.getClassLoader().loadClass("eb.a");
+                Method dispatch = router.getDeclaredMethod("F", Context.class, String.class, String.class,
+                        String.class, boolean.class, Boolean.class);
+                dispatch.setAccessible(true);
+                dispatch.invoke(null, context, link, null, null, false, false);
+            });
+        } else {
+            String activity = switch (flavor) {
+                case "baconreader" -> BACON;
+                case "infinity" -> INFINITY;
+                default -> JOEY;
+            };
+            Intent input = new Intent(Intent.ACTION_VIEW, Uri.parse(link))
+                    .setClassName(context.getPackageName(), activity);
+            if (inApp) {
+                Class<?> type = context.getClassLoader().loadClass("com.onelouder.baconreader.LinkProcessor");
+                Object processor = type.getConstructor(Context.class, String.class).newInstance(context, link);
+                input = (Intent) type.getMethod("getIntent").invoke(processor);
+                check(input.getComponent() != null && BACON.equals(input.getComponent().getClassName()),
+                        "BaconReader in-app link bypassed the native dispatcher");
             }
-            return awaitHandoff(link);
-        } finally {
-            if (original != null) instrumentation.runOnMainSync(original::finish);
+            context.startActivity(input.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
         }
+        return awaitHandoff(link);
     }
 
     private void resetHandoff() {
@@ -604,6 +647,7 @@ public final class ShareLinksDeviceTest {
             case "FixtureForeign" -> new Reply("https://" + FOREIGN_HOST + "/r/Example/s/FixtureOutside", 302);
             case "FixtureLoop" -> new Reply(path, 302);
             case "FixtureWrapper", "FixtureInApp" -> new Reply(WEB + POST_PATH, 302);
+            case "FixtureWrappedShare" -> new Reply(ROOT + "/s/FixtureBlockedWeb", 302);
             case "FixtureGet" -> "HEAD".equals(method) ? new Reply(null, 405) : new Reply(WEB + POST_PATH, 302);
             case "FixtureChain" -> new Reply("/r/Example/s/FixtureHop", 307);
             case "FixtureGallery" -> new Reply("/gallery/abc123", 302);

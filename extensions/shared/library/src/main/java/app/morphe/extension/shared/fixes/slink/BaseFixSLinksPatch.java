@@ -14,7 +14,7 @@ public abstract class BaseFixSLinksPatch {
     protected static BaseFixSLinksPatch INSTANCE;
 
     public boolean resolveSLink(String link) {
-        if (ShareLinkResolver.shareUri(link) == null) return false;
+        if (!ShareLinkResolver.canResolve(link) || ShareLinkNavigation.isFallback(link)) return false;
         Context context = Utils.getContext();
         if (context == null) return false;
         if (link.endsWith("#bypass")) {
