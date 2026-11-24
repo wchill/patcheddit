@@ -261,9 +261,10 @@ python3 -B test/run_device_tests.py \
 adb -s "$ANDROID_SERIAL" shell am force-stop com.rubenmayayo.reddit
 ```
 
-The fixture uses native Glide with synthetic responses and restores its test
-preferences, including recovery after an interrupted run. Force-stop clears the
-temporary transport before returning to normal use.
+The fixture uses native Glide with synthetic responses, checks taps inside and
+outside portrait previews, and restores its test preferences, including after an
+interrupted run. Force-stop clears the temporary transport before normal use.
+Use `--arg touch-only=true` to run just the touch regression without a focused window.
 
 ## Boost navigation device tests
 

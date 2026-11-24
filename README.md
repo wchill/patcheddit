@@ -40,7 +40,7 @@ In addition, patches for some apps contain additional features that were not pre
 ### Boost for Reddit
 * **Reddit API fixes** loads History in small pages so it doesn't hold up other Reddit requests.
 * Boost patches target the official [Boost 1.14.4 APK](https://github.com/rubenmayayo/boost-for-reddit/releases/tag/v1.14.4).
-* **Load all inline media** shows linked images and GIFs immediately after their corresponding links in comments and text-post bodies, respecting Boost's inline-media setting. **Patcheddit > Media > Keep inline media URLs** defaults to on; turning it off hides bare URLs without removing descriptive labels.
+* **Load all inline media** shows linked images and GIFs immediately after their corresponding links in comments and text-post bodies, respecting Boost's inline-media setting. Only taps on the image itself open the preview. **Patcheddit > Media > Keep inline media URLs** defaults to on; turning it off hides bare URLs without removing descriptive labels.
 * **Fix image search** updates Google's image search to Google Lens while keeping Yandex and TinEye in the image-search submenu.
 * Boost 1.14.3 also handles the image-post submission kind, search callback lifecycle checks and media-viewer insets natively, so those overrides are no longer injected. The remaining navigation patches still support Patcheddit's custom navigation hosts and layout behavior.
 * Boost handles cached Redgifs playback without a separate fix.

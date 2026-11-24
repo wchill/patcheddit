@@ -12,9 +12,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.RectF;
 import android.graphics.drawable.Animatable;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -89,6 +92,8 @@ public final class BoostInlineMediaDeviceTest {
                 activity = monitor.waitForActivityWithTimeout(15_000);
                 check(activity != null, "Native Boost test host did not start");
             } finally { instrumentation.removeMonitor(monitor); }
+            onMain(() -> { previewTaps(); return null; });
+            if ("true".equals(arguments.getString("touch-only"))) return;
             onMain(() -> {
                 ScrollView scroll = new ScrollView(activity);
                 rows = new LinearLayout(activity);
@@ -144,6 +149,45 @@ public final class BoostInlineMediaDeviceTest {
             if (activity != null) onMain(() -> { if (rows != null) rows.removeAllViews(); activity.finish(); return null; });
             restore(preferences, keys, before);
             check(backup.edit().clear().commit(), "Could not clear fixture recovery state");
+        }
+    }
+
+    private static void previewTaps() throws Exception {
+        LinearLayout body = newBody();
+        body.setClickable(true);
+        render(body, "<p><a href=\"" + BASE + "portrait.png\">Portrait</a></p>");
+        ImageView preview = previews(body).get(0);
+        // Use a real drawable and dispatch hierarchy without requiring a focused window for Glide.
+        Bitmap portrait = Bitmap.createBitmap(40, 240, Bitmap.Config.ARGB_8888);
+        preview.setImageDrawable(new BitmapDrawable(activity.getResources(), portrait));
+        int width = View.MeasureSpec.makeMeasureSpec(480, View.MeasureSpec.EXACTLY);
+        body.measure(width, View.MeasureSpec.UNSPECIFIED);
+        body.layout(0, 0, body.getMeasuredWidth(), body.getMeasuredHeight());
+        RectF bounds = new RectF(preview.getDrawable().getBounds());
+        preview.getImageMatrix().mapRect(bounds);
+        bounds.offset(preview.getLeft() + preview.getPaddingLeft(), preview.getTop() + preview.getPaddingTop());
+        check(bounds.left > 5 && bounds.right < body.getWidth() - 5, "Fixture needs space beside the preview");
+        check(bounds.bottom < preview.getBottom() - 2, "Fixture needs padding below the image");
+        for (float[] point : new float[][]{{bounds.left - 4, bounds.centerY()},
+                {bounds.right + 4, bounds.centerY()}, {bounds.centerX(), bounds.bottom + 2}}) {
+            long down = SystemClock.uptimeMillis();
+            touch(body, down, MotionEvent.ACTION_DOWN, point[0], point[1]);
+            check(body.isPressed() && !preview.isPressed(), "A tap outside the image did not reach the comment");
+            touch(body, down, MotionEvent.ACTION_CANCEL, point[0], point[1]);
+        }
+        long down = SystemClock.uptimeMillis();
+        touch(body, down, MotionEvent.ACTION_DOWN, bounds.right - 2, bounds.centerY());
+        check(preview.isPressed() && !body.isPressed(), "A tap inside the image did not reach its preview");
+        touch(body, down, MotionEvent.ACTION_UP, bounds.right + 4, bounds.centerY());
+        check(!preview.isPressed(), "Releasing outside the image left the preview pressed");
+    }
+
+    private static void touch(View view, long down, int action, float x, float y) {
+        MotionEvent event = MotionEvent.obtain(down, SystemClock.uptimeMillis(), action, x, y, 0);
+        try {
+            view.dispatchTouchEvent(event);
+        } finally {
+            event.recycle();
         }
     }
 
@@ -298,11 +342,15 @@ public final class BoostInlineMediaDeviceTest {
     }
 
     private static LinearLayout table(String html) throws Exception {
-        LinearLayout table = (LinearLayout) loader.loadClass("com.rubenmayayo.reddit.ui.customviews.TableTextView")
-                .getConstructor(Context.class, android.util.AttributeSet.class).newInstance(activity, null);
+        LinearLayout table = newBody();
         rows.addView(table, new LinearLayout.LayoutParams(300, -2));
         render(table, html);
         return table;
+    }
+
+    private static LinearLayout newBody() throws Exception {
+        return (LinearLayout) loader.loadClass("com.rubenmayayo.reddit.ui.customviews.TableTextView")
+                .getConstructor(Context.class, android.util.AttributeSet.class).newInstance(activity, null);
     }
 
     private static void render(LinearLayout table, String html) throws Exception {
