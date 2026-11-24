@@ -43,6 +43,7 @@ public final class RelayMediaLinksDeviceTest {
     private static final Map<String, byte[]> images = new HashMap<>();
     private static final List<String> requests = java.util.Collections.synchronizedList(new ArrayList<>());
     static final CountDownLatch SLOW = new CountDownLatch(1);
+    static final CountDownLatch STABLE_IMAGE = new CountDownLatch(1);
     private static final String run = Long.toString(System.nanoTime());
     private static final String query = "?s=fixture%2Fsignature%3D&run=" + run;
 
@@ -424,6 +425,9 @@ public final class RelayMediaLinksDeviceTest {
                     && request.getClass().getMethod("header", String.class).invoke(request, "Cookie") == null,
                     "Account credentials reached a public media request");
             if (path.endsWith("slow.jpeg")) check(SLOW.await(15, TimeUnit.SECONDS), "Slow fixture timed out");
+            if (path.endsWith("stable.jpeg")) {
+                check(STABLE_IMAGE.await(15, TimeUnit.SECONDS), "Stable layout fixture timed out");
+            }
             byte[] bytes;
             String location = null;
             if (path.endsWith("redirect.mpd") || path.endsWith("outside.mpd")) {

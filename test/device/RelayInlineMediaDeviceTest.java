@@ -9,7 +9,9 @@ package app.patcheddit.fixture;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
 import android.text.Spanned;
 import android.view.MotionEvent;
@@ -43,6 +45,8 @@ public final class RelayInlineMediaDeviceTest {
     private static LinearLayout rows;
     private static Object adapter, holder;
     private static TextView comment;
+
+    private record RowLayout(TextView body, CharSequence text, int height, int top) {}
 
     public static void verify(Context context, Activity host) throws Exception {
         loader = context.getClassLoader();
@@ -79,7 +83,20 @@ public final class RelayInlineMediaDeviceTest {
                     + "</p><p>" + link(webp, webp) + "</p><pre><code>" + image + "</code></pre>";
             onMain(() -> { bind(html); return null; });
             await(() -> onMain(() -> loaded(comment) == 3), "Native comment previews did not load");
+            for (int index : new int[]{1, 2}) {
+                onMain(() -> {
+                    Spanned text = (Spanned) comment.getText();
+                    int position = text.getSpanStart(previews(comment).get(index));
+                    int y = comment.getTotalPaddingTop()
+                            + comment.getLayout().getLineTop(comment.getLayout().getLineForOffset(position));
+                    comment.requestRectangleOnScreen(new Rect(0, y, 1, y + 100), true);
+                    return null;
+                });
+                await(() -> onMain(() -> animation(previews(comment).get(index)).isRunning()),
+                        "Visible GIF/WebP preview did not animate");
+            }
             onMain(() -> {
+                ((ScrollView) rows.getParent()).scrollTo(0, 0);
                 List<Object> previews = previews(comment);
                 Spanned rendered = (Spanned) comment.getText();
                 check(comment.getText().toString().contains(image), "URLs were not kept by default");
@@ -90,8 +107,15 @@ public final class RelayInlineMediaDeviceTest {
                             "Media was not immediately after its corresponding URL");
                 }
                 check(comment.getText().toString().contains("Descriptive GIF"), "Descriptive label was lost");
-                check(animation(previews.get(1)).isRunning() && animation(previews.get(2)).isRunning(),
-                        "Native GIF/WebP previews did not animate");
+                Object gifDrawable = field(previews.get(1), "drawable");
+                bindModel(field(holder, "b"));
+                check(comment.getText() == rendered && field(previews.get(1), "drawable") == gifDrawable,
+                        "Rebinding the same comment reset native media");
+                View row = rows.getChildAt(0);
+                rows.removeView(row);
+                rows.addView(row);
+                check(comment.getText() == rendered && field(previews.get(1), "drawable") == gifDrawable,
+                        "A brief layout detach discarded the preview");
                 Class<?> listener = type("reddit.news.listings.common.views.ActiveTextView2$OnLinkClickedListener");
                 String[] clicked = {null};
                 Object capture = Proxy.newProxyInstance(loader, new Class<?>[]{listener}, (proxy, method, args) -> {
@@ -150,8 +174,11 @@ public final class RelayInlineMediaDeviceTest {
                     "Relay's rewritten Giphy embed did not animate");
             String corrupt = URL + "corrupt.png" + QUERY;
             onMain(() -> { bind("<p>" + link(corrupt, corrupt) + "</p>"); return null; });
-            await(() -> onMain(() -> previews(comment).isEmpty() && comment.getText().toString().contains(corrupt)),
-                    "Failed preview did not restore the hidden URL");
+            await(() -> onMain(() -> {
+                List<Object> previews = previews(comment);
+                return previews.size() == 1 && (Boolean) field(previews.get(0), "failed")
+                        && comment.getText().toString().contains(corrupt);
+            }), "Failed preview did not expose a link without removing its reserved space");
             onMain(() -> { bind("<p>" + link(gif, gif) + "</p>"); return null; });
             await(() -> onMain(() -> loaded(comment) == 1), "Animated preview did not reload");
             Object preview = onMain(() -> previews(comment).get(0));
@@ -163,11 +190,17 @@ public final class RelayInlineMediaDeviceTest {
             });
             String threadImage = URL + "thread.png" + QUERY + "&width=911&format=png&auto=webp";
             ListView thread = onMain(() -> thread(threadImage, prefs, context));
-            int bodyId = context.getResources().getIdentifier("body", "id", context.getPackageName());
-            await(() -> onMain(() -> {
-                TextView body = thread.findViewById(bodyId);
-                return body != null && loaded(body) == 1;
-            }), "Native comment thread did not render a signed Reddit image");
+            int bodyId = resource(context, "body", "id");
+            try {
+                await(() -> onMain(() -> {
+                    TextView body = thread.findViewById(bodyId);
+                    return body != null && loaded(body) == 1;
+                }), "Native comment thread did not render a signed Reddit image");
+            } catch (AssertionError failure) {
+                String state = onMain(() -> describeBody(thread.findViewById(bodyId)));
+                throw new AssertionError(failure.getMessage() + ": " + state, failure);
+            }
+            verifyStableThread(prefs, context, bodyId);
             TextView post = onMain(() -> {
                 TextView view = (TextView) type("reddit.news.listings.common.views.ActiveTextView2")
                         .getConstructor(Context.class, android.util.AttributeSet.class).newInstance(activity, null);
@@ -203,6 +236,7 @@ public final class RelayInlineMediaDeviceTest {
                     "Disabling inline media did not restore native text");
         } finally {
             RelayMediaLinksDeviceTest.SLOW.countDown();
+            RelayMediaLinksDeviceTest.STABLE_IMAGE.countDown();
             onMain(() -> { rows.removeAllViews(); return null; });
             restore(prefs, before);
             check(backup.edit().clear().commit(), "Could not clear inline preference backup");
@@ -210,31 +244,102 @@ public final class RelayInlineMediaDeviceTest {
     }
 
     private static ListView thread(String url, SharedPreferences prefs, Context context) throws Exception {
+        return thread(url, prefs, context, 0);
+    }
+
+    private static ListView thread(String url, SharedPreferences prefs, Context context, int paddingRows)
+            throws Exception {
         Object fragment = type("reddit.news.WebAndCommentsFragment").getConstructor().newInstance();
         Object manager = activity.getClass().getMethod("getSupportFragmentManager").invoke(activity);
         set(fragment, "mHost", field(manager, "mHost"));
-        Class<?> commentType = type("reddit.news.oauth.reddit.model.RedditComment");
-        Object model = commentType.getConstructor().newInstance();
-        set(model, "body", url);
-        set(model, "bodyHtml", "<div class=\"md\"><p>" + link(url, url) + "</p></div>");
-        set(model, "author", "fixture");
-        set(model, "id", "fixture");
-        set(model, "name", "t1_fixture");
-        set(model, "subreddit", "fixture");
-        set(model, "edited", 0L);
-        set(model, "linkId", "t3_fixture");
-        set(model, "parentId", "t3_fixture");
-        Object comment = type("reddit.news.data.DataComment").getConstructor(commentType, int.class)
-                .newInstance(model, 0);
-        ArrayList<Object> comments = new ArrayList<>(List.of(comment));
+        ArrayList<Object> comments = new ArrayList<>();
+        for (int i = 0; i <= 2 * paddingRows; i++) {
+            comments.add(threadComment(i, i == paddingRows ? url : null));
+        }
         var constructor = type("reddit.news.adapters.CommentsAdapter").getConstructors()[0];
         var adapter = (ArrayAdapter<?>) constructor.newInstance(fragment, null, null,
-                context.getResources().getIdentifier("commentsrow", "layout", context.getPackageName()),
+                resource(context, "commentsrow", "layout"),
                 comments, prefs, false, null);
         ListView list = new ListView(activity);
         list.setAdapter(adapter);
         activity.setContentView(list);
         return list;
+    }
+
+    private static Object threadComment(int index, String url) throws Exception {
+        Class<?> commentType = type("reddit.news.oauth.reddit.model.RedditComment");
+        Object model = commentType.getConstructor().newInstance();
+        String text = "Fixture comment " + index;
+        set(model, "body", url == null ? text : url);
+        set(model, "bodyHtml", "<div class=\"md\"><p>" + (url == null ? text : link(url, url)) + "</p></div>");
+        set(model, "author", "fixture");
+        set(model, "id", "fixture" + index);
+        set(model, "name", "t1_fixture" + index);
+        set(model, "subreddit", "fixture");
+        set(model, "edited", 0L);
+        set(model, "linkId", "t3_fixture");
+        set(model, "parentId", "t3_fixture");
+        return type("reddit.news.data.DataComment").getConstructor(commentType, int.class).newInstance(model, 0);
+    }
+
+    private static void verifyStableThread(SharedPreferences prefs, Context context, int bodyId) throws Exception {
+        int imageRow = 18, offset = 80;
+        ListView list = onMain(() -> {
+            ListView thread = thread(URL + "stable.jpeg" + QUERY, prefs, context, imageRow);
+            // Start below the image, then scroll back up to its cold preview.
+            thread.setSelectionFromTop(imageRow + 4, offset);
+            return thread;
+        });
+        await(() -> onMain(() -> list.getFirstVisiblePosition() > imageRow), "Thread did not scroll past the image");
+        onMain(() -> { list.setSelectionFromTop(imageRow, offset); return null; });
+        await(() -> onMain(() -> {
+            RowLayout row = rowLayout(list, bodyId, imageRow);
+            return row != null && !previews(row.body()).isEmpty()
+                    && (Boolean) field(previews(row.body()).get(0), "active");
+        }), "Scrolling back up did not start the delayed image");
+        RowLayout before = onMain(() -> rowLayout(list, bodyId, imageRow));
+        check(before != null && onMain(() -> loaded(before.body()) == 0), "Delayed image was already decoded");
+        RelayMediaLinksDeviceTest.STABLE_IMAGE.countDown();
+        await(() -> onMain(() -> loaded(before.body()) == 1), "Delayed image did not decode");
+        onMain(() -> {
+            RowLayout after = rowLayout(list, bodyId, imageRow);
+            check(after != null && after.height() == before.height() && after.top() == before.top()
+                            && after.text() == before.text(),
+                    "Decoding an image changed the thread anchor, row height, or comment text");
+            Drawable drawable = (Drawable) field(previews(after.body()).get(0), "drawable");
+            var bounds = drawable.getBounds();
+            check(bounds.width() > 0 && Math.abs(bounds.width() - 2 * bounds.height()) <= 2,
+                    "The stable preview frame stretched the image");
+            return null;
+        });
+    }
+
+    private static RowLayout rowLayout(ListView list, int bodyId, int position) {
+        int index = position - list.getFirstVisiblePosition();
+        if (index < 0 || index >= list.getChildCount()) return null;
+        View row = list.getChildAt(index);
+        TextView body = row.findViewById(bodyId);
+        return body == null || body.getHeight() == 0 ? null
+                : new RowLayout(body, body.getText(), row.getHeight(), row.getTop());
+    }
+
+    private static String describeBody(TextView body) throws Exception {
+        if (body == null) return "no body";
+        Rect bounds = new Rect();
+        boolean shown = body.getLocalVisibleRect(bounds);
+        List<Object> all = previews(body);
+        return "length=" + body.length() + " size=" + body.getWidth() + "x" + body.getHeight()
+                + " layout=" + (body.getLayout() != null) + " shown=" + shown + " visible=" + bounds
+                + " previews=" + all.size() + (all.isEmpty() ? "" :
+                " active=" + field(all.get(0), "active") + " failed=" + field(all.get(0), "failed"));
+    }
+
+    private static int resource(Context context, String name, String kind) {
+        int id = context.getResources().getIdentifier(name, kind, context.getPackageName());
+        if (id == 0) id = context.getResources().getIdentifier(name, kind, "free.reddit.news");
+        if (id == 0) id = context.getResources().getIdentifier(name, kind, "reddit.news");
+        check(id != 0, "Missing Relay resource " + kind + "/" + name);
+        return id;
     }
 
     private static String link(String url, String text) {
@@ -255,6 +360,9 @@ public final class RelayInlineMediaDeviceTest {
     private static void bind(String html) throws Exception {
         Object model = type("reddit.news.oauth.reddit.model.RedditComment").getConstructor().newInstance();
         set(model, "htmlBodySpanned", parsed(html));
+        bindModel(model);
+    }
+    private static void bindModel(Object model) throws Exception {
         set(holder, "b", model);
         List<?> payloads = List.of(type("reddit.news.listings.links.payloads.EditedPayload").getConstructor().newInstance());
         Method method = Arrays.stream(adapter.getClass().getMethods()).filter(candidate ->
