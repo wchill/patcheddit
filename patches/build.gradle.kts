@@ -40,6 +40,7 @@ dependencies {
     compileOnly(project(":patches:stub"))
 
     testImplementation(kotlin("test-junit"))
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
 }
 
 val prepareHttpLibraryResources by tasks.registering(Sync::class) {

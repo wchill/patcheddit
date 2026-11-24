@@ -6,9 +6,16 @@
 
 package app.morphe.patches.reddit.customclients.boostforreddit
 
+import app.morphe.patcher.Patcher
+import app.morphe.patcher.PatcherConfig
+import app.morphe.patcher.patch.patch
+import app.morphe.patcher.resource.ResourceType.STRING
+import app.morphe.patcher.resource.resourceId
 import app.morphe.patches.reddit.customclients.AppCompatibility
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostApi
 import app.morphe.patches.reddit.customclients.boostforreddit.bindings.BoostBindings
+import app.morphe.patches.reddit.customclients.boostforreddit.http.reddit.StateSubmissionViewSetStateFingerprint
+import app.morphe.patches.reddit.customclients.boostforreddit.http.reddit.overrideRemovalReasonStrings
 import app.morphe.patches.reddit.customclients.misc.extension.mapping.FieldId
 import app.morphe.patches.reddit.customclients.misc.extension.mapping.MethodId
 import app.morphe.patches.reddit.customclients.misc.extension.mapping.ProguardMapping
@@ -21,7 +28,10 @@ import com.android.tools.smali.dexlib2.iface.instruction.TwoRegisterInstruction
 import com.android.tools.smali.dexlib2.iface.instruction.WideLiteralInstruction
 import com.android.tools.smali.dexlib2.iface.reference.FieldReference
 import com.android.tools.smali.dexlib2.iface.reference.StringReference
+import kotlinx.coroutines.runBlocking
 import org.junit.Assume.assumeTrue
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
 import java.io.File
 import java.security.MessageDigest
 import java.util.HexFormat
@@ -30,6 +40,9 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class BoostReleaseTest {
+    @get:Rule
+    val temporaryFolder = TemporaryFolder()
+
     private fun mappingText() = checkNotNull(javaClass.classLoader.getResourceAsStream("boost/mapping.txt"))
         .bufferedReader().use { it.readText() }
 
@@ -40,6 +53,33 @@ class BoostReleaseTest {
         assertEquals(listOf(version), AppCompatibility.Boost.single().targets.map { it.version })
         assertTrue(mappingText().lineSequence().first().endsWith("Boost $version APK."))
         BoostBindings.table.mapping(ProguardMapping.read(mappingText().reader()).reversed())
+    }
+
+    @Test
+    fun undeleteUsesTheTargetApksRemovalReasonStrings() {
+        val path = System.getenv("BOOST_APK")
+        assumeTrue("Set BOOST_APK to the official Boost ${BoostBindings.table.version} APK", path != null)
+        val inspect = patch(default = false) {
+            execute {
+                val method = StateSubmissionViewSetStateFingerprint.method
+                method.overrideRemovalReasonStrings()
+                val removalOverride = method.implementation!!.instructions.takeWhile { it.opcode != Opcode.RETURN_VOID }
+                assertEquals(listOf("copyright_takedown", "content_takedown"), removalOverride.mapNotNull {
+                    ((it as? ReferenceInstruction)?.reference as? StringReference)?.string
+                })
+                val expected = listOf(
+                    "removed_by_copyright_takedown_header", "removed_by_copyright_takedown_summary",
+                    "removed_by_anti_evil_ops_header", "removed_by_anti_evil_ops_summary",
+                ).map { resourceId(STRING, it) }
+                assertEquals(expected, removalOverride.filter { it.opcode == Opcode.CONST }.map {
+                    (it as WideLiteralInstruction).wideLiteral
+                })
+            }
+        }
+        Patcher(PatcherConfig(File(checkNotNull(path)), temporaryFolder.newFolder("patch"))).use { patcher ->
+            patcher += setOf(inspect)
+            runBlocking { patcher().collect { it.exception?.let { failure -> throw failure } } }
+        }
     }
 
     @Test

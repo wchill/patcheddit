@@ -88,6 +88,9 @@ A match identifies a symbol, not unchanged
 behavior. APK resources, reflection, native code, and patch behavior still need
 their usual audits.
 
+When using Boost's existing resources in injected bytecode, look up their IDs
+by type and name with `resourceId` rather than copying numeric IDs from an APK.
+
 Exit status `0` means the mapping is complete with no body differences; `2`
 means review is required; `1` means an input/extraction error or a mismatch
 against an optional benchmark. An incomplete/conflicting mapping is not
